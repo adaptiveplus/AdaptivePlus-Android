@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sprintsquads.adaptiveplusqaapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AdaptivePlusQaApp"
+        android:usesCleartextTraffic="true">
+
+        <activity android:name=".ui.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+<!--        <meta-data-->
+<!--            android:name="adaptiveBaseApiUrl"-->
+<!--            android:value="https://api-staging.adaptive.plus"-->
+<!--            />-->
+<!--        <meta-data-->
+<!--            android:name="adaptiveCompanySecret"-->
+<!--            android:value="Tbh1qthkdODSBU5kSkTiRNH4rU6taNtliHz/z1qYIQG5fkISQtxyShr5rj2UaqR4GHOo5m+xJ8j3iMqJI9Pw4Ao4wheJNzw0q0tpwz/JEVuhz023e1IYTvfM/UuYilzcB/hctmWIQbprmmgu8O7eOXuoDqk7I6vReieJ6YH/Rnh5913sXoACyVzvehk8gm8BZFeL9YKc2ulReaEf9L0fUTKjlxqnlU0kEz14M6JiiE6EH5xTwIJJiR6I6FDVXd7uGuCe8j3FYpSga3cpY74trHXEME0c6boeJM2uw7WGiadDfz3hPPf1SH4TRPJk9uXfj1BfwE8I5E2KT97XD90G9w=="-->
+<!--            />-->
+<!--        <meta-data-->
+<!--            android:name="adaptiveAppSecret"-->
+<!--            android:value="LdtUp8n+WBc3VXOdCpAfFPskhSYEqGf32YaXY94C9u4D265avLmhyO5qlkG95G56bmYDxfua6Xc+TaJflCDOB63BNv6BG5ISCtwsQws1M5YY0Swiw533jhZh2lQ4c9wMw6OtopIAgOFOYx6Ymv40opvR1euKuUOVA2daitmbgKwwgSbZpBhWnq9gKYLjGYet104B5bSeZ4/SSGsweXZY0E+bneylrdCstnUkdixIbE9bkJRJs+2/gHj2zxQ9t8QqG26LyXVpmNml1RGcivK8XbIsImGLpFm1v9743acnu2UCm9P7P+GBw0kvVutZmpHa+EFPtJShykWkwvVfI35B3Q=="-->
+<!--            />-->
+    </application>
+
+</manifest>
