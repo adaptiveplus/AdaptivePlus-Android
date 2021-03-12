@@ -1,2 +1,3 @@
+include ':adaptiveplus'
 include ':app'
 rootProject.name = "AdaptivePlusQaApp"

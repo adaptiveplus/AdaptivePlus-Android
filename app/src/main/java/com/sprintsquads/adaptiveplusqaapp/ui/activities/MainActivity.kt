@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplusqaapp.ui
+package com.sprintsquads.adaptiveplusqaapp.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
