@@ -15,7 +15,6 @@
             tools:targetApi="l">?attr/colorPrimaryVariant
         </item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="AdaptiveQaAppDialogTheme" parent="Theme.AppCompat.Light.DarkActionBar">

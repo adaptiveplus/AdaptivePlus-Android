@@ -15,6 +15,5 @@
             tools:targetApi="l">?attr/colorPrimaryVariant
         </item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/white</item>
     </style>
 </resources>
