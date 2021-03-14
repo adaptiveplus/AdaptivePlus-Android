@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
@@ -86,7 +87,7 @@ class ApiFragment : Fragment() {
 
                         text = "TAG: ${tag.id}"
                         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-                        setTextColor(Color.BLACK)
+                        setTextColor(ContextCompat.getColor(context, R.color.colorOnSecondary))
                     }
                     tagsLayout?.addView(tagNameTxtView)
 
@@ -213,7 +214,6 @@ class ApiFragment : Fragment() {
                             val adaptiveTag = AdaptiveTag(ctx).apply {
                                 id = ViewCompat.generateViewId()
                                 setAdaptiveTagId(tag.id)
-                                setHasBookmarks(tag.hasBookmarks ?: false)
                                 setAdaptiveCustomActionCallback(object:
                                     AdaptiveCustomAction {
                                     override fun onRun(params: HashMap<String, Any>) {

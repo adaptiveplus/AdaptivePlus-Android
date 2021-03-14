@@ -1,7 +1,7 @@
 {
   "id": "5f859fb96aa1a80012ee31fe",
   "options": {
-    "isViewless": true,
+    "isViewless": false,
     "width": 240,
     "height": 120,
     "cornerRadius": 12,
