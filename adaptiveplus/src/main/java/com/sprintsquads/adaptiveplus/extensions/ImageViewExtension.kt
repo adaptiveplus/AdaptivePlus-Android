@@ -21,7 +21,7 @@ import com.sprintsquads.adaptiveplus.data.GLIDE_TIMEOUT
  */
 internal fun ImageView.loadImage(
     url: String,
-    defaultDrawable: Drawable?,
+    defaultDrawable: Drawable? = null,
     onResourceReady: (() -> Unit)? = null,
     cornerRadius: Int? = null
 ) {

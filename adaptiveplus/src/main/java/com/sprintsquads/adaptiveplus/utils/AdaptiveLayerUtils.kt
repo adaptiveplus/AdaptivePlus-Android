@@ -1,22 +1,26 @@
 package com.sprintsquads.adaptiveplus.utils
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
 import com.sprintsquads.adaptiveplus.data.models.AdaptiveEntry
 import com.sprintsquads.adaptiveplus.data.models.AdaptiveLayer
-import java.util.*
+import com.sprintsquads.adaptiveplus.data.models.components.AdaptiveBackgroundComponent
+import com.sprintsquads.adaptiveplus.data.models.components.AdaptiveImageComponent
+import com.sprintsquads.adaptiveplus.data.models.components.AdaptiveTextComponent
+import com.sprintsquads.adaptiveplus.ui.components.AdaptiveBackgroundComponentView
+import com.sprintsquads.adaptiveplus.ui.components.AdaptiveImageComponentView
+import com.sprintsquads.adaptiveplus.ui.components.AdaptiveTextComponentView
 
 
 internal fun buildComponentView(context: Context, layer: AdaptiveLayer): View? {
-    return View(context).apply {
-        val rnd = Random()
-        setBackgroundColor(
-            Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-        )
+    return when (layer.component) {
+        is AdaptiveBackgroundComponent -> AdaptiveBackgroundComponentView(context, layer.component)
+        is AdaptiveImageComponent -> AdaptiveImageComponentView(context, layer.component)
+        is AdaptiveTextComponent -> AdaptiveTextComponentView(context, layer.component)
+        else -> null
     }
 }
 
