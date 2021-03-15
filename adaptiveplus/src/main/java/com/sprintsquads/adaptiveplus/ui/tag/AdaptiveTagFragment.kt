@@ -201,7 +201,7 @@ internal class AdaptiveTagFragment : Fragment() {
             }
 
             while (apEntriesRecyclerView.itemDecorationCount > 0) {
-                apEntriesRecyclerView.removeItemDecorationAt(0);
+                apEntriesRecyclerView.removeItemDecorationAt(0)
             }
             apEntriesRecyclerView.addItemDecoration(
                 EntrySpaceDecoration((options.spacing * scaleFactor).toInt()))

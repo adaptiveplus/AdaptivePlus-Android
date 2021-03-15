@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.DELAY_BETWEEN_CLICKS
 import com.sprintsquads.adaptiveplus.data.models.AdaptiveEntry
-import com.sprintsquads.adaptiveplus.utils.getColorFromHex
+import com.sprintsquads.adaptiveplus.utils.drawEntry
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 
 
@@ -72,21 +71,14 @@ internal class AdaptiveEntriesAdapter(
             }
         }
 
-        fun bind(item: AdaptiveEntry) = with(itemView) {
+        fun bind(entry: AdaptiveEntry) = with(itemView) {
             apEntryCardView.layoutParams = LinearLayout.LayoutParams(
                 (options.width * scaleFactor).toInt(),
                 (options.height * scaleFactor).toInt()
             )
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
-            // TODO: implement
-            apEntryLayout.addView(
-                View(context).apply {
-                    setBackgroundColor(getColorFromHex("#FF0000"))
-                },
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.MATCH_PARENT
-            )
+            drawEntry(apEntryLayout, entry, scaleFactor)
         }
     }
 }
