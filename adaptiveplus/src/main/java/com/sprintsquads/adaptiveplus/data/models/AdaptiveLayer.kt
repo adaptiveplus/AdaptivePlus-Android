@@ -2,13 +2,14 @@ package com.sprintsquads.adaptiveplus.data.models
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.sprintsquads.adaptiveplus.data.models.components.AdaptiveComponent
 import java.io.Serializable
 
 @Keep
 internal data class AdaptiveLayer(
     val kind: Kind,
     val options: Options,
-    val component: AdaptiveComponent
+    val component: AdaptiveComponent?
 ) : Serializable {
 
     enum class Kind {

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.managers.AdaptiveActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAdaptiveActionsManager
@@ -20,7 +20,6 @@ import com.sprintsquads.adaptiveplus.extensions.hide
 import com.sprintsquads.adaptiveplus.extensions.show
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.sdk.data.AdaptiveCustomAction
-import com.sprintsquads.adaptiveplus.ui.entry.AdaptiveEntriesView
 import com.sprintsquads.adaptiveplus.ui.tag.vm.AdaptiveTagViewModel
 import com.sprintsquads.adaptiveplus.ui.tag.vm.AdaptiveTagViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.isTagTemplateNullOrEmpty
@@ -45,8 +44,7 @@ internal class AdaptiveTagFragment : Fragment() {
 
     private lateinit var viewModel: AdaptiveTagViewModel
     private lateinit var tagId: String
-
-    private var adaptiveEntriesView: AdaptiveEntriesView? = null
+    private lateinit var entriesAdapter: AdaptiveEntriesAdapter
 
     private var actionsManager: AdaptiveActionsManager? = null
     private var customActionCallback: AdaptiveCustomAction? = null
@@ -80,9 +78,14 @@ internal class AdaptiveTagFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
-        checkSdkIsStarted()
 
-        hideTagFragment()
+        updateTagFragmentVisibility()
+
+        entriesAdapter = AdaptiveEntriesAdapter(listOf())
+        val layoutManager = LinearLayoutManager(
+            context, LinearLayoutManager.HORIZONTAL, false)
+        apEntriesRecyclerView.layoutManager = layoutManager
+        apEntriesRecyclerView.adapter = entriesAdapter
 
         // Mock is used only for development and testing purposes, not for release
         if (context?.packageName == "com.sprintsquads.adaptiveplusqaapp" &&
@@ -95,43 +98,35 @@ internal class AdaptiveTagFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        adaptiveEntriesView = null
-        super.onDestroyView()
-    }
-
     private fun setupObservers() {
         view?.let {
             AdaptivePlusSDK().getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
+            AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
             viewModel.tagTemplateLiveData.observe(viewLifecycleOwner, tagTemplateObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
         }
     }
 
     private val tokenObserver = Observer<String?> { token ->
-        checkSdkIsStarted()
-
         if (token != null) {
             viewModel.requestTemplate(tagId)
         }
         else if (AdaptivePlusSDK().getTokenRequestState() == RequestState.ERROR) {
-            if (viewModel.tagTemplateLiveData.value == null) {
-                hideTagFragment()
-            } else {
-                showTagFragment()
-            }
+            updateTagFragmentVisibility()
         }
     }
 
-    private val tagTemplateObserver = Observer<AdaptiveTagTemplate?> { template ->
-        checkSdkIsStarted()
+    private val isSdkStartedObserver = Observer<Boolean> {
+        updateTagFragmentVisibility()
+    }
 
+    private val tagTemplateObserver = Observer<AdaptiveTagTemplate?> { template ->
         if (isTagTemplateNullOrEmpty(template)) {
-            hideTagFragment()
+            updateTagFragmentVisibility()
         }
         else {
-            showTagFragment()
-            drawComponent(template!!)
+            updateTagFragmentVisibility()
+            drawTag(template!!)
         }
     }
 
@@ -171,48 +166,39 @@ internal class AdaptiveTagFragment : Fragment() {
         refresh()
     }
 
-    private fun drawComponent(template: AdaptiveTagTemplate) {
-        if (context == null || view == null) return
+    private fun drawTag(template: AdaptiveTagTemplate) {
+        if (context == null || view == null || template.options.isViewless) return
 
-        showTagFragment()
+        updateTagFragmentVisibility()
 
-        if (adaptiveEntriesView != null) {
-            adaptiveEntriesView?.updateEntries(template.entries)
-        } else {
-            apEntriesContainer.removeAllViews()
+        val options = template.options
+        val scaleFactor = (apAdaptiveTagFragment.width / options.screenWidth).toFloat()
 
-            context?.let { ctx ->
-                AdaptiveEntriesView(ctx, viewModel, template.entries).run {
-                    adaptiveEntriesView = this
-                    addViewToAdaptiveContainer(this)
-                }
-            }
+        options.padding.run {
+            apEntriesRecyclerView.setPadding(
+                left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
         }
-    }
 
-    private fun addViewToAdaptiveContainer(view: View) {
-        val layoutParams =
-            ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-            )
-
-        apEntriesContainer.addView(view, layoutParams)
-    }
-
-    private fun checkSdkIsStarted() {
-        if (!AdaptivePlusSDK().isStarted()) {
-            hideTagFragment()
+        while (apEntriesRecyclerView.itemDecorationCount > 0) {
+            apEntriesRecyclerView.removeItemDecorationAt(0);
         }
+        apEntriesRecyclerView.addItemDecoration(
+            EntrySpaceDecoration(options.spacing.toInt()))
+
+        entriesAdapter.updateTagOptions(options)
+        entriesAdapter.updateDataSet(template.entries)
+
+        apEntriesRecyclerView.scaleX = scaleFactor
+        apEntriesRecyclerView.scaleY = scaleFactor
     }
 
-    private fun hideTagFragment() {
-        apAdaptiveTagFragment?.hide()
-    }
-
-    private fun showTagFragment() {
-        if (AdaptivePlusSDK().isStarted()) {
+    private fun updateTagFragmentVisibility() {
+        if (AdaptivePlusSDK().isStartedLiveData().value == true &&
+            !isTagTemplateNullOrEmpty(viewModel.tagTemplateLiveData.value)
+        ) {
             apAdaptiveTagFragment?.show()
+        } else {
+            apAdaptiveTagFragment?.hide()
         }
     }
 }

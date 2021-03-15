@@ -101,7 +101,7 @@
               "size": 12,
               "color": "#000000FF",
               "align": "left",
-              "letterSpacing": "0"
+              "letterSpacing": 0
             }
           }
         }

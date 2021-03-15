@@ -55,7 +55,7 @@ class AdaptivePlusSDK {
         AdaptivePlusSDK.userId = userId ?: deviceId
         AdaptivePlusSDK.userConfig = userConfig
 
-        isStarted = true
+        isStartedLiveData.postValue(true)
         authorize(context, true)
     }
 
@@ -200,7 +200,7 @@ class AdaptivePlusSDK {
 
     internal fun getUserId(): String? = userId
 
-    internal fun isStarted(): Boolean = isStarted
+    internal fun isStartedLiveData(): LiveData<Boolean> = isStartedLiveData
 
     internal fun getUserLocation(): AdaptiveLocation? = userLocation
 
@@ -219,7 +219,9 @@ class AdaptivePlusSDK {
         private var mAppSecret: String? = null
         private var mCompanySecret: String? = null
 
-        private var isStarted: Boolean = false
+        private var isStartedLiveData = MutableLiveData<Boolean>().apply {
+            value = false
+        }
 
         private val tokenLiveData = MutableLiveData<String?>()
         private var tokenRequestState = RequestState.NONE
