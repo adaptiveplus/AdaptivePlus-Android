@@ -15,6 +15,7 @@
             android:id="@+id/mock1AdaptiveTag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:apTagId="mock1"
             />
 

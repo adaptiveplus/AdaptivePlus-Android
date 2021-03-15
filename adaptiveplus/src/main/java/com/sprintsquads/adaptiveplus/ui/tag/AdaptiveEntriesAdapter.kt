@@ -4,13 +4,13 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.DELAY_BETWEEN_CLICKS
 import com.sprintsquads.adaptiveplus.data.models.AdaptiveEntry
-import com.sprintsquads.adaptiveplus.data.models.AdaptiveTagTemplate
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 
@@ -19,13 +19,17 @@ internal class AdaptiveEntriesAdapter(
     dataSet: List<AdaptiveEntry>
 ) : RecyclerView.Adapter<AdaptiveEntriesAdapter.EntryViewHolder>() {
 
-    private val dataSet: MutableList<AdaptiveEntry>
-    private var options: AdaptiveTagTemplate.Options? = null
+    private val dataSet: MutableList<AdaptiveEntry> = ArrayList(dataSet)
+    private var options: EntryOptions = EntryOptions(0.0, 0.0, 0.0)
+    private var scaleFactor: Float = 1f
     private var lastTimeClicked = 0L
 
-    init {
-        this.dataSet = ArrayList(dataSet)
-    }
+
+    class EntryOptions(
+        val width: Double,
+        val height: Double,
+        val cornerRadius: Double
+    )
 
 
     fun updateDataSet(entries: List<AdaptiveEntry>) {
@@ -37,15 +41,10 @@ internal class AdaptiveEntriesAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun updateTagOptions(
-        options: AdaptiveTagTemplate.Options,
-        isForceUpdate: Boolean = false
-    ) {
+    fun updateEntryOptions(options: EntryOptions, scaleFactor: Float) {
         this.options = options
-
-        if (isForceUpdate) {
-            notifyDataSetChanged()
-        }
+        this.scaleFactor = scaleFactor
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
@@ -74,12 +73,13 @@ internal class AdaptiveEntriesAdapter(
         }
 
         fun bind(item: AdaptiveEntry) = with(itemView) {
-            // TODO: implement
-            apEntryLayout.layoutParams = ConstraintLayout.LayoutParams(
-                options?.width?.toInt() ?: 0,
-                options?.height?.toInt() ?: 0
+            apEntryCardView.layoutParams = LinearLayout.LayoutParams(
+                (options.width * scaleFactor).toInt(),
+                (options.height * scaleFactor).toInt()
             )
+            apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
+            // TODO: implement
             apEntryLayout.addView(
                 View(context).apply {
                     setBackgroundColor(getColorFromHex("#FF0000"))

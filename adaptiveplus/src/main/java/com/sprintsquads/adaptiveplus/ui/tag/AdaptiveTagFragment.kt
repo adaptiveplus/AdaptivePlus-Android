@@ -69,7 +69,7 @@ internal class AdaptiveTagFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.ap_fragment_adaptive_tag, container, false)
     }
@@ -86,6 +86,8 @@ internal class AdaptiveTagFragment : Fragment() {
             context, LinearLayoutManager.HORIZONTAL, false)
         apEntriesRecyclerView.layoutManager = layoutManager
         apEntriesRecyclerView.adapter = entriesAdapter
+
+        apAdaptiveTagFragmentLayout.addOnLayoutChangeListener(tagFragmentLayoutChangeListener)
 
         // Mock is used only for development and testing purposes, not for release
         if (context?.packageName == "com.sprintsquads.adaptiveplusqaapp" &&
@@ -171,34 +173,57 @@ internal class AdaptiveTagFragment : Fragment() {
 
         updateTagFragmentVisibility()
 
-        val options = template.options
-        val scaleFactor = (apAdaptiveTagFragment.width / options.screenWidth).toFloat()
-
-        options.padding.run {
-            apEntriesRecyclerView.setPadding(
-                left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
-        }
-
-        while (apEntriesRecyclerView.itemDecorationCount > 0) {
-            apEntriesRecyclerView.removeItemDecorationAt(0);
-        }
-        apEntriesRecyclerView.addItemDecoration(
-            EntrySpaceDecoration(options.spacing.toInt()))
-
-        entriesAdapter.updateTagOptions(options)
         entriesAdapter.updateDataSet(template.entries)
 
-        apEntriesRecyclerView.scaleX = scaleFactor
-        apEntriesRecyclerView.scaleY = scaleFactor
+        updateEntriesViewOptions()
+    }
+
+    private val tagFragmentLayoutChangeListener = View.OnLayoutChangeListener {
+        v, _, _, _, _, oldLeft, _, oldRight, _ ->
+
+        val oldWidth = oldRight - oldLeft
+        if (v.width != oldWidth) {
+            updateEntriesViewOptions()
+        }
+    }
+
+    private fun updateEntriesViewOptions() {
+        viewModel.tagTemplateLiveData.value?.options?.let { options ->
+            val templateScreenWidth = maxOf(options.screenWidth, 0.001)
+            val scaleFactor = (apAdaptiveTagFragmentLayout.width / templateScreenWidth).toFloat()
+
+            options.padding.run {
+                apEntriesRecyclerView.setPadding(
+                    (left * scaleFactor).toInt(),
+                    (top * scaleFactor).toInt(),
+                    (right * scaleFactor).toInt(),
+                    (bottom * scaleFactor).toInt())
+            }
+
+            while (apEntriesRecyclerView.itemDecorationCount > 0) {
+                apEntriesRecyclerView.removeItemDecorationAt(0);
+            }
+            apEntriesRecyclerView.addItemDecoration(
+                EntrySpaceDecoration((options.spacing * scaleFactor).toInt()))
+
+            entriesAdapter.updateEntryOptions(
+                options = AdaptiveEntriesAdapter.EntryOptions(
+                    width = options.width,
+                    height = options.height,
+                    cornerRadius = options.cornerRadius
+                ),
+                scaleFactor = scaleFactor
+            )
+        }
     }
 
     private fun updateTagFragmentVisibility() {
         if (AdaptivePlusSDK().isStartedLiveData().value == true &&
             !isTagTemplateNullOrEmpty(viewModel.tagTemplateLiveData.value)
         ) {
-            apAdaptiveTagFragment?.show()
+            apAdaptiveTagFragmentLayout?.show()
         } else {
-            apAdaptiveTagFragment?.hide()
+            apAdaptiveTagFragmentLayout?.hide()
         }
     }
 }

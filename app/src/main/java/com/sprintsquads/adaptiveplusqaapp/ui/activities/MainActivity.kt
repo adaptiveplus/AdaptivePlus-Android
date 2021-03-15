@@ -38,56 +38,56 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = envName
         supportActionBar?.subtitle = env?.baseApiUrl
 
+        if (env == null) {
+            finish()
+            return
+        }
+
+        var customIP = intent?.getStringExtra(EXTRA_CUSTOM_IP)
+        if (customIP.isNullOrEmpty()) {
+            customIP = null
+        }
+
+        val locale = intent?.getStringExtra(EXTRA_LOCALE) ?: "ru"
+        val userId = intent?.getStringExtra(EXTRA_USER_ID)
+        val age = intent?.getIntExtra(EXTRA_AGE, -1)
+        val gender = when {
+            intent?.getStringExtra(EXTRA_GENDER) == Gender.FEMALE.value -> UserConfig.Gender.FEMALE
+            intent?.getStringExtra(EXTRA_GENDER) == Gender.MALE.value -> UserConfig.Gender.MALE
+            else -> null
+        }
+
+        val userConfig = if (age != -1 && gender != null) {
+            UserConfig(age = age, gender = gender)
+        } else {
+            null
+        }
+
+        val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? AdaptiveLocation
+
+        AdaptivePlusSDK().apply {
+            setTestEnvironment(
+                context = this@MainActivity,
+                appId = env.appId,
+                companySecret = env.companySecret,
+                appSecret = env.appSecret,
+                baseUrl = env.baseApiUrl,
+                customIP = customIP
+            )
+
+            start(
+                context = this@MainActivity,
+                userId = userId,
+                userConfig = userConfig,
+                isDebuggable = true,
+                locale = locale,
+                location = location
+            )
+        }
+
         if (envName == Environment.MOCK.value) {
             showMockFragment()
         } else {
-            if (env == null) {
-                finish()
-                return
-            }
-
-            var customIP = intent?.getStringExtra(EXTRA_CUSTOM_IP)
-            if (customIP.isNullOrEmpty()) {
-                customIP = null
-            }
-
-            val locale = intent?.getStringExtra(EXTRA_LOCALE) ?: "ru"
-            val userId = intent?.getStringExtra(EXTRA_USER_ID)
-            val age = intent?.getIntExtra(EXTRA_AGE, -1)
-            val gender = when {
-                intent?.getStringExtra(EXTRA_GENDER) == Gender.FEMALE.value -> UserConfig.Gender.FEMALE
-                intent?.getStringExtra(EXTRA_GENDER) == Gender.MALE.value -> UserConfig.Gender.MALE
-                else -> null
-            }
-
-            val userConfig = if (age != -1 && gender != null) {
-                UserConfig(age = age, gender = gender)
-            } else {
-                null
-            }
-
-            val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? AdaptiveLocation
-
-            AdaptivePlusSDK().apply {
-                setTestEnvironment(
-                    context = this@MainActivity,
-                    appId = env.appId,
-                    companySecret = env.companySecret,
-                    appSecret = env.appSecret,
-                    baseUrl = env.baseApiUrl,
-                    customIP = customIP
-                )
-
-                start(
-                    context = this@MainActivity,
-                    userId = userId,
-                    userConfig = userConfig,
-                    isDebuggable = true,
-                    locale = locale,
-                    location = location
-                )
-            }
-
             showApiFragment(env)
         }
     }
