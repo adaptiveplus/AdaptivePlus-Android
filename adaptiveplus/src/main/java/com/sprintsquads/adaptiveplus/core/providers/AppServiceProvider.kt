@@ -11,7 +11,7 @@ import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManagerImpl
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
 
 
-internal fun provideAdaptiveSharedPreferences(
+internal fun provideAPSharedPreferences(
     context: Context
 ) : APSharedPreferences {
     return APSharedPreferences(context)
@@ -20,11 +20,11 @@ internal fun provideAdaptiveSharedPreferences(
 internal fun provideNetworkServiceManager(
     context: Context?
 ) : NetworkServiceManager {
-    val preferences = context?.let { provideAdaptiveSharedPreferences(it) }
+    val preferences = context?.let { provideAPSharedPreferences(it) }
     return NetworkServiceManagerImpl.newInstance(preferences)
 }
 
-internal fun provideAdaptiveActionsManager(
+internal fun provideAPActionsManager(
     fragmentActivity: FragmentActivity,
     fragmentManager: FragmentManager,
     apViewModelDelegate: APViewModelDelegate

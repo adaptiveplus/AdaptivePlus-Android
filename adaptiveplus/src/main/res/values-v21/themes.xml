@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="APStoriesDialogTheme" parent="APStoriesDialogBaseTheme">
+        <item name="android:navigationBarColor">@color/apBlack</item>
+    </style>
+</resources>

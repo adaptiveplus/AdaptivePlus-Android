@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="APBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="APBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/APBottomSheetModal</item>
     </style>
+
+    <style name="APStoriesDialogBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/apBlack</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:windowAnimationStyle">@style/APStoriesDialogBottomTopAnimation</item>
+    </style>
+
+    <style name="APStoriesDialogTheme" parent="APStoriesDialogBaseTheme"/>
 </resources>

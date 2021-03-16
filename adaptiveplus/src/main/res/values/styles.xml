@@ -3,4 +3,9 @@
     <style name="APBottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/ap_bg_bottom_dialog</item>
     </style>
+
+    <style name="APStoriesDialogBottomTopAnimation">
+        <item name="android:windowEnterAnimation">@anim/ap_enter_stories_bottom_top</item>
+        <item name="android:windowExitAnimation">@anim/ap_exit_stories_top_bottom</item>
+    </style>
 </resources>

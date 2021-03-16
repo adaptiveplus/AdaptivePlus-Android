@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ap_stories_close_btn_size">40dp</dimen>
+</resources>

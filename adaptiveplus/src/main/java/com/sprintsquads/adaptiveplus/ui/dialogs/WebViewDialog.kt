@@ -25,25 +25,25 @@ internal class WebViewDialog : BottomSheetDialogFragment() {
         private const val EXTRA_URL = "url"
 
         @JvmStatic
-        fun newInstance(url: String, delegate: Delegate? = null) =
+        fun newInstance(url: String, lifecycleListener: LifecycleListener? = null) =
             WebViewDialog().apply {
                 arguments = bundleOf(EXTRA_URL to url)
-                this.delegate = delegate
+                this.lifecycleListener = lifecycleListener
             }
     }
 
 
-    interface Delegate {
+    interface LifecycleListener {
         fun onDismiss()
     }
 
 
-    private var delegate: Delegate? = null
+    private var lifecycleListener: LifecycleListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.APBottomSheetDialog)
+        setStyle(STYLE_NO_TITLE, R.style.APBottomSheetDialogTheme)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -147,6 +147,6 @@ internal class WebViewDialog : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        delegate?.onDismiss()
+        lifecycleListener?.onDismiss()
     }
 }

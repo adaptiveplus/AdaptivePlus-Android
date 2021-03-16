@@ -3,4 +3,6 @@
     <color name="apTransparent">#00000000</color>
     <color name="apWhite">#FFFFFF</color>
     <color name="apDarkIndigo">#071222</color>
+    <color name="apBlack">#000000</color>
+    <color name="apWhite50">#7FFFFFFF</color>
 </resources>

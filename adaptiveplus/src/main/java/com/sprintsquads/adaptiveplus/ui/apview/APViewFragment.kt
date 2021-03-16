@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
-import com.sprintsquads.adaptiveplus.core.providers.provideAdaptiveActionsManager
+import com.sprintsquads.adaptiveplus.core.providers.provideAPActionsManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
@@ -61,7 +61,7 @@ internal class APViewFragment : Fragment() {
             val viewModelFactory = APViewModelFactory(it.application)
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewModel::class.java)
 
-            apActionsManager = provideAdaptiveActionsManager(it, childFragmentManager, viewModel)
+            apActionsManager = provideAPActionsManager(it, childFragmentManager, viewModel)
             customActionCallback?.let { callback ->
                 apActionsManager?.setAPCustomAction(callback)
             }
