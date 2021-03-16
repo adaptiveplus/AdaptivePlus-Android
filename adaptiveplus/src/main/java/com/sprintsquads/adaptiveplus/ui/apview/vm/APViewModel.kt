@@ -32,7 +32,6 @@ internal class APViewModel(
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
     private var _apViewId: String = ""
-    private var _apViewDataModel: APViewDataModel? = null
 
     private var repository = provideAPViewRepository(application.applicationContext)
 
@@ -49,7 +48,7 @@ internal class APViewModel(
                 _apViewDataModelLiveData.value = _apViewDataModelLiveData.value
             }
         }
-        else if (isForceUpdate || !isCached || _apViewDataModel == null) {
+        else if (isForceUpdate || !isCached || _apViewDataModelLiveData.value == null) {
             if (!isCached) {
                 saveAPViewDataModelToCache(dataModel.id, dataModel)
             }

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
-import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
@@ -24,12 +23,12 @@ internal fun buildComponentView(context: Context, layer: APLayer): View? {
     }
 }
 
-internal fun drawEntry(
+internal fun drawAPLayersOnLayout(
     layout: ConstraintLayout,
-    entryPoint: APEntryPoint,
+    layers: List<APLayer>,
     scaleFactor: Float = 1f
 ) {
-    entryPoint.layers.forEach { layer ->
+    layers.forEach { layer ->
         buildComponentView(layout.context, layer)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
 

@@ -338,7 +338,7 @@
                 "opacity": 1
               },
               "component": {
-                "color": "#000000FF"
+                "color": "#00FF00FF"
               }
             },
             {
@@ -364,17 +364,17 @@
                 "font": {
                   "family": "Roboto",
                   "style": "semiboldItalic",
-                  "size": 12,
+                  "size": 20,
                   "color": "#000000FF",
-                  "align": "left",
-                  "letterSpacing": "0"
+                  "align": "center",
+                  "letterSpacing": 0
                 }
               },
               "options": {
                 "position": {
-                  "x": 16,
-                  "y": 44,
-                  "width": 208,
+                  "x": 100,
+                  "y": 60,
+                  "width": 180,
                   "height": 60,
                   "angle": 0
                 },
@@ -405,7 +405,7 @@
                   "size": 12,
                   "color": "#000000FF",
                   "align": "center",
-                  "letterSpacing": "0"
+                  "letterSpacing": 0
                 }
               },
               "actions": [

@@ -2,6 +2,7 @@ package com.sprintsquads.adaptiveplus.ui.stories
 
 import android.os.Bundle
 import android.view.*
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,8 @@ import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModelFactory
+import com.sprintsquads.adaptiveplus.utils.drawAPLayersOnLayout
+import kotlinx.android.synthetic.main.ap_fragment_snap.*
 import kotlin.math.abs
 
 
@@ -71,7 +74,32 @@ internal class APSnapFragment :
         view.setOnTouchListener(this)
         gestureDetector = GestureDetector(context, SwipeDetector())
 
-        // TODO: build components layout
+        redrawSnap()
+
+        apContentCardView.addOnLayoutChangeListener(apSnapFragmentLayoutChangeListener)
+    }
+
+    private val apSnapFragmentLayoutChangeListener = View.OnLayoutChangeListener {
+            v, _, _, _, _, oldLeft, _, oldRight, _ ->
+
+        val oldWidth = oldRight - oldLeft
+        if (v.width != oldWidth) {
+            redrawSnap()
+        }
+    }
+
+    private fun redrawSnap() {
+        val apContentCardViewConstraintSet = ConstraintSet()
+        apContentCardViewConstraintSet.clone(apSnapLayout)
+        apContentCardViewConstraintSet.constrainHeight(
+            apContentCardView.id, (apContentCardView.width * snap.height / snap.width).toInt())
+        apContentCardViewConstraintSet.applyTo(apSnapLayout)
+
+        val baseScreenWidth = maxOf(snap.width, 0.001)
+        val scaleFactor = (apContentCardView.width / baseScreenWidth).toFloat()
+
+        apContentLayout.removeAllViews()
+        drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

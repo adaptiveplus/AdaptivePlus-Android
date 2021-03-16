@@ -11,7 +11,7 @@ import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.DELAY_BETWEEN_CLICKS
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
-import com.sprintsquads.adaptiveplus.utils.drawEntry
+import com.sprintsquads.adaptiveplus.utils.drawAPLayersOnLayout
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 
 
@@ -79,7 +79,7 @@ internal class APEntryPointsAdapter(
             )
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
-            drawEntry(apEntryLayout, entryPoint, scaleFactor)
+            drawAPLayersOnLayout(apEntryLayout, entryPoint.layers, scaleFactor)
         }
     }
 }
