@@ -19,7 +19,7 @@ import javax.net.ssl.X509TrustManager
 
 internal class NetworkServiceManagerImpl
 private constructor(
-    private val preferences: AdaptiveSharedPreferences? = null
+    private val preferences: APSharedPreferences? = null
 ): NetworkServiceManager {
 
     companion object {
@@ -29,7 +29,7 @@ private constructor(
 
 
         fun newInstance(
-            preferences: AdaptiveSharedPreferences? = null
+            preferences: APSharedPreferences? = null
         ): NetworkServiceManagerImpl {
             return NetworkServiceManagerImpl(preferences)
         }
@@ -42,7 +42,7 @@ private constructor(
 
     private fun tokenInstance(): String? {
         if (token == null) {
-            token = preferences?.getString(AdaptiveSharedPreferences.AUTH_TOKEN)
+            token = preferences?.getString(APSharedPreferences.AUTH_TOKEN)
         }
         return token
     }
@@ -51,10 +51,10 @@ private constructor(
         this.token = token
 
         if (token == null) {
-            preferences?.remove(AdaptiveSharedPreferences.AUTH_TOKEN)
+            preferences?.remove(APSharedPreferences.AUTH_TOKEN)
         }
         else {
-            preferences?.saveString(AdaptiveSharedPreferences.AUTH_TOKEN, token)
+            preferences?.saveString(APSharedPreferences.AUTH_TOKEN, token)
         }
     }
 

@@ -6,30 +6,30 @@ import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.sprintsquads.adaptiveplus.core.providers.provideAdaptiveAuthRepository
+import com.sprintsquads.adaptiveplus.core.providers.provideAPAuthRepository
 import com.sprintsquads.adaptiveplus.data.*
 import com.sprintsquads.adaptiveplus.data.BASE_API_URL
 import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
 import com.sprintsquads.adaptiveplus.data.LOCALE
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
-import com.sprintsquads.adaptiveplus.data.repositories.AdaptiveAuthRepository
-import com.sprintsquads.adaptiveplus.sdk.data.AdaptiveLocation
-import com.sprintsquads.adaptiveplus.sdk.data.UserConfig
+import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
+import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.sdk.data.APUserConfig
 
 
 class AdaptivePlusSDK {
 
-    private var authRepository: AdaptiveAuthRepository? = null
+    private var authRepository: APAuthRepository? = null
 
 
     @SuppressLint("HardwareIds")
     fun start(
         context: Context,
         userId: String? = null,
-        userConfig: UserConfig? = null,
+        userConfig: APUserConfig? = null,
         isDebuggable: Boolean = false,
         locale: String? = null,
-        location: AdaptiveLocation? = null
+        location: APLocation? = null
     ) {
         IS_DEBUGGABLE = isDebuggable
         LOCALE = locale ?:
@@ -160,9 +160,9 @@ class AdaptivePlusSDK {
          */
     }
 
-    private fun authRepositoryInstance(context: Context?) : AdaptiveAuthRepository? {
+    private fun authRepositoryInstance(context: Context?) : APAuthRepository? {
         if (authRepository == null && context != null) {
-            authRepository = provideAdaptiveAuthRepository(context)
+            authRepository = provideAPAuthRepository(context)
         }
 
         return authRepository
@@ -202,9 +202,9 @@ class AdaptivePlusSDK {
 
     internal fun isStartedLiveData(): LiveData<Boolean> = isStartedLiveData
 
-    internal fun getUserLocation(): AdaptiveLocation? = userLocation
+    internal fun getUserLocation(): APLocation? = userLocation
 
-    fun updateUserLocation(location: AdaptiveLocation?) {
+    fun updateUserLocation(location: APLocation?) {
         userLocation = location
     }
 
@@ -212,8 +212,8 @@ class AdaptivePlusSDK {
     companion object {
         private var deviceId: String? = null
         private var userId: String? = null
-        private var userConfig: UserConfig? = null
-        private var userLocation: AdaptiveLocation? = null
+        private var userConfig: APUserConfig? = null
+        private var userLocation: APLocation? = null
 
         private var mAppId: String? = null
         private var mAppSecret: String? = null

@@ -23,7 +23,7 @@
                 android:layout_marginEnd="16dp">
 
                 <Spinner
-                    android:id="@+id/tagsSpinner"
+                    android:id="@+id/apViewsSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
@@ -34,29 +34,29 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/addNewTagBtn"
+                    app:layout_constraintEnd_toStartOf="@id/addNewAPViewBtn"
                     />
 
                 <ImageView
-                    android:id="@+id/addNewTagBtn"
+                    android:id="@+id/addNewAPViewBtn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:src="@android:drawable/ic_input_add"
-                    app:layout_constraintTop_toTopOf="@id/tagsSpinner"
-                    app:layout_constraintBottom_toBottomOf="@id/tagsSpinner"
-                    app:layout_constraintEnd_toStartOf="@id/deleteTagBtn"
+                    app:layout_constraintTop_toTopOf="@id/apViewsSpinner"
+                    app:layout_constraintBottom_toBottomOf="@id/apViewsSpinner"
+                    app:layout_constraintEnd_toStartOf="@id/deleteAPViewBtn"
                     />
 
                 <ImageView
-                    android:id="@+id/deleteTagBtn"
+                    android:id="@+id/deleteAPViewBtn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@android:drawable/ic_delete"
-                    app:layout_constraintTop_toTopOf="@id/tagsSpinner"
+                    app:layout_constraintTop_toTopOf="@id/apViewsSpinner"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/tagsSpinner"
+                    app:layout_constraintBottom_toBottomOf="@id/apViewsSpinner"
                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -68,7 +68,7 @@
                 />
 
             <LinearLayout
-                android:id="@+id/tagsLayout"
+                android:id="@+id/apViewsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

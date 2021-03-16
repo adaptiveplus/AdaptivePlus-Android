@@ -1,40 +1,40 @@
 package com.sprintsquads.adaptiveplus.core.providers
 
 import android.content.Context
-import com.sprintsquads.adaptiveplus.data.repositories.AdaptiveAnalyticsRepository
-import com.sprintsquads.adaptiveplus.data.repositories.AdaptiveAuthRepository
-import com.sprintsquads.adaptiveplus.data.repositories.AdaptiveStoriesRepository
-import com.sprintsquads.adaptiveplus.data.repositories.AdaptiveTagRepository
+import com.sprintsquads.adaptiveplus.data.repositories.APAnalyticsRepository
+import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
+import com.sprintsquads.adaptiveplus.data.repositories.APStoriesRepository
+import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
 
 
-internal fun provideAdaptiveAnalyticsRepository(
+internal fun provideAPAnalyticsRepository(
     context: Context?
-): AdaptiveAnalyticsRepository {
-    return AdaptiveAnalyticsRepository(
+): APAnalyticsRepository {
+    return APAnalyticsRepository(
         provideNetworkServiceManager(context)
     )
 }
 
-internal fun provideAdaptiveAuthRepository(
+internal fun provideAPAuthRepository(
     context: Context?
-): AdaptiveAuthRepository {
-    return AdaptiveAuthRepository(
+): APAuthRepository {
+    return APAuthRepository(
         provideNetworkServiceManager(context)
     )
 }
 
-internal fun provideAdaptiveTagRepository(
+internal fun provideAPViewRepository(
     context: Context?
-): AdaptiveTagRepository {
-    return AdaptiveTagRepository(
+): APViewRepository {
+    return APViewRepository(
         provideNetworkServiceManager(context)
     )
 }
 
-internal fun provideAdaptiveStoriesRepository(
+internal fun provideAPStoriesRepository(
     context: Context?
-): AdaptiveStoriesRepository {
-    return AdaptiveStoriesRepository(
+): APStoriesRepository {
+    return APStoriesRepository(
         provideNetworkServiceManager(context)
     )
 }

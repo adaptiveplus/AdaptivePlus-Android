@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptiveTag
-            android:id="@+id/mock1AdaptiveTag"
+        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+            android:id="@+id/mock1APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:apTagId="mock1"
+            app:apViewId="mock1"
             />
 
     </LinearLayout>

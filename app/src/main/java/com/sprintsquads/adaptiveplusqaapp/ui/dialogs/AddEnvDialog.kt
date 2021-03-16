@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.webkit.URLUtil
 import androidx.fragment.app.DialogFragment
 import com.sprintsquads.adaptiveplusqaapp.R
-import com.sprintsquads.adaptiveplusqaapp.data.AdaptiveSdkEnvironment
+import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.utils.addNewEnv
 import kotlinx.android.synthetic.main.add_env_dialog.*
 
@@ -51,13 +51,13 @@ class AddEnvDialog : DialogFragment() {
                 companySecretEditText.text.toString().isNotEmpty() &&
                 appSecretEditText.text.toString().isNotEmpty()
             ) {
-                val newEnv = AdaptiveSdkEnvironment(
+                val newEnv = APSdkEnvironment(
                     name = envNameEditText.text.toString(),
                     baseApiUrl = baseUrlEditText.text.toString(),
                     appId = appIdEditText.text.toString(),
                     companySecret = companySecretEditText.text.toString(),
                     appSecret = appSecretEditText.text.toString(),
-                    tags = listOf()
+                    apViews = listOf()
                 )
 
                 context?.let { ctx -> addNewEnv(ctx, newEnv) }

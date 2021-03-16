@@ -3,19 +3,18 @@ package com.sprintsquads.adaptiveplus.core.providers
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.sprintsquads.adaptiveplus.core.managers.*
-import com.sprintsquads.adaptiveplus.core.managers.AdaptiveActionsManager
-import com.sprintsquads.adaptiveplus.core.managers.AdaptiveActionsManagerImpl
-import com.sprintsquads.adaptiveplus.core.managers.AdaptiveSharedPreferences
+import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
+import com.sprintsquads.adaptiveplus.core.managers.APActionsManagerImpl
+import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManagerImpl
-import com.sprintsquads.adaptiveplus.ui.tag.vm.AdaptiveTagViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
 
 
 internal fun provideAdaptiveSharedPreferences(
     context: Context
-) : AdaptiveSharedPreferences {
-    return AdaptiveSharedPreferences(context)
+) : APSharedPreferences {
+    return APSharedPreferences(context)
 }
 
 internal fun provideNetworkServiceManager(
@@ -28,7 +27,7 @@ internal fun provideNetworkServiceManager(
 internal fun provideAdaptiveActionsManager(
     fragmentActivity: FragmentActivity,
     fragmentManager: FragmentManager,
-    tagViewModelDelegate: AdaptiveTagViewModelDelegate
-) : AdaptiveActionsManager {
-    return AdaptiveActionsManagerImpl(fragmentActivity, fragmentManager, tagViewModelDelegate)
+    apViewModelDelegate: APViewModelDelegate
+) : APActionsManager {
+    return APActionsManagerImpl(fragmentActivity, fragmentManager, apViewModelDelegate)
 }

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
-import com.sprintsquads.adaptiveplus.sdk.data.AdaptiveLocation
+import com.sprintsquads.adaptiveplus.sdk.data.APLocation
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.Gender
 import com.sprintsquads.adaptiveplusqaapp.data.Locale
@@ -130,12 +130,12 @@ class LauncherActivity : AppCompatActivity() {
             this, android.R.layout.simple_spinner_dropdown_item, ipNames)
     }
 
-    private fun getAdaptiveLocation(): AdaptiveLocation? {
+    private fun getAdaptiveLocation(): APLocation? {
         val lat = latitudeEditText.text.toString().toDoubleOrNull()
         val lon = longitudeEditText.text.toString().toDoubleOrNull()
 
         if (lat != null && lon != null) {
-            return AdaptiveLocation(latitude = lat, longitude = lon)
+            return APLocation(latitude = lat, longitude = lon)
         }
 
         return null

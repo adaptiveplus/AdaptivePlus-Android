@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.sprintsquads.adaptiveplus.sdk.data.AdaptiveOnboardingItem
+import com.sprintsquads.adaptiveplus.sdk.data.APOnboardingItem
 import com.sprintsquads.adaptiveplusqaapp.R
 import kotlinx.android.synthetic.main.onboarding_dialog.*
 
@@ -20,7 +20,7 @@ class OnboardingDialog : DialogFragment() {
 
         @JvmStatic
         fun newInstance(
-            onboardingItems: List<AdaptiveOnboardingItem>,
+            onboardingItems: List<APOnboardingItem>,
             interactor: InteractionInterface
         ) = OnboardingDialog().apply {
             arguments = bundleOf(EXTRA_ONBOARDING to ArrayList(onboardingItems))
@@ -29,7 +29,7 @@ class OnboardingDialog : DialogFragment() {
     }
 
 
-    private lateinit var onboardingItems: List<AdaptiveOnboardingItem>
+    private lateinit var onboardingItems: List<APOnboardingItem>
     private var interactor: InteractionInterface? = null
 
 
@@ -50,7 +50,7 @@ class OnboardingDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (arguments?.getSerializable(EXTRA_ONBOARDING) as? ArrayList<AdaptiveOnboardingItem>)?.let {
+        (arguments?.getSerializable(EXTRA_ONBOARDING) as? ArrayList<APOnboardingItem>)?.let {
             this.onboardingItems = it
         } ?: run {
             dismiss()
@@ -71,7 +71,7 @@ class OnboardingDialog : DialogFragment() {
         }
     }
 
-    private fun convertOnboardingItemToString(item: AdaptiveOnboardingItem): String {
+    private fun convertOnboardingItemToString(item: APOnboardingItem): String {
         return "{\n\ttitle: ${item.title},\n\tsubtitle: ${item.subtitle}," +
                 "\n\timageUrl: ${item.imageUrl},\n\timageType: ${item.imageType}," +
                 "\n\thasActions: ${item.hasActions}\n},"

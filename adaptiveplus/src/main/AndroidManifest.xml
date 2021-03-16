@@ -7,13 +7,13 @@
 
     <application>
         <provider
-            android:name=".core.providers.AdaptiveFileProvider"
-            android:authorities="${applicationId}.adaptivefileprovider"
+            android:name=".core.providers.APFileProvider"
+            android:authorities="${applicationId}.apfileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/adaptive_filepaths" />
+                android:resource="@xml/ap_filepaths" />
         </provider>
     </application>
 

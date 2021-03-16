@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
-import com.sprintsquads.adaptiveplus.sdk.data.AdaptiveLocation
-import com.sprintsquads.adaptiveplus.sdk.data.UserConfig
+import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.sdk.data.APUserConfig
 import com.sprintsquads.adaptiveplusqaapp.R
-import com.sprintsquads.adaptiveplusqaapp.data.AdaptiveSdkEnvironment
+import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.data.Environment
 import com.sprintsquads.adaptiveplusqaapp.data.Gender
 import com.sprintsquads.adaptiveplusqaapp.ui.fragments.ApiFragment
@@ -52,18 +52,18 @@ class MainActivity : AppCompatActivity() {
         val userId = intent?.getStringExtra(EXTRA_USER_ID)
         val age = intent?.getIntExtra(EXTRA_AGE, -1)
         val gender = when {
-            intent?.getStringExtra(EXTRA_GENDER) == Gender.FEMALE.value -> UserConfig.Gender.FEMALE
-            intent?.getStringExtra(EXTRA_GENDER) == Gender.MALE.value -> UserConfig.Gender.MALE
+            intent?.getStringExtra(EXTRA_GENDER) == Gender.FEMALE.value -> APUserConfig.Gender.FEMALE
+            intent?.getStringExtra(EXTRA_GENDER) == Gender.MALE.value -> APUserConfig.Gender.MALE
             else -> null
         }
 
         val userConfig = if (age != -1 && gender != null) {
-            UserConfig(age = age, gender = gender)
+            APUserConfig(age = age, gender = gender)
         } else {
             null
         }
 
-        val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? AdaptiveLocation
+        val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? APLocation
 
         AdaptivePlusSDK().apply {
             setTestEnvironment(
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showApiFragment(env: AdaptiveSdkEnvironment) {
+    private fun showApiFragment(env: APSdkEnvironment) {
         supportFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE

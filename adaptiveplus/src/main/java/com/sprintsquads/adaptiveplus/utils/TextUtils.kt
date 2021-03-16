@@ -6,7 +6,7 @@ import android.text.Spanned
 import org.xml.sax.XMLReader
 
 
-//internal fun formatTextView(textView: TextView, options: AdaptiveTemplate.TextDetails.Options) {
+//internal fun formatTextView(textView: TextView, options: APTextComponent) {
 //    options.fontSize?.let {
 //        textView.textSize = it.toFloat()
 //    }
@@ -19,9 +19,9 @@ import org.xml.sax.XMLReader
 //
 //    options.textAlign?.let {
 //        textView.gravity = when (it) {
-//            AdaptiveTemplate.TextDetails.Options.TextAlign.LEFT -> Gravity.START
-//            AdaptiveTemplate.TextDetails.Options.TextAlign.CENTER -> Gravity.CENTER
-//            AdaptiveTemplate.TextDetails.Options.TextAlign.RIGHT -> Gravity.END
+//            APTextComponent.TextAlign.LEFT -> Gravity.START
+//            APTextComponent.TextAlign.CENTER -> Gravity.CENTER
+//            APTextComponent.TextAlign.RIGHT -> Gravity.END
 //        }
 //    }
 //}

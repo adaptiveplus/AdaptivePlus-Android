@@ -1,22 +1,19 @@
 package com.sprintsquads.adaptiveplus.utils
 
 import android.content.Context
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.sprintsquads.adaptiveplus.data.GLIDE_TIMEOUT
-import com.sprintsquads.adaptiveplus.data.models.AdaptiveTagTemplate
+import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import java.io.*
 
 
-internal fun loadTemplateFromCache(
+internal fun loadAPViewDataModelFromCache(
     ctx: Context,
-    tagId: String,
+    apViewId: String,
     userId: String,
-    onResult: (template: AdaptiveTagTemplate?) -> Unit
+    onResult: (dataModel: APViewDataModel?) -> Unit
 ) {
     try {
-        val templateFile = File(ctx.cacheDir, "${userId}_$tagId.json")
-        val inputStream: InputStream = templateFile.inputStream()
+        val dataModelFile = File(ctx.cacheDir, "${userId}_$apViewId.json")
+        val inputStream: InputStream = dataModelFile.inputStream()
         val size = inputStream.available()
         val buffer = ByteArray(size)
 
@@ -25,8 +22,8 @@ internal fun loadTemplateFromCache(
 
         val json = String(buffer, Charsets.UTF_8)
 
-        val template = getDeserializedTagTemplate(json)
-        onResult(template)
+        val dataModel = getDeserializedAPViewDataModel(json)
+        onResult(dataModel)
     } catch (ex: FileNotFoundException) {
         ex.printStackTrace()
         onResult(null)
@@ -36,43 +33,17 @@ internal fun loadTemplateFromCache(
     }
 }
 
-internal fun loadTemplateFromCache(
+internal fun saveAPViewDataModelToCache(
     ctx: Context,
-    tagId: String,
-    userId: String
-): AdaptiveTagTemplate? {
-    try {
-        val templateFile = File(ctx.cacheDir, "${userId}_$tagId.json")
-        val inputStream: InputStream = templateFile.inputStream()
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-
-        inputStream.read(buffer)
-        inputStream.close()
-
-        val json = String(buffer, Charsets.UTF_8)
-
-        return getDeserializedTagTemplate(json)
-    } catch (ex: FileNotFoundException) {
-        ex.printStackTrace()
-        return null
-    } catch (ex: IOException) {
-        ex.printStackTrace()
-        return null
-    }
-}
-
-internal fun saveTemplateToCache(
-    ctx: Context,
-    tagId: String,
+    apViewId: String,
     userId: String,
-    template: AdaptiveTagTemplate
+    dataModel: APViewDataModel
 ) {
     try {
-        val templateFile = File(ctx.cacheDir, "${userId}_$tagId.json")
-        templateFile.createNewFile()
-        val outputStream: OutputStream = templateFile.outputStream()
-        val json = getSerializedTagTemplate(template)
+        val dataModelFile = File(ctx.cacheDir, "${userId}_$apViewId.json")
+        dataModelFile.createNewFile()
+        val outputStream: OutputStream = dataModelFile.outputStream()
+        val json = getSerializedAPViewDataModel(dataModel)
 
         if (json != null) {
             outputStream.write(json.toByteArray())
@@ -85,27 +56,27 @@ internal fun saveTemplateToCache(
     }
 }
 
-internal fun removeTemplateFromCache(
+internal fun removeAPViewDataModelFromCache(
     ctx: Context,
-    tagId: String,
+    apViewId: String,
     userId: String
 ) {
     try {
-        val templateFile = File(ctx.cacheDir, "${userId}_$tagId.json")
-        templateFile.delete()
+        val dataModelFile = File(ctx.cacheDir, "${userId}_$apViewId.json")
+        dataModelFile.delete()
     } catch (ex: IOException) {
         ex.printStackTrace()
     }
 }
 
-internal fun loadMockTemplateFromAssets(
+internal fun loadAPViewMockDataModelFromAssets(
     ctx: Context,
-    tagId: String,
-    onSuccess: (template: AdaptiveTagTemplate) -> Unit
+    apViewId: String,
+    onSuccess: (dataModel: APViewDataModel) -> Unit
 ) {
     try {
         val inputStream: InputStream =
-            ctx.assets.open("$tagId.json")
+            ctx.assets.open("$apViewId.json")
         val size = inputStream.available()
         val buffer = ByteArray(size)
 
@@ -114,19 +85,11 @@ internal fun loadMockTemplateFromAssets(
 
         val json = String(buffer, Charsets.UTF_8)
 
-        val template = getDeserializedTagTemplate(json)
-        if (template != null) {
-            onSuccess(template)
+        val dataModel = getDeserializedAPViewDataModel(json)
+        if (dataModel != null) {
+            onSuccess(dataModel)
         }
     } catch (ex: IOException) {
         ex.printStackTrace()
     }
-}
-
-internal fun preloadImage(ctx: Context, imageUrl: String) {
-    Glide.with(ctx)
-        .load(imageUrl)
-        .timeout(GLIDE_TIMEOUT)
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
-        .preload()
 }
