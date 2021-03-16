@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
+import com.sprintsquads.adaptiveplus.extensions.applyAPFont
 import kotlinx.android.synthetic.main.ap_component_text.view.*
 
 
@@ -24,6 +25,7 @@ internal class APTextComponentView : APBaseComponentView {
 
         (component as? APTextComponent)?.run {
             apComponentTextView.text = value
+            font?.let { apComponentTextView.applyAPFont(it) }
         }
     }
 }

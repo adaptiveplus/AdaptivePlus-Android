@@ -45,7 +45,7 @@
             "position": {
               "x": 10,
               "y": 10,
-              "width": 220,
+              "width": 180,
               "height": 100,
               "angle": 0
             },
@@ -60,8 +60,10 @@
                 "endColor": "#126B3CFF",
                 "angle": 45
               },
-              "padding": 2
-            }
+              "padding": 4,
+              "cornerRadius": 14
+            },
+            "cornerRadius": 12
           }
         },
         {
@@ -87,9 +89,9 @@
             "position": {
               "x": 120,
               "y": 60,
-              "width": 208,
+              "width": 120,
               "height": 60,
-              "angle": 0
+              "angle": 45
             },
             "opacity": 1
           },
@@ -99,7 +101,7 @@
               "family": "Roboto",
               "style": "semiboldItalic",
               "size": 12,
-              "color": "#000000FF",
+              "color": "#FF0000FF",
               "align": "left",
               "letterSpacing": 0
             }
@@ -157,7 +159,8 @@
               "activeColor": {
                 "startColor": "#000000FF",
                 "endColor": "#126B3CFF",
-                "angle": 45
+                "angle": 45,
+                "cornerRadius": 14
               },
               "padding": 2
             }

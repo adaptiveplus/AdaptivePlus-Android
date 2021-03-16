@@ -6,12 +6,14 @@ import java.io.Serializable
 
 internal data class APImageComponent(
     val url: String,
-    val border: Border
+    val border: Border?,
+    val cornerRadius: Double?
 ) : APComponent, Serializable {
 
     data class Border(
         val width: Double,
         val activeColor: APColor,
-        val padding: Double
+        val padding: Double,
+        val cornerRadius: Double
     ) : Serializable
 }
