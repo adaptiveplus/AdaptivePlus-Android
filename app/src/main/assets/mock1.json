@@ -210,9 +210,9 @@
       ],
       "actions": [
         {
-          "kind": "SHOW_STORY",
+          "kind": "OPEN_WEB_LINK",
           "params": {
-            "storyId": "123"
+            "url": "https://sprintsquads.com/"
           }
         }
       ]

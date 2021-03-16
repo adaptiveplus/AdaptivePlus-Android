@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import java.io.Serializable
 
 @Keep
-internal data class APEntry(
+internal data class APEntryPoint(
     val options: Options,
     val layers: List<APLayer>,
     val actions: List<APAction>

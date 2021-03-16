@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.sprintsquads.adaptiveplus.core.providers.provideAPViewRepository
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
@@ -28,7 +29,9 @@ internal class APViewModel(
 
     private val _apViewDataModelLiveData = MutableLiveData<APViewDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<Pair<APAction, String>>>()
-//    private val _storiesPausesLiveData = MutableLiveData<Int>()
+    private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
+    private val _isAPStoriesPausedLiveData =
+        Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
     private var _apViewId: String = ""
     private var _apViewDataModel: APViewDataModel? = null
@@ -83,27 +86,22 @@ internal class APViewModel(
         actions: List<APAction>,
         campaignId: String
     ) {
-//        for (actionId in actions) {
-//            (_actions[actionId] ?: _bookmarksTemplate?.actions?.get(actionId))?.let {
-//                params["actionId"] = actionId
-//                AdaptiveAnalytics.logEvent(
-//                        AnalyticsEvent(
-//                                name = "action",
-//                                campaignId = campaignId,
-//                                apViewId = _apViewId,
-//                                parameters = params
-//                        )
-//                )
-//
-//                runAction(it, campaignId)
-//            }
-//        }
+        for (action in actions) {
+            // TODO: uncomment on analytics
+//            AdaptiveAnalytics.logEvent(
+//                action = action,
+//                campaignId = campaignId,
+//                apViewId = _apViewId
+//            )
+
+            runAction(action, campaignId)
+        }
     }
 
     /**
-     * Method to execute adaptive action
+     * Method to execute adaptive plus action
      *
-     * @param action - a adaptive action to execute
+     * @param action - a adaptive plus action to execute
      * @see APAction
      */
     private fun runAction(action: APAction, campaignId: String) {
@@ -111,17 +109,17 @@ internal class APViewModel(
                 Event(Pair(action, campaignId))
     }
 
-//    override fun getStoriesPausesLiveData(): LiveData<Int> {
-//        return _storiesPausesLiveData
-//    }
-//
-//    override fun pauseStories() {
-//        _storiesPausesLiveData.value = _storiesPausesLiveData.value?.inc() ?: 1
-//    }
-//
-//    override fun resumeStories() {
-//        _storiesPausesLiveData.value = _storiesPausesLiveData.value?.dec() ?: 0
-//    }
+    override fun isAPStoriesPausedLiveData(): LiveData<Boolean> {
+        return _isAPStoriesPausedLiveData
+    }
+
+    override fun pauseAPStories() {
+        _apStoriesPauseNumberLiveData.value = _apStoriesPauseNumberLiveData.value?.inc() ?: 1
+    }
+
+    override fun resumeAPStories() {
+        _apStoriesPauseNumberLiveData.value = _apStoriesPauseNumberLiveData.value?.dec() ?: 0
+    }
 
     @Deprecated(
             message = "Not working. Only for testing purposes.",

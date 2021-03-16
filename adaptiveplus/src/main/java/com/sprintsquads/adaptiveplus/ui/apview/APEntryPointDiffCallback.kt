@@ -1,25 +1,25 @@
 package com.sprintsquads.adaptiveplus.ui.apview
 
 import androidx.recyclerview.widget.DiffUtil
-import com.sprintsquads.adaptiveplus.data.models.APEntry
+import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 
 
 internal class APEntryPointDiffCallback(
-    private val oldEntries: List<APEntry>,
-    private val newEntries: List<APEntry>
+    private val oldEntryPoints: List<APEntryPoint>,
+    private val newEntryPoints: List<APEntryPoint>
 ): DiffUtil.Callback() {
 
-    override fun getOldListSize(): Int = oldEntries.size
+    override fun getOldListSize(): Int = oldEntryPoints.size
 
-    override fun getNewListSize(): Int = newEntries.size
+    override fun getNewListSize(): Int = newEntryPoints.size
 
     override fun areItemsTheSame(oldItemPos: Int, newItemPos: Int): Boolean {
-        return oldEntries[oldItemPos].options.id == newEntries[newItemPos].options.id
+        return oldEntryPoints[oldItemPos].options.id == newEntryPoints[newItemPos].options.id
     }
 
     override fun areContentsTheSame(oldItemPos: Int, newItemPos: Int): Boolean {
-        val oldItem = oldEntries[oldItemPos]
-        val newItem = newEntries[newItemPos]
+        val oldItem = oldEntryPoints[oldItemPos]
+        val newItem = newEntryPoints[newItemPos]
 
         return oldItem.layers.size == newItem.layers.size &&
             oldItem.actions.size == newItem.actions.size

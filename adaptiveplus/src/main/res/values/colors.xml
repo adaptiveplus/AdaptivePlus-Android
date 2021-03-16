@@ -2,4 +2,5 @@
 <resources>
     <color name="apTransparent">#00000000</color>
     <color name="apWhite">#FFFFFF</color>
+    <color name="apDarkIndigo">#071222</color>
 </resources>

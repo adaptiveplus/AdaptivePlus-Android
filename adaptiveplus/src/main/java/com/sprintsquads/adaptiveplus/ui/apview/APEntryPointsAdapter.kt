@@ -9,16 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.DELAY_BETWEEN_CLICKS
-import com.sprintsquads.adaptiveplus.data.models.APEntry
+import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
 import com.sprintsquads.adaptiveplus.utils.drawEntry
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 
 
 internal class APEntryPointsAdapter(
-    dataSet: List<APEntry>
+    dataSet: List<APEntryPoint>,
+    private val apViewModelDelegate: APViewModelDelegate
 ) : RecyclerView.Adapter<APEntryPointsAdapter.EntryViewHolder>() {
 
-    private val dataSet: MutableList<APEntry> = ArrayList(dataSet)
+    private val dataSet: MutableList<APEntryPoint> = ArrayList(dataSet)
     private var options: EntryOptions = EntryOptions(0.0, 0.0, 0.0)
     private var scaleFactor: Float = 1f
     private var lastTimeClicked = 0L
@@ -31,12 +33,12 @@ internal class APEntryPointsAdapter(
     )
 
 
-    fun updateDataSet(entries: List<APEntry>) {
-        val diffCallback = APEntryPointDiffCallback(oldEntries = this.dataSet, newEntries = entries)
+    fun updateDataSet(entryPoints: List<APEntryPoint>) {
+        val diffCallback = APEntryPointDiffCallback(oldEntryPoints = this.dataSet, newEntryPoints = entryPoints)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         dataSet.clear()
-        dataSet.addAll(entries)
+        dataSet.addAll(entryPoints)
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -61,24 +63,23 @@ internal class APEntryPointsAdapter(
     }
 
     inner class EntryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        init {
-            itemView.setOnClickListener {
+
+        fun bind(entryPoint: APEntryPoint) = with(itemView) {
+            apEntryCardView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {
                     lastTimeClicked = SystemClock.elapsedRealtime()
-                    // TODO: run actions
-                    // listener?.onClick(adapterPosition)
+                    apViewModelDelegate.runActions(
+                        entryPoint.actions, entryPoint.options.campaignId)
                 }
             }
-        }
 
-        fun bind(entry: APEntry) = with(itemView) {
             apEntryCardView.layoutParams = LinearLayout.LayoutParams(
                 (options.width * scaleFactor).toInt(),
                 (options.height * scaleFactor).toInt()
             )
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
-            drawEntry(apEntryLayout, entry, scaleFactor)
+            drawEntry(apEntryLayout, entryPoint, scaleFactor)
         }
     }
 }

@@ -59,5 +59,5 @@ private val layerDeserializer =
     }
 
 internal fun isAPViewDataModelNullOrEmpty(dataModel: APViewDataModel?): Boolean {
-    return dataModel?.entries.isNullOrEmpty()
+    return dataModel?.entryPoints.isNullOrEmpty()
 }

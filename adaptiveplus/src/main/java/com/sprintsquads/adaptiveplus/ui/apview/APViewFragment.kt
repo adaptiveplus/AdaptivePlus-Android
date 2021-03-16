@@ -81,7 +81,7 @@ internal class APViewFragment : Fragment() {
 
         updateAPViewFragmentVisibility()
 
-        entryPointsAdapter = APEntryPointsAdapter(listOf())
+        entryPointsAdapter = APEntryPointsAdapter(listOf(), viewModel)
         val layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.HORIZONTAL, false)
         apEntriesRecyclerView.layoutManager = layoutManager
@@ -123,11 +123,10 @@ internal class APViewFragment : Fragment() {
     }
 
     private val apViewDataModelObserver = Observer<APViewDataModel?> { dataModel ->
-        if (isAPViewDataModelNullOrEmpty(dataModel)) {
-            updateAPViewFragmentVisibility()
-        }
-        else {
-            updateAPViewFragmentVisibility()
+        updateAPViewFragmentVisibility()
+        apActionsManager?.setAPStories(dataModel?.stories)
+
+        if (!isAPViewDataModelNullOrEmpty(dataModel)) {
             drawAPView(dataModel!!)
         }
     }
@@ -171,9 +170,7 @@ internal class APViewFragment : Fragment() {
     private fun drawAPView(apViewDataModel: APViewDataModel) {
         if (context == null || view == null || apViewDataModel.options.isViewless) return
 
-        updateAPViewFragmentVisibility()
-
-        entryPointsAdapter.updateDataSet(apViewDataModel.entries)
+        entryPointsAdapter.updateDataSet(apViewDataModel.entryPoints)
 
         updateEntriesViewOptions()
     }
