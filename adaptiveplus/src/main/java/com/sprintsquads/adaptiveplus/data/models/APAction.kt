@@ -16,8 +16,6 @@ internal data class APAction(
         @SerializedName("OPEN_WEB_LINK")
         OPEN_WEB_LINK,
         @SerializedName("CUSTOM")
-        CUSTOM,
-        @SerializedName("SHOW_POPUP_VIEW")
-        SHOW_POPUP_VIEW
+        CUSTOM
     }
 }

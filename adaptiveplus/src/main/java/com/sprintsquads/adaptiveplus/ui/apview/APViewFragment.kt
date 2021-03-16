@@ -156,7 +156,7 @@ internal class APViewFragment : Fragment() {
         }
     }
 
-    fun setAdaptiveCustomActionCallback(callback: APCustomAction) {
+    fun setAPCustomAction(callback: APCustomAction) {
         this.customActionCallback = callback
         apActionsManager?.setAPCustomAction(callback)
     }

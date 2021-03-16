@@ -93,7 +93,7 @@ class ApiFragment : Fragment() {
                             val apView = AdaptivePlusView(ctx).apply {
                                 id = ViewCompat.generateViewId()
                                 setAdaptivePlusViewId(apView.id)
-                                setAdaptiveCustomActionCallback(object:
+                                setAPCustomAction(object:
                                     APCustomAction {
                                     override fun onRun(params: HashMap<String, Any>) {
                                         val name = params["name"]?.toString()

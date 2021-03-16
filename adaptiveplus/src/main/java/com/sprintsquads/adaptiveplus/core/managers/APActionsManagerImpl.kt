@@ -3,6 +3,7 @@ package com.sprintsquads.adaptiveplus.core.managers
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
@@ -33,8 +34,7 @@ internal class APActionsManagerImpl(
     override fun runAction(action: APAction, campaignId: String) {
         when (action.kind) {
             APAction.Kind.OPEN_WEB_LINK -> openWebView(action)
-//            APAction.Kind.SHOW_POPUP_VIEW -> openPopUpDialog(action, campaignId)
-//            APAction.Kind.CUSTOM -> runCustomAction(action)
+            APAction.Kind.CUSTOM -> runAPCustomAction(action)
 //            APAction.Kind.SHOW_STORY -> showStory(action)
         }
     }
@@ -60,6 +60,25 @@ internal class APActionsManagerImpl(
                     e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun runAPCustomAction(action: APAction) {
+        action.params?.let {
+            dismissAllDialogs()
+            apCustomAction?.onRun(it)
+        }
+    }
+
+    private fun dismissAllDialogs() {
+        try {
+            for (fragment in fragmentManager.fragments) {
+                if (fragment != null && fragment is DialogFragment) {
+                    fragment.dismiss()
+                }
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
     }
 }

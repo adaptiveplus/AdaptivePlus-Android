@@ -1,8 +1,6 @@
 package com.sprintsquads.adaptiveplus.ui.apview.vm
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -132,11 +130,7 @@ internal class APViewModel(
                 ctx = ctx,
                 apViewId = apViewId
             ) { dataModel ->
-                Looper.myLooper()?.let { looper ->
-                    Handler(looper).postDelayed({
-                        setAPViewDataModel(dataModel)
-                    }, 2000)
-                }
+                runDelayedTask({ setAPViewDataModel(dataModel) }, 2000)
             }
         }
     }

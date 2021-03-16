@@ -84,7 +84,7 @@ class AdaptivePlusView : FrameLayout {
             }
 
             apCustomAction?.let { callback ->
-                apViewFragment?.setAdaptiveCustomActionCallback(callback)
+                apViewFragment?.setAPCustomAction(callback)
             }
         }
     }
@@ -105,13 +105,13 @@ class AdaptivePlusView : FrameLayout {
     }
 
     /**
-     * Setter of adaptive custom action callback for the given container
+     * Setter of adaptive plus custom action
      *
-     * @param callback - adaptive custom action callback
+     * @param apCustomAction - adaptive plus custom action
      * @see APCustomAction
      */
-    fun setAdaptiveCustomActionCallback(callback: APCustomAction) {
-        apCustomAction = callback
-        apViewFragment?.setAdaptiveCustomActionCallback(callback)
+    fun setAPCustomAction(apCustomAction: APCustomAction) {
+        this.apCustomAction = apCustomAction
+        apViewFragment?.setAPCustomAction(apCustomAction)
     }
 }
