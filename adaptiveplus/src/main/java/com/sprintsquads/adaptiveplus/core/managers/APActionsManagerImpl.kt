@@ -12,6 +12,7 @@ import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
 import com.sprintsquads.adaptiveplus.ui.dialogs.WebViewDialog
 import com.sprintsquads.adaptiveplus.ui.stories.APStoriesDialog
+import com.sprintsquads.adaptiveplus.utils.deserializeAPActionParams
 
 
 internal class APActionsManagerImpl(
@@ -22,7 +23,7 @@ internal class APActionsManagerImpl(
 
     companion object {
         private const val PARAM_URL = "url"
-        private const val PARAM_STORY_ID = "storyId"
+        private const val PARAM_STORY = "story"
     }
 
 
@@ -39,10 +40,10 @@ internal class APActionsManagerImpl(
     }
 
     override fun runAction(action: APAction, campaignId: String) {
-        when (action.kind) {
-            APAction.Kind.OPEN_WEB_LINK -> openWebView(action)
-            APAction.Kind.CUSTOM -> runAPCustomAction(action)
-            APAction.Kind.SHOW_STORY -> showAPStory(action)
+        when (action.type) {
+            APAction.Type.OPEN_WEB_LINK -> openWebView(action)
+            APAction.Type.CUSTOM -> runAPCustomAction(action)
+            APAction.Type.SHOW_STORY -> showAPStory(action)
         }
     }
 
@@ -90,8 +91,10 @@ internal class APActionsManagerImpl(
     }
 
     private fun showAPStory(action: APAction) {
-        (action.params?.get(PARAM_STORY_ID) as? String)?.let { storyId ->
-            val storyIndex = apStories?.indexOfFirst { it.id == storyId }
+        deserializeAPActionParams(action)
+
+        (action.params?.get("story") as? APStory)?.let { story ->
+            val storyIndex = apStories?.indexOfFirst { it.id == story.id }
 
             if (storyIndex != null && storyIndex != -1 && apStories != null) {
                 try {

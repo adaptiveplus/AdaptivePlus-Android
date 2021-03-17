@@ -43,7 +43,7 @@ internal fun saveAPViewDataModelToCache(
         val dataModelFile = File(ctx.cacheDir, "${userId}_$apViewId.json")
         dataModelFile.createNewFile()
         val outputStream: OutputStream = dataModelFile.outputStream()
-        val json = getSerializedAPViewDataModel(dataModel)
+        val json = getSerializedDataModel(dataModel)
 
         if (json != null) {
             outputStream.write(json.toByteArray())

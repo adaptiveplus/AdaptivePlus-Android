@@ -7,7 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.data.models.APStory
+import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModelFactory
@@ -30,7 +30,7 @@ internal class APSnapFragment :
 
         @JvmStatic
         fun newInstance(
-            snap: APStory.Snap,
+            snap: APSnap,
             storyId: String,
         ) =
             APSnapFragment().apply {
@@ -41,7 +41,7 @@ internal class APSnapFragment :
     }
 
 
-    private lateinit var snap: APStory.Snap
+    private lateinit var snap: APSnap
     private lateinit var viewModel: APStoriesViewModel
 
     private var gestureDetector: GestureDetector? = null
@@ -50,7 +50,7 @@ internal class APSnapFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (arguments?.get(EXTRA_SNAP) as? APStory.Snap)?.let {
+        (arguments?.get(EXTRA_SNAP) as? APSnap)?.let {
             snap = it
         } ?: run {
             activity?.finish()

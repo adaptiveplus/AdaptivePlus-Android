@@ -22,6 +22,7 @@ import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModel
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelFactory
+import com.sprintsquads.adaptiveplus.utils.getAPStoriesList
 import com.sprintsquads.adaptiveplus.utils.isAPViewDataModelNullOrEmpty
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
 
@@ -124,7 +125,7 @@ internal class APViewFragment : Fragment() {
 
     private val apViewDataModelObserver = Observer<APViewDataModel?> { dataModel ->
         updateAPViewFragmentVisibility()
-        apActionsManager?.setAPStories(dataModel?.stories)
+        apActionsManager?.setAPStories(getAPStoriesList(dataModel))
 
         if (!isAPViewDataModelNullOrEmpty(dataModel)) {
             drawAPView(dataModel!!)
@@ -168,7 +169,7 @@ internal class APViewFragment : Fragment() {
     }
 
     private fun drawAPView(apViewDataModel: APViewDataModel) {
-        if (context == null || view == null || apViewDataModel.options.isViewless) return
+        if (context == null || view == null) return
 
         entryPointsAdapter.updateDataSet(apViewDataModel.entryPoints)
 

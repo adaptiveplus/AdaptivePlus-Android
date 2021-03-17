@@ -69,7 +69,7 @@ internal class APEntryPointsAdapter(
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {
                     lastTimeClicked = SystemClock.elapsedRealtime()
                     apViewModelDelegate.runActions(
-                        entryPoint.actions, entryPoint.options.campaignId)
+                        entryPoint.actions, entryPoint.campaignId)
                 }
             }
 

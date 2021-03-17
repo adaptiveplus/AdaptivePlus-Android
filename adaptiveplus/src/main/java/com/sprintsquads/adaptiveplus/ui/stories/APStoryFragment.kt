@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
+import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStatus
@@ -42,7 +43,7 @@ internal class APStoryFragment :
     private var storiesProgressController: APStoriesProgressController? = null
 
     private lateinit var story: APStory
-    private lateinit var snaps: List<APStory.Snap>
+    private lateinit var snaps: List<APSnap>
 
     private lateinit var viewModel: APStoriesViewModel
 

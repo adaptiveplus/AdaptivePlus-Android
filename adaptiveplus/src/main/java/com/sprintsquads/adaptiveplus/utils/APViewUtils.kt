@@ -5,7 +5,10 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
+import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
+import com.sprintsquads.adaptiveplus.data.models.APStory
+import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
@@ -61,5 +64,28 @@ internal fun drawAPLayersOnLayout(
                 componentView.id, layer.options.position.angle.toFloat())
             componentConstraintSet.applyTo(layout)
         }
+    }
+}
+
+internal fun isAPViewDataModelNullOrEmpty(dataModel: APViewDataModel?): Boolean {
+    return dataModel?.entryPoints.isNullOrEmpty()
+}
+
+internal fun getAPStoriesList(dataModel: APViewDataModel?) : List<APStory>? {
+    return dataModel?.run {
+        val stories = mutableListOf<APStory>()
+
+        entryPoints.forEach { entryPoint ->
+            entryPoint.actions.forEach { action ->
+                if (action.type == APAction.Type.SHOW_STORY) {
+                    deserializeAPActionParams(action)
+                    (action.params?.get("story") as? APStory)?.let { story ->
+                        stories.add(story)
+                    }
+                }
+            }
+        }
+
+        stories
     }
 }

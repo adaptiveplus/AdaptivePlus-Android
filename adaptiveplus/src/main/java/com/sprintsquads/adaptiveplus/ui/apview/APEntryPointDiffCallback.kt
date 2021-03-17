@@ -14,7 +14,7 @@ internal class APEntryPointDiffCallback(
     override fun getNewListSize(): Int = newEntryPoints.size
 
     override fun areItemsTheSame(oldItemPos: Int, newItemPos: Int): Boolean {
-        return oldEntryPoints[oldItemPos].options.id == newEntryPoints[newItemPos].options.id
+        return oldEntryPoints[oldItemPos].id == newEntryPoints[newItemPos].id
     }
 
     override fun areContentsTheSame(oldItemPos: Int, newItemPos: Int): Boolean {

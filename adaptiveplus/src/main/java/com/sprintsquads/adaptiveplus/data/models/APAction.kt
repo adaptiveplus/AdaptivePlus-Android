@@ -6,11 +6,11 @@ import java.io.Serializable
 
 @Keep
 internal data class APAction(
-    val kind: Kind,
+    val type: Type,
     val params: HashMap<String, Any>?
 ) : Serializable {
 
-    enum class Kind {
+    enum class Type {
         @SerializedName("SHOW_STORY")
         SHOW_STORY,
         @SerializedName("OPEN_WEB_LINK")

@@ -7,12 +7,12 @@ import java.io.Serializable
 
 @Keep
 internal data class APLayer(
-    val kind: Kind,
+    val type: Type,
     val options: Options,
     val component: APComponent?
 ) : Serializable {
 
-    enum class Kind {
+    enum class Type {
         @SerializedName("BACKGROUND")
         BACKGROUND,
         @SerializedName("IMAGE")
