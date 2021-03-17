@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.view.setPadding
+import androidx.constraintlayout.widget.ConstraintSet
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.extensions.loadImage
@@ -30,13 +30,19 @@ internal class APImageComponentView : APBaseComponentView {
             apComponentImageView.loadImage(url, cornerRadius = cornerRadius?.toInt())
 
             border?.let {
-                apComponentLayout.setPadding(it.padding.toInt())
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(apComponentLayout)
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, it.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, it.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, it.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, it.padding.toInt())
+                constraintSet.applyTo(apComponentLayout)
 
                 val borderDrawable = GradientDrawable().apply {
                     setStroke(it.width.toInt(), getColorFromHex(it.activeColor.startColor))
                     cornerRadius = it.cornerRadius.toFloat()
                 }
-                apComponentLayout.background = borderDrawable
+                apComponentBorderView.background = borderDrawable
             }
         }
     }

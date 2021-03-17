@@ -17,7 +17,6 @@
   "campaigns": [
     {
       "id": "huy",
-      "type": "CAMPAIGN",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,
@@ -184,19 +183,10 @@
                             ],
                             "width": 375,
                             "height": 667,
-                            "actionLayer": {
+                            "actionAreaHeight": 60,
+                            "actionArea": {
                               "type": "BUTTON",
-                              "options": {
-                                "position": {
-                                  "x": 16,
-                                  "y": 44,
-                                  "width": 343,
-                                  "height": 52,
-                                  "angle": 0
-                                },
-                                "opacity": 1
-                              },
-                              "component": {
+                              "body": {
                                 "text": {
                                   "value": "open",
                                   "font": {
@@ -217,7 +207,17 @@
                                   }
                                 ],
                                 "cornerRadius": 12,
-                                "backgroundColor": "#000000FF"
+                                "backgroundColor": "#000000FF",
+                                "border": {
+                                  "width": 2,
+                                  "activeColor": {
+                                    "startColor": "#000000FF",
+                                    "endColor": "#126B3CFF",
+                                    "angle": 45
+                                  },
+                                  "padding": 4,
+                                  "cornerRadius": 14
+                                }
                               }
                             },
                             "showTime": 5
@@ -235,7 +235,6 @@
     },
     {
       "id": "huy",
-      "type": "CAMPAIGN",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,
@@ -342,7 +341,6 @@
     },
     {
       "id": "huy",
-      "type": "CAMPAIGN",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,

@@ -146,10 +146,34 @@ private val apSnapDeserializer =
 
             val gsonBuilder = GsonBuilder()
             gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+            gsonBuilder.registerTypeAdapter(
+                APSnap.ActionArea::class.java,
+                apSnapActionAreaDeserializer)
             val apSnapGson = gsonBuilder.create()
             apSnapGson.fromJson(
                 snapBodyJsonObject.toString(),
                 APSnap::class.java)
+        } catch (e: JsonSyntaxException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+private val apSnapActionAreaDeserializer =
+    JsonDeserializer { json, _, _ ->
+        try {
+            val jsonObject: JsonObject = json.asJsonObject
+            val type = Gson().fromJson(
+                jsonObject.get("type").asString, APSnap.ActionArea.Type::class.java)
+            val bodyJson = jsonObject.get("body").toString()
+
+            val body = when (type) {
+                APSnap.ActionArea.Type.BUTTON ->
+                    Gson().fromJson(bodyJson, APSnap.ActionArea.ButtonBody::class.java)
+                else -> null
+            }
+
+            APSnap.ActionArea(type, body)
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             null
