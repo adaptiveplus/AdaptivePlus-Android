@@ -22,8 +22,9 @@ import com.sprintsquads.adaptiveplus.data.GLIDE_TIMEOUT
 internal fun ImageView.loadImage(
     url: String,
     defaultDrawable: Drawable? = null,
+    cornerRadius: Int? = null,
     onResourceReady: (() -> Unit)? = null,
-    cornerRadius: Int? = null
+    onLoadFailed: (() -> Unit)? = null
 ) {
     val requestOptions =
         if (cornerRadius != null && cornerRadius > 0) {
@@ -44,6 +45,7 @@ internal fun ImageView.loadImage(
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
+                onLoadFailed?.invoke()
                 return false
             }
 

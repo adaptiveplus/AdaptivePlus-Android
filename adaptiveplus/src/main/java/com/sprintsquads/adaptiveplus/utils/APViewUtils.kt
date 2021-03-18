@@ -15,14 +15,14 @@ import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
 import com.sprintsquads.adaptiveplus.ui.components.APBackgroundComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APImageComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APTextComponentView
-import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
 
 
 internal fun buildComponentView(
     context: Context,
     layer: APLayer,
-    viewModel: APComponentViewModel?
+    viewModel: APBaseComponentViewModel?
 ): View? {
     return when (layer.component) {
         is APBackgroundComponent -> APBackgroundComponentView(context, layer.component, viewModel)

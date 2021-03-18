@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
-import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_background.view.*
 
@@ -18,7 +18,7 @@ internal class APBackgroundComponentView : APBaseComponentView {
     constructor(
         context: Context,
         component: APBackgroundComponent,
-        componentViewModel: APComponentViewModel?
+        componentViewModel: APBaseComponentViewModel?
     ) : super(context, component, componentViewModel)
 
 

@@ -17,10 +17,9 @@ internal interface APStoryViewModelDelegate {
      * Method to run/execute adaptive plus actions
      *
      * @param actions - list of adaptive plus actions to execute
-     * @param campaignId - id of adaptive plus campaign
      * @see APAction
      */
-    fun runActions(actions: List<APAction>, campaignId: String)
+    fun runActions(actions: List<APAction>)
 
     /**
      * Method to notify story about snap event happened

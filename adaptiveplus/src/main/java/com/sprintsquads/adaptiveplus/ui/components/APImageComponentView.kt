@@ -8,7 +8,8 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.extensions.loadImage
-import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_image.view.*
 
@@ -21,7 +22,7 @@ internal class APImageComponentView : APBaseComponentView {
     constructor(
         context: Context,
         component: APImageComponent,
-        componentViewModel: APComponentViewModel?
+        componentViewModel: APBaseComponentViewModel?
     ) : super(context, component, componentViewModel)
 
 
@@ -29,7 +30,16 @@ internal class APImageComponentView : APBaseComponentView {
         View.inflate(context, R.layout.ap_component_image, this)
 
         (component as? APImageComponent)?.run {
-            apComponentImageView.loadImage(url, cornerRadius = cornerRadius?.toInt())
+            apComponentImageView.loadImage(
+                url,
+                cornerRadius = cornerRadius?.toInt(),
+                onResourceReady = {
+                    (componentViewModel as? APImageComponentViewModel)?.onImageResourceReady()
+                },
+                onLoadFailed = {
+                    (componentViewModel as? APImageComponentViewModel)?.onImageLoadFailed()
+                }
+            )
 
             border?.let {
                 val constraintSet = ConstraintSet()

@@ -11,7 +11,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStateInfo
 
 
 internal class APStoryViewModel(
-    story: APStory,
+    private val story: APStory,
     private val storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate
 ) : ViewModel(), APStoryViewModelDelegate {
 
@@ -48,8 +48,8 @@ internal class APStoryViewModel(
         return snapReadinessMap.getOrElse(id, { false })
     }
 
-    override fun runActions(actions: List<APAction>, campaignId: String) {
-        storiesDialogViewModelDelegate.runActions(actions, campaignId)
+    override fun runActions(actions: List<APAction>) {
+        storiesDialogViewModelDelegate.runActions(actions, story.campaignId ?: "")
     }
 
     fun isStoriesPaused() : Boolean = isStoriesPausedLiveData.value == true
