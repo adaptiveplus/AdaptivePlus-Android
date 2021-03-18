@@ -59,7 +59,7 @@ internal class APViewFragment : Fragment() {
         }
 
         activity?.let {
-            val viewModelFactory = APViewModelFactory(it.application)
+            val viewModelFactory = APViewModelFactory(it)
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewModel::class.java)
 
             apActionsManager = provideAPActionsManager(it, childFragmentManager, viewModel)

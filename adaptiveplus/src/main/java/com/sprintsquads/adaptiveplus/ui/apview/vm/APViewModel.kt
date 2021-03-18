@@ -1,25 +1,18 @@
 package com.sprintsquads.adaptiveplus.ui.apview.vm
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
+import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.utils.*
-import com.sprintsquads.adaptiveplus.utils.loadAPViewMockDataModelFromAssets
-import com.sprintsquads.adaptiveplus.utils.loadAPViewDataModelFromCache
-import com.sprintsquads.adaptiveplus.utils.removeAPViewDataModelFromCache
 
 
 internal class APViewModel(
-    application: Application,
-    repository: APViewRepository
-) : AndroidViewModel(application), APViewModelDelegate, APEntryPointViewModelProvider {
+    private val repository: APViewRepository,
+    private val cacheManager: APCacheManager
+) : ViewModel(), APViewModelDelegate, APEntryPointViewModelProvider {
 
     val apViewDataModelLiveData: LiveData<APViewDataModel?>
         get() = _apViewDataModelLiveData
@@ -121,59 +114,29 @@ internal class APViewModel(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
-        getApplication<Application>().applicationContext?.let { ctx ->
-            loadAPViewMockDataModelFromAssets(
-                ctx = ctx,
-                apViewId = apViewId
-            ) { dataModel ->
-                runDelayedTask({ setAPViewDataModel(dataModel) }, 2000)
-            }
+        cacheManager.loadAPViewMockDataModelFromAssets(apViewId) { dataModel ->
+            runDelayedTask({ setAPViewDataModel(dataModel) }, 2000)
         }
     }
 
     fun loadAPViewDataModelFromCache(apViewId: String, isForceUpdate: Boolean = false) {
-        val userId = AdaptivePlusSDK().getUserId() ?: ""
-
-        getApplication<Application>().applicationContext?.let { ctx ->
-            loadAPViewDataModelFromCache(
-                ctx = ctx,
-                apViewId = apViewId,
-                userId = userId
-            ) { dataModel ->
-                if (isForceUpdate || dataModel != null) {
-                    setAPViewDataModel(
-                        dataModel = dataModel,
-                        isCached = true,
-                        isForceUpdate = isForceUpdate
-                    )
-                }
+        cacheManager.loadAPViewDataModelFromCache(apViewId) { dataModel ->
+            if (isForceUpdate || dataModel != null) {
+                setAPViewDataModel(
+                    dataModel = dataModel,
+                    isCached = true,
+                    isForceUpdate = isForceUpdate
+                )
             }
         }
     }
 
     private fun saveAPViewDataModelToCache(apViewId: String, dataModel: APViewDataModel) {
-        val userId = AdaptivePlusSDK().getUserId() ?: ""
-
-        getApplication<Application>().applicationContext?.let { ctx ->
-            saveAPViewDataModelToCache(
-                ctx = ctx,
-                apViewId = apViewId,
-                userId = userId,
-                dataModel = dataModel
-            )
-        }
+        cacheManager.saveAPViewDataModelToCache(apViewId, dataModel)
     }
 
     private fun removeAPViewDataModelFromCache(apViewId: String) {
-        val userId = AdaptivePlusSDK().getUserId() ?: ""
-
-        getApplication<Application>().applicationContext?.let { ctx ->
-            removeAPViewDataModelFromCache(
-                ctx = ctx,
-                apViewId = apViewId,
-                userId = userId
-            )
-        }
+        cacheManager.removeAPViewDataModelFromCache(apViewId)
     }
 
     override fun getAPEntryPointViewModel(id: String): APEntryPointViewModel? {
