@@ -34,15 +34,15 @@ internal class APImageComponentView : APBaseComponentView {
             border?.let {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, it.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, it.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, it.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, it.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, it.active.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, it.active.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, it.active.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, it.active.padding.toInt())
                 constraintSet.applyTo(apComponentLayout)
 
                 val borderDrawable = GradientDrawable().apply {
-                    setStroke(it.width.toInt(), getColorFromHex(it.activeColor.startColor))
-                    cornerRadius = it.cornerRadius.toFloat()
+                    setStroke(it.active.width.toInt(), getColorFromHex(it.active.color.startColor))
+                    cornerRadius = it.active.cornerRadius.toFloat()
                 }
                 apComponentBorderView.background = borderDrawable
             }

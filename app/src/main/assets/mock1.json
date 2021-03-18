@@ -56,14 +56,26 @@
                 "component": {
                   "url": "https://media.gq-magazine.co.uk/photos/5ffdc57f9cafd9b0acd1b649/master/w_1920,c_limit/120121_Anime_03.jpg",
                   "border": {
-                    "width": 2,
-                    "activeColor": {
-                      "startColor": "#000000FF",
-                      "endColor": "#126B3CFF",
-                      "angle": 45
+                    "active": {
+                      "width": 4,
+                      "color": {
+                        "startColor": "#2765AE",
+                        "endColor": "#00A469",
+                        "angle": 45
+                      },
+                      "cornerRadius": 14,
+                      "padding": 2
                     },
-                    "padding": 4,
-                    "cornerRadius": 14
+                    "inactive": {
+                      "width": 1,
+                      "color": {
+                        "startColor": "#4DB9B9B9",
+                        "endColor": "#4DB9B9B9",
+                        "angle": 0
+                      },
+                      "cornerRadius": 14,
+                      "padding": 4
+                    }
                   },
                   "cornerRadius": 12
                 }
@@ -274,15 +286,28 @@
                 "component": {
                   "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
                   "border": {
-                    "width": 2,
-                    "activeColor": {
-                      "startColor": "#000000FF",
-                      "endColor": "#126B3CFF",
-                      "angle": 45,
-                      "cornerRadius": 14
+                    "active": {
+                      "width": 4,
+                      "color": {
+                        "startColor": "#2765AE",
+                        "endColor": "#00A469",
+                        "angle": 45
+                      },
+                      "cornerRadius": 14,
+                      "padding": 2
                     },
-                    "padding": 2
-                  }
+                    "inactive": {
+                      "width": 1,
+                      "color": {
+                        "startColor": "#4DB9B9B9",
+                        "endColor": "#4DB9B9B9",
+                        "angle": 0
+                      },
+                      "cornerRadius": 14,
+                      "padding": 4
+                    }
+                  },
+                  "cornerRadius": 12
                 }
               },
               {
@@ -380,14 +405,26 @@
                 "component": {
                   "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
                   "border": {
-                    "width": 2,
-                    "activeColor": {
-                      "startColor": "#000000FF",
-                      "endColor": "#126B3CFF",
-                      "angle": 45,
-                      "cornerRadius": 14
+                    "active": {
+                      "width": 4,
+                      "color": {
+                        "startColor": "#2765AE",
+                        "endColor": "#00A469",
+                        "angle": 45
+                      },
+                      "cornerRadius": 14,
+                      "padding": 2
                     },
-                    "padding": 2
+                    "inactive": {
+                      "width": 1,
+                      "color": {
+                        "startColor": "#4DB9B9B9",
+                        "endColor": "#4DB9B9B9",
+                        "angle": 0
+                      },
+                      "cornerRadius": 14,
+                      "padding": 4
+                    }
                   }
                 }
               },

@@ -11,9 +11,15 @@ internal data class APImageComponent(
 ) : APComponent, Serializable {
 
     data class Border(
-        val width: Double,
-        val activeColor: APColor,
-        val padding: Double,
-        val cornerRadius: Double
-    ) : Serializable
+        val active: State,
+        val inactive: State
+    ) : Serializable {
+
+        data class State(
+            val width: Double,
+            val color: APColor,
+            val padding: Double,
+            val cornerRadius: Double
+        ) : Serializable
+    }
 }
