@@ -1,7 +1,6 @@
 package com.sprintsquads.adaptiveplus.ui.stories
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
-import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStatus
+import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
+import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapState
 import com.sprintsquads.adaptiveplus.ui.stories.progress.APStoriesProgressView
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModel
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModelFactory
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModel
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelFactory
+import com.sprintsquads.adaptiveplus.utils.runDelayedTask
 import kotlinx.android.synthetic.main.ap_fragment_story.*
 
 
@@ -32,20 +33,21 @@ internal class APStoryFragment :
         @JvmStatic
         fun newInstance(
             story: APStory,
-            controller: APStoriesProgressController? = null
+            controller: APStoriesProgressController,
+            storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate
         ) = APStoryFragment().apply {
             arguments = bundleOf(EXTRA_STORY to story)
             this.storiesProgressController = controller
+            this.storiesDialogViewModelDelegate = storiesDialogViewModelDelegate
         }
     }
 
 
-    private var storiesProgressController: APStoriesProgressController? = null
-
     private lateinit var story: APStory
-    private lateinit var snaps: List<APSnap>
+    private lateinit var storiesProgressController: APStoriesProgressController
+    private lateinit var storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate
 
-    private lateinit var viewModel: APStoriesViewModel
+    private lateinit var viewModel: APStoryViewModel
 
     private var isUnderTouch = false
 
@@ -55,15 +57,14 @@ internal class APStoryFragment :
 
         (arguments?.get(EXTRA_STORY) as? APStory)?.let { story ->
             this.story = story
-            this.snaps = story.snaps
         } ?: run {
-            activity?.finish()
+            storiesProgressController.closeStories()
+            return
         }
 
-        activity?.let {
-            val viewModelFactory = APStoriesViewModelFactory(it)
-            viewModel = ViewModelProvider(it, viewModelFactory).get(APStoriesViewModel::class.java)
-        }
+        val viewModelFactory = APStoryViewModelFactory(story, storiesDialogViewModelDelegate)
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        viewModel = viewModelProvider.get(APStoryViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -78,16 +79,16 @@ internal class APStoryFragment :
         apSnapsViewPager.offscreenPageLimit = 1
         apSnapsViewPager.adapter = APSnapsPagerAdapter(
             fragmentManager = childFragmentManager,
-            snaps = snaps,
-            storyId = story.id
+            snaps = story.snaps,
+            viewModel
         )
 
-        apStoriesProgressView.setStoriesCount(snaps.size)
-        apStoriesProgressView.setStoryDurations(snaps.map { (it.showTime * 1000).toLong() })
+        apStoriesProgressView.setStoriesCount(story.snaps.size)
+        apStoriesProgressView.setStoryDurations(story.snaps.map { (it.showTime * 1000).toLong() })
         apStoriesProgressView.setStoriesListener(this)
 
         apCloseButtonImageView.setOnClickListener {
-            storiesProgressController?.closeStories()
+            storiesProgressController.closeStories()
         }
 
         setupObservers()
@@ -101,7 +102,7 @@ internal class APStoryFragment :
             apStoriesProgressView.startStories(snapIndex)
         }
 
-        Handler().postDelayed({
+        runDelayedTask({
             updateStoryProgressState()
         }, PRE_ANIMATION_DELAY)
     }
@@ -120,11 +121,9 @@ internal class APStoryFragment :
     private fun setupObservers() {
         viewModel.snapReadinessUpdatedEventLiveData.observe(
             viewLifecycleOwner, snapReadinessUpdatedEventObserver)
-        viewModel.isStoriesExternallyPausedLiveData?.observe(
-            viewLifecycleOwner, isStoriesExternallyPausedObserver)
-        viewModel.isIdleStateLiveData.observe(
-            viewLifecycleOwner, isIdleStateObserver)
-        viewModel.snapEventLiveData.observe(
+        viewModel.isStoriesPausedLiveData.observe(
+            viewLifecycleOwner, isStoriesPausedObserver)
+        viewModel.snapEventInfoLiveData.observe(
             viewLifecycleOwner, snapEventObserver)
     }
 
@@ -133,41 +132,39 @@ internal class APStoryFragment :
             updateStoryProgressState()
         }
 
-    private val isStoriesExternallyPausedObserver = Observer<Boolean> {
-        updateStoryProgressState()
-    }
-
-    private val isIdleStateObserver = Observer<Boolean> {
-        Handler().postDelayed({
+    private val isStoriesPausedObserver = Observer<Boolean> {
+        runDelayedTask({
             updateStoryProgressState()
         }, PRE_ANIMATION_DELAY)
     }
 
-    private val snapEventObserver = Observer<APSnapEvent> { snapEvent ->
-        if (snapEvent.event != APSnapEvent.Type.NONE &&
-            snaps.any { it.id == snapEvent.snapId }
+    private val snapEventObserver = Observer<APSnapEventInfo> { snapEvent ->
+        if (snapEvent.event != APSnapEvent.NONE &&
+            story.snaps.any { it.id == snapEvent.snapId }
         ) {
-            viewModel.onSnapEvent(snapEvent.snapId, APSnapEvent.Type.NONE)
+            viewModel.onSnapEvent(
+                APSnapEventInfo(snapEvent.snapId, APSnapEvent.NONE)
+            )
 
             when (snapEvent.event) {
-                APSnapEvent.Type.IS_UNDER_TOUCH -> {
+                APSnapEvent.IS_UNDER_TOUCH -> {
                     isUnderTouch = true
                     updateStoryProgressState()
                 }
-                APSnapEvent.Type.IS_NOT_UNDER_TOUCH -> {
+                APSnapEvent.IS_NOT_UNDER_TOUCH -> {
                     isUnderTouch = false
                     updateStoryProgressState()
                 }
-                APSnapEvent.Type.GO_TO_PREV_SNAP -> {
+                APSnapEvent.GO_TO_PREV_SNAP -> {
                     goToPrevSnap()
                 }
-                APSnapEvent.Type.GO_TO_NEXT_SNAP -> {
+                APSnapEvent.GO_TO_NEXT_SNAP -> {
                     goToNextSnap()
                 }
-                APSnapEvent.Type.CLOSE_STORIES -> {
-                    storiesProgressController?.closeStories()
+                APSnapEvent.CLOSE_STORIES -> {
+                    storiesProgressController.closeStories()
                 }
-                APSnapEvent.Type.RESET_AND_PAUSE_SNAP_PROGRESS -> {
+                APSnapEvent.RESET_AND_PAUSE_SNAP_PROGRESS -> {
                     apStoriesProgressView?.resetCurrentSnap()
                     apStoriesProgressView?.pause()
                 }
@@ -179,9 +176,9 @@ internal class APStoryFragment :
     override fun onComplete() {
         resetLastSnap()
 
-        storiesProgressController?.moveToNextStory(story.id)
+        storiesProgressController.moveToNextStory(story.id)
 
-        Handler().postDelayed({
+        runDelayedTask({
             updateStoryProgressState()
         }, PRE_ANIMATION_DELAY)
     }
@@ -199,11 +196,11 @@ internal class APStoryFragment :
 
         resetLastSnap()
 
-        if (apSnapsViewPager.currentItem < snaps.size - 1) {
+        if (apSnapsViewPager.currentItem < story.snaps.size - 1) {
             apSnapsViewPager.currentItem++
         }
 
-        Handler().postDelayed({
+        runDelayedTask({
             updateStoryProgressState()
         }, PRE_ANIMATION_DELAY)
     }
@@ -214,13 +211,13 @@ internal class APStoryFragment :
         resetLastSnap()
 
         if (apSnapsViewPager.currentItem == 0) {
-            storiesProgressController?.moveToPrevStory(story.id)
+            storiesProgressController.moveToPrevStory(story.id)
         }
         else {
             apSnapsViewPager.currentItem = maxOf(0, apSnapsViewPager.currentItem - 1)
         }
 
-        Handler().postDelayed({
+        runDelayedTask({
             updateStoryProgressState()
         }, PRE_ANIMATION_DELAY)
     }
@@ -229,26 +226,25 @@ internal class APStoryFragment :
         if (view == null) return
 
         val snapIndex = apSnapsViewPager.currentItem
-        val snapId = snaps.getOrNull(snapIndex)?.id ?: ""
+        val snapId = story.snaps.getOrNull(snapIndex)?.id ?: ""
 
         if (viewModel.isSnapReady(snapId)) {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
-                && viewModel.isStateIdle()
-                && !viewModel.isStoriesExternallyPaused()
+                && !viewModel.isStoriesPaused()
                 && !isUnderTouch
             ) {
                 apStoriesProgressView.resume()
 
-                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapStatus.State.RESUMED)
+                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESUMED)
             }
             else {
                 apStoriesProgressView.pause()
-                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapStatus.State.PAUSED)
+                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.PAUSED)
             }
         }
         else {
             apStoriesProgressView.pause()
-            viewModel.updateStoryProgressState(snapId = snapId, state = APSnapStatus.State.PAUSED)
+            viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.PAUSED)
         }
     }
 
@@ -261,8 +257,8 @@ internal class APStoryFragment :
     }
 
     private fun resetLastSnap() {
-        val snapId = snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
-        viewModel.updateStoryProgressState(snapId = snapId, state = APSnapStatus.State.RESET)
+        val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
+        viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESET)
     }
 
 }

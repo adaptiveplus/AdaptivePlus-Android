@@ -131,15 +131,13 @@ class AdaptivePlusSDK {
     }
 
     fun stop(context: Context) {
-        /*
-        isStarted = false
+        isStartedLiveData.postValue(false)
         userId = null
         userConfig = null
 
-        authRepositoryInstance(context)?.removeToken()
+//        authRepositoryInstance(context)?.removeToken()
         tokenRequestState = RequestState.NONE
         tokenLiveData.postValue(null)
-         */
     }
 
     private fun requestConfigs() {
@@ -206,6 +204,10 @@ class AdaptivePlusSDK {
 
     fun updateUserLocation(location: APLocation?) {
         userLocation = location
+    }
+
+    fun updateUserConfig(userConfig: APUserConfig) {
+        // TODO: implement
     }
 
 

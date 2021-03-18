@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModel
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModelFactory
+import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModel
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModelFactory
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegate
 import com.sprintsquads.adaptiveplus.utils.drawAPLayersOnLayout
 import kotlinx.android.synthetic.main.ap_fragment_snap.*
 import kotlin.math.abs
@@ -21,7 +23,6 @@ internal class APSnapFragment :
 
     companion object {
         private const val EXTRA_SNAP = "extra_snap"
-        private const val EXTRA_STORY_ID = "extra_story_id"
 
         private const val CLICK_EVENT_THRESHOLD = 250 // time in milliseconds
         private const val SWIPE_EVENT_THRESHOLD = 100 // time in milliseconds
@@ -31,18 +32,18 @@ internal class APSnapFragment :
         @JvmStatic
         fun newInstance(
             snap: APSnap,
-            storyId: String,
+            storyViewModelDelegate: APStoryViewModelDelegate
         ) =
             APSnapFragment().apply {
-                arguments = bundleOf(
-                    EXTRA_SNAP to snap,
-                    EXTRA_STORY_ID to storyId)
+                arguments = bundleOf(EXTRA_SNAP to snap)
+                this.storyViewModelDelegate = storyViewModelDelegate
             }
     }
 
 
     private lateinit var snap: APSnap
-    private lateinit var viewModel: APStoriesViewModel
+    private lateinit var storyViewModelDelegate: APStoryViewModelDelegate
+    private lateinit var viewModel: APSnapViewModel
 
     private var gestureDetector: GestureDetector? = null
 
@@ -53,13 +54,13 @@ internal class APSnapFragment :
         (arguments?.get(EXTRA_SNAP) as? APSnap)?.let {
             snap = it
         } ?: run {
-            activity?.finish()
+            storyViewModelDelegate.onSnapEvent(
+                APSnapEventInfo("", APSnapEvent.CLOSE_STORIES))
+            return
         }
 
-        activity?.let {
-            val viewModelFactory = APStoriesViewModelFactory(it)
-            viewModel = ViewModelProvider(it, viewModelFactory).get(APStoriesViewModel::class.java)
-        }
+        val snaViewModelFactory = APSnapViewModelFactory(snap, storyViewModelDelegate)
+        viewModel = ViewModelProvider(this, snaViewModelFactory).get(APSnapViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -99,7 +100,7 @@ internal class APSnapFragment :
         val scaleFactor = (apContentCardView.width / baseScreenWidth).toFloat()
 
         apContentLayout.removeAllViews()
-        drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor)
+        drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -107,17 +108,17 @@ internal class APSnapFragment :
 
         when (event?.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                viewModel.onSnapEvent(snap.id, APSnapEvent.Type.IS_UNDER_TOUCH)
+                viewModel.onSnapEvent(APSnapEvent.IS_UNDER_TOUCH)
             }
             MotionEvent.ACTION_UP -> {
-                viewModel.onSnapEvent(snap.id, APSnapEvent.Type.IS_NOT_UNDER_TOUCH)
+                viewModel.onSnapEvent(APSnapEvent.IS_NOT_UNDER_TOUCH)
 
                 if (event.eventTime - event.downTime <= CLICK_EVENT_THRESHOLD) {
                     if (view != null) {
                         if (event.x < resources.displayMetrics.widthPixels / 2) {
-                            viewModel.onSnapEvent(snap.id, APSnapEvent.Type.GO_TO_PREV_SNAP)
+                            viewModel.onSnapEvent(APSnapEvent.GO_TO_PREV_SNAP)
                         } else {
-                            viewModel.onSnapEvent(snap.id, APSnapEvent.Type.GO_TO_NEXT_SNAP)
+                            viewModel.onSnapEvent(APSnapEvent.GO_TO_NEXT_SNAP)
                         }
                     }
                 }
@@ -125,7 +126,7 @@ internal class APSnapFragment :
                 v?.performClick()
             }
             MotionEvent.ACTION_CANCEL -> {
-                viewModel.onSnapEvent(snap.id, APSnapEvent.Type.IS_NOT_UNDER_TOUCH)
+                viewModel.onSnapEvent(APSnapEvent.IS_NOT_UNDER_TOUCH)
             }
             else -> { }
         }
@@ -145,7 +146,7 @@ internal class APSnapFragment :
                 if (e2.y > e1.y) {
                     if (e2.y - e1.y > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                         // Top -> Bottom
-                        viewModel.onSnapEvent(snap.id, APSnapEvent.Type.CLOSE_STORIES)
+                        viewModel.onSnapEvent(APSnapEvent.CLOSE_STORIES)
                         return true
                     }
                 }

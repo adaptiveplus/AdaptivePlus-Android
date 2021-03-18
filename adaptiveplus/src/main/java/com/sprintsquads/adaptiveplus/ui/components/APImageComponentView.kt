@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.extensions.loadImage
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_image.view.*
 
@@ -20,7 +21,8 @@ internal class APImageComponentView : APBaseComponentView {
     constructor(
         context: Context,
         component: APImageComponent,
-    ) : super(context, component)
+        componentViewModel: APComponentViewModel?
+    ) : super(context, component, componentViewModel)
 
 
     override fun initElement() {

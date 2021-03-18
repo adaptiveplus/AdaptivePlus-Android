@@ -14,8 +14,8 @@ import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.extensions.setTransitionDuration
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModel
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesViewModelFactory
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModel
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.restrictToRange
 import kotlinx.android.synthetic.main.ap_fragment_ap_stories_dialog.*
 
@@ -30,20 +30,23 @@ internal class APStoriesDialog :
         @JvmStatic
         fun newInstance(
             stories: List<APStory>,
-            startIndex: Int
+            startIndex: Int,
+            apViewModelDelegate: APViewModelDelegate
         ) = APStoriesDialog().apply {
             arguments = bundleOf(
                 EXTRA_STORIES to ArrayList(stories),
                 EXTRA_START_INDEX to startIndex
             )
+
+            this.apViewModelDelegate = apViewModelDelegate
         }
     }
 
 
     private lateinit var stories: List<APStory>
 
-    private lateinit var viewModel: APStoriesViewModel
-    private var apViewModelDelegate: APViewModelDelegate? = null
+    private lateinit var viewModel: APStoriesDialogViewModel
+    private lateinit var apViewModelDelegate: APViewModelDelegate
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,12 +62,9 @@ internal class APStoriesDialog :
             return
         }
 
-        activity?.let {
-            val viewModelFactory = APStoriesViewModelFactory(it)
-            viewModel = ViewModelProvider(it, viewModelFactory).get(APStoriesViewModel::class.java)
-            viewModel.init(stories)
-            viewModel.setAPViewModelDelegate(apViewModelDelegate)
-        }
+        val viewModelFactory = APStoriesDialogViewModelFactory(apViewModelDelegate)
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        viewModel = viewModelProvider.get(APStoriesDialogViewModel::class.java)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -90,7 +90,8 @@ internal class APStoriesDialog :
             maxValue = stories.size - 1)
 
         apStoriesViewPager.offscreenPageLimit = 1
-        apStoriesViewPager.adapter = APStoriesPagerAdapter(childFragmentManager, stories, this)
+        apStoriesViewPager.adapter = APStoriesPagerAdapter(
+            childFragmentManager, stories, this, viewModel)
         apStoriesViewPager.currentItem = startIndex
         apStoriesViewPager.setPageTransformer(true, CubePageTransformer())
         apStoriesViewPager.setTransitionDuration(1000)
@@ -123,13 +124,5 @@ internal class APStoriesDialog :
 
     override fun closeStories() {
         dismiss()
-    }
-
-    fun setAPViewModelDelegate(delegate: APViewModelDelegate) {
-        this.apViewModelDelegate = delegate
-
-        if (::viewModel.isInitialized) {
-            viewModel.setAPViewModelDelegate(delegate)
-        }
     }
 }

@@ -23,7 +23,6 @@ internal class APActionsManagerImpl(
 
     companion object {
         private const val PARAM_URL = "url"
-        private const val PARAM_STORY = "story"
     }
 
 
@@ -99,9 +98,7 @@ internal class APActionsManagerImpl(
             if (storyIndex != null && storyIndex != -1 && apStories != null) {
                 try {
                     val apStoriesDialog = APStoriesDialog
-                        .newInstance(apStories!!, storyIndex).apply {
-                            setAPViewModelDelegate(apViewModelDelegate)
-                        }
+                        .newInstance(apStories!!, storyIndex, apViewModelDelegate)
                     apStoriesDialog.show(fragmentManager, apStoriesDialog.tag)
                 } catch (e: IllegalStateException) {
                     e.printStackTrace()

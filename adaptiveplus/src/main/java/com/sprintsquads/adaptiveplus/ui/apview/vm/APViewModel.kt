@@ -5,10 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.sprintsquads.adaptiveplus.core.providers.provideAPViewRepository
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
+import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.utils.*
 import com.sprintsquads.adaptiveplus.utils.loadAPViewMockDataModelFromAssets
@@ -17,8 +17,9 @@ import com.sprintsquads.adaptiveplus.utils.removeAPViewDataModelFromCache
 
 
 internal class APViewModel(
-        application: Application
-) : AndroidViewModel(application), APViewModelDelegate {
+    application: Application,
+    repository: APViewRepository
+) : AndroidViewModel(application), APViewModelDelegate, APEntryPointViewModelProvider {
 
     val apViewDataModelLiveData: LiveData<APViewDataModel?>
         get() = _apViewDataModelLiveData
@@ -31,9 +32,7 @@ internal class APViewModel(
     private val _isAPStoriesPausedLiveData =
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
-    private var _apViewId: String = ""
-
-    private var repository = provideAPViewRepository(application.applicationContext)
+    private val _entryPointViewModelMap = mutableMapOf<String, APEntryPointViewModel>()
 
 
     private fun setAPViewDataModel(
@@ -122,8 +121,6 @@ internal class APViewModel(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
-        _apViewId = apViewId
-
         getApplication<Application>().applicationContext?.let { ctx ->
             loadAPViewMockDataModelFromAssets(
                 ctx = ctx,
@@ -135,8 +132,6 @@ internal class APViewModel(
     }
 
     fun loadAPViewDataModelFromCache(apViewId: String, isForceUpdate: Boolean = false) {
-        _apViewId = apViewId
-
         val userId = AdaptivePlusSDK().getUserId() ?: ""
 
         getApplication<Application>().applicationContext?.let { ctx ->
@@ -179,5 +174,12 @@ internal class APViewModel(
                 userId = userId
             )
         }
+    }
+
+    override fun getAPEntryPointViewModel(id: String): APEntryPointViewModel? {
+        if (!_entryPointViewModelMap.contains(id)) {
+            _entryPointViewModelMap[id] = APEntryPointViewModel(this)
+        }
+        return _entryPointViewModelMap[id]
     }
 }

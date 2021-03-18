@@ -15,13 +15,19 @@ import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
 import com.sprintsquads.adaptiveplus.ui.components.APBackgroundComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APImageComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APTextComponentView
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
 
 
-internal fun buildComponentView(context: Context, layer: APLayer): View? {
+internal fun buildComponentView(
+    context: Context,
+    layer: APLayer,
+    viewModel: APComponentViewModel?
+): View? {
     return when (layer.component) {
-        is APBackgroundComponent -> APBackgroundComponentView(context, layer.component)
-        is APImageComponent -> APImageComponentView(context, layer.component)
-        is APTextComponent -> APTextComponentView(context, layer.component)
+        is APBackgroundComponent -> APBackgroundComponentView(context, layer.component, viewModel)
+        is APImageComponent -> APImageComponentView(context, layer.component, viewModel)
+        is APTextComponent -> APTextComponentView(context, layer.component, viewModel)
         else -> null
     }
 }
@@ -29,10 +35,13 @@ internal fun buildComponentView(context: Context, layer: APLayer): View? {
 internal fun drawAPLayersOnLayout(
     layout: ConstraintLayout,
     layers: List<APLayer>,
-    scaleFactor: Float = 1f
+    scaleFactor: Float = 1f,
+    componentViewModelProvider: APComponentViewModelProvider?
 ) {
-    layers.forEach { layer ->
-        buildComponentView(layout.context, layer)?.let { componentView ->
+    layers.forEachIndexed { index, layer ->
+        val componentViewModel = componentViewModelProvider?.getAPComponentViewModel(index)
+
+        buildComponentView(layout.context, layer, componentViewModel)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
 
             layout.addView(componentView)
