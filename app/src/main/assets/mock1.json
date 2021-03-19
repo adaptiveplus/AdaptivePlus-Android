@@ -195,40 +195,40 @@
                             ],
                             "width": 375,
                             "height": 667,
-                            "actionAreaHeight": 60,
+                            "actionAreaHeight": 64,
                             "actionArea": {
                               "type": "BUTTON",
                               "body": {
+                                "width": 121,
+                                "height": 40,
                                 "text": {
-                                  "value": "open",
+                                  "value": "See details",
                                   "font": {
-                                    "family": "Roboto",
-                                    "style": "Medium",
-                                    "size": 12,
-                                    "color": "#000000FF",
+                                    "family": "Helvetica",
+                                    "style": "regular",
+                                    "size": 17,
+                                    "color": "#FFFFFF",
                                     "align": "center",
-                                    "letterSpacing": 0
+                                    "letterSpacing": -0.15
                                   }
                                 },
                                 "actions": [
                                   {
                                     "type": "OPEN_WEB_LINK",
                                     "parameters": {
-                                      "url": "hh.kz"
+                                      "url": "https://s10s.co"
                                     }
                                   }
                                 ],
-                                "cornerRadius": 12,
-                                "backgroundColor": "#000000FF",
+                                "cornerRadius": 22,
+                                "backgroundColor": "#4183E7",
                                 "border": {
                                   "width": 2,
-                                  "activeColor": {
-                                    "startColor": "#000000FF",
-                                    "endColor": "#126B3CFF",
-                                    "angle": 45
-                                  },
-                                  "padding": 4,
-                                  "cornerRadius": 14
+                                  "color": {
+                                    "startColor": "#FFFFFFAA",
+                                    "endColor": "#FFFFFFAA",
+                                    "angle": 0
+                                  }
                                 }
                               }
                             },
@@ -345,7 +345,7 @@
                     "family": "Roboto",
                     "style": "semiboldItalic",
                     "size": 12,
-                    "color": "#000000FF",
+                    "color": "#FFFFFFFF",
                     "align": "left",
                     "letterSpacing": 0
                   }

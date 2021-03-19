@@ -90,17 +90,82 @@ internal class APSnapFragment :
     }
 
     private fun redrawSnap() {
-        val apContentCardViewConstraintSet = ConstraintSet()
-        apContentCardViewConstraintSet.clone(apSnapLayout)
-        apContentCardViewConstraintSet.constrainHeight(
-            apContentCardView.id, (apContentCardView.width * snap.height / snap.width).toInt())
-        apContentCardViewConstraintSet.applyTo(apSnapLayout)
-
         val baseScreenWidth = maxOf(snap.width, 0.001)
         val scaleFactor = (apContentCardView.width / baseScreenWidth).toFloat()
 
+        val apContentCardViewConstraintSet = ConstraintSet()
+        apContentCardViewConstraintSet.clone(apSnapLayout)
+
+        val newSnapHeight = (snap.height * scaleFactor).toInt()
+        apContentCardViewConstraintSet.constrainHeight(apContentCardView.id, newSnapHeight)
+
+        val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
+        apContentCardViewConstraintSet.constrainHeight(apActionAreaLayout.id, newActionAreaHeight)
+
+        if (newSnapHeight + newActionAreaHeight > apSnapLayout.height) {
+            apContentCardViewConstraintSet.connect(
+                apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
+            apContentCardViewConstraintSet.connect(
+                apContentCardView.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
+            apContentCardViewConstraintSet.connect(
+                apActionAreaLayout.id, ConstraintSet.BOTTOM, apContentCardView.id, ConstraintSet.BOTTOM)
+            apContentCardViewConstraintSet.clear(
+                apActionAreaLayout.id, ConstraintSet.TOP)
+        } else {
+            apContentCardViewConstraintSet.connect(
+                apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
+            apContentCardViewConstraintSet.clear(
+                apContentCardView.id, ConstraintSet.BOTTOM)
+            apContentCardViewConstraintSet.connect(
+                apActionAreaLayout.id, ConstraintSet.TOP, apContentCardView.id, ConstraintSet.BOTTOM)
+            apContentCardViewConstraintSet.connect(
+                apActionAreaLayout.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
+        }
+
+        apContentCardViewConstraintSet.applyTo(apSnapLayout)
+
         apContentLayout.removeAllViews()
         drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
+
+        snap.actionArea?.let { actionArea ->
+            drawSnapActionArea(actionArea, scaleFactor)
+        }
+    }
+
+    private fun drawSnapActionArea(actionArea: APSnap.ActionArea, scaleFactor: Float) {
+        // TODO: implement
+//        apActionAreaLayout2.removeAllViews()
+//
+//        when (actionArea.type) {
+//            APSnap.ActionArea.Type.BUTTON -> {
+//                context?.let { ctx ->
+//                    val buttonBody = actionArea.body as APSnap.ActionArea.ButtonBody
+//                    val buttonView = APActionAreaButtonView(
+//                        context = ctx,
+//                        data = buttonBody,
+//                        listener = viewModel
+//                    )
+//                    buttonView.id = ViewCompat.generateViewId()
+//                    apActionAreaLayout2.addView(buttonView)
+//
+//                    val constraintSet = ConstraintSet()
+//                    constraintSet.clone(apActionAreaLayout2)
+//                    constraintSet.constrainWidth(buttonView.id, buttonBody.width.toInt())
+//                    constraintSet.constrainHeight(buttonView.id, buttonBody.height.toInt())
+//                    constraintSet.connect(
+//                        buttonView.id, ConstraintSet.TOP, apActionAreaLayout2.id, ConstraintSet.TOP)
+//                    constraintSet.connect(
+//                        buttonView.id, ConstraintSet.START, apActionAreaLayout2.id, ConstraintSet.START)
+//                    constraintSet.connect(
+//                        buttonView.id, ConstraintSet.END, apActionAreaLayout2.id, ConstraintSet.END)
+//                    constraintSet.connect(
+//                        buttonView.id, ConstraintSet.BOTTOM, apActionAreaLayout2.id, ConstraintSet.BOTTOM)
+//                    constraintSet.setScaleX(buttonView.id, scaleFactor)
+//                    constraintSet.setScaleY(buttonView.id, scaleFactor)
+//                    constraintSet.applyTo(apActionAreaLayout2)
+//                }
+//            }
+//        }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -154,7 +219,7 @@ internal class APSnapFragment :
                 if (e1.y > e2.y) {
                     if (e1.y - e2.y > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                         // Bottom -> Top
-                        // TODO: Run Button Layer Actions
+                        viewModel.runActionAreaActions()
                         return true
                     }
                 }

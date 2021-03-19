@@ -10,6 +10,7 @@ import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
 import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaListener
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 
@@ -17,7 +18,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 internal class APSnapViewModel(
     private val snap: APSnap,
     private val storyViewModelDelegate: APStoryViewModelDelegate?
-) : ViewModel(), APComponentViewModelProvider {
+) : ViewModel(), APComponentViewModelProvider, APActionAreaListener {
 
     private val componentReadinessList = snap.layers.map { false }.toMutableList()
 
@@ -55,8 +56,21 @@ internal class APSnapViewModel(
         // TODO: implement
     }
 
-    fun runActions(actions: List<APAction>) {
+    override fun runActions(actions: List<APAction>) {
         storyViewModelDelegate?.runActions(actions)
+    }
+
+    fun runActionAreaActions() {
+        val actionArea = snap.actionArea
+
+        when (actionArea?.type) {
+            APSnap.ActionArea.Type.BUTTON -> {
+                (actionArea.body as? APSnap.ActionArea.ButtonBody)?.actions?.let {
+                    runActions(it)
+                }
+            }
+            else -> {}
+        }
     }
 
     fun onSnapEvent(event: APSnapEvent) {

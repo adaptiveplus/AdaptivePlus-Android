@@ -12,34 +12,42 @@
         android:id="@+id/apContentCardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_marginBottom="100dp"
+        tools:layout_height="667dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         app:cardBackgroundColor="@color/apTransparent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/apContentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
             tools:background="@android:color/holo_green_light"
             />
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/apButtonLayout"
+    <LinearLayout
+        android:id="@+id/apActionAreaLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        tools:layout_height="64dp"
+        android:orientation="vertical"
+        android:background="#660000FF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apContentCardView"
-        />
+        >
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/apActionAreaLayout2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            />-->
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

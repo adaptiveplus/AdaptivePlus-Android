@@ -10,7 +10,7 @@ internal data class APSnap(
     val layers: List<APLayer>,
     val width: Double,
     val height: Double,
-    val actionAreaHeight: Double,
+    val actionAreaHeight: Double?,
     val actionArea: ActionArea?,
     val showTime: Double
 ) : Serializable {
@@ -28,23 +28,23 @@ internal data class APSnap(
         interface BaseBody
 
         data class ButtonBody(
+            val width: Double,
+            val height: Double,
             val text: Text,
             val actions: List<APAction>,
-            val cornerRadius: Double,
+            val cornerRadius: Double?,
             val backgroundColor: String,
-            val border: Border
+            val border: Border?
         ) : BaseBody, Serializable {
 
             data class Text(
                 val value: String,
-                val font: APFont
+                val font: APFont?
             ) : Serializable
 
             data class Border(
                 val width: Double,
-                val activeColor: APColor,
-                val padding: Double,
-                val cornerRadius: Double
+                val color: APColor
             ) : Serializable
         }
     }
