@@ -1,9 +1,11 @@
 package com.sprintsquads.adaptiveplus.ui.stories
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -91,6 +93,10 @@ internal class APStoryFragment :
             storiesProgressController.closeStories()
         }
 
+        updateTopMargin()
+
+        apStoryFragmentLayout.addOnLayoutChangeListener(apStoryFragmentLayoutChangeListener)
+
         setupObservers()
     }
 
@@ -116,6 +122,38 @@ internal class APStoryFragment :
     override fun onDestroy() {
         apStoriesProgressView?.destroy()
         super.onDestroy()
+    }
+
+    private val apStoryFragmentLayoutChangeListener = View.OnLayoutChangeListener {
+            v, _, _, _, _, oldLeft, _, oldRight, _ ->
+
+        val oldWidth = oldRight - oldLeft
+        if (v.width != oldWidth) {
+            updateTopMargin()
+        }
+    }
+
+    private fun updateTopMargin() {
+        story.snaps.firstOrNull()?.let { snap ->
+            val baseScreenWidth = maxOf(snap.width, 0.001)
+            val scaleFactor = (apStoryFragmentLayout.width / baseScreenWidth).toFloat()
+            val newSnapHeight = (snap.height * scaleFactor).toInt()
+            val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
+
+            val defaultMargin = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
+            val marginTop =
+                if (newSnapHeight + newActionAreaHeight > apStoryFragmentLayout.height) {
+                    (apStoryFragmentLayout.height - newSnapHeight) / 2 + defaultMargin
+                } else {
+                    defaultMargin
+                }
+
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(apStoryFragmentLayout)
+            constraintSet.setMargin(apStoriesProgressView.id, ConstraintSet.TOP, marginTop)
+            constraintSet.applyTo(apStoryFragmentLayout)
+        }
     }
 
     private fun setupObservers() {
