@@ -8,7 +8,7 @@ internal class APTextComponentViewModel(
 ) : APBaseComponentViewModel(lifecycleListener) {
 
     override fun prepare() {
-        lifecycleListener.onReady(true)
+        lifecycleListener.onReady(false)
     }
 
     override fun resume() {}
@@ -16,5 +16,13 @@ internal class APTextComponentViewModel(
     override fun pause() {}
 
     override fun reset() {}
+
+    fun onTextResourceReady() {
+        lifecycleListener.onReady(true)
+    }
+
+    fun onError() {
+        lifecycleListener.onError()
+    }
 
 }

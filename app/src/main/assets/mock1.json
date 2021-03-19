@@ -112,9 +112,9 @@
                 "component": {
                   "value": "Hello yerbol pidor",
                   "font": {
-                    "family": "Roboto",
-                    "style": "semiboldItalic",
-                    "size": 12,
+                    "family": "Redressed",
+                    "style": "regular",
+                    "size": 14,
                     "color": "#FF0000FF",
                     "align": "left",
                     "letterSpacing": 0
