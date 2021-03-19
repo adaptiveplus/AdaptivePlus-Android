@@ -27,16 +27,6 @@
             android:hint="AP View ID"
             />
 
-        <Spinner
-            android:id="@+id/loadingTypeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_spinner"
-            />
-
         <CheckBox
             android:id="@+id/isInstructionsCheckBox"
             android:layout_width="match_parent"

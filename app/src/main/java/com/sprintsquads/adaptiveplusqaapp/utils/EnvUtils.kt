@@ -50,7 +50,7 @@ fun getCustomIPs(context: Context): List<AdaptiveCustomIP> {
         Gson().fromJson(ipsWrapperStr, CustomIPsWrapper::class.java).ips
     } catch (e: Exception) {
         e.printStackTrace()
-        listOf<AdaptiveCustomIP>()
+        listOf()
     }.toMutableList()
 
     if (ips.firstOrNull { it.name == "NONE" } == null) {
@@ -70,7 +70,6 @@ fun addNewAPView(
     context: Context,
     envName: String,
     apViewId: String,
-    loadingType: APSdkEnvironment.APView.LoadingType,
     isInstructions: Boolean,
     isOnboarding: Boolean,
     hasBookmarks: Boolean
@@ -81,7 +80,6 @@ fun addNewAPView(
             add(
                 APSdkEnvironment.APView(
                     id = apViewId,
-                    loadingType = loadingType,
                     isInstructions = isInstructions,
                     isOnboarding = isOnboarding,
                     hasBookmarks = hasBookmarks
@@ -139,7 +137,7 @@ fun getEnvs(context: Context): List<APSdkEnvironment> {
         Gson().fromJson(envsWrapperStr, EnvsWrapper::class.java).envs
     } catch (e: Exception) {
         e.printStackTrace()
-        listOf<APSdkEnvironment>()
+        listOf()
     }.toMutableList()
 
     for (localEnvName in Environment.values().map { it.value }) {
@@ -213,45 +211,10 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     }
 }
 
-private val stagingAPViews = listOf(
-    APSdkEnvironment.APView(id = "5f85ffadb069f4001221c9f9", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859fac6aa1a80012ee31fd", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859fb96aa1a80012ee31fe", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f79d22e6c6500125c2e56", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859f846aa1a80012ee31fb", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859f946aa1a80012ee31fc", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a2b2e6c6500125c2e58", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859f1f6aa1a80012ee31a9", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f859f386aa1a80012ee31aa", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a6d2e6c6500125c2e5a", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a9e2e6c6500125c2e5c", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a042e6c6500125c2e57", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a562e6c6500125c2e59", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f5f7a892e6c6500125c2e5b", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f894b3c44795c0012511f35", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5fc61e6fa2577e0018a8b4de", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY)
-)
+private val stagingAPViews = listOf<APSdkEnvironment.APView>()
 
-private val homebankAPViews = listOf(
-    APSdkEnvironment.APView(id = "5f645dcb1fcfdf0018828dde", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645d741fcfdf0018828ddd", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645da672b21a0018d808b0", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645df372b21a0018d808b1", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645e0c1fcfdf0018828ddf", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645e2e72b21a0018d808b2", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f645e471fcfdf0018828de0", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY)
-)
+private val homebankAPViews = listOf<APSdkEnvironment.APView>()
 
-private val mycarAPViews = listOf(
-    APSdkEnvironment.APView(id = "5f871516851f910012576f44", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f871535851f910012576f45", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f871570851f910012576f46", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f8715b4851f910012576f48", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f87158a851f910012576f47", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY)
-)
+private val mycarAPViews = listOf<APSdkEnvironment.APView>()
 
-private val mycarPreprodAPViews = listOf(
-    APSdkEnvironment.APView(id = "5f871570851f910012576f46", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5f871516851f910012576f44", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY),
-    APSdkEnvironment.APView(id = "5fe3d8d6a49a340018f9932f", loadingType = APSdkEnvironment.APView.LoadingType.EMPTY, isInstructions = true)
-)
+private val mycarPreprodAPViews = listOf<APSdkEnvironment.APView>()

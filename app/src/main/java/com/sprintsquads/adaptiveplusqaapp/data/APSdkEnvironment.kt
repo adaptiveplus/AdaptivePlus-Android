@@ -14,15 +14,8 @@ data class APSdkEnvironment(
 
     data class APView(
         val id: String,
-        val loadingType: LoadingType,
         val isInstructions: Boolean? = false,
         val isOnboarding: Boolean? = false,
         val hasBookmarks: Boolean? = false
-    ) : Serializable {
-
-        enum class LoadingType {
-            EMPTY,
-            BANNERS_FULLSCREEN
-        }
-    }
+    ) : Serializable
 }

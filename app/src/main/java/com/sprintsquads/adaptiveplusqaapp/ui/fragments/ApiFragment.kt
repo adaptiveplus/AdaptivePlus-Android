@@ -2,12 +2,12 @@ package com.sprintsquads.adaptiveplusqaapp.ui.fragments
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
 import com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
 import com.sprintsquads.adaptiveplusqaapp.R
-import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddNewAPViewDialog
 import com.sprintsquads.adaptiveplusqaapp.utils.getEnvByName
 import com.sprintsquads.adaptiveplusqaapp.utils.removeAPView
@@ -52,9 +51,11 @@ class ApiFragment : Fragment() {
             apViewsLayout.children.forEach {
                 (it as? AdaptivePlusView)?.refresh()
             }
-            Handler().postDelayed({
-                mSwipeRefresher?.isRefreshing = false
-            }, 1000)
+            Looper.myLooper()?.let {
+                Handler(it).postDelayed({
+                    mSwipeRefresher?.isRefreshing = false
+                }, 1000)
+            }
         }
 
         setAdaptivePlusViews()
@@ -69,7 +70,7 @@ class ApiFragment : Fragment() {
 
         getEnvByName(context!!, envName)?.let { configs ->
             context?.let { ctx ->
-                apViewsSpinner.adapter = ArrayAdapter<String>(
+                apViewsSpinner.adapter = ArrayAdapter(
                     context!!,
                     android.R.layout.simple_spinner_dropdown_item,
                     configs.apViews.map { it.id }
@@ -77,12 +78,12 @@ class ApiFragment : Fragment() {
 
                 apViewsLayout?.removeAllViews()
 
-                for (apView in configs.apViews) {
+                for (apViewModel in configs.apViews) {
                     val apViewNameTxtView = TextView(ctx).apply {
                         val paddingSz = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
                         setPadding(paddingSz, paddingSz, paddingSz, paddingSz)
 
-                        text = "APView: ${apView.id}"
+                        text = "APView: ${apViewModel.id}"
                         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                         setTextColor(ContextCompat.getColor(context, R.color.colorOnSecondary))
                     }
@@ -92,7 +93,7 @@ class ApiFragment : Fragment() {
                         else -> {
                             val apView = AdaptivePlusView(ctx).apply {
                                 id = ViewCompat.generateViewId()
-                                setAdaptivePlusViewId(apView.id)
+                                setAdaptivePlusViewId(apViewModel.id)
                                 setAPCustomAction(object:
                                     APCustomAction {
                                     override fun onRun(params: HashMap<String, Any>) {
@@ -100,17 +101,6 @@ class ApiFragment : Fragment() {
                                         context?.toast("Custom action: $name")
                                     }
                                 })
-
-                                if (apView.loadingType == APSdkEnvironment.APView.LoadingType.BANNERS_FULLSCREEN) {
-                                    val redundantHeight = TypedValue.applyDimension(
-                                        TypedValue.COMPLEX_UNIT_DIP, 56f, resources.displayMetrics
-                                    ).toInt()
-
-                                    layoutParams = LinearLayout.LayoutParams(
-                                        LinearLayout.LayoutParams.MATCH_PARENT,
-                                        resources.displayMetrics.heightPixels - redundantHeight
-                                    )
-                                }
                             }
                             apViewsLayout?.addView(apView)
                         }

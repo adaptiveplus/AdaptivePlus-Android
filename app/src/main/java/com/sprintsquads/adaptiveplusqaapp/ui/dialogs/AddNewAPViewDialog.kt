@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.sprintsquads.adaptiveplusqaapp.R
-import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.utils.addNewAPView
 import kotlinx.android.synthetic.main.add_new_ap_view_dialog.*
 
@@ -57,16 +55,9 @@ class AddNewAPViewDialog : DialogFragment() {
             return
         }
 
-        val loadingTypes = APSdkEnvironment.APView.LoadingType.values().map { it.name }
-        loadingTypeSpinner.adapter = ArrayAdapter<String>(
-            context!!, android.R.layout.simple_spinner_dropdown_item, loadingTypes)
-
         addAPViewBtn.setOnClickListener {
             if (apViewIdEditText.text.toString().isNotEmpty()) {
                 val apViewId = apViewIdEditText.text.toString()
-                val loadingType = APSdkEnvironment.APView.LoadingType.values().firstOrNull {
-                    it.name == loadingTypeSpinner.selectedItem.toString()
-                } ?: APSdkEnvironment.APView.LoadingType.EMPTY
                 val isInstructions = isInstructionsCheckBox.isChecked
                 val isOnboarding = isOnboardingCheckBox.isChecked
                 val hasBookmarks = hasBookmarksCheckBox.isChecked
@@ -76,7 +67,6 @@ class AddNewAPViewDialog : DialogFragment() {
                         context = ctx,
                         envName = envName,
                         apViewId = apViewId,
-                        loadingType = loadingType,
                         isInstructions = isInstructions,
                         isOnboarding = isOnboarding,
                         hasBookmarks = hasBookmarks
