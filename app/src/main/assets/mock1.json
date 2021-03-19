@@ -199,17 +199,16 @@
                             "actionArea": {
                               "type": "BUTTON",
                               "body": {
-                                "width": 121,
-                                "height": 40,
                                 "text": {
                                   "value": "See details",
                                   "font": {
-                                    "family": "Helvetica",
+                                    "family": "Source Sans Pro",
                                     "style": "regular",
-                                    "size": 17,
+                                    "size": 15,
                                     "color": "#FFFFFF",
                                     "align": "center",
-                                    "letterSpacing": -0.15
+                                    "letterSpacing": 0,
+                                    "lineHeight": 24
                                   }
                                 },
                                 "actions": [
@@ -223,7 +222,7 @@
                                 "cornerRadius": 22,
                                 "backgroundColor": "#4183E7",
                                 "border": {
-                                  "width": 2,
+                                  "width": 0,
                                   "color": {
                                     "startColor": "#FFFFFFAA",
                                     "endColor": "#FFFFFFAA",

@@ -15,37 +15,29 @@ internal data class APSnap(
     val showTime: Double
 ) : Serializable {
 
-    data class ActionArea(
-        val type: Type,
-        val body: BaseBody?
-    ) : Serializable {
-
+    interface ActionArea : Serializable {
         enum class Type {
             @SerializedName("BUTTON")
             BUTTON
         }
+    }
 
-        interface BaseBody
+    data class ButtonActionArea(
+        val text: Text,
+        val actions: List<APAction>,
+        val cornerRadius: Double?,
+        val backgroundColor: String,
+        val border: Border?
+    ) : ActionArea, Serializable {
 
-        data class ButtonBody(
+        data class Text(
+            val value: String,
+            val font: APFont?
+        ) : Serializable
+
+        data class Border(
             val width: Double,
-            val height: Double,
-            val text: Text,
-            val actions: List<APAction>,
-            val cornerRadius: Double?,
-            val backgroundColor: String,
-            val border: Border?
-        ) : BaseBody, Serializable {
-
-            data class Text(
-                val value: String,
-                val font: APFont?
-            ) : Serializable
-
-            data class Border(
-                val width: Double,
-                val color: APColor
-            ) : Serializable
-        }
+            val color: APColor
+        ) : Serializable
     }
 }

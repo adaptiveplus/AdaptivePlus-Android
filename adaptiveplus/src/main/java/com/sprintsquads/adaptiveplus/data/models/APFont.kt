@@ -10,7 +10,8 @@ internal data class APFont(
     val size: Double,
     val color: String,
     val align: Align,
-    val letterSpacing: Double
+    val letterSpacing: Double,
+    val lineHeight: Double?
 ) : Serializable {
 
     enum class Align {

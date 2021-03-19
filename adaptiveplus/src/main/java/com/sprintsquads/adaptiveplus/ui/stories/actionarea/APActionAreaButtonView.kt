@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.ap_action_area_button.view.*
 
 internal class APActionAreaButtonView : LinearLayout {
 
-    private var data: APSnap.ActionArea.ButtonBody? = null
+    private var data: APSnap.ButtonActionArea? = null
     private var listener: APActionAreaListener? = null
 
     constructor(context: Context) : super(context)
@@ -22,7 +22,7 @@ internal class APActionAreaButtonView : LinearLayout {
 
     constructor(
         context: Context,
-        data: APSnap.ActionArea.ButtonBody?,
+        data: APSnap.ButtonActionArea,
         listener: APActionAreaListener?
     ) : super(context) {
         this.data = data
@@ -34,23 +34,23 @@ internal class APActionAreaButtonView : LinearLayout {
         View.inflate(context, R.layout.ap_action_area_button, this)
 
         data?.let { data ->
-            apButton.setOnClickListener {
+            apButtonTextView.setOnClickListener {
                 listener?.runActions(data.actions)
             }
 
             val bgDrawable = GradientDrawable().apply {
-                setBackgroundColor(getColorFromHex(data.backgroundColor))
+                setColor(getColorFromHex(data.backgroundColor))
                 cornerRadius = data.cornerRadius?.toFloat() ?: 0f
 
                 data.border?.let { border ->
                     setStroke(border.width.toInt(), getColorFromHex(border.color.startColor))
                 }
             }
-            apButton.background = bgDrawable
+            apButtonTextView.background = bgDrawable
 
-            apButton.text = data.text.value
+            apButtonTextView.text = data.text.value
             data.text.font?.let {
-                apButton.applyAPFont(apFont = it)
+                apButtonTextView.applyAPFont(apFont = it)
             }
         }
     }

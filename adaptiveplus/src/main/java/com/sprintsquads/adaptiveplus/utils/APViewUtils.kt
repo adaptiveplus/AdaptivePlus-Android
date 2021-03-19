@@ -5,8 +5,10 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
+import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
@@ -17,6 +19,8 @@ import com.sprintsquads.adaptiveplus.ui.components.APImageComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APTextComponentView
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
+import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaButtonView
+import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaListener
 
 
 internal fun buildComponentView(
@@ -38,6 +42,8 @@ internal fun drawAPLayersOnLayout(
     scaleFactor: Float = 1f,
     componentViewModelProvider: APComponentViewModelProvider?
 ) {
+    layout.removeAllViews()
+
     layers.forEachIndexed { index, layer ->
         val componentViewModel = componentViewModelProvider?.getAPComponentViewModel(index)
 
@@ -96,5 +102,59 @@ internal fun getAPStoriesList(dataModel: APViewDataModel?) : List<APStory>? {
         }
 
         stories
+    }
+}
+
+internal fun buildActionAreaView(
+    context: Context,
+    actionArea: APSnap.ActionArea,
+    actionAreaListener: APActionAreaListener?
+): View? {
+    return when (actionArea) {
+        is APSnap.ButtonActionArea ->
+            APActionAreaButtonView(context, actionArea, actionAreaListener)
+        else -> null
+    }
+}
+
+internal fun drawAPSnapActionArea(
+    layout: ConstraintLayout,
+    actionArea: APSnap.ActionArea,
+    scaleFactor: Float = 1f,
+    actionAreaListener: APActionAreaListener?
+) {
+    layout.removeAllViews()
+
+    buildActionAreaView(layout.context, actionArea, actionAreaListener)?.let { actionAreaView ->
+        actionAreaView.id = ViewCompat.generateViewId()
+        layout.addView(actionAreaView)
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(layout)
+
+        when (actionArea) {
+            is APSnap.ButtonActionArea -> {
+                actionAreaView.apply {
+                    doOnPreDraw {
+                        pivotX = width.toFloat() / 2
+                        pivotY = height.toFloat()
+                    }
+                }
+
+                constraintSet.connect(
+                    actionAreaView.id, ConstraintSet.START, layout.id, ConstraintSet.START)
+                constraintSet.connect(
+                    actionAreaView.id, ConstraintSet.END, layout.id, ConstraintSet.END)
+                constraintSet.connect(
+                    actionAreaView.id, ConstraintSet.BOTTOM,
+                    layout.id, ConstraintSet.BOTTOM,
+                    (2 * scaleFactor).toInt())
+
+                constraintSet.setScaleX(actionAreaView.id, scaleFactor)
+                constraintSet.setScaleY(actionAreaView.id, scaleFactor)
+            }
+        }
+
+        constraintSet.applyTo(layout)
     }
 }

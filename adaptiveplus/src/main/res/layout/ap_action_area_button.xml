@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Button
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/apButton"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout_height="48dp"
-    tools:text="CLICK ME"
-    />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:background="@color/apBlack">
+
+    <ImageView
+        android:layout_width="24px"
+        android:layout_height="16px"
+        android:layout_marginBottom="4px"
+        android:src="@drawable/ap_ic_chevron_up"
+        />
+
+    <TextView
+        android:id="@+id/apButtonTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="8px"
+        android:paddingBottom="8px"
+        android:paddingStart="24px"
+        android:paddingEnd="24px"
+        tools:layout_height="48px"
+        tools:background="@color/apWhite50"
+        tools:text="Click Me"
+        tools:textSize="15px"
+        tools:textColor="@color/apWhite"
+        />
+
+</LinearLayout>

@@ -32,6 +32,10 @@ internal fun TextView.applyAPFont(
         letterSpacing = apFont.letterSpacing.toFloat()
     }
 
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+        apFont.lineHeight?.let { lineHeight = it.toInt() }
+    }
+
     requestFontDownload(
         context = context,
         familyName = apFont.family,

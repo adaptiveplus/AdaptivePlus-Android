@@ -51,6 +51,8 @@ internal class APStoryFragment :
 
     private lateinit var viewModel: APStoryViewModel
 
+    private var snapsAdapter: APSnapsPagerAdapter? = null
+
     private var isUnderTouch = false
 
 
@@ -78,12 +80,15 @@ internal class APStoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        apSnapsViewPager.offscreenPageLimit = 1
-        apSnapsViewPager.adapter = APSnapsPagerAdapter(
+        snapsAdapter = APSnapsPagerAdapter(
             fragmentManager = childFragmentManager,
             snaps = story.snaps,
-            viewModel
+            viewModel,
+            1f
         )
+
+        apSnapsViewPager.offscreenPageLimit = 1
+        apSnapsViewPager.adapter = snapsAdapter
 
         apStoriesProgressView.setStoriesCount(story.snaps.size)
         apStoriesProgressView.setStoryDurations(story.snaps.map { (it.showTime * 1000).toLong() })
@@ -93,7 +98,7 @@ internal class APStoryFragment :
             storiesProgressController.closeStories()
         }
 
-        updateTopMargin()
+        updateStoryScaleFactor()
 
         apStoryFragmentLayout.addOnLayoutChangeListener(apStoryFragmentLayoutChangeListener)
 
@@ -129,14 +134,17 @@ internal class APStoryFragment :
 
         val oldWidth = oldRight - oldLeft
         if (v.width != oldWidth) {
-            updateTopMargin()
+            updateStoryScaleFactor()
         }
     }
 
-    private fun updateTopMargin() {
+    private fun updateStoryScaleFactor() {
         story.snaps.firstOrNull()?.let { snap ->
             val baseScreenWidth = maxOf(snap.width, 0.001)
             val scaleFactor = (apStoryFragmentLayout.width / baseScreenWidth).toFloat()
+
+            snapsAdapter?.updateScaleFactor(scaleFactor)
+
             val newSnapHeight = (snap.height * scaleFactor).toInt()
             val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
 

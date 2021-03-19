@@ -167,13 +167,11 @@ private val apSnapActionAreaDeserializer =
                 jsonObject.get("type").asString, APSnap.ActionArea.Type::class.java)
             val bodyJson = jsonObject.get("body").toString()
 
-            val body = when (type) {
+            when (type) {
                 APSnap.ActionArea.Type.BUTTON ->
-                    Gson().fromJson(bodyJson, APSnap.ActionArea.ButtonBody::class.java)
+                    Gson().fromJson(bodyJson, APSnap.ButtonActionArea::class.java)
                 else -> null
             }
-
-            APSnap.ActionArea(type, body)
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
             null

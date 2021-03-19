@@ -61,13 +61,9 @@ internal class APSnapViewModel(
     }
 
     fun runActionAreaActions() {
-        val actionArea = snap.actionArea
-
-        when (actionArea?.type) {
-            APSnap.ActionArea.Type.BUTTON -> {
-                (actionArea.body as? APSnap.ActionArea.ButtonBody)?.actions?.let {
-                    runActions(it)
-                }
+        when (val actionArea = snap.actionArea) {
+            is APSnap.ButtonActionArea -> {
+                runActions(actionArea.actions)
             }
             else -> {}
         }

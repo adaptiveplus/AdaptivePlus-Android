@@ -14,6 +14,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModelFactory
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegate
 import com.sprintsquads.adaptiveplus.utils.drawAPLayersOnLayout
+import com.sprintsquads.adaptiveplus.utils.drawAPSnapActionArea
 import kotlinx.android.synthetic.main.ap_fragment_snap.*
 import kotlin.math.abs
 
@@ -23,6 +24,7 @@ internal class APSnapFragment :
 
     companion object {
         private const val EXTRA_SNAP = "extra_snap"
+        private const val EXTRA_SCALE_FACTOR = "extra_scale_factor"
 
         private const val CLICK_EVENT_THRESHOLD = 250 // time in milliseconds
         private const val SWIPE_EVENT_THRESHOLD = 100 // time in milliseconds
@@ -32,10 +34,13 @@ internal class APSnapFragment :
         @JvmStatic
         fun newInstance(
             snap: APSnap,
-            storyViewModelDelegate: APStoryViewModelDelegate
+            storyViewModelDelegate: APStoryViewModelDelegate,
+            scaleFactor: Float
         ) =
             APSnapFragment().apply {
-                arguments = bundleOf(EXTRA_SNAP to snap)
+                arguments = bundleOf(
+                    EXTRA_SNAP to snap,
+                    EXTRA_SCALE_FACTOR to scaleFactor)
                 this.storyViewModelDelegate = storyViewModelDelegate
             }
     }
@@ -44,6 +49,7 @@ internal class APSnapFragment :
     private lateinit var snap: APSnap
     private lateinit var storyViewModelDelegate: APStoryViewModelDelegate
     private lateinit var viewModel: APSnapViewModel
+    private var scaleFactor: Float = 1f
 
     private var gestureDetector: GestureDetector? = null
 
@@ -61,6 +67,8 @@ internal class APSnapFragment :
 
         val snaViewModelFactory = APSnapViewModelFactory(snap, storyViewModelDelegate)
         viewModel = ViewModelProvider(this, snaViewModelFactory).get(APSnapViewModel::class.java)
+
+        scaleFactor = arguments?.getFloat(EXTRA_SCALE_FACTOR, 1f) ?: 1f
     }
 
     override fun onCreateView(
@@ -75,24 +83,10 @@ internal class APSnapFragment :
         view.setOnTouchListener(this)
         gestureDetector = GestureDetector(context, SwipeDetector())
 
-        redrawSnap()
-
-        apContentCardView.addOnLayoutChangeListener(apSnapFragmentLayoutChangeListener)
+        drawSnap()
     }
 
-    private val apSnapFragmentLayoutChangeListener = View.OnLayoutChangeListener {
-            v, _, _, _, _, oldLeft, _, oldRight, _ ->
-
-        val oldWidth = oldRight - oldLeft
-        if (v.width != oldWidth) {
-            redrawSnap()
-        }
-    }
-
-    private fun redrawSnap() {
-        val baseScreenWidth = maxOf(snap.width, 0.001)
-        val scaleFactor = (apContentCardView.width / baseScreenWidth).toFloat()
-
+    private fun drawSnap() {
         val apContentCardViewConstraintSet = ConstraintSet()
         apContentCardViewConstraintSet.clone(apSnapLayout)
 
@@ -124,48 +118,11 @@ internal class APSnapFragment :
 
         apContentCardViewConstraintSet.applyTo(apSnapLayout)
 
-        apContentLayout.removeAllViews()
         drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
 
         snap.actionArea?.let { actionArea ->
-            drawSnapActionArea(actionArea, scaleFactor)
+            drawAPSnapActionArea(apActionAreaLayout, actionArea, scaleFactor, viewModel)
         }
-    }
-
-    private fun drawSnapActionArea(actionArea: APSnap.ActionArea, scaleFactor: Float) {
-        // TODO: implement
-//        apActionAreaLayout2.removeAllViews()
-//
-//        when (actionArea.type) {
-//            APSnap.ActionArea.Type.BUTTON -> {
-//                context?.let { ctx ->
-//                    val buttonBody = actionArea.body as APSnap.ActionArea.ButtonBody
-//                    val buttonView = APActionAreaButtonView(
-//                        context = ctx,
-//                        data = buttonBody,
-//                        listener = viewModel
-//                    )
-//                    buttonView.id = ViewCompat.generateViewId()
-//                    apActionAreaLayout2.addView(buttonView)
-//
-//                    val constraintSet = ConstraintSet()
-//                    constraintSet.clone(apActionAreaLayout2)
-//                    constraintSet.constrainWidth(buttonView.id, buttonBody.width.toInt())
-//                    constraintSet.constrainHeight(buttonView.id, buttonBody.height.toInt())
-//                    constraintSet.connect(
-//                        buttonView.id, ConstraintSet.TOP, apActionAreaLayout2.id, ConstraintSet.TOP)
-//                    constraintSet.connect(
-//                        buttonView.id, ConstraintSet.START, apActionAreaLayout2.id, ConstraintSet.START)
-//                    constraintSet.connect(
-//                        buttonView.id, ConstraintSet.END, apActionAreaLayout2.id, ConstraintSet.END)
-//                    constraintSet.connect(
-//                        buttonView.id, ConstraintSet.BOTTOM, apActionAreaLayout2.id, ConstraintSet.BOTTOM)
-//                    constraintSet.setScaleX(buttonView.id, scaleFactor)
-//                    constraintSet.setScaleY(buttonView.id, scaleFactor)
-//                    constraintSet.applyTo(apActionAreaLayout2)
-//                }
-//            }
-//        }
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
