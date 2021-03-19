@@ -84,6 +84,43 @@ internal class APSnapFragment :
         gestureDetector = GestureDetector(context, SwipeDetector())
 
         drawSnap()
+
+        apSnapLayout.addOnLayoutChangeListener(apSnapLayoutChangeListener)
+    }
+
+    private val apSnapLayoutChangeListener = View.OnLayoutChangeListener {
+            v, _, _, _, _, oldLeft, _, oldRight, _ ->
+
+        val oldWidth = oldRight - oldLeft
+        if (v.width != oldWidth) {
+            val newSnapHeight = (snap.height * scaleFactor).toInt()
+            val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
+
+            val apContentCardViewConstraintSet = ConstraintSet()
+            apContentCardViewConstraintSet.clone(apSnapLayout)
+
+            if (newSnapHeight + newActionAreaHeight > apSnapLayout.height) {
+                apContentCardViewConstraintSet.connect(
+                    apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
+                apContentCardViewConstraintSet.connect(
+                    apContentCardView.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
+                apContentCardViewConstraintSet.connect(
+                    apActionAreaLayout.id, ConstraintSet.BOTTOM, apContentCardView.id, ConstraintSet.BOTTOM)
+                apContentCardViewConstraintSet.clear(
+                    apActionAreaLayout.id, ConstraintSet.TOP)
+            } else {
+                apContentCardViewConstraintSet.connect(
+                    apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
+                apContentCardViewConstraintSet.clear(
+                    apContentCardView.id, ConstraintSet.BOTTOM)
+                apContentCardViewConstraintSet.connect(
+                    apActionAreaLayout.id, ConstraintSet.TOP, apContentCardView.id, ConstraintSet.BOTTOM)
+                apContentCardViewConstraintSet.connect(
+                    apActionAreaLayout.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
+            }
+
+            apContentCardViewConstraintSet.applyTo(apSnapLayout)
+        }
     }
 
     private fun drawSnap() {
@@ -95,26 +132,6 @@ internal class APSnapFragment :
 
         val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
         apContentCardViewConstraintSet.constrainHeight(apActionAreaLayout.id, newActionAreaHeight)
-
-        if (newSnapHeight + newActionAreaHeight > apSnapLayout.height) {
-            apContentCardViewConstraintSet.connect(
-                apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
-            apContentCardViewConstraintSet.connect(
-                apContentCardView.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
-            apContentCardViewConstraintSet.connect(
-                apActionAreaLayout.id, ConstraintSet.BOTTOM, apContentCardView.id, ConstraintSet.BOTTOM)
-            apContentCardViewConstraintSet.clear(
-                apActionAreaLayout.id, ConstraintSet.TOP)
-        } else {
-            apContentCardViewConstraintSet.connect(
-                apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
-            apContentCardViewConstraintSet.clear(
-                apContentCardView.id, ConstraintSet.BOTTOM)
-            apContentCardViewConstraintSet.connect(
-                apActionAreaLayout.id, ConstraintSet.TOP, apContentCardView.id, ConstraintSet.BOTTOM)
-            apContentCardViewConstraintSet.connect(
-                apActionAreaLayout.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
-        }
 
         apContentCardViewConstraintSet.applyTo(apSnapLayout)
 
