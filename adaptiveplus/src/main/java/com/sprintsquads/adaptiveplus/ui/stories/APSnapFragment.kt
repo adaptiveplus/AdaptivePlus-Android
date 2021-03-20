@@ -185,6 +185,7 @@ internal class APSnapFragment :
                 if (e2.y > e1.y) {
                     if (e2.y - e1.y > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                         // Top -> Bottom
+                        viewModel.onSnapEvent(APSnapEvent.IS_NOT_UNDER_TOUCH)
                         viewModel.onSnapEvent(APSnapEvent.CLOSE_STORIES)
                         return true
                     }
@@ -193,6 +194,7 @@ internal class APSnapFragment :
                 if (e1.y > e2.y) {
                     if (e1.y - e2.y > SWIPE_MIN_DISTANCE && abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                         // Bottom -> Top
+                        viewModel.onSnapEvent(APSnapEvent.IS_NOT_UNDER_TOUCH)
                         viewModel.runActionAreaActions()
                         return true
                     }

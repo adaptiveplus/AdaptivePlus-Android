@@ -7,7 +7,7 @@ import java.io.Serializable
 @Keep
 internal data class APAction(
     val type: Type,
-    val params: HashMap<String, Any>?
+    val parameters: HashMap<String, Any>?
 ) : Serializable {
 
     enum class Type {

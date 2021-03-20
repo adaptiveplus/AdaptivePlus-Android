@@ -47,7 +47,7 @@ internal class APActionsManagerImpl(
     }
 
     private fun openWebView(action: APAction) {
-        (action.params?.get(PARAM_URL) as? String)?.let { url ->
+        (action.parameters?.get(PARAM_URL) as? String)?.let { url ->
             if (url.startsWith("http")) {
                 apViewModelDelegate.pauseAPStories()
 
@@ -71,7 +71,7 @@ internal class APActionsManagerImpl(
     }
 
     private fun runAPCustomAction(action: APAction) {
-        action.params?.let {
+        action.parameters?.let {
             dismissAllDialogs()
             apCustomAction?.onRun(it)
         }
@@ -92,7 +92,7 @@ internal class APActionsManagerImpl(
     private fun showAPStory(action: APAction) {
         deserializeAPActionParams(action)
 
-        (action.params?.get("story") as? APStory)?.let { story ->
+        (action.parameters?.get("story") as? APStory)?.let { story ->
             val storyIndex = apStories?.indexOfFirst { it.id == story.id }
 
             if (storyIndex != null && storyIndex != -1 && apStories != null) {

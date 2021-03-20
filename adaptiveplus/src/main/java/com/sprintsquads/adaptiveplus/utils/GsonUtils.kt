@@ -179,11 +179,11 @@ private val apSnapActionAreaDeserializer =
     }
 
 internal fun deserializeAPActionParams(action: APAction) {
-    action.params?.get("story")?.let { storyParam ->
+    action.parameters?.get("story")?.let { storyParam ->
         if (storyParam !is APStory) {
             getSerializedDataModel(storyParam)?.let { storyJson ->
                 getDeserializedAPStory(storyJson)?.let { story ->
-                    action.params["story"] = story
+                    action.parameters["story"] = story
                 }
             }
         }

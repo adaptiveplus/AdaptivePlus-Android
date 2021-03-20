@@ -34,7 +34,7 @@ internal class APActionAreaButtonView : LinearLayout {
         View.inflate(context, R.layout.ap_action_area_button, this)
 
         data?.let { data ->
-            apButtonTextView.setOnClickListener {
+            setOnClickListener {
                 listener?.runActions(data.actions)
             }
 

@@ -94,7 +94,7 @@ internal fun getAPStoriesList(dataModel: APViewDataModel?) : List<APStory>? {
             entryPoint.actions.forEach { action ->
                 if (action.type == APAction.Type.SHOW_STORY) {
                     deserializeAPActionParams(action)
-                    (action.params?.get("story") as? APStory)?.let { story ->
+                    (action.parameters?.get("story") as? APStory)?.let { story ->
                         stories.add(story)
                     }
                 }

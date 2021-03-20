@@ -125,7 +125,7 @@
             "actions": [
               {
                 "type": "SHOW_STORY",
-                "params": {
+                "parameters": {
                   "story": {
                     "id": "123",
                     "type": "STORY",
@@ -354,7 +354,7 @@
             "actions": [
               {
                 "type": "OPEN_WEB_LINK",
-                "params": {
+                "parameters": {
                   "url": "https://sprintsquads.com/"
                 }
               }
@@ -472,7 +472,7 @@
             "actions": [
               {
                 "type": "CUSTOM",
-                "params": {
+                "parameters": {
                   "name": "Custom Action"
                 }
               }
