@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.APSnap
+import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
@@ -18,7 +19,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 internal class APSnapViewModel(
     private val snap: APSnap,
     private val storyViewModelDelegate: APStoryViewModelDelegate?
-) : ViewModel(), APComponentViewModelProvider, APActionAreaListener {
+) : ViewModel(), APComponentViewModelProvider, APActionAreaListener, APComponentContainerViewModel {
 
     private val componentReadinessList = snap.layers.map { false }.toMutableList()
 
@@ -31,9 +32,9 @@ internal class APSnapViewModel(
         }
 
         return when (snap.layers.getOrNull(index)?.type) {
-            APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(componentLifecycleListener)
-            APLayer.Type.IMAGE -> APImageComponentViewModel(componentLifecycleListener)
-            APLayer.Type.TEXT -> APTextComponentViewModel(componentLifecycleListener)
+            APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(this, componentLifecycleListener)
+            APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
+            APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
             else -> null
         }
     }
@@ -74,4 +75,6 @@ internal class APSnapViewModel(
             APSnapEventInfo(snap.id, event)
         )
     }
+
+    override fun isActive(): Boolean = true
 }

@@ -1,11 +1,13 @@
 package com.sprintsquads.adaptiveplus.ui.components.vm
 
+import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 
 
 internal class APTextComponentViewModel(
+    containerViewModel: APComponentContainerViewModel,
     lifecycleListener: APComponentLifecycleListener
-) : APBaseComponentViewModel(lifecycleListener) {
+) : APBaseComponentViewModel(containerViewModel, lifecycleListener) {
 
     override fun prepare() {
         lifecycleListener.onReady(false)

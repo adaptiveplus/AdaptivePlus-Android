@@ -3,6 +3,7 @@ package com.sprintsquads.adaptiveplus.ui.apview.vm
 import androidx.lifecycle.*
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
@@ -139,10 +140,10 @@ internal class APViewModel(
         cacheManager.removeAPViewDataModelFromCache(apViewId)
     }
 
-    override fun getAPEntryPointViewModel(id: String): APEntryPointViewModel? {
-        if (!_entryPointViewModelMap.contains(id)) {
-            _entryPointViewModelMap[id] = APEntryPointViewModel(this)
+    override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
+        if (!_entryPointViewModelMap.contains(entryPoint.id)) {
+            _entryPointViewModelMap[entryPoint.id] = APEntryPointViewModel(entryPoint, this)
         }
-        return _entryPointViewModelMap[id]
+        return _entryPointViewModelMap[entryPoint.id]
     }
 }

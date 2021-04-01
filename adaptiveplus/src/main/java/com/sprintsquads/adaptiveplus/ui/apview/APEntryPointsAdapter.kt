@@ -65,7 +65,7 @@ internal class APEntryPointsAdapter(
     inner class EntryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(entryPoint: APEntryPoint) = with(itemView) {
-            val viewModel = apEntryPointViewModelProvider.getAPEntryPointViewModel(entryPoint.id)
+            val viewModel = apEntryPointViewModelProvider.getAPEntryPointViewModel(entryPoint)
 
             apEntryCardView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {

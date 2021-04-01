@@ -1,11 +1,13 @@
 package com.sprintsquads.adaptiveplus.ui.components.vm
 
+import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 
 
 internal class APImageComponentViewModel(
+    containerViewModel: APComponentContainerViewModel,
     lifecycleListener: APComponentLifecycleListener
-) : APBaseComponentViewModel(lifecycleListener) {
+) : APBaseComponentViewModel(containerViewModel, lifecycleListener) {
 
     override fun prepare() {
         lifecycleListener.onReady(false)
@@ -15,7 +17,9 @@ internal class APImageComponentViewModel(
 
     override fun pause() {}
 
-    override fun reset() {}
+    override fun reset() {
+        mComponentViewController?.reset()
+    }
 
     fun onImageResourceReady() {
         lifecycleListener.onReady(true)
@@ -25,9 +29,6 @@ internal class APImageComponentViewModel(
         lifecycleListener.onError()
     }
 
-    fun isActive() : Boolean {
-        // TODO: ask container
-        return true
-    }
+    fun isActive() : Boolean = containerViewModel.isActive()
 
 }
