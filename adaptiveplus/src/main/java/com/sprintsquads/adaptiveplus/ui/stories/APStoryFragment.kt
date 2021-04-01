@@ -66,9 +66,11 @@ internal class APStoryFragment :
             return
         }
 
-        val viewModelFactory = APStoryViewModelFactory(story, storiesDialogViewModelDelegate)
-        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        viewModel = viewModelProvider.get(APStoryViewModel::class.java)
+        activity?.let {
+            val viewModelFactory = APStoryViewModelFactory(it, story, storiesDialogViewModelDelegate)
+            val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+            viewModel = viewModelProvider.get(APStoryViewModel::class.java)
+        }
     }
 
     override fun onCreateView(
@@ -220,6 +222,8 @@ internal class APStoryFragment :
     }
 
     override fun onComplete() {
+        viewModel.setStoryWatched()
+
         resetLastSnap()
 
         storiesProgressController.moveToNextStory(story.id)
