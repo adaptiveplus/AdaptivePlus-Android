@@ -6,7 +6,7 @@ import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
-import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
 import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
@@ -23,7 +23,7 @@ internal class APSnapViewModel(
     private val componentReadinessList = snap.layers.map { false }.toMutableList()
 
 
-    override fun getAPComponentViewModel(index: Int): APBaseComponentViewModel? {
+    override fun getAPComponentViewModel(index: Int): APComponentViewModel? {
         val componentLifecycleListener = object: APComponentLifecycleListener {
             override fun onReady(isReady: Boolean) { onComponentReady(index) }
             override fun onComplete() { onComponentComplete(index) }

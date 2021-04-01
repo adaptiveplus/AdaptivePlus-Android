@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.extensions.loadImage
-import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_image.view.*
@@ -22,7 +22,7 @@ internal class APImageComponentView : APBaseComponentView {
     constructor(
         context: Context,
         component: APImageComponent,
-        componentViewModel: APBaseComponentViewModel?
+        componentViewModel: APComponentViewModel?
     ) : super(context, component, componentViewModel)
 
 
@@ -41,18 +41,39 @@ internal class APImageComponentView : APBaseComponentView {
                 }
             )
 
+            updateImageBorder()
+        }
+    }
+
+    override fun resume() {}
+
+    override fun pause() {}
+
+    override fun reset() {
+        updateImageBorder()
+    }
+
+    private fun updateImageBorder() {
+        (component as? APImageComponent)?.run {
             border?.let {
+                val borderState =
+                    if ((componentViewModel as? APImageComponentViewModel)?.isActive() == false) {
+                        it.inactive
+                    } else {
+                        it.active
+                    }
+
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, it.active.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, it.active.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, it.active.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, it.active.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, borderState.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, borderState.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, borderState.padding.toInt())
+                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, borderState.padding.toInt())
                 constraintSet.applyTo(apComponentLayout)
 
                 val borderDrawable = GradientDrawable().apply {
-                    setStroke(it.active.width.toInt(), getColorFromHex(it.active.color.startColor))
-                    cornerRadius = it.active.cornerRadius.toFloat()
+                    setStroke(borderState.width.toInt(), getColorFromHex(borderState.color.startColor))
+                    cornerRadius = borderState.cornerRadius.toFloat()
                 }
                 apComponentBorderView.background = borderDrawable
             }

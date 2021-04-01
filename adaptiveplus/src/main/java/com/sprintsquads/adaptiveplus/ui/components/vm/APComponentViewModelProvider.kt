@@ -5,5 +5,5 @@ internal interface APComponentViewModelProvider {
     /**
      * Get component view model by layer index
      */
-    fun getAPComponentViewModel(index: Int) : APBaseComponentViewModel?
+    fun getAPComponentViewModel(index: Int) : APComponentViewModel?
 }

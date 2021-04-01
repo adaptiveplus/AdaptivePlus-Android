@@ -17,7 +17,7 @@ import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
 import com.sprintsquads.adaptiveplus.ui.components.APBackgroundComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APImageComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APTextComponentView
-import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
 import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaButtonView
 import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaListener
@@ -26,7 +26,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaListener
 internal fun buildComponentView(
     context: Context,
     layer: APLayer,
-    viewModel: APBaseComponentViewModel?
+    viewModel: APComponentViewModel?
 ): View? {
     return when (layer.component) {
         is APBackgroundComponent -> APBackgroundComponentView(context, layer.component, viewModel)

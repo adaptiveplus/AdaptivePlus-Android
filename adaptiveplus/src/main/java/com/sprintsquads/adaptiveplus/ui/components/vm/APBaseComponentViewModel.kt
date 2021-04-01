@@ -1,28 +1,19 @@
 package com.sprintsquads.adaptiveplus.ui.components.vm
 
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
+import com.sprintsquads.adaptiveplus.ui.components.APComponentViewController
 
 
 internal abstract class APBaseComponentViewModel(
     protected val lifecycleListener: APComponentLifecycleListener
-) {
-    /**
-     * Lifecycle method to prepare component
-     */
-    abstract fun prepare()
+) : APComponentViewModel {
 
-    /**
-     * Lifecycle method to resume component
-     */
-    abstract fun resume()
+    private var componentViewController: APComponentViewController? = null
 
-    /**
-     * Lifecycle method to pause component
-     */
-    abstract fun pause()
 
-    /**
-     * Lifecycle method to reset component
-     */
-    abstract fun reset()
+    fun setComponentViewController(
+        controller: APComponentViewController?
+    ) {
+        this.componentViewController = controller
+    }
 }

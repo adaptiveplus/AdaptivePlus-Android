@@ -25,4 +25,9 @@ internal class APImageComponentViewModel(
         lifecycleListener.onError()
     }
 
+    fun isActive() : Boolean {
+        // TODO: ask container
+        return true
+    }
+
 }

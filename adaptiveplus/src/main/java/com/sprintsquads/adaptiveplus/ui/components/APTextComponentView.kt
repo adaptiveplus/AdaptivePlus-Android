@@ -6,7 +6,7 @@ import android.view.View
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
 import com.sprintsquads.adaptiveplus.extensions.applyAPFont
-import com.sprintsquads.adaptiveplus.ui.components.vm.APBaseComponentViewModel
+import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 import kotlinx.android.synthetic.main.ap_component_text.view.*
 
@@ -19,7 +19,7 @@ internal class APTextComponentView : APBaseComponentView {
     constructor(
         context: Context,
         component: APTextComponent,
-        componentViewModel: APBaseComponentViewModel?
+        componentViewModel: APComponentViewModel?
     ) : super(context, component, componentViewModel)
 
 
@@ -41,4 +41,10 @@ internal class APTextComponentView : APBaseComponentView {
             }
         }
     }
+
+    override fun resume() {}
+
+    override fun pause() {}
+
+    override fun reset() {}
 }
