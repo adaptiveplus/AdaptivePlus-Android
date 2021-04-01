@@ -16,7 +16,7 @@
   },
   "campaigns": [
     {
-      "id": "huy",
+      "id": "campaign1",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,
@@ -130,6 +130,7 @@
                     "id": "123",
                     "type": "STORY",
                     "body": {
+                      "campaignId": "campaign1",
                       "snaps": [
                         {
                           "id": "5fbce88c42797600117ade1c",
@@ -245,7 +246,7 @@
       }
     },
     {
-      "id": "huy",
+      "id": "campaign2",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,
@@ -364,7 +365,7 @@
       }
     },
     {
-      "id": "huy",
+      "id": "campaign3",
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,

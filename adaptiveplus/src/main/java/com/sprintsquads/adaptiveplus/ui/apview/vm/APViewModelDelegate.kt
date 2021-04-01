@@ -30,4 +30,9 @@ internal interface APViewModelDelegate {
      * Resume stories progress
      */
     fun resumeAPStories()
+
+    /**
+     * Method to notify apView that stories dialog was dismissed
+     */
+    fun onAPStoriesDismissed()
 }

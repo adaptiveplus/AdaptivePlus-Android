@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
-import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences.Companion.STORY_WATCHED_STATE
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
@@ -53,7 +52,7 @@ internal class APStoryViewModel(
     }
 
     override fun runActions(actions: List<APAction>) {
-        storiesDialogViewModelDelegate.runActions(actions, story.campaignId ?: "")
+        storiesDialogViewModelDelegate.runActions(actions, story.campaignId)
     }
 
     fun isStoriesPaused() : Boolean = isStoriesPausedLiveData.value == true
@@ -70,8 +69,9 @@ internal class APStoryViewModel(
         _snapEventInfoLiveData.value = eventInfo
     }
 
-    fun setStoryWatched() {
+    fun setStoryCampaignWatched() {
         val userId = AdaptivePlusSDK().getUserId() ?: ""
-        preferences.saveBoolean("${userId}_${story.id}_$STORY_WATCHED_STATE", true)
+        val prefKey = "${userId}_${story.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
+        preferences.saveBoolean(prefKey, true)
     }
 }

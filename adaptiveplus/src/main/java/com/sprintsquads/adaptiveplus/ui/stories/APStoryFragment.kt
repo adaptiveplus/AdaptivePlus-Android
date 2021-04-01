@@ -222,8 +222,6 @@ internal class APStoryFragment :
     }
 
     override fun onComplete() {
-        viewModel.setStoryWatched()
-
         resetLastSnap()
 
         storiesProgressController.moveToNextStory(story.id)
@@ -286,6 +284,10 @@ internal class APStoryFragment :
                 apStoriesProgressView.resume()
 
                 viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESUMED)
+
+                if (snapIndex == story.snaps.lastIndex) {
+                    viewModel.setStoryCampaignWatched()
+                }
             }
             else {
                 apStoriesProgressView.pause()

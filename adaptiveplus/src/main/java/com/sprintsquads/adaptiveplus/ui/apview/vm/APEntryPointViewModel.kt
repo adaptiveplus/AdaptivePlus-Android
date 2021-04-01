@@ -1,8 +1,10 @@
 package com.sprintsquads.adaptiveplus.ui.apview.vm
 
+import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
+import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
@@ -14,8 +16,25 @@ import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 
 internal class APEntryPointViewModel(
     private val entryPoint: APEntryPoint,
-    private val apViewModelDelegate: APViewModelDelegate
+    private val apViewModelDelegate: APViewModelDelegate,
+    private val preferences: APSharedPreferences
 ) : APComponentViewModelProvider, APComponentContainerViewModel {
+
+    private val componentViewModelList: List<APComponentViewModel?> = entryPoint.layers.mapIndexed { index, apLayer ->
+        val componentLifecycleListener = object: APComponentLifecycleListener {
+            override fun onReady(isReady: Boolean) { onComponentReady(index) }
+            override fun onComplete() { onComponentComplete(index) }
+            override fun onError() { onComponentError(index) }
+        }
+
+        when (apLayer.type) {
+            APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(this, componentLifecycleListener)
+            APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
+            APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
+            else -> null
+        }
+    }
+
 
     /**
      * Lifecycle method to prepare entry point
@@ -42,7 +61,7 @@ internal class APEntryPointViewModel(
      * Lifecycle method to reset entry point
      */
     fun reset() {
-        // TODO: implement
+        componentViewModelList.forEach { it?.reset() }
     }
 
     fun runActions(
@@ -53,23 +72,13 @@ internal class APEntryPointViewModel(
     }
 
     override fun getAPComponentViewModel(index: Int): APComponentViewModel? {
-        val componentLifecycleListener = object: APComponentLifecycleListener {
-            override fun onReady(isReady: Boolean) { onComponentReady(index) }
-            override fun onComplete() { onComponentComplete(index) }
-            override fun onError() { onComponentError(index) }
-        }
-
-        return when (entryPoint.layers.getOrNull(index)?.type) {
-            APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(this, componentLifecycleListener)
-            APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
-            APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
-            else -> null
-        }
+        return componentViewModelList[index]
     }
 
     override fun isActive(): Boolean {
-        // TODO: implement
-        return true
+        val userId = AdaptivePlusSDK().getUserId() ?: ""
+        val prefKey = "${userId}_${entryPoint.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
+        return !preferences.getBoolean(prefKey)
     }
 
     private fun onComponentReady(index: Int) {

@@ -124,5 +124,6 @@ internal class APStoriesDialog :
 
     override fun closeStories() {
         dismiss()
+        apViewModelDelegate.onAPStoriesDismissed()
     }
 }

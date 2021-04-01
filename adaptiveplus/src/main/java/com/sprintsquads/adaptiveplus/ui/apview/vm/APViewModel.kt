@@ -2,6 +2,7 @@ package com.sprintsquads.adaptiveplus.ui.apview.vm
 
 import androidx.lifecycle.*
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
+import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
@@ -12,7 +13,8 @@ import com.sprintsquads.adaptiveplus.utils.*
 
 internal class APViewModel(
     private val repository: APViewRepository,
-    private val cacheManager: APCacheManager
+    private val cacheManager: APCacheManager,
+    private val preferences: APSharedPreferences
 ) : ViewModel(), APViewModelDelegate, APEntryPointViewModelProvider {
 
     val apViewDataModelLiveData: LiveData<APViewDataModel?>
@@ -111,6 +113,12 @@ internal class APViewModel(
         _apStoriesPauseNumberLiveData.value = _apStoriesPauseNumberLiveData.value?.dec() ?: 0
     }
 
+    override fun onAPStoriesDismissed() {
+        _entryPointViewModelMap.forEach { (_, entryPointViewModel) ->
+            entryPointViewModel.reset()
+        }
+    }
+
     @Deprecated(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)
@@ -142,7 +150,8 @@ internal class APViewModel(
 
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
         if (!_entryPointViewModelMap.contains(entryPoint.id)) {
-            _entryPointViewModelMap[entryPoint.id] = APEntryPointViewModel(entryPoint, this)
+            _entryPointViewModelMap[entryPoint.id] =
+                APEntryPointViewModel(entryPoint, this, preferences)
         }
         return _entryPointViewModelMap[entryPoint.id]
     }
