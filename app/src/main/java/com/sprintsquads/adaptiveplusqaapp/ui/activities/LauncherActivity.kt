@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.Gender
@@ -76,6 +78,19 @@ class LauncherActivity : AppCompatActivity() {
                 .create()
             checkDialog.show()
         }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+//                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            fcmTokenValue.text = token
+        })
     }
 
     private fun openTestActivity() {

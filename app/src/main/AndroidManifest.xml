@@ -24,6 +24,14 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
 
+        <service
+            android:name=".core.APFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
 <!--        <meta-data-->
 <!--            android:name="adaptiveBaseApiUrl"-->
 <!--            android:value="https://api-staging.adaptive.plus"-->

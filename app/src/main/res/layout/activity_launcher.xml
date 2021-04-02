@@ -263,6 +263,33 @@
                 app:layout_constraintEnd_toEndOf="@id/userIdEditText"
                 />
 
+            <TextView
+                android:id="@+id/fcmTokenTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="FCM:"
+                android:textSize="14sp"
+                android:textColor="@color/colorOnSecondary"
+                app:layout_constraintTop_toBottomOf="@id/ipSpinner"
+                app:layout_constraintStart_toStartOf="@id/ipSpinner"
+                />
+
+            <TextView
+                android:id="@+id/fcmTokenValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:hint="FCM Registration Token Value Loading"
+                android:textSize="14sp"
+                android:textColor="#00FF00"
+                android:textIsSelectable="true"
+                app:layout_constraintTop_toTopOf="@id/fcmTokenTitle"
+                app:layout_constraintStart_toEndOf="@id/fcmTokenTitle"
+                app:layout_constraintEnd_toEndOf="@id/removeIpBtn"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
