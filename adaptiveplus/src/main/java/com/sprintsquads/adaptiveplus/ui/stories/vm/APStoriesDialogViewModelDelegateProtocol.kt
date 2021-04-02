@@ -1,10 +1,10 @@
-package com.sprintsquads.adaptiveplus.ui.apview.vm
+package com.sprintsquads.adaptiveplus.ui.stories.vm
 
 import androidx.lifecycle.LiveData
 import com.sprintsquads.adaptiveplus.data.models.APAction
 
 
-internal interface APViewModelDelegate {
+internal interface APStoriesDialogViewModelDelegateProtocol {
     /**
      * Method to run/execute adaptive plus actions
      *
@@ -20,19 +20,4 @@ internal interface APViewModelDelegate {
      * @return is ap stories paused boolean live data
      */
     fun isAPStoriesPausedLiveData() : LiveData<Boolean>
-
-    /**
-     * Pause stories progress
-     */
-    fun pauseAPStories()
-
-    /**
-     * Resume stories progress
-     */
-    fun resumeAPStories()
-
-    /**
-     * Method to notify apView that stories dialog was dismissed
-     */
-    fun onAPStoriesDismissed()
 }

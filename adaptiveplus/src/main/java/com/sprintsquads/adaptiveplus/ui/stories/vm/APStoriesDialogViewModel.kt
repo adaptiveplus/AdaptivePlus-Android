@@ -5,12 +5,12 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sprintsquads.adaptiveplus.data.models.APAction
-import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 
 
 internal class APStoriesDialogViewModel(
-    private val apViewModelDelegate: APViewModelDelegate
-) : ViewModel(), APStoriesDialogViewModelDelegate {
+    private val apViewModelDelegate: APViewModelDelegateProtocol
+) : ViewModel(), APStoriesDialogViewModelDelegateProtocol {
 
     private val _isStoriesExternallyPausedLiveData = apViewModelDelegate.isAPStoriesPausedLiveData()
     private val _isIdleStateLiveData = MutableLiveData<Boolean>().apply { value = true }

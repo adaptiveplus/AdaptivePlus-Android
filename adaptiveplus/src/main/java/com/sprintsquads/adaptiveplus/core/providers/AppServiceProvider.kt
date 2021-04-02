@@ -10,7 +10,7 @@ import com.sprintsquads.adaptiveplus.core.managers.APCacheManagerImpl
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManagerImpl
-import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 
 
 internal fun provideAPSharedPreferences(
@@ -29,7 +29,7 @@ internal fun provideNetworkServiceManager(
 internal fun provideAPActionsManager(
     fragmentActivity: FragmentActivity,
     fragmentManager: FragmentManager,
-    apViewModelDelegate: APViewModelDelegate
+    apViewModelDelegate: APViewModelDelegateProtocol
 ) : APActionsManager {
     return APActionsManagerImpl(fragmentActivity, fragmentManager, apViewModelDelegate)
 }

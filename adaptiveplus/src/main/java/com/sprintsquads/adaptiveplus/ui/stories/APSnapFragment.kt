@@ -12,7 +12,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModelFactory
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.utils.drawAPLayersOnLayout
 import com.sprintsquads.adaptiveplus.utils.drawAPSnapActionArea
 import kotlinx.android.synthetic.main.ap_fragment_snap.*
@@ -34,7 +34,7 @@ internal class APSnapFragment :
         @JvmStatic
         fun newInstance(
             snap: APSnap,
-            storyViewModelDelegate: APStoryViewModelDelegate,
+            storyViewModelDelegate: APStoryViewModelDelegateProtocol,
             scaleFactor: Float
         ) =
             APSnapFragment().apply {
@@ -47,7 +47,7 @@ internal class APSnapFragment :
 
 
     private lateinit var snap: APSnap
-    private lateinit var storyViewModelDelegate: APStoryViewModelDelegate
+    private lateinit var storyViewModelDelegate: APStoryViewModelDelegateProtocol
     private lateinit var viewModel: APSnapViewModel
     private var scaleFactor: Float = 1f
 

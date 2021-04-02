@@ -15,7 +15,7 @@ internal class APViewModel(
     private val repository: APViewRepository,
     private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences
-) : ViewModel(), APViewModelDelegate, APEntryPointViewModelProvider {
+) : ViewModel(), APViewModelDelegateProtocol, APEntryPointViewModelProvider {
 
     val apViewDataModelLiveData: LiveData<APViewDataModel?>
         get() = _apViewDataModelLiveData

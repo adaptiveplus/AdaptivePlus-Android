@@ -16,7 +16,7 @@ import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 
 internal class APEntryPointViewModel(
     private val entryPoint: APEntryPoint,
-    private val apViewModelDelegate: APViewModelDelegate,
+    private val apViewModelDelegate: APViewModelDelegateProtocol,
     private val preferences: APSharedPreferences
 ) : APComponentViewModelProvider, APComponentContainerViewModel {
 

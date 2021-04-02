@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.extensions.setTransitionDuration
-import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.restrictToRange
@@ -31,7 +31,7 @@ internal class APStoriesDialog :
         fun newInstance(
             stories: List<APStory>,
             startIndex: Int,
-            apViewModelDelegate: APViewModelDelegate
+            apViewModelDelegate: APViewModelDelegateProtocol
         ) = APStoriesDialog().apply {
             arguments = bundleOf(
                 EXTRA_STORIES to ArrayList(stories),
@@ -46,7 +46,7 @@ internal class APStoriesDialog :
     private lateinit var stories: List<APStory>
 
     private lateinit var viewModel: APStoriesDialogViewModel
-    private lateinit var apViewModelDelegate: APViewModelDelegate
+    private lateinit var apViewModelDelegate: APViewModelDelegateProtocol
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

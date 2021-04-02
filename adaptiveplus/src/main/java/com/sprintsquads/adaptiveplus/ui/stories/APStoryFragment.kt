@@ -17,7 +17,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapState
 import com.sprintsquads.adaptiveplus.ui.stories.progress.APStoriesProgressView
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.runDelayedTask
@@ -36,7 +36,7 @@ internal class APStoryFragment :
         fun newInstance(
             story: APStory,
             controller: APStoriesProgressController,
-            storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate
+            storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegateProtocol
         ) = APStoryFragment().apply {
             arguments = bundleOf(EXTRA_STORY to story)
             this.storiesProgressController = controller
@@ -47,7 +47,7 @@ internal class APStoryFragment :
 
     private lateinit var story: APStory
     private lateinit var storiesProgressController: APStoriesProgressController
-    private lateinit var storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate
+    private lateinit var storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegateProtocol
 
     private lateinit var viewModel: APStoryViewModel
 

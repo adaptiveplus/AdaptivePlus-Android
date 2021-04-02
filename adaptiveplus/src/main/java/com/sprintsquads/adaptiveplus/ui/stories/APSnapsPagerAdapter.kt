@@ -4,13 +4,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sprintsquads.adaptiveplus.data.models.APSnap
-import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoryViewModelDelegateProtocol
 
 
 internal class APSnapsPagerAdapter(
     fragmentManager: FragmentManager,
     private val snaps: List<APSnap>,
-    private val storyViewModelDelegate: APStoryViewModelDelegate,
+    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol,
     private var scaleFactor: Float
 ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 

@@ -4,7 +4,7 @@ import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 
 
-internal interface APStoryViewModelDelegate {
+internal interface APStoryViewModelDelegateProtocol {
     /**
      * Method to update snap readiness
      *

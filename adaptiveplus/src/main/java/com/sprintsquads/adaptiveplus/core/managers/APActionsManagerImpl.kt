@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
-import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegate
+import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.dialogs.WebViewDialog
 import com.sprintsquads.adaptiveplus.ui.stories.APStoriesDialog
 import com.sprintsquads.adaptiveplus.utils.deserializeAPActionParams
@@ -18,7 +18,7 @@ import com.sprintsquads.adaptiveplus.utils.deserializeAPActionParams
 internal class APActionsManagerImpl(
     private val fragmentActivity: FragmentActivity,
     private val fragmentManager: FragmentManager,
-    private val apViewModelDelegate: APViewModelDelegate
+    private val apViewModelDelegate: APViewModelDelegateProtocol
 ) : APActionsManager {
 
     companion object {

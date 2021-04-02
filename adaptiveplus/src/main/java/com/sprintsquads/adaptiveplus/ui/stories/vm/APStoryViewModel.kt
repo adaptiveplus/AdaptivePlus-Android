@@ -14,9 +14,9 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStateInfo
 
 internal class APStoryViewModel(
     private val story: APStory,
-    private val storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegate,
+    private val storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegateProtocol,
     private val preferences: APSharedPreferences
-) : ViewModel(), APStoryViewModelDelegate {
+) : ViewModel(), APStoryViewModelDelegateProtocol {
 
     val snapReadinessUpdatedEventLiveData: LiveData<String>
         get() = _snapReadinessUpdatedEventLiveData

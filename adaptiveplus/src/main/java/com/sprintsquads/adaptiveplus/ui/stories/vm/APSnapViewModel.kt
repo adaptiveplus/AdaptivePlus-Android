@@ -18,7 +18,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 
 internal class APSnapViewModel(
     private val snap: APSnap,
-    private val storyViewModelDelegate: APStoryViewModelDelegate?
+    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol?
 ) : ViewModel(), APComponentViewModelProvider, APActionAreaListener, APComponentContainerViewModel {
 
     private val componentReadinessList = snap.layers.map { false }.toMutableList()
