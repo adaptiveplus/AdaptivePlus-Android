@@ -5,6 +5,7 @@
     "height": 120,
     "cornerRadius": 12,
     "magnetize": false,
+    "autoScroll": 3,
     "padding": {
       "top": 0,
       "bottom": 0,
