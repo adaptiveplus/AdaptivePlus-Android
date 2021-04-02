@@ -3,12 +3,10 @@ package com.sprintsquads.adaptiveplus.core.managers
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.ui.apview.APViewDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.dialogs.WebViewDialog
 import com.sprintsquads.adaptiveplus.ui.stories.APStoriesDialog
@@ -16,8 +14,7 @@ import com.sprintsquads.adaptiveplus.utils.deserializeAPActionParams
 
 
 internal class APActionsManagerImpl(
-    private val fragmentActivity: FragmentActivity,
-    private val fragmentManager: FragmentManager,
+    private val apViewDelegate: APViewDelegateProtocol,
     private val apViewModelDelegate: APViewModelDelegateProtocol
 ) : APActionsManager {
 
@@ -58,11 +55,11 @@ internal class APActionsManagerImpl(
                             apViewModelDelegate.resumeAPStories()
                         }
                     })
-                webViewDialog.show(fragmentManager, webViewDialog.tag)
+                apViewDelegate.showDialog(webViewDialog)
             } else {
                 try {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    fragmentActivity.startActivity(intent)
+                    apViewDelegate.startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
                     e.printStackTrace()
                 }
@@ -72,20 +69,8 @@ internal class APActionsManagerImpl(
 
     private fun runAPCustomAction(action: APAction) {
         action.parameters?.let {
-            dismissAllDialogs()
+            apViewDelegate.dismissAllDialogs()
             apCustomAction?.onRun(it)
-        }
-    }
-
-    private fun dismissAllDialogs() {
-        try {
-            for (fragment in fragmentManager.fragments) {
-                if (fragment != null && fragment is DialogFragment) {
-                    fragment.dismiss()
-                }
-            }
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
         }
     }
 
@@ -99,7 +84,7 @@ internal class APActionsManagerImpl(
                 try {
                     val apStoriesDialog = APStoriesDialog
                         .newInstance(apStories!!, storyIndex, apViewModelDelegate)
-                    apStoriesDialog.show(fragmentManager, apStoriesDialog.tag)
+                    apViewDelegate.showDialog(apStoriesDialog)
                 } catch (e: IllegalStateException) {
                     e.printStackTrace()
                 }

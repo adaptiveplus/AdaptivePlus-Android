@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +28,7 @@ import com.sprintsquads.adaptiveplus.utils.isAPViewDataModelNullOrEmpty
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
 
 
-internal class APViewFragment : Fragment() {
+internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     companion object {
         private const val EXTRA_AP_VIEW_ID = "extra_ap_view_id"
@@ -62,7 +63,7 @@ internal class APViewFragment : Fragment() {
             val viewModelFactory = APViewModelFactory(it)
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewModel::class.java)
 
-            apActionsManager = provideAPActionsManager(it, childFragmentManager, viewModel)
+            apActionsManager = provideAPActionsManager(this, viewModel)
             customActionCallback?.let { callback ->
                 apActionsManager?.setAPCustomAction(callback)
             }
@@ -222,6 +223,22 @@ internal class APViewFragment : Fragment() {
             apViewFragmentLayout?.show()
         } else {
             apViewFragmentLayout?.hide()
+        }
+    }
+
+    override fun showDialog(dialogFragment: DialogFragment) {
+        dialogFragment.show(childFragmentManager, dialogFragment.tag)
+    }
+
+    override fun dismissAllDialogs() {
+        try {
+            for (fragment in childFragmentManager.fragments) {
+                if (fragment != null && fragment is DialogFragment) {
+                    fragment.dismiss()
+                }
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
     }
 }

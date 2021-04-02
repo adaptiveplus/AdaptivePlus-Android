@@ -1,8 +1,6 @@
 package com.sprintsquads.adaptiveplus.core.providers
 
 import android.content.Context
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManagerImpl
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
@@ -10,6 +8,7 @@ import com.sprintsquads.adaptiveplus.core.managers.APCacheManagerImpl
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManagerImpl
+import com.sprintsquads.adaptiveplus.ui.apview.APViewDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 
 
@@ -27,11 +26,10 @@ internal fun provideNetworkServiceManager(
 }
 
 internal fun provideAPActionsManager(
-    fragmentActivity: FragmentActivity,
-    fragmentManager: FragmentManager,
+    apViewDelegate: APViewDelegateProtocol,
     apViewModelDelegate: APViewModelDelegateProtocol
 ) : APActionsManager {
-    return APActionsManagerImpl(fragmentActivity, fragmentManager, apViewModelDelegate)
+    return APActionsManagerImpl(apViewDelegate, apViewModelDelegate)
 }
 
 internal fun provideAPCacheManager(
