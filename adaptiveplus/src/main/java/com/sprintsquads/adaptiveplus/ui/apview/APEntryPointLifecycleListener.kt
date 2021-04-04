@@ -3,19 +3,19 @@ package com.sprintsquads.adaptiveplus.ui.apview
 
 internal interface APEntryPointLifecycleListener {
     /**
-     * Method called on component readiness state changed
+     * Method called on entry point readiness state changed
      *
-     * @param isReady - component readiness state
+     * @param isReady - entry point readiness state
      */
     fun onReady(isReady: Boolean)
 
     /**
-     * Method called on component progress complete
+     * Method called on entry point progress complete
      */
     fun onComplete()
 
     /**
-     * Method called if component got into error state
+     * Method called if entry point got into error state
      */
     fun onError()
 }

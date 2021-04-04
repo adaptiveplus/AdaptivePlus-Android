@@ -70,6 +70,7 @@ internal class APEntryPointsAdapter(
 
         fun bind(entryPoint: APEntryPoint) = with(itemView) {
             val viewModel = apEntryPointViewModelProvider.getAPEntryPointViewModel(entryPoint)
+            viewModel?.prepare()
 
             apEntryCardView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {

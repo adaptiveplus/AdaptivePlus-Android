@@ -1,10 +1,13 @@
 package com.sprintsquads.adaptiveplus.ui.apview.vm
 
+import android.os.Handler
+import android.os.Looper
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
+import com.sprintsquads.adaptiveplus.ui.apview.APEntryPointLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
@@ -17,14 +20,15 @@ import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 
 internal class APEntryPointViewModel(
     private val entryPoint: APEntryPoint,
-    private val apViewModelDelegate: APViewModelDelegateProtocol,
     private val preferences: APSharedPreferences,
-    private val userRepository: APUserRepository
+    private val userRepository: APUserRepository,
+    private val lifecycleListener: APEntryPointLifecycleListener,
+    private val apViewModelDelegate: APViewModelDelegateProtocol
 ) : APComponentViewModelProvider, APComponentContainerViewModel {
 
     private val componentViewModelList: List<APComponentViewModel?> = entryPoint.layers.mapIndexed { index, apLayer ->
         val componentLifecycleListener = object: APComponentLifecycleListener {
-            override fun onReady(isReady: Boolean) { onComponentReady(index) }
+            override fun onReady(isReady: Boolean) { onComponentReady(index, isReady) }
             override fun onComplete() { onComponentComplete(index) }
             override fun onError() { onComponentError(index) }
         }
@@ -38,26 +42,39 @@ internal class APEntryPointViewModel(
         }
     }
 
+    private val componentReadinessSet = mutableSetOf<Int>()
+    private var progressHandler: Handler? = null
+    private val progressCompleteTask = Runnable { lifecycleListener.onComplete() }
+
 
     /**
      * Lifecycle method to prepare entry point
      */
     fun prepare() {
-        // TODO: implement
+        lifecycleListener.onReady(false)
+
+        if (Looper.myLooper() == null) {
+            Looper.prepare()
+        }
+        Looper.myLooper()?.let {
+            progressHandler = Handler(it)
+        }
     }
 
     /**
      * Lifecycle method to resume entry point
      */
     fun resume() {
-        // TODO: implement
+        componentViewModelList.forEach { it?.resume() }
+        progressHandler?.postDelayed(progressCompleteTask, 3000L)
     }
 
     /**
      * Lifecycle method to pause entry point
      */
     fun pause() {
-        // TODO: implement
+        componentViewModelList.forEach { it?.pause() }
+        progressHandler?.removeCallbacks(progressCompleteTask)
     }
 
     /**
@@ -84,8 +101,20 @@ internal class APEntryPointViewModel(
         return !preferences.getBoolean(prefKey)
     }
 
-    private fun onComponentReady(index: Int) {
-        // TODO: implement
+    private fun onComponentReady(index: Int, isReady: Boolean) {
+        val oldIsEntryPointReady = componentReadinessSet.size == entryPoint.layers.size
+
+        if (isReady) {
+            componentReadinessSet.add(index)
+        } else {
+            componentReadinessSet.remove(index)
+        }
+
+        val newIsEntryPointReady = componentReadinessSet.size == entryPoint.layers.size
+
+        if (oldIsEntryPointReady != newIsEntryPointReady) {
+            lifecycleListener.onReady(newIsEntryPointReady)
+        }
     }
 
     private fun onComponentComplete(index: Int) {
@@ -93,6 +122,6 @@ internal class APEntryPointViewModel(
     }
 
     private fun onComponentError(index: Int) {
-        // TODO: implement
+        lifecycleListener.onError()
     }
 }

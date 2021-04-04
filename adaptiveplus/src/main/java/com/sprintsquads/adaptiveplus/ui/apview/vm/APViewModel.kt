@@ -10,6 +10,7 @@ import com.sprintsquads.adaptiveplus.data.models.Event
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
+import com.sprintsquads.adaptiveplus.ui.apview.APEntryPointLifecycleListener
 import com.sprintsquads.adaptiveplus.utils.*
 
 
@@ -129,8 +130,20 @@ internal class APViewModel(
 
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
         if (!_entryPointViewModelMap.contains(entryPoint.id)) {
+            val entryPointLifecycleListener = object: APEntryPointLifecycleListener {
+                override fun onReady(isReady: Boolean) {  }
+                override fun onComplete() {  }
+                override fun onError() {  }
+            }
+
             _entryPointViewModelMap[entryPoint.id] =
-                APEntryPointViewModel(entryPoint, this, preferences, userRepository)
+                APEntryPointViewModel(
+                    entryPoint = entryPoint,
+                    preferences = preferences,
+                    userRepository = userRepository,
+                    lifecycleListener = entryPointLifecycleListener,
+                    apViewModelDelegate = this
+                )
         }
         return _entryPointViewModelMap[entryPoint.id]
     }
