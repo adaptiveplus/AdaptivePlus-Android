@@ -69,20 +69,14 @@ private data class EnvsWrapper(
 fun addNewAPView(
     context: Context,
     envName: String,
-    apViewId: String,
-    isInstructions: Boolean,
-    isOnboarding: Boolean,
-    hasBookmarks: Boolean
+    apViewId: String
 ) {
     val envs = getEnvs(context).toMutableList()
     envs.firstOrNull { it.name == envName }?.run {
         apViews = apViews.toMutableList().apply {
             add(
                 APSdkEnvironment.APView(
-                    id = apViewId,
-                    isInstructions = isInstructions,
-                    isOnboarding = isOnboarding,
-                    hasBookmarks = hasBookmarks
+                    id = apViewId
                 )
             )
         }
@@ -159,51 +153,19 @@ fun getEnvByName(context: Context, envName: String) : APSdkEnvironment? {
 
 private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     return when (envName) {
-        Environment.STAGING.value -> APSdkEnvironment(
-            name = Environment.STAGING.value,
-            appId = "com.s10s.adaptiveplussampleapp",
-            companySecret = "Tbh1qthkdODSBU5kSkTiRNH4rU6taNtliHz/z1qYIQG5fkISQtxyShr5rj2UaqR4GHOo5m+xJ8j3iMqJI9Pw4Ao4wheJNzw0q0tpwz/JEVuhz023e1IYTvfM/UuYilzcB/hctmWIQbprmmgu8O7eOXuoDqk7I6vReieJ6YH/Rnh5913sXoACyVzvehk8gm8BZFeL9YKc2ulReaEf9L0fUTKjlxqnlU0kEz14M6JiiE6EH5xTwIJJiR6I6FDVXd7uGuCe8j3FYpSga3cpY74trHXEME0c6boeJM2uw7WGiadDfz3hPPf1SH4TRPJk9uXfj1BfwE8I5E2KT97XD90G9w==",
-            appSecret = "LdtUp8n+WBc3VXOdCpAfFPskhSYEqGf32YaXY94C9u4D265avLmhyO5qlkG95G56bmYDxfua6Xc+TaJflCDOB63BNv6BG5ISCtwsQws1M5YY0Swiw533jhZh2lQ4c9wMw6OtopIAgOFOYx6Ymv40opvR1euKuUOVA2daitmbgKwwgSbZpBhWnq9gKYLjGYet104B5bSeZ4/SSGsweXZY0E+bneylrdCstnUkdixIbE9bkJRJs+2/gHj2zxQ9t8QqG26LyXVpmNml1RGcivK8XbIsImGLpFm1v9743acnu2UCm9P7P+GBw0kvVutZmpHa+EFPtJShykWkwvVfI35B3Q==",
-            baseApiUrl = "https://api-staging.adaptive.plus",
-            apViews = stagingAPViews
-        )
-        Environment.HOMEBANK_DEV.value -> APSdkEnvironment(
-            name = Environment.HOMEBANK_DEV.value,
-            appId = "kz.kkb.homebank.dev",
-            companySecret = "Tbh1qthkdODSBU5kSkTiRNH4rU6taNtliHz/z1qYIQG5fkISQtxyShr5rj2UaqR4GHOo5m+xJ8j3iMqJI9Pw4Ao4wheJNzw0q0tpwz/JEVuhz023e1IYTvfM/UuYilzcB/hctmWIQbprmmgu8O7eOXuoDqk7I6vReieJ6YH/Rnh5913sXoACyVzvehk8gm8BZFeL9YKc2ulReaEf9L0fUTKjlxqnlU0kEz14M6JiiE6EH5xTwIJJiR6I6FDVXd7uGuCe8j3FYpSga3cpY74trHXEME0c6boeJM2uw7WGiadDfz3hPPf1SH4TRPJk9uXfj1BfwE8I5E2KT97XD90G9w==",
-            appSecret = "qOt2DpO2gS4YVZ8gNgS1BhI1+R0jMrSBo+jLfLBcQT238FqSfTKcD+XxeTnBHFqQZLrkO/wHMkKEEKOh1G1xw+2vwNsEezChjnN7nMbiowK9zUwKKW95jhPFpcpKUf30W5TDvPtVZAm5I9st0s4kXrDxP53uPvpqg2va1fFPu8LoGkXTSLn//KBrKYdqiyxmd7nEOaT28+IUC8aP+GI0jqtqqBSbu/ycfNBoP7cWGZyv6oTIxFNazN8BU4JmcvSdeCm+qiDedFQapvsHYDxDR2bc/zGACQJtrllX9rp0z47Z8njW8BUDtLd5I+bfm/MRXQCM3mcC5TuSuEhMqFpvxQ==",
-            baseApiUrl = "https://test-adaptive-api.homebank.kz",
-            apViews = homebankAPViews
-        )
-        Environment.HOMEBANK_PROD.value -> APSdkEnvironment(
-            name = Environment.HOMEBANK_PROD.value,
-            appId = "kz.kkb.homebank",
-            companySecret = "Tbh1qthkdODSBU5kSkTiRNH4rU6taNtliHz/z1qYIQG5fkISQtxyShr5rj2UaqR4GHOo5m+xJ8j3iMqJI9Pw4Ao4wheJNzw0q0tpwz/JEVuhz023e1IYTvfM/UuYilzcB/hctmWIQbprmmgu8O7eOXuoDqk7I6vReieJ6YH/Rnh5913sXoACyVzvehk8gm8BZFeL9YKc2ulReaEf9L0fUTKjlxqnlU0kEz14M6JiiE6EH5xTwIJJiR6I6FDVXd7uGuCe8j3FYpSga3cpY74trHXEME0c6boeJM2uw7WGiadDfz3hPPf1SH4TRPJk9uXfj1BfwE8I5E2KT97XD90G9w==",
-            appSecret = "6+e6T6gluLgjM30X1EMbLXBkrfVDECV5NA2UwIygChbuqi4tFLwgdghqin9ISbxvm9EA7mn58JQTn6iJaPukXdZj96ZW53kQxed9Yv8R3KA+W7SY630lTQ8xTQ2ArU4b1bac/m+V9nqmxHS6tX4XiXDPYPzxfLrH9mNDsQMzzKxB0igs31L1DwfcrgJMFowTxQBkHpMXoR32nSVK99Ovxa+vzgXSF2E2lrk5eNicJhL6uW1BP7nu2Ju+4PDkX/f34ZMR50LFD5UfrEeEAjnhOhy0DvS0BdNK7PUPc5gB9fnXOmDiA+P7YTt5hRLaVO+Bgup5HrXfC3SyO+3HOxy5Ug==",
-            baseApiUrl = "https://adaptive-api.homebank.kz",
-            apViews = homebankAPViews
-        )
-        Environment.MYCAR.value -> APSdkEnvironment(
-            name = Environment.MYCAR.value,
-            appId = "kz.smartmk.mycars.android",
-            companySecret = "N48RyrE1lSwKj0IIddb3IFfhmy+Vywrh2v3K8LWWG0jBrxAHVP76k2Lgj/IwXEU59APriXZH8KtPDFf4ZXJyf0F1kV7/nskUXxZeY2PWcSHBfchtxZiBT+GYZgQoK3jfz7preff7Q2wyBxuuWU+KWyLpTo5vAxx/40C6wL3vVcBieQ5TkrHvd4eGPkqSL52bC8UgIR2IuLcT89CC90I5avF4pHDSbFIWcpUIcV7l0HIfP+uU5Y7FMgrpm/3scMhUoHYMy5Ta0mUaZfFZbZ2ozjycpJiwq/bELpFZSl+WuD1Lf/DsGNjofbvsmAYGeDk9ODyD+Y/kQKgO6uwWHnRAlQ==",
-            appSecret = "4F8vwnCXg+sSF/B8+YjG8eCeNzxYDmYhFSON6kwNl+TVxXxAY8RKUy2ZRem9PqOUWj9OwM+VTn/mlCaDJPNbDSuv1qLJAMMwj8y25kmDd0XwJapevJUfQejzHerLMEREc0gpcm7cRv3x324mqfG4GIjueBbkYZQYy11C7WTpzZ7rWm2kU0601+KICpgmeb8alZwC4+54psJDBSHm1kz2pZjvwOBtdvqp/6qe2USlliou0zUPQ+zUw0X06mw22nnWlWwUDlWDxa8+PkDYtzNynhJwlB75KzSMGQD8wwCgUdjhWmtczdo1gmCEFqExvxkiNwHnQ3IooDiBsubEqXkGkA==",
-            baseApiUrl = "https://adaptive-api.mycar.kz",
-            apViews = mycarAPViews
-        )
-        Environment.MYCAR_PREPROD.value -> APSdkEnvironment(
-            name = Environment.MYCAR_PREPROD.value,
-            appId = "ru.agima.mycars.android",
-            companySecret = "N48RyrE1lSwKj0IIddb3IFfhmy+Vywrh2v3K8LWWG0jBrxAHVP76k2Lgj/IwXEU59APriXZH8KtPDFf4ZXJyf0F1kV7/nskUXxZeY2PWcSHBfchtxZiBT+GYZgQoK3jfz7preff7Q2wyBxuuWU+KWyLpTo5vAxx/40C6wL3vVcBieQ5TkrHvd4eGPkqSL52bC8UgIR2IuLcT89CC90I5avF4pHDSbFIWcpUIcV7l0HIfP+uU5Y7FMgrpm/3scMhUoHYMy5Ta0mUaZfFZbZ2ozjycpJiwq/bELpFZSl+WuD1Lf/DsGNjofbvsmAYGeDk9ODyD+Y/kQKgO6uwWHnRAlQ==",
-            appSecret = "FSCcUdSR9skHCo4dX7Jegn2HgJwAwckvbuui8Igwno+4P5FSjH7nkLVKDhOl+3LXaMrSmbvMKe6fp6YpDcbhDMgSJCS4Gik06aynaZLkV5z5wz1VBdmuYehHc3YHy5ueGmM8mk5P7QGuD+EVC2XbO2u2fWJMgI0Uw4Wm4hbRtMlPxaCNclFlOhqxbc3csjLHl2aTjDWT91ML0zppxaP4IaEyUIhYMsq0aFy3w3UDB4vztGhULvAFLzm6daHcoUsc5U44dvs/B9S7kHSGYcZBmnObiJmDdl6/XNwDFn25356J1kOc4YNmQTHHS5HJOlRIWcvcwBgluBNjDyQspN85iA==",
-            baseApiUrl = "http://178.154.231.192:3030",
-            apViews = mycarPreprodAPViews
+        Environment.SDK_V2.value -> APSdkEnvironment(
+            name = Environment.SDK_V2.value,
+            appId = "com.sprintsquads.adaptiveplusqaapp",
+            clientId = "fef9d7d0-36c7-4fd7-bb10-61469c29ecc2",
+            clientSecret = "BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU",
+            baseApiUrl = "http://test.adaptive.plus:3000/v1",
+            apViews = sdkV2APViews
         )
         Environment.MOCK.value -> APSdkEnvironment(
             name = Environment.MOCK.value,
             appId = "",
-            companySecret = "",
-            appSecret = "",
+            clientId = "",
+            clientSecret = "",
             baseApiUrl = "",
             apViews = listOf()
         )
@@ -211,10 +173,4 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     }
 }
 
-private val stagingAPViews = listOf<APSdkEnvironment.APView>()
-
-private val homebankAPViews = listOf<APSdkEnvironment.APView>()
-
-private val mycarAPViews = listOf<APSdkEnvironment.APView>()
-
-private val mycarPreprodAPViews = listOf<APSdkEnvironment.APView>()
+private val sdkV2APViews = listOf<APSdkEnvironment.APView>()

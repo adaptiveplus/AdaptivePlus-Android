@@ -5,6 +5,7 @@ import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManagerImpl
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManagerImpl
+import com.sprintsquads.adaptiveplus.core.managers.APClientCredentialsManager
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManagerImpl
@@ -35,5 +36,9 @@ internal fun provideAPActionsManager(
 internal fun provideAPCacheManager(
     context: Context
 ) : APCacheManager {
-    return APCacheManagerImpl(context)
+    return APCacheManagerImpl(context, provideAPUserRepository(context))
+}
+
+internal fun provideAPClientCredentialsManager() : APClientCredentialsManager {
+    return APClientCredentialsManager()
 }

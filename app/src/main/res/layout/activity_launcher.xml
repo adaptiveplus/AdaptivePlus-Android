@@ -80,84 +80,16 @@
                 />
 
             <TextView
-                android:id="@+id/ageLabel"
+                android:id="@+id/localeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="16dp"
-                android:text="Age"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:text="Locale"
                 android:textSize="24sp"
                 android:textColor="@color/colorOnSecondary"
                 app:layout_constraintTop_toBottomOf="@id/envDivider"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/genderLabel"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                />
-
-            <NumberPicker
-                android:id="@+id/agePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/ageLabel"
-                app:layout_constraintStart_toStartOf="@id/ageLabel"
-                app:layout_constraintEnd_toEndOf="@id/ageLabel"
-                />
-
-            <TextView
-                android:id="@+id/genderLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender"
-                android:textSize="24sp"
-                android:textColor="@color/colorOnSecondary"
-                app:layout_constraintTop_toTopOf="@id/ageLabel"
-                app:layout_constraintStart_toEndOf="@id/ageLabel"
-                app:layout_constraintEnd_toStartOf="@id/localeLabel"
-                />
-
-            <RadioGroup
-                android:id="@+id/genderRadioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/genderLabel"
-                app:layout_constraintStart_toStartOf="@id/genderLabel"
-                app:layout_constraintEnd_toEndOf="@id/genderLabel">
-
-                <RadioButton
-                    android:id="@+id/maleRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="MALE"
-                    android:textSize="20sp"
-                    />
-
-                <RadioButton
-                    android:id="@+id/femaleRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="FEMALE"
-                    android:textSize="20sp"
-                    />
-
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/localeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
-                android:text="Locale"
-                android:textSize="24sp"
-                android:textColor="@color/colorOnSecondary"
-                app:layout_constraintTop_toTopOf="@id/genderLabel"
-                app:layout_constraintStart_toEndOf="@id/genderLabel"
-                app:layout_constraintEnd_toEndOf="parent"
                 />
 
             <Spinner
@@ -175,14 +107,15 @@
                 android:id="@+id/locationLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:gravity="center"
                 android:text="Location"
                 android:textSize="24sp"
                 android:textColor="@color/colorOnSecondary"
-                app:layout_constraintTop_toBottomOf="@id/genderRadioGroup"
-                app:layout_constraintStart_toStartOf="@id/genderRadioGroup"
-                app:layout_constraintEnd_toEndOf="@id/localeLabel"
+                app:layout_constraintTop_toTopOf="@id/localeLabel"
+                app:layout_constraintStart_toEndOf="@id/localeSpinner"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
 
             <EditText
@@ -223,7 +156,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="User ID"
-                app:layout_constraintTop_toBottomOf="@id/latitudeEditText"
+                app:layout_constraintTop_toBottomOf="@id/localeSpinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />

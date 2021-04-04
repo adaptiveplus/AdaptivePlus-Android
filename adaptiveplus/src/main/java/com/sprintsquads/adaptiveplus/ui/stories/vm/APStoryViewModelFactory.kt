@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.core.providers.provideAPSharedPreferences
+import com.sprintsquads.adaptiveplus.core.providers.provideAPUserRepository
 import com.sprintsquads.adaptiveplus.data.models.APStory
 
 
@@ -18,7 +19,8 @@ internal class APStoryViewModelFactory(
             return APStoryViewModel(
                 story,
                 storiesDialogViewModelDelegate,
-                provideAPSharedPreferences(context)
+                provideAPSharedPreferences(context),
+                provideAPUserRepository(context)
             ) as T
         }
 

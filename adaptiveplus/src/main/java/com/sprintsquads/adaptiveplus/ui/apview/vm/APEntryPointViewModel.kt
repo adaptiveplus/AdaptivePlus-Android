@@ -4,7 +4,7 @@ import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
+import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel
 import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
@@ -17,7 +17,8 @@ import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 internal class APEntryPointViewModel(
     private val entryPoint: APEntryPoint,
     private val apViewModelDelegate: APViewModelDelegateProtocol,
-    private val preferences: APSharedPreferences
+    private val preferences: APSharedPreferences,
+    private val userRepository: APUserRepository
 ) : APComponentViewModelProvider, APComponentContainerViewModel {
 
     private val componentViewModelList: List<APComponentViewModel?> = entryPoint.layers.mapIndexed { index, apLayer ->
@@ -76,7 +77,7 @@ internal class APEntryPointViewModel(
     }
 
     override fun isActive(): Boolean {
-        val userId = AdaptivePlusSDK().getUserId() ?: ""
+        val userId = userRepository.getAPUser().apId ?: ""
         val prefKey = "${userId}_${entryPoint.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         return !preferences.getBoolean(prefKey)
     }

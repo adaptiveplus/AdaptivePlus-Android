@@ -2,14 +2,15 @@ package com.sprintsquads.adaptiveplus.core.managers
 
 import android.content.Context
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
+import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.utils.getDeserializedAPViewDataModel
 import com.sprintsquads.adaptiveplus.utils.getSerializedDataModel
 import java.io.*
 
 
 internal class APCacheManagerImpl(
-    private val context: Context
+    private val context: Context,
+    private val userRepository: APUserRepository
 ) : APCacheManager {
     @Deprecated(
         message = "Only for development purposes.",
@@ -43,7 +44,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APViewDataModel?) -> Unit
     ) {
         try {
-            val userId = AdaptivePlusSDK().getUserId() ?: ""
+            val userId = userRepository.getAPUser().apId ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
@@ -70,7 +71,7 @@ internal class APCacheManagerImpl(
         dataModel: APViewDataModel
     ) {
         try {
-            val userId = AdaptivePlusSDK().getUserId() ?: ""
+            val userId = userRepository.getAPUser().apId ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
@@ -91,7 +92,7 @@ internal class APCacheManagerImpl(
         apViewId: String
     ) {
         try {
-            val userId = AdaptivePlusSDK().getUserId() ?: ""
+            val userId = userRepository.getAPUser().apId ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
             dataModelFile.delete()
         } catch (ex: IOException) {

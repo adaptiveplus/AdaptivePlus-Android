@@ -55,8 +55,8 @@ class AddEnvDialog : DialogFragment() {
                     name = envNameEditText.text.toString(),
                     baseApiUrl = baseUrlEditText.text.toString(),
                     appId = appIdEditText.text.toString(),
-                    companySecret = companySecretEditText.text.toString(),
-                    appSecret = appSecretEditText.text.toString(),
+                    clientId = companySecretEditText.text.toString(),
+                    clientSecret = appSecretEditText.text.toString(),
                     apViews = listOf()
                 )
 

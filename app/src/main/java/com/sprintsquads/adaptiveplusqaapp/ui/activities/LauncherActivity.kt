@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
 import com.sprintsquads.adaptiveplusqaapp.R
-import com.sprintsquads.adaptiveplusqaapp.data.Gender
 import com.sprintsquads.adaptiveplusqaapp.data.Locale
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddCustomIPDialog
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddEnvDialog
@@ -26,19 +25,13 @@ class LauncherActivity : AppCompatActivity() {
         updateEnvAdapter()
         updateIPsAdapter()
 
-        agePicker.minValue = 0
-        agePicker.maxValue = 100
-        agePicker.value = 24
-
-        maleRadioButton.isChecked = true
-
         val locales = listOf(
             Locale.EN.value,
             Locale.RU.value,
             Locale.KZ.value
         )
 
-        localeSpinner.adapter = ArrayAdapter<String>(
+        localeSpinner.adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, locales)
 
         userIdEditText.setText("s10s_QA_user")
@@ -98,13 +91,7 @@ class LauncherActivity : AppCompatActivity() {
 
         val envName = envSpinner.selectedItem.toString()
 
-        val gender =
-            if (maleRadioButton.isChecked) Gender.MALE.value
-            else Gender.FEMALE.value
-
         intent.putExtra(MainActivity.EXTRA_ENV_NAME, envName)
-        intent.putExtra(MainActivity.EXTRA_AGE, agePicker.value)
-        intent.putExtra(MainActivity.EXTRA_GENDER, gender)
         intent.putExtra(MainActivity.EXTRA_USER_ID, userIdEditText.text.toString())
         intent.putExtra(MainActivity.EXTRA_LOCALE, localeSpinner.selectedItem.toString())
         intent.putExtra(MainActivity.EXTRA_CUSTOM_IP, getCustomIPBySpinnerName(this, ipSpinner.selectedItem.toString())?.ip)
@@ -134,14 +121,14 @@ class LauncherActivity : AppCompatActivity() {
     private fun updateEnvAdapter() {
         val envsNames = getEnvs(this).map { it.name }
 
-        envSpinner.adapter = ArrayAdapter<String>(
+        envSpinner.adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, envsNames)
     }
 
     private fun updateIPsAdapter() {
         val ipNames = getCustomIPs(this).map { "${it.name}: ${it.ip}" }
 
-        ipSpinner.adapter = ArrayAdapter<String>(
+        ipSpinner.adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, ipNames)
     }
 

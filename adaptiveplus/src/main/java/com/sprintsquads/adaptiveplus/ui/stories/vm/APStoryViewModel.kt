@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
+import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapState
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStateInfo
@@ -15,7 +15,8 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapStateInfo
 internal class APStoryViewModel(
     private val story: APStory,
     private val storiesDialogViewModelDelegate: APStoriesDialogViewModelDelegateProtocol,
-    private val preferences: APSharedPreferences
+    private val preferences: APSharedPreferences,
+    private val userRepository: APUserRepository
 ) : ViewModel(), APStoryViewModelDelegateProtocol {
 
     val snapReadinessUpdatedEventLiveData: LiveData<String>
@@ -70,7 +71,7 @@ internal class APStoryViewModel(
     }
 
     fun setStoryCampaignWatched() {
-        val userId = AdaptivePlusSDK().getUserId() ?: ""
+        val userId = userRepository.getAPUser().apId ?: ""
         val prefKey = "${userId}_${story.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         preferences.saveBoolean(prefKey, true)
     }

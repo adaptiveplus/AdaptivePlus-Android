@@ -2,10 +2,10 @@ package com.sprintsquads.adaptiveplus.data.repositories
 
 import com.google.gson.Gson
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
-import com.sprintsquads.adaptiveplus.data.models.network.ErrorResponseBody
+import com.sprintsquads.adaptiveplus.data.models.APError
+import com.sprintsquads.adaptiveplus.data.models.network.BaseResponseBody
 import okhttp3.MediaType
 import okhttp3.Request
-import okhttp3.Response
 
 
 internal open class APBaseRepository(
@@ -18,18 +18,34 @@ internal open class APBaseRepository(
 
     protected fun executeRequest(
         request: Request,
-        onSuccess: (response: Response) -> Unit,
-        onError: (error: ErrorResponseBody?) -> Unit
+        onSuccess: (response: String?) -> Unit,
+        onError: (error: APError?) -> Unit
     ) {
         Thread {
             try {
                 val response = networkManager.getOkHttpClient().newCall(request).execute()
 
                 if (response.isSuccessful) {
-                    onSuccess.invoke(response)
+                    val responseBody = Gson().fromJson(
+                        response.body()?.string(), BaseResponseBody::class.java)
+
+                    if (responseBody.code == 200) {
+                        onSuccess.invoke(responseBody.data)
+                    } else {
+                        onError.invoke(
+                            APError(
+                                code = responseBody.code,
+                                message = responseBody.message
+                            )
+                        )
+                    }
                 } else {
-                    val error = Gson().fromJson(response.body()?.string(), ErrorResponseBody::class.java)
-                    onError.invoke(error)
+                    onError.invoke(
+                        APError(
+                            code = response.code(),
+                            message = response.message()
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

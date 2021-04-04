@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPActionsManager
+import com.sprintsquads.adaptiveplus.core.providers.provideNetworkServiceManager
 import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
-import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.extensions.hide
 import com.sprintsquads.adaptiveplus.extensions.show
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
@@ -104,7 +104,9 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     private fun setupObservers() {
         view?.let {
-            AdaptivePlusSDK().getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
+            val networkManager = provideNetworkServiceManager(context)
+            networkManager.getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
+
             AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
             viewModel.apViewDataModelLiveData.observe(viewLifecycleOwner, apViewDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
@@ -112,11 +114,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     }
 
     private val tokenObserver = Observer<String?> { token ->
+        updateAPViewFragmentVisibility()
+
         if (token != null) {
             viewModel.requestAPViewDataModel(apViewId)
-        }
-        else if (AdaptivePlusSDK().getTokenRequestState() == RequestState.ERROR) {
-            updateAPViewFragmentVisibility()
         }
     }
 
@@ -147,11 +148,11 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             viewModel.loadAPViewDataModelFromCache(apViewId)
         }
 
-        val sdk = AdaptivePlusSDK()
-        val tokenLiveData = sdk.getTokenLiveData()
+        val networkManager = provideNetworkServiceManager(context)
+        val tokenLiveData = networkManager.getTokenLiveData()
 
         if (tokenLiveData.value == null) {
-            context?.let { sdk.authorize(it) }
+            context?.let { AdaptivePlusSDK().authorize(it) }
         }
         else {
             viewModel.requestAPViewDataModel(apViewId)

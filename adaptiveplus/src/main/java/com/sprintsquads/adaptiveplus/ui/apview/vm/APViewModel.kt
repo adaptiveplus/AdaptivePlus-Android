@@ -7,12 +7,14 @@ import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
+import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
 import com.sprintsquads.adaptiveplus.utils.*
 
 
 internal class APViewModel(
     private val repository: APViewRepository,
+    private val userRepository: APUserRepository,
     private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences
 ) : ViewModel(), APViewModelDelegateProtocol, APEntryPointViewModelProvider {
@@ -151,7 +153,7 @@ internal class APViewModel(
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
         if (!_entryPointViewModelMap.contains(entryPoint.id)) {
             _entryPointViewModelMap[entryPoint.id] =
-                APEntryPointViewModel(entryPoint, this, preferences)
+                APEntryPointViewModel(entryPoint, this, preferences, userRepository)
         }
         return _entryPointViewModelMap[entryPoint.id]
     }

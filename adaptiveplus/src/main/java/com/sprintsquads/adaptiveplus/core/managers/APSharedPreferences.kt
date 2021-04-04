@@ -9,6 +9,7 @@ internal class APSharedPreferences(context: Context) {
         private const val PREF_ADAPTIVE_PLUS = "adaptive_plus_sdk_preferences"
 
         const val AUTH_TOKEN = "auth_token"
+        const val AP_USER_ID = "ap_user_id"
         const val IS_CAMPAIGN_WATCHED = "is_campaign_watched"
     }
 

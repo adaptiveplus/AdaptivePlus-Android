@@ -5,11 +5,9 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.data.APUserConfig
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.data.Environment
-import com.sprintsquads.adaptiveplusqaapp.data.Gender
 import com.sprintsquads.adaptiveplusqaapp.ui.fragments.ApiFragment
 import com.sprintsquads.adaptiveplusqaapp.ui.fragments.MockFragment
 import com.sprintsquads.adaptiveplusqaapp.utils.getEnvByName
@@ -19,8 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_ENV_NAME = "extra_env_name"
-        const val EXTRA_AGE = "extra_age"
-        const val EXTRA_GENDER = "extra_gender"
         const val EXTRA_USER_ID = "extra_user_id"
         const val EXTRA_LOCALE = "extra_locale"
         const val EXTRA_CUSTOM_IP = "extra_custom_ip"
@@ -50,27 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         val locale = intent?.getStringExtra(EXTRA_LOCALE) ?: "ru"
         val userId = intent?.getStringExtra(EXTRA_USER_ID)
-        val age = intent?.getIntExtra(EXTRA_AGE, -1)
-        val gender = when {
-            intent?.getStringExtra(EXTRA_GENDER) == Gender.FEMALE.value -> APUserConfig.Gender.FEMALE
-            intent?.getStringExtra(EXTRA_GENDER) == Gender.MALE.value -> APUserConfig.Gender.MALE
-            else -> null
-        }
-
-        val userConfig = if (age != -1 && gender != null) {
-            APUserConfig(age = age, gender = gender)
-        } else {
-            null
-        }
 
         val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? APLocation
 
         AdaptivePlusSDK().apply {
             setTestEnvironment(
                 context = this@MainActivity,
-                appId = env.appId,
-                companySecret = env.companySecret,
-                appSecret = env.appSecret,
+                clientId = env.clientId,
+                clientSecret = env.clientSecret,
                 baseUrl = env.baseApiUrl,
                 customIP = customIP
             )
@@ -78,10 +61,9 @@ class MainActivity : AppCompatActivity() {
             start(
                 context = this@MainActivity,
                 userId = userId,
-                userConfig = userConfig,
-                isDebuggable = true,
+                location = location,
                 locale = locale,
-                location = location
+                isDebuggable = true
             )
         }
 

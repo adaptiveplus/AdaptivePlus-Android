@@ -1,6 +1,8 @@
 package com.sprintsquads.adaptiveplus.core.managers
 
 import android.os.Build
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.sprintsquads.adaptiveplus.core.factories.Tls12SocketFactory
 import com.sprintsquads.adaptiveplus.data.CUSTOM_IP_ADDRESS
 import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
@@ -27,6 +29,8 @@ private constructor(
         private const val WRITE_TIMEOUT_SECONDS: Long = 30
         private const val READ_TIMEOUT_SECONDS: Long = 30
 
+        private val tokenLiveData = MutableLiveData<String?>()
+
 
         fun newInstance(
             preferences: APSharedPreferences? = null
@@ -36,19 +40,25 @@ private constructor(
     }
 
 
-    private var token: String? = null
     private var okHttpClient: OkHttpClient? = null
 
 
     private fun tokenInstance(): String? {
-        if (token == null) {
-            token = preferences?.getString(APSharedPreferences.AUTH_TOKEN)
+        return if (tokenLiveData.value == null) {
+            val token = preferences?.getString(APSharedPreferences.AUTH_TOKEN)
+
+            if (token != null) {
+                tokenLiveData.postValue(token)
+            }
+
+            token
+        } else {
+            tokenLiveData.value
         }
-        return token
     }
 
     override fun updateToken(token: String?) {
-        this.token = token
+        tokenLiveData.postValue(token)
 
         if (token == null) {
             preferences?.remove(APSharedPreferences.AUTH_TOKEN)
@@ -57,6 +67,8 @@ private constructor(
             preferences?.saveString(APSharedPreferences.AUTH_TOKEN, token)
         }
     }
+
+    override fun getTokenLiveData(): LiveData<String?> = tokenLiveData
 
     override fun getOkHttpClient(): OkHttpClient {
         if (okHttpClient == null) {
