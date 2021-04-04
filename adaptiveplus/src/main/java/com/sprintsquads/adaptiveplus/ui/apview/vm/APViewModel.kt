@@ -24,9 +24,12 @@ internal class APViewModel(
         get() = _apViewDataModelLiveData
     val actionEventLiveData: LiveData<Event<Pair<APAction, String>>>
         get() = _actionEventLiveData
+    val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
+        get() = _magnetizeEntryPointEventLiveData
 
     private val _apViewDataModelLiveData = MutableLiveData<APViewDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<Pair<APAction, String>>>()
+    private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
     private val _isAPStoriesPausedLiveData =
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
@@ -88,6 +91,13 @@ internal class APViewModel(
     }
 
     override fun onAPStoriesDismissed() {
+        _apViewDataModelLiveData.value?.let { dataModel ->
+            dataModel.entryPoints.findLast {
+                getAPEntryPointViewModel(it)?.isActive() != true
+            }?.let { entryPoint ->
+                _magnetizeEntryPointEventLiveData.value = Event(entryPoint.id)
+            }
+        }
         _entryPointViewModelMap.forEach { (_, entryPointViewModel) ->
             entryPointViewModel.reset()
         }

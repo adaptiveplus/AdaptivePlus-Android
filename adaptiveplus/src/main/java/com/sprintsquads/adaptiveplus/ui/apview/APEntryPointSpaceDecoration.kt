@@ -15,8 +15,8 @@ internal class APEntryPointSpaceDecoration(
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (parent.getChildAdapterPosition(view) > 0) {
-            outRect.left = space
+        if (parent.getChildAdapterPosition(view) < (parent.adapter?.itemCount ?: 0) - 1) {
+            outRect.right = space
         }
     }
 }

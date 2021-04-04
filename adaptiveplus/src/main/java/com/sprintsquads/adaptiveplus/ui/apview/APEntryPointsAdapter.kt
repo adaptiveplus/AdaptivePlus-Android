@@ -48,6 +48,10 @@ internal class APEntryPointsAdapter(
         notifyDataSetChanged()
     }
 
+    fun positionOfEntryPoint(id: String) : Int {
+        return dataSet.indexOfFirst { it.id == id }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         return EntryViewHolder(
             LayoutInflater.from(parent.context).inflate(

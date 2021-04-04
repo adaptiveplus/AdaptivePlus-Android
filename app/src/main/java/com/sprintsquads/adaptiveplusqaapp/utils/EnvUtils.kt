@@ -163,10 +163,10 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
         )
         Environment.MOCK.value -> APSdkEnvironment(
             name = Environment.MOCK.value,
-            appId = "",
+            appId = "com.sprintsquads.adaptiveplusqaapp",
             clientId = "",
             clientSecret = "",
-            baseApiUrl = "",
+            baseApiUrl = "http://test.adaptive.plus:3000",
             apViews = listOf()
         )
         else -> null

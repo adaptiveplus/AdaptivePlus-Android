@@ -9,6 +9,7 @@ import com.sprintsquads.adaptiveplus.ui.components.APComponentLifecycleListener
 import com.sprintsquads.adaptiveplus.ui.components.vm.APBackgroundComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModelProvider
+import com.sprintsquads.adaptiveplus.ui.components.vm.APGIFComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.actionarea.APActionAreaListener
@@ -35,6 +36,7 @@ internal class APSnapViewModel(
             APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(this, componentLifecycleListener)
             APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
             APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
+            APLayer.Type.GIF -> APGIFComponentViewModel(this, componentLifecycleListener)
             else -> null
         }
     }

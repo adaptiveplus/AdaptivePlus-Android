@@ -86,8 +86,8 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         entryPointsAdapter = APEntryPointsAdapter(listOf(), viewModel)
         val layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.HORIZONTAL, false)
-        apEntriesRecyclerView.layoutManager = layoutManager
-        apEntriesRecyclerView.adapter = entryPointsAdapter
+        apEntryPointsRecyclerView.layoutManager = layoutManager
+        apEntryPointsRecyclerView.adapter = entryPointsAdapter
 
         apViewFragmentLayout.addOnLayoutChangeListener(apViewFragmentLayoutChangeListener)
 
@@ -110,6 +110,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
             viewModel.apViewDataModelLiveData.observe(viewLifecycleOwner, apViewDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
+            viewModel.magnetizeEntryPointEventLiveData.observe(viewLifecycleOwner, magnetizeEntryPointEventObserver)
         }
     }
 
@@ -136,6 +137,13 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             EventObserver<Pair<APAction, String>> {
                 apActionsManager?.runAction(action = it.first, campaignId = it.second)
             }
+
+    private val magnetizeEntryPointEventObserver =
+        EventObserver<String> {
+            val adapterPosition = entryPointsAdapter.positionOfEntryPoint(it)
+            val layoutManager = apEntryPointsRecyclerView.layoutManager as? LinearLayoutManager
+            layoutManager?.scrollToPositionWithOffset(maxOf(adapterPosition, 0), 0)
+        }
 
     fun refresh() {
         if (!::viewModel.isInitialized) {
@@ -191,17 +199,17 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             val scaleFactor = (apViewFragmentLayout.width / baseScreenWidth).toFloat()
 
             options.padding.run {
-                apEntriesRecyclerView.setPadding(
+                apEntryPointsRecyclerView.setPadding(
                     (left * scaleFactor).toInt(),
                     (top * scaleFactor).toInt(),
                     (right * scaleFactor).toInt(),
                     (bottom * scaleFactor).toInt())
             }
 
-            while (apEntriesRecyclerView.itemDecorationCount > 0) {
-                apEntriesRecyclerView.removeItemDecorationAt(0)
+            while (apEntryPointsRecyclerView.itemDecorationCount > 0) {
+                apEntryPointsRecyclerView.removeItemDecorationAt(0)
             }
-            apEntriesRecyclerView.addItemDecoration(
+            apEntryPointsRecyclerView.addItemDecoration(
                 APEntryPointSpaceDecoration((options.spacing * scaleFactor).toInt()))
 
             entryPointsAdapter.updateEntryOptions(
