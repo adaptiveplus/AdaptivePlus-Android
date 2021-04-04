@@ -34,7 +34,7 @@
 
 <!--        <meta-data-->
 <!--            android:name="apBaseApiUrl"-->
-<!--            android:value="http://test.adaptive.plus:3000/v1"-->
+<!--            android:value="http://test.adaptive.plus:3000"-->
 <!--            />-->
 <!--        <meta-data-->
 <!--            android:name="apClientId"-->

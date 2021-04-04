@@ -18,10 +18,10 @@ internal var BASE_API_URL: String? = null
     set(value) {
         if (URLUtil.isValidUrl(value)) {
             field = value
-            SDK_API_URL = "$field"
+            SDK_API_URL = "$field/v1"
         }
     }
-internal var SDK_API_URL: String = "$BASE_API_URL"
+internal var SDK_API_URL: String = "$BASE_API_URL/v1"
 
 internal const val DELAY_BETWEEN_CLICKS = 1000 // milliseconds
 internal const val GLIDE_TIMEOUT = 60000 // milliseconds

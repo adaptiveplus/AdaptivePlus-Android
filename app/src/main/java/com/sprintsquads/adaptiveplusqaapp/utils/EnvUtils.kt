@@ -158,7 +158,7 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
             appId = "com.sprintsquads.adaptiveplusqaapp",
             clientId = "fef9d7d0-36c7-4fd7-bb10-61469c29ecc2",
             clientSecret = "BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU",
-            baseApiUrl = "http://test.adaptive.plus:3000/v1",
+            baseApiUrl = "http://test.adaptive.plus:3000",
             apViews = sdkV2APViews
         )
         Environment.MOCK.value -> APSdkEnvironment(

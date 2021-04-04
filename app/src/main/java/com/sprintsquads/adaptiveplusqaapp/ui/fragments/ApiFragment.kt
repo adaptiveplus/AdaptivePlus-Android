@@ -86,6 +86,7 @@ class ApiFragment : Fragment() {
                         text = "APView: ${apViewModel.id}"
                         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                         setTextColor(ContextCompat.getColor(context, R.color.colorOnSecondary))
+                        setTextIsSelectable(true)
                     }
                     apViewsLayout?.addView(apViewNameTxtView)
 

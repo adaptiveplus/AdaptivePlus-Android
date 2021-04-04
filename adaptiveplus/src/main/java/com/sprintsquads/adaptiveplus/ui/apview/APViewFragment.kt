@@ -114,8 +114,6 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     }
 
     private val tokenObserver = Observer<String?> { token ->
-        updateAPViewFragmentVisibility()
-
         if (token != null) {
             viewModel.requestAPViewDataModel(apViewId)
         }

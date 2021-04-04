@@ -7,13 +7,14 @@ import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
+import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
 import com.sprintsquads.adaptiveplus.utils.*
 
 
 internal class APViewModel(
-    private val repository: APViewRepository,
+    private val apViewRepository: APViewRepository,
     private val userRepository: APUserRepository,
     private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences
@@ -34,18 +35,10 @@ internal class APViewModel(
 
 
     private fun setAPViewDataModel(
-        dataModel: APViewDataModel?,
-        isCached: Boolean = false,
-        isForceUpdate: Boolean = false
+        dataModel: APViewDataModel,
+        isCached: Boolean = false
     ) {
-        if (dataModel == null) {
-            if (isForceUpdate) {
-                _apViewDataModelLiveData.value = null
-            } else {
-                _apViewDataModelLiveData.value = _apViewDataModelLiveData.value
-            }
-        }
-        else if (isForceUpdate || !isCached || _apViewDataModelLiveData.value == null) {
+        if (!isCached || _apViewDataModelLiveData.value == null) {
             if (!isCached) {
                 saveAPViewDataModelToCache(dataModel.id, dataModel)
             }
@@ -55,25 +48,17 @@ internal class APViewModel(
     }
 
     fun requestAPViewDataModel(apViewId: String) {
-        // TODO: implement
-//        _apViewId = apViewId
-//        val location = AdaptivePlusSDK().getUserLocation()
-//
-//        repository.requestAdaptiveComponent(
-//                apViewId, location, object: AdaptivePlusCallback<AdaptiveTemplate>() {
-//            override fun success(response: AdaptiveTemplate) {
-//                runOnMainThread {
-//                    setTemplate(response)
-//                }
-//            }
-//
-//            override fun failure(error: Any?) {
-//                runOnMainThread {
-//                    setTemplate(null)
-//                }
-//            }
-//        }
-//        )
+        apViewRepository.requestAPView(
+            apViewId, object: RequestResultCallback<APViewDataModel>() {
+                override fun success(response: APViewDataModel) {
+                    runOnMainThread {
+                        setAPViewDataModel(response)
+                    }
+                }
+
+                override fun failure(error: Any?) { }
+            }
+        )
     }
 
     override fun runActions(
@@ -81,23 +66,10 @@ internal class APViewModel(
         campaignId: String
     ) {
         for (action in actions) {
-            // TODO: uncomment on analytics
-//            AdaptiveAnalytics.logEvent(
-//                action = action,
-//                campaignId = campaignId,
-//                apViewId = _apViewId
-//            )
-
             runAction(action, campaignId)
         }
     }
 
-    /**
-     * Method to execute adaptive plus action
-     *
-     * @param action - a adaptive plus action to execute
-     * @see APAction
-     */
     private fun runAction(action: APAction, campaignId: String) {
         _actionEventLiveData.value =
                 Event(Pair(action, campaignId))
@@ -130,13 +102,12 @@ internal class APViewModel(
         }
     }
 
-    fun loadAPViewDataModelFromCache(apViewId: String, isForceUpdate: Boolean = false) {
+    fun loadAPViewDataModelFromCache(apViewId: String) {
         cacheManager.loadAPViewDataModelFromCache(apViewId) { dataModel ->
-            if (isForceUpdate || dataModel != null) {
+            if (dataModel != null) {
                 setAPViewDataModel(
                     dataModel = dataModel,
-                    isCached = true,
-                    isForceUpdate = isForceUpdate
+                    isCached = true
                 )
             }
         }
@@ -144,10 +115,6 @@ internal class APViewModel(
 
     private fun saveAPViewDataModelToCache(apViewId: String, dataModel: APViewDataModel) {
         cacheManager.saveAPViewDataModelToCache(apViewId, dataModel)
-    }
-
-    private fun removeAPViewDataModelFromCache(apViewId: String) {
-        cacheManager.removeAPViewDataModelFromCache(apViewId)
     }
 
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
