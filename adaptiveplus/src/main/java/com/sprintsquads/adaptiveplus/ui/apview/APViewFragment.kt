@@ -1,6 +1,7 @@
 package com.sprintsquads.adaptiveplus.ui.apview
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,8 @@ import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
 internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     companion object {
+        private const val MILLISECONDS_PER_INCH = 100f
+
         private const val EXTRA_AP_VIEW_ID = "extra_ap_view_id"
 
         @JvmStatic
@@ -176,6 +179,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             val smoothScroller = object: LinearSmoothScroller(context) {
                 override fun getHorizontalSnapPreference(): Int {
                     return SNAP_TO_START
+                }
+
+                override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
                 }
             }
             smoothScroller.targetPosition = adapterPosition
