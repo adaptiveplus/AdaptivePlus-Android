@@ -4,7 +4,7 @@
     "width": 120,
     "height": 120,
     "cornerRadius": 12,
-    "magnetize": false,
+    "magnetize": true,
     "autoScroll": 3,
     "padding": {
       "top": 0,

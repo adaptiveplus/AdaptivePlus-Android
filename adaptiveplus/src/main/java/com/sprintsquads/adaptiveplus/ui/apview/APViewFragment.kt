@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPActionsManager
@@ -88,6 +90,17 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             context, LinearLayoutManager.HORIZONTAL, false)
         apEntryPointsRecyclerView.layoutManager = layoutManager
         apEntryPointsRecyclerView.adapter = entryPointsAdapter
+        apEntryPointsRecyclerView.addOnScrollListener(
+            object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        autoMagnetize()
+                    }
+                }
+            }
+        )
 
         apViewFragmentLayout.addOnLayoutChangeListener(apViewFragmentLayoutChangeListener)
 
@@ -141,9 +154,34 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     private val magnetizeEntryPointEventObserver =
         EventObserver<String> {
             val adapterPosition = entryPointsAdapter.positionOfEntryPoint(it)
-            val layoutManager = apEntryPointsRecyclerView.layoutManager as? LinearLayoutManager
-            layoutManager?.scrollToPositionWithOffset(maxOf(adapterPosition, 0), 0)
+            magnetizeToPosition(maxOf(adapterPosition, 0))
         }
+
+    private fun autoMagnetize() {
+        if (viewModel.apViewDataModelLiveData.value?.options?.magnetize == true) {
+            (apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager)?.run {
+                val firstVisiblePos = findFirstVisibleItemPosition()
+                val firstCompletelyVisiblePos = findFirstCompletelyVisibleItemPosition()
+
+                if (firstVisiblePos != firstCompletelyVisiblePos) {
+                    magnetizeToPosition(firstVisiblePos)
+                }
+            }
+        }
+    }
+
+    private fun magnetizeToPosition(adapterPosition: Int) {
+        context?.let {
+            val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
+            val smoothScroller = object: LinearSmoothScroller(context) {
+                override fun getHorizontalSnapPreference(): Int {
+                    return SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = adapterPosition
+            layoutManager?.startSmoothScroll(smoothScroller)
+        }
+    }
 
     fun refresh() {
         if (!::viewModel.isInitialized) {
