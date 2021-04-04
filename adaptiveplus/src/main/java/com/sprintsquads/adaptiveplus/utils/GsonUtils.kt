@@ -6,10 +6,6 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
 import com.sprintsquads.adaptiveplus.data.models.*
-import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
-import com.sprintsquads.adaptiveplus.data.models.APLayer
-import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.components.*
 
 
@@ -93,6 +89,8 @@ private val apLayerDeserializer =
                     Gson().fromJson(componentString, APTextComponent::class.java)
                 APLayer.Type.BUTTON ->
                     Gson().fromJson(componentString, APButtonComponent::class.java)
+                APLayer.Type.GIF ->
+                    Gson().fromJson(componentString, APGIFComponent::class.java)
                 else ->
                     null
             }

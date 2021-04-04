@@ -12,9 +12,11 @@ import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
+import com.sprintsquads.adaptiveplus.data.models.components.APGIFComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
 import com.sprintsquads.adaptiveplus.ui.components.APBackgroundComponentView
+import com.sprintsquads.adaptiveplus.ui.components.APGIFComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APImageComponentView
 import com.sprintsquads.adaptiveplus.ui.components.APTextComponentView
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
@@ -32,6 +34,7 @@ internal fun buildComponentView(
         is APBackgroundComponent -> APBackgroundComponentView(context, layer.component, viewModel)
         is APImageComponent -> APImageComponentView(context, layer.component, viewModel)
         is APTextComponent -> APTextComponentView(context, layer.component, viewModel)
+        is APGIFComponent -> APGIFComponentView(context, layer.component, viewModel)
         else -> null
     }
 }

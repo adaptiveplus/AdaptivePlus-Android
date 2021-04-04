@@ -4,7 +4,7 @@ import com.sprintsquads.adaptiveplus.data.models.APGradientColor
 import java.io.Serializable
 
 
-internal data class APImageComponent(
+internal data class APGIFComponent(
     val url: String,
     val border: Border?,
     val cornerRadius: Double?

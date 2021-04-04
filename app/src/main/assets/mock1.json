@@ -82,7 +82,7 @@
                 }
               },
               {
-                "type": "IMAGE",
+                "type": "GIF",
                 "options": {
                   "position": {
                     "x": 80,
@@ -94,7 +94,7 @@
                   "opacity": 1
                 },
                 "component": {
-                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
+                  "url": "https://i.pinimg.com/originals/1e/c9/15/1ec915eb76dcff7edf9e5c195b70363f.gif",
                   "border": null
                 }
               },

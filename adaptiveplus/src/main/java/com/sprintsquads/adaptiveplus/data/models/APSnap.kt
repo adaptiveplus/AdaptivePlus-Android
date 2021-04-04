@@ -37,7 +37,7 @@ internal data class APSnap(
 
         data class Border(
             val width: Double,
-            val color: APColor
+            val color: APGradientColor
         ) : Serializable
     }
 }
