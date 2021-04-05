@@ -156,7 +156,7 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
         Environment.SDK_V2.value -> APSdkEnvironment(
             name = Environment.SDK_V2.value,
             appId = "com.sprintsquads.adaptiveplusqaapp",
-            channelSecret = "OWeLrQKjLxzIivHSlcxgdXhhuTSkuxKGLwQvuyNhYFmBZHeAerqyNEUzXPFGkqEG",
+            channelSecret = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps",
             baseApiUrl = "http://test.adaptive.plus:3000",
             apViews = sdkV2APViews
         )
@@ -171,4 +171,6 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     }
 }
 
-private val sdkV2APViews = listOf<APSdkEnvironment.APView>()
+private val sdkV2APViews = listOf(
+    APSdkEnvironment.APView(id = "4bf93439-2acd-4c7b-bbef-2f320f63a3b5")
+)
