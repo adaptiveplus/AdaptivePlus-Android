@@ -37,12 +37,8 @@
 <!--            android:value="http://test.adaptive.plus:3000"-->
 <!--            />-->
 <!--        <meta-data-->
-<!--            android:name="apClientId"-->
-<!--            android:value="fef9d7d0-36c7-4fd7-bb10-61469c29ecc2"-->
-<!--            />-->
-<!--        <meta-data-->
-<!--            android:name="apClientSecret"-->
-<!--            android:value="BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU"-->
+<!--            android:name="apChannelSecret"-->
+<!--            android:value="OWeLrQKjLxzIivHSlcxgdXhhuTSkuxKGLwQvuyNhYFmBZHeAerqyNEUzXPFGkqEG"-->
 <!--            />-->
     </application>
 

@@ -48,15 +48,13 @@ class AddEnvDialog : DialogFragment() {
                 appIdEditText.text.toString().isNotEmpty() &&
                 baseUrlEditText.text.toString().isNotEmpty() &&
                 URLUtil.isValidUrl(baseUrlEditText.text.toString()) &&
-                companySecretEditText.text.toString().isNotEmpty() &&
-                appSecretEditText.text.toString().isNotEmpty()
+                channelSecretEditText.text.toString().isNotEmpty()
             ) {
                 val newEnv = APSdkEnvironment(
                     name = envNameEditText.text.toString(),
                     baseApiUrl = baseUrlEditText.text.toString(),
                     appId = appIdEditText.text.toString(),
-                    clientId = companySecretEditText.text.toString(),
-                    clientSecret = appSecretEditText.text.toString(),
+                    channelSecret = channelSecretEditText.text.toString(),
                     apViews = listOf()
                 )
 

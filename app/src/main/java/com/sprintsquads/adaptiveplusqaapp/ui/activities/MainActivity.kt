@@ -52,8 +52,7 @@ class MainActivity : AppCompatActivity() {
         AdaptivePlusSDK().apply {
             setTestEnvironment(
                 context = this@MainActivity,
-                clientId = env.clientId,
-                clientSecret = env.clientSecret,
+                channelSecret = env.channelSecret,
                 baseUrl = env.baseApiUrl,
                 customIP = customIP
             )
@@ -101,4 +100,8 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    override fun onDestroy() {
+        AdaptivePlusSDK().stop()
+        super.onDestroy()
+    }
 }

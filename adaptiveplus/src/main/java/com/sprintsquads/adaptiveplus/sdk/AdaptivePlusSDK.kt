@@ -14,7 +14,6 @@ import com.sprintsquads.adaptiveplus.data.*
 import com.sprintsquads.adaptiveplus.data.BASE_API_URL
 import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
 import com.sprintsquads.adaptiveplus.data.LOCALE
-import com.sprintsquads.adaptiveplus.data.models.APClientCredentials
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
@@ -125,8 +124,7 @@ class AdaptivePlusSDK {
         level = DeprecationLevel.WARNING)
     fun setTestEnvironment(
         context: Context,
-        clientId: String,
-        clientSecret: String,
+        channelSecret: String,
         baseUrl: String,
         customIP: String?
     ) {
@@ -138,12 +136,7 @@ class AdaptivePlusSDK {
             return
         }
 
-        provideAPClientCredentialsManager().setTestCredentials(
-            APClientCredentials(
-                clientId = clientId,
-                clientSecret = clientSecret
-            )
-        )
+        provideAPClientCredentialsManager().setTestChannelSecret(channelSecret)
         BASE_API_URL = baseUrl
         CUSTOM_IP_ADDRESS = customIP
     }

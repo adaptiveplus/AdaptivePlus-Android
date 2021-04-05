@@ -1,7 +1,7 @@
 package com.sprintsquads.adaptiveplus.data.repositories
 
 import com.google.gson.Gson
-import com.sprintsquads.adaptiveplus.core.managers.APClientCredentialsManager
+import com.sprintsquads.adaptiveplus.core.managers.APAuthCredentialsManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.data.SDK_API_URL
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
@@ -12,7 +12,7 @@ import okhttp3.RequestBody
 
 
 internal class APAuthRepository(
-    private val clientCredentialsManager: APClientCredentialsManager,
+    private val authCredentialsManager: APAuthCredentialsManager,
     private val userRepository: APUserRepository,
     networkManager: NetworkServiceManager
 ) : APBaseRepository(networkManager) {
@@ -34,9 +34,11 @@ internal class APAuthRepository(
     fun requestToken(
         callback: RequestResultCallback<String>
     ) {
-        val credentials = clientCredentialsManager.getClientCredentials()
+        val credentials = authCredentialsManager.getAuthCredentials()
         val clientId = credentials?.clientId ?: ""
         val clientSecret = credentials?.clientSecret ?: ""
+        val grantType = credentials?.grantType ?: ""
+        val channelSecret = credentials?.channelSecret ?: ""
 
         val user = userRepository.getAPUser()
 
@@ -54,8 +56,8 @@ internal class APAuthRepository(
             .url("$SDK_API_URL/oauth/token")
             .addHeader(HEADER_CLIENT_ID, clientId)
             .addHeader(HEADER_CLIENT_SECRET, clientSecret)
-            .addHeader(HEADER_GRANT_TYPE, "channel_credentials")
-            .addHeader(HEADER_CHANNEL_SECRET, "OWeLrQKjLxzIivHSlcxgdXhhuTSkuxKGLwQvuyNhYFmBZHeAerqyNEUzXPFGkqEG")
+            .addHeader(HEADER_GRANT_TYPE, grantType)
+            .addHeader(HEADER_CHANNEL_SECRET, channelSecret)
             .post(body)
             .build()
 

@@ -27,5 +27,4 @@ internal const val DELAY_BETWEEN_CLICKS = 1000 // milliseconds
 internal const val GLIDE_TIMEOUT = 60000 // milliseconds
 
 internal const val META_KEY_BASE_API_URL = "apBaseApiUrl"
-internal const val META_KEY_CLIENT_ID = "apClientId"
-internal const val META_KEY_CLIENT_SECRET = "apClientSecret"
+internal const val META_KEY_CHANNEL_SECRET = "apChannelSecret"
