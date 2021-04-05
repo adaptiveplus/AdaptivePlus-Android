@@ -38,10 +38,9 @@ internal class APViewRepository(
             .post(body)
             .build()
 
-        executeRequest(request,
+        executeRequest<APViewDataModel>(request,
             { response ->
-                val responseModel = Gson().fromJson(response, APViewDataModel::class.java)
-                callback.success(responseModel)
+                callback.success(response)
             },
             { error ->
                 callback.failure(error)

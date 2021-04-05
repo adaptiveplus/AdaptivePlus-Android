@@ -61,11 +61,10 @@ internal class APAuthRepository(
             .post(body)
             .build()
 
-        executeRequest(request,
+        executeRequest<TokenResponseBody>(request,
             { response ->
-                val responseModel = Gson().fromJson(response, TokenResponseBody::class.java)
-                updateToken(responseModel.token)
-                callback.success(responseModel.token)
+                updateToken(response.token)
+                callback.success(response.token)
             },
             { error ->
                 updateToken(null)
