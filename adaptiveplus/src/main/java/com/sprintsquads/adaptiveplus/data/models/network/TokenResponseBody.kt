@@ -12,5 +12,7 @@ internal data class TokenResponseBody(
     @SerializedName("refresh_token")
     val refreshToken: String,
     @SerializedName("refresh_token_expires_in")
-    val refreshTokenExpirationDate: String
+    val refreshTokenExpirationDate: String,
+    @SerializedName("ap_id")
+    val apUserId: String
 ) : Serializable

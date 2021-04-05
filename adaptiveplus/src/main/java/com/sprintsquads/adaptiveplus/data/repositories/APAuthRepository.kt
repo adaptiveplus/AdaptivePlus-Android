@@ -63,6 +63,7 @@ internal class APAuthRepository(
 
         executeRequest<TokenResponseBody>(request,
             { response ->
+                userRepository.setAPUserId(response.apUserId)
                 updateToken(response.token)
                 callback.success(response.token)
             },
