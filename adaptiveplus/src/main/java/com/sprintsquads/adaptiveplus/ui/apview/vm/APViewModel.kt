@@ -212,15 +212,27 @@ internal class APViewModel(
         }
     }
 
+    fun onResume() {
+        resetAutoScroll()
+    }
+
+    fun onPause() {
+        _resumedEntryPointId?.let { pauseEntryPoint(it) }
+    }
+
     fun setVisibleEntryPointsPositionRange(range: IntRange) {
         this._visibleEntryPointsPositionRange = range
+    }
 
+    private fun resetAutoScroll() {
         _apViewDataModelLiveData.value?.let { dataModel ->
             if (getAutoScrollPeriod() != null) {
+                val range = _visibleEntryPointsPositionRange
                 val resumedEntryPointPosition =
                     dataModel.entryPoints.indexOfFirst {
                         it.id == _resumedEntryPointId
                     }
+
                 if (resumedEntryPointPosition !in range) {
                     _resumedEntryPointId?.let { pauseEntryPoint(it) }
                     dataModel.entryPoints.getOrNull(range.first)?.id?.let { resumeEntryPoint(it) }

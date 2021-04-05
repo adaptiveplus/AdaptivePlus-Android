@@ -99,8 +99,11 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
                     super.onScrollStateChanged(recyclerView, newState)
 
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        updateVisibleEntryPointsPositionRange()
                         autoMagnetize()
+                        updateVisibleEntryPointsPositionRange()
+                        viewModel.onResume()
+                    } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        viewModel.onPause()
                     }
                 }
             }
@@ -117,6 +120,16 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         else {
             refresh()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onPause() {
+        viewModel.onPause()
+        super.onPause()
     }
 
     private fun setupObservers() {

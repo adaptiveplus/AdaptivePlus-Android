@@ -36,5 +36,19 @@ class MockFragment : Fragment() {
                 ).show()
             }
         })
+        mock2APView.setAPCustomAction(object: APCustomAction {
+            override fun onRun(params: HashMap<String, Any>) {
+                Toast.makeText(
+                    context, params["name"].toString(), Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+        mock3APView.setAPCustomAction(object: APCustomAction {
+            override fun onRun(params: HashMap<String, Any>) {
+                Toast.makeText(
+                    context, params["name"].toString(), Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 }
