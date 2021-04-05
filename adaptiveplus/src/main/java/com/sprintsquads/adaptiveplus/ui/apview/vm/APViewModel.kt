@@ -36,6 +36,8 @@ internal class APViewModel(
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
     private val _entryPointViewModelMap = mutableMapOf<String, APEntryPointViewModel>()
+    private var _resumedEntryPointId: String? = null
+    private var _visibleEntryPointsPositionRange: IntRange = 0..0
 
 
     private fun setAPViewDataModel(
@@ -104,6 +106,10 @@ internal class APViewModel(
         }
     }
 
+    override fun getAutoScrollPeriod(): Long? {
+        return _apViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
+    }
+
     @Deprecated(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)
@@ -131,8 +137,8 @@ internal class APViewModel(
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
         if (!_entryPointViewModelMap.contains(entryPoint.id)) {
             val entryPointLifecycleListener = object: APEntryPointLifecycleListener {
-                override fun onReady(isReady: Boolean) {  }
-                override fun onComplete() {  }
+                override fun onReady(isReady: Boolean) { onEntryPointReady(entryPoint.id, isReady) }
+                override fun onComplete() { onEntryPointComplete(entryPoint.id) }
                 override fun onError() {  }
             }
 
@@ -146,5 +152,80 @@ internal class APViewModel(
                 )
         }
         return _entryPointViewModelMap[entryPoint.id]
+    }
+
+    private fun onEntryPointReady(id: String, isReady: Boolean) {
+        _apViewDataModelLiveData.value?.let { dataModel ->
+            val firstVisibleEntryPoint =
+                dataModel.entryPoints.getOrNull(_visibleEntryPointsPositionRange.first)
+
+            if (getAutoScrollPeriod() != null && isReady &&
+                id == firstVisibleEntryPoint?.id && _resumedEntryPointId == null
+            ) {
+                resumeEntryPoint(id)
+            }
+        }
+    }
+
+    private fun onEntryPointComplete(id: String) {
+        if (id == _resumedEntryPointId) {
+            _resumedEntryPointId = null
+
+            _apViewDataModelLiveData.value?.let { dataModel ->
+                if (getAutoScrollPeriod() != null) {
+                    val resumedEntryPointPosition =
+                        dataModel.entryPoints.indexOfFirst {
+                            it.id == id
+                        }
+                    val entryPointToResumePosition =
+                        (resumedEntryPointPosition + 1) % dataModel.entryPoints.size
+                    val entryPointToResume = dataModel.entryPoints[entryPointToResumePosition]
+
+                    resumeEntryPoint(entryPointToResume.id)
+                }
+            }
+        }
+    }
+
+    private fun pauseEntryPoint(id: String) {
+        _apViewDataModelLiveData.value?.let { dataModel ->
+            dataModel.entryPoints.find { it.id == id }?.let { entryPoint ->
+                getAPEntryPointViewModel(entryPoint)?.run {
+                    if (id == _resumedEntryPointId) {
+                        _resumedEntryPointId = null
+                    }
+                    pause()
+                }
+            }
+        }
+    }
+
+    private fun resumeEntryPoint(id: String) {
+        _apViewDataModelLiveData.value?.let { dataModel ->
+            dataModel.entryPoints.find { it.id == id }?.let { entryPoint ->
+                _magnetizeEntryPointEventLiveData.value = Event(id)
+                getAPEntryPointViewModel(entryPoint)?.run {
+                    _resumedEntryPointId = id
+                    resume()
+                }
+            }
+        }
+    }
+
+    fun setVisibleEntryPointsPositionRange(range: IntRange) {
+        this._visibleEntryPointsPositionRange = range
+
+        _apViewDataModelLiveData.value?.let { dataModel ->
+            if (getAutoScrollPeriod() != null) {
+                val resumedEntryPointPosition =
+                    dataModel.entryPoints.indexOfFirst {
+                        it.id == _resumedEntryPointId
+                    }
+                if (resumedEntryPointPosition !in range) {
+                    _resumedEntryPointId?.let { pauseEntryPoint(it) }
+                    dataModel.entryPoints.getOrNull(range.first)?.id?.let { resumeEntryPoint(it) }
+                }
+            }
+        }
     }
 }

@@ -99,6 +99,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
                     super.onScrollStateChanged(recyclerView, newState)
 
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        updateVisibleEntryPointsPositionRange()
                         autoMagnetize()
                     }
                 }
@@ -188,6 +189,17 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             smoothScroller.targetPosition = adapterPosition
             layoutManager?.startSmoothScroll(smoothScroller)
         }
+    }
+
+    private fun updateVisibleEntryPointsPositionRange() {
+        val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
+        val firstCompVisiblePos = maxOf(
+            layoutManager?.findFirstCompletelyVisibleItemPosition() ?: 0,
+            layoutManager?.findFirstVisibleItemPosition() ?: 0)
+        val lastCompVisiblePos = maxOf(
+            layoutManager?.findLastCompletelyVisibleItemPosition() ?: 0,
+            firstCompVisiblePos)
+        viewModel.setVisibleEntryPointsPositionRange(firstCompVisiblePos..lastCompVisiblePos)
     }
 
     fun refresh() {

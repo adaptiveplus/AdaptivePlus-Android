@@ -44,7 +44,12 @@ internal class APEntryPointViewModel(
 
     private val componentReadinessSet = mutableSetOf<Int>()
     private var progressHandler: Handler? = null
-    private val progressCompleteTask = Runnable { lifecycleListener.onComplete() }
+    private val progressCompleteTask = Runnable {
+        pause()
+        lifecycleListener.onComplete()
+    }
+    private var isResumed: Boolean = false
+    private var doResumeOnReady: Boolean = false
 
 
     /**
@@ -65,14 +70,26 @@ internal class APEntryPointViewModel(
      * Lifecycle method to resume entry point
      */
     fun resume() {
-        componentViewModelList.forEach { it?.resume() }
-        progressHandler?.postDelayed(progressCompleteTask, 3000L)
+        if (!isResumed) {
+            if (isReady()) {
+                isResumed = true
+                componentViewModelList.forEach { it?.resume() }
+
+                apViewModelDelegate.getAutoScrollPeriod()?.let { autoScrollPeriod ->
+                    progressHandler?.postDelayed(progressCompleteTask, autoScrollPeriod)
+                }
+            } else {
+                doResumeOnReady = true
+            }
+        }
     }
 
     /**
      * Lifecycle method to pause entry point
      */
     fun pause() {
+        isResumed = false
+        doResumeOnReady = false
         componentViewModelList.forEach { it?.pause() }
         progressHandler?.removeCallbacks(progressCompleteTask)
     }
@@ -91,14 +108,18 @@ internal class APEntryPointViewModel(
         apViewModelDelegate.runActions(actions, campaignId)
     }
 
-    override fun getAPComponentViewModel(index: Int): APComponentViewModel? {
+    override fun getAPComponentViewModel(index: Int) : APComponentViewModel? {
         return componentViewModelList[index]
     }
 
-    override fun isActive(): Boolean {
+    override fun isActive() : Boolean {
         val userId = userRepository.getAPUser().apId ?: ""
         val prefKey = "${userId}_${entryPoint.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         return !preferences.getBoolean(prefKey)
+    }
+
+    private fun isReady() : Boolean {
+        return componentReadinessSet.size == entryPoint.layers.size
     }
 
     private fun onComponentReady(index: Int, isReady: Boolean) {
@@ -114,6 +135,11 @@ internal class APEntryPointViewModel(
 
         if (oldIsEntryPointReady != newIsEntryPointReady) {
             lifecycleListener.onReady(newIsEntryPointReady)
+
+            if (newIsEntryPointReady && doResumeOnReady) {
+                doResumeOnReady = false
+                resume()
+            }
         }
     }
 

@@ -17,6 +17,7 @@ internal data class APViewDataModel(
         val height: Double,
         val cornerRadius: Double,
         val magnetize: Boolean,
+        val autoScroll: Double?,
         val padding: APPadding,
         val spacing: Double,
         val screenWidth: Double

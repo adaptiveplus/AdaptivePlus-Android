@@ -35,4 +35,11 @@ internal interface APViewModelDelegateProtocol {
      * Method to notify apView that stories dialog was dismissed
      */
     fun onAPStoriesDismissed()
+
+    /**
+     * Getter of entry point auto scroll period
+     *
+     * @return autoScroll period in milliseconds
+     */
+    fun getAutoScrollPeriod() : Long?
 }
