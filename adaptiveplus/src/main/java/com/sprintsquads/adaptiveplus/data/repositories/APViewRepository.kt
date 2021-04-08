@@ -11,8 +11,9 @@ import okhttp3.RequestBody
 
 
 internal class APViewRepository(
-    networkManager: NetworkServiceManager
-) : APBaseRepository(networkManager) {
+    networkManager: NetworkServiceManager,
+    customGson: Gson
+) : APBaseRepository(networkManager, customGson) {
 
     /**
      * Method to request adaptive plus view data model

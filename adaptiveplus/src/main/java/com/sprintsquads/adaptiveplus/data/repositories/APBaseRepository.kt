@@ -1,16 +1,17 @@
 package com.sprintsquads.adaptiveplus.data.repositories
 
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.network.BaseResponseBody
-import com.sprintsquads.adaptiveplus.utils.getAPGson
 import okhttp3.MediaType
 import okhttp3.Request
 
 
 internal open class APBaseRepository(
-    private val networkManager: NetworkServiceManager
+    private val networkManager: NetworkServiceManager,
+    private val customGson: Gson? = null
 ) {
 
     protected fun updateToken(token: String?) {
@@ -28,7 +29,7 @@ internal open class APBaseRepository(
 
                 if (response.isSuccessful) {
                     val dataType = object: TypeToken<BaseResponseBody<T>>(){}.type
-                    val responseBody = getAPGson()
+                    val responseBody = (customGson ?: Gson())
                         .fromJson<BaseResponseBody<T>>(response.body()?.string(), dataType)
 
                     if (responseBody.code == 0) {

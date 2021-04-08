@@ -9,7 +9,7 @@ import com.sprintsquads.adaptiveplus.data.models.*
 import com.sprintsquads.adaptiveplus.data.models.components.*
 
 
-internal fun getAPGson(): Gson {
+internal fun getAPViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APViewDataModel::class.java, apViewDataModelDeserializer)
     return gsonBuilder.create()
@@ -21,7 +21,7 @@ internal fun getSerializedDataModel(dataModel: Any): String? {
 
 internal fun getDeserializedAPViewDataModel(json: String): APViewDataModel? {
     return try {
-        getAPGson().fromJson(json, APViewDataModel::class.java)
+        getAPViewGson().fromJson(json, APViewDataModel::class.java)
     } catch (e: JsonSyntaxException) {
         e.printStackTrace()
         null

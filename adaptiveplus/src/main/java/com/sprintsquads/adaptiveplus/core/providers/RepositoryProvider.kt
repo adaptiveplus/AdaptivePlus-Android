@@ -5,6 +5,7 @@ import com.sprintsquads.adaptiveplus.data.repositories.APAnalyticsRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APViewRepository
+import com.sprintsquads.adaptiveplus.utils.getAPViewGson
 
 
 internal fun provideAPAnalyticsRepository(
@@ -37,6 +38,7 @@ internal fun provideAPViewRepository(
     context: Context?
 ) : APViewRepository {
     return APViewRepository(
-        provideNetworkServiceManager(context)
+        provideNetworkServiceManager(context),
+        getAPViewGson()
     )
 }
