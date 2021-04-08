@@ -77,7 +77,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 12
+                  "cornerRadius": 12,
+                  "loadingColor": "#00FF00"
                 }
               },
               {
@@ -94,7 +95,9 @@
                 },
                 "component": {
                   "url": "https://i.pinimg.com/originals/1e/c9/15/1ec915eb76dcff7edf9e5c195b70363f.gif",
-                  "border": null
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
                 }
               },
               {
@@ -156,7 +159,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#00FF00"
                                 },
                                 "options": {
                                   "position": {
@@ -307,7 +313,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 12
+                  "cornerRadius": 12,
+                  "loadingColor": "#00FF00"
                 }
               },
               {
@@ -324,7 +331,9 @@
                 },
                 "component": {
                   "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
-                  "border": null
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
                 }
               },
               {
@@ -425,7 +434,9 @@
                       "cornerRadius": 14,
                       "padding": 4
                     }
-                  }
+                  },
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
                 }
               },
               {
@@ -442,7 +453,9 @@
                 },
                 "component": {
                   "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
-                  "border": null
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
                 }
               },
               {

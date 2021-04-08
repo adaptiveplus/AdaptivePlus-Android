@@ -78,7 +78,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 16
+                  "cornerRadius": 16,
+                  "loadingColor": "#0000FF"
                 }
               }
             ],
@@ -116,7 +117,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -219,7 +223,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -322,7 +329,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -473,7 +483,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 16
+                  "cornerRadius": 16,
+                  "loadingColor": "#0000FF"
                 }
               }
             ],
@@ -511,7 +522,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -614,7 +628,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -717,7 +734,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -868,7 +888,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 16
+                  "cornerRadius": 16,
+                  "loadingColor": "#0000FF"
                 }
               }
             ],
@@ -906,7 +927,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -1009,7 +1033,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -1112,7 +1139,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -1263,7 +1293,8 @@
                       "padding": 4
                     }
                   },
-                  "cornerRadius": 16
+                  "cornerRadius": 16,
+                  "loadingColor": "#0000FF"
                 }
               }
             ],
@@ -1301,7 +1332,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -1404,7 +1438,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
@@ -1507,7 +1544,10 @@
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg"
+                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#0000FF"
                                 },
                                 "options": {
                                   "position": {
