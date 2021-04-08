@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import com.sprintsquads.adaptiveplus.data.models.*
+import com.sprintsquads.adaptiveplus.data.models.actions.*
 import com.sprintsquads.adaptiveplus.data.models.components.*
 
 
@@ -54,6 +56,7 @@ private val apViewDataModelDeserializer =
 
                 val gsonBuilder = GsonBuilder()
                 gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+                gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
                 val apEntryPointGson = gsonBuilder.create()
                 apEntryPointGson.fromJson(
                     entryPointBodyJsonObject.toString(),
@@ -83,17 +86,21 @@ private val apLayerDeserializer =
                 APLayer.Options::class.java)
             val componentString = jsonObject.get("component").toString()
 
+            val gsonBuilder = GsonBuilder()
+            gsonBuilder.registerTypeAdapter(APAction::class.java, apActionDeserializer)
+            val componentGson = gsonBuilder.create()
+
             val component = when (type) {
                 APLayer.Type.BACKGROUND ->
-                    Gson().fromJson(componentString, APBackgroundComponent::class.java)
+                    componentGson.fromJson(componentString, APBackgroundComponent::class.java)
                 APLayer.Type.IMAGE ->
-                    Gson().fromJson(componentString, APImageComponent::class.java)
+                    componentGson.fromJson(componentString, APImageComponent::class.java)
                 APLayer.Type.TEXT ->
-                    Gson().fromJson(componentString, APTextComponent::class.java)
+                    componentGson.fromJson(componentString, APTextComponent::class.java)
                 APLayer.Type.BUTTON ->
-                    Gson().fromJson(componentString, APButtonComponent::class.java)
+                    componentGson.fromJson(componentString, APButtonComponent::class.java)
                 APLayer.Type.GIF ->
-                    Gson().fromJson(componentString, APGIFComponent::class.java)
+                    componentGson.fromJson(componentString, APGIFComponent::class.java)
                 else ->
                     null
             }
@@ -104,18 +111,6 @@ private val apLayerDeserializer =
             null
         }
     }
-
-internal fun getDeserializedAPStory(json: String): APStory? {
-    return try {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.registerTypeAdapter(APStory::class.java, apStoryDeserializer)
-        val apStoryGson = gsonBuilder.create()
-        apStoryGson.fromJson(json, APStory::class.java)
-    } catch (e: JsonSyntaxException) {
-        e.printStackTrace()
-        null
-    }
-}
 
 private val apStoryDeserializer =
     JsonDeserializer { json, _, _ ->
@@ -168,9 +163,13 @@ private val apSnapActionAreaDeserializer =
                 jsonObject.get("type").asString, APSnap.ActionArea.Type::class.java)
             val bodyJson = jsonObject.get("body").toString()
 
+            val gsonBuilder = GsonBuilder()
+            gsonBuilder.registerTypeAdapter(APAction::class.java, apActionDeserializer)
+            val actionAreaGson = gsonBuilder.create()
+
             when (type) {
                 APSnap.ActionArea.Type.BUTTON ->
-                    Gson().fromJson(bodyJson, APSnap.ButtonActionArea::class.java)
+                    actionAreaGson.fromJson(bodyJson, APSnap.ButtonActionArea::class.java)
                 else -> null
             }
         } catch (e: JsonSyntaxException) {
@@ -179,14 +178,64 @@ private val apSnapActionAreaDeserializer =
         }
     }
 
-internal fun deserializeAPActionParams(action: APAction) {
-    action.parameters?.get("story")?.let { storyParam ->
-        if (storyParam !is APStory) {
-            getSerializedDataModel(storyParam)?.let { storyJson ->
-                getDeserializedAPStory(storyJson)?.let { story ->
-                    action.parameters["story"] = story
+private val apActionDeserializer =
+    JsonDeserializer { json, _, _ ->
+        try {
+            val jsonObject: JsonObject = json.asJsonObject
+            val type = Gson().fromJson(
+                jsonObject.get("type").asString, APAction.Type::class.java)
+            val paramsJsonObject = jsonObject.get("parameters").asJsonObject
+
+            when (type) {
+                APAction.Type.OPEN_WEB_LINK -> {
+                    val url = paramsJsonObject.get("url").asString
+                    APOpenWebLinkAction(url)
                 }
+                APAction.Type.CUSTOM -> {
+                    val paramsType = object: TypeToken<HashMap<String, Any>?>(){}.type
+                    val params = Gson().fromJson<HashMap<String, Any>>(
+                        jsonObject.get("parameters").toString(), paramsType)
+                    APCustomAction(params)
+                }
+                else -> null
             }
+        } catch (e: JsonSyntaxException) {
+            e.printStackTrace()
+            null
         }
     }
-}
+
+private val apEntryPointActionDeserializer =
+    JsonDeserializer { json, _, _ ->
+        try {
+            val jsonObject: JsonObject = json.asJsonObject
+            val type = Gson().fromJson(
+                jsonObject.get("type").asString, APAction.Type::class.java)
+            val paramsJsonObject = jsonObject.get("parameters").asJsonObject
+
+            when (type) {
+                APAction.Type.SHOW_STORY -> {
+                    val gsonBuilder = GsonBuilder()
+                    gsonBuilder.registerTypeAdapter(APStory::class.java, apStoryDeserializer)
+                    val storyGson = gsonBuilder.create()
+                    val story = storyGson.fromJson(
+                        paramsJsonObject.get("story").toString(), APStory::class.java)
+                    APShowStoryAction(story)
+                }
+                APAction.Type.OPEN_WEB_LINK -> {
+                    val url = paramsJsonObject.get("url").asString
+                    APOpenWebLinkAction(url)
+                }
+                APAction.Type.CUSTOM -> {
+                    val paramsType = object: TypeToken<HashMap<String, Any>?>(){}.type
+                    val params = Gson().fromJson<HashMap<String, Any>>(
+                        jsonObject.get("parameters").toString(), paramsType)
+                    APCustomAction(params)
+                }
+                else -> null
+            }
+        } catch (e: JsonSyntaxException) {
+            e.printStackTrace()
+            null
+        }
+    }

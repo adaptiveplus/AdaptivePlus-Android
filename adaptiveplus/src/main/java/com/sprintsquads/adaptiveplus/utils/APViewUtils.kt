@@ -6,11 +6,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
-import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
+import com.sprintsquads.adaptiveplus.data.models.actions.APShowStoryAction
 import com.sprintsquads.adaptiveplus.data.models.components.APBackgroundComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APGIFComponent
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
@@ -95,11 +95,8 @@ internal fun getAPStoriesList(dataModel: APViewDataModel?) : List<APStory>? {
 
         entryPoints.forEach { entryPoint ->
             entryPoint.actions.forEach { action ->
-                if (action.type == APAction.Type.SHOW_STORY) {
-                    deserializeAPActionParams(action)
-                    (action.parameters?.get("story") as? APStory)?.let { story ->
-                        stories.add(story)
-                    }
+                if (action is APShowStoryAction) {
+                    stories.add(action.story)
                 }
             }
         }

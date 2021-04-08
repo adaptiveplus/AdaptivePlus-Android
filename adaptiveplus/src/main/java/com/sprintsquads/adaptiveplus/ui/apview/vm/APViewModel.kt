@@ -3,7 +3,7 @@ package com.sprintsquads.adaptiveplus.ui.apview.vm
 import androidx.lifecycle.*
 import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event

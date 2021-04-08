@@ -3,14 +3,16 @@ package com.sprintsquads.adaptiveplus.core.managers
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import com.sprintsquads.adaptiveplus.data.models.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APCustomAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APOpenWebLinkAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APShowStoryAction
+import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.APViewDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.dialogs.WebViewDialog
 import com.sprintsquads.adaptiveplus.ui.stories.APStoriesDialog
-import com.sprintsquads.adaptiveplus.utils.deserializeAPActionParams
 
 
 internal class APActionsManagerImpl(
@@ -18,12 +20,7 @@ internal class APActionsManagerImpl(
     private val apViewModelDelegate: APViewModelDelegateProtocol
 ) : APActionsManager {
 
-    companion object {
-        private const val PARAM_URL = "url"
-    }
-
-
-    private var apCustomAction: APCustomAction? = null
+    private var apCustomActionListener: APCustomActionListener? = null
     private var apStories: List<APStory>? = null
 
 
@@ -31,59 +28,56 @@ internal class APActionsManagerImpl(
         this.apStories = apStories
     }
 
-    override fun setAPCustomAction(apCustomAction: APCustomAction?) {
-        this.apCustomAction = apCustomAction
+    override fun setAPCustomActionListener(listener: APCustomActionListener?) {
+        this.apCustomActionListener = listener
     }
 
     override fun runAction(action: APAction, campaignId: String) {
-        when (action.type) {
-            APAction.Type.OPEN_WEB_LINK -> openWebView(action)
-            APAction.Type.CUSTOM -> runAPCustomAction(action)
-            APAction.Type.SHOW_STORY -> showAPStory(action)
+        when (action) {
+            is APOpenWebLinkAction -> openWebView(action)
+            is APCustomAction -> runAPCustomAction(action)
+            is APShowStoryAction -> showAPStory(action)
+            else -> {}
         }
     }
 
-    private fun openWebView(action: APAction) {
-        (action.parameters?.get(PARAM_URL) as? String)?.let { url ->
-            if (url.startsWith("http")) {
-                apViewModelDelegate.pauseAPStories()
+    private fun openWebView(action: APOpenWebLinkAction) {
+        if (action.url.startsWith("http")) {
+            apViewModelDelegate.pauseAPStories()
 
-                val webViewDialog = WebViewDialog.newInstance(
-                    url,
-                    object: WebViewDialog.LifecycleListener {
-                        override fun onDismiss() {
-                            apViewModelDelegate.resumeAPStories()
-                        }
-                    })
-                apViewDelegate.showDialog(webViewDialog)
-            } else {
-                try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    apViewDelegate.startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
+            val webViewDialog = WebViewDialog.newInstance(
+                action.url,
+                object: WebViewDialog.LifecycleListener {
+                    override fun onDismiss() {
+                        apViewModelDelegate.resumeAPStories()
+                    }
+                })
+            apViewDelegate.showDialog(webViewDialog)
+        } else {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(action.url))
+                apViewDelegate.startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
             }
         }
     }
 
-    private fun runAPCustomAction(action: APAction) {
+    private fun runAPCustomAction(action: APCustomAction) {
         action.parameters?.let {
             apViewDelegate.dismissAllDialogs()
-            apCustomAction?.onRun(it)
+            apCustomActionListener?.onRun(it)
         }
     }
 
-    private fun showAPStory(action: APAction) {
-        deserializeAPActionParams(action)
+    private fun showAPStory(action: APShowStoryAction) {
+        apStories?.let { stories ->
+            val storyIndex = stories.indexOfFirst { it.id == action.story.id }
 
-        (action.parameters?.get("story") as? APStory)?.let { story ->
-            val storyIndex = apStories?.indexOfFirst { it.id == story.id }
-
-            if (storyIndex != null && storyIndex != -1 && apStories != null) {
+            if (storyIndex != -1) {
                 try {
                     val apStoriesDialog = APStoriesDialog
-                        .newInstance(apStories!!, storyIndex, apViewModelDelegate)
+                        .newInstance(stories, storyIndex, apViewModelDelegate)
                     apViewDelegate.showDialog(apStoriesDialog)
                 } catch (e: IllegalStateException) {
                     e.printStackTrace()

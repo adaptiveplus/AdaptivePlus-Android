@@ -15,7 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 import com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddNewAPViewDialog
@@ -95,8 +95,8 @@ class ApiFragment : Fragment() {
                             val apView = AdaptivePlusView(ctx).apply {
                                 id = ViewCompat.generateViewId()
                                 setAdaptivePlusViewId(apViewModel.id)
-                                setAPCustomAction(object:
-                                    APCustomAction {
+                                setAPCustomActionListener(object:
+                                    APCustomActionListener {
                                     override fun onRun(params: HashMap<String, Any>) {
                                         val name = params["name"]?.toString()
                                         context?.toast("Custom action: $name")

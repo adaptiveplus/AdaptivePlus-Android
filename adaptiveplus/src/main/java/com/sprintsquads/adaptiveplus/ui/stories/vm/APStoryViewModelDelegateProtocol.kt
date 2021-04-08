@@ -1,6 +1,6 @@
 package com.sprintsquads.adaptiveplus.ui.stories.vm
 
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 
 

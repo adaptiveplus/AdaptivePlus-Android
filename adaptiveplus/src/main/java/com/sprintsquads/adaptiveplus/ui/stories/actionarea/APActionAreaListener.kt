@@ -1,6 +1,6 @@
 package com.sprintsquads.adaptiveplus.ui.stories.actionarea
 
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 
 
 internal interface APActionAreaListener {

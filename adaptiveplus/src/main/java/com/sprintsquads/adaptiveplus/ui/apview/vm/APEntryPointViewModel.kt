@@ -3,7 +3,7 @@ package com.sprintsquads.adaptiveplus.ui.apview.vm
 import android.os.Handler
 import android.os.Looper
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository

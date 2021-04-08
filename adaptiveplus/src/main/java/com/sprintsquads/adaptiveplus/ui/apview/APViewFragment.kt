@@ -17,13 +17,13 @@ import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideNetworkServiceManager
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
 import com.sprintsquads.adaptiveplus.extensions.hide
 import com.sprintsquads.adaptiveplus.extensions.show
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModel
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.getAPStoriesList
@@ -54,7 +54,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     private lateinit var entryPointsAdapter: APEntryPointsAdapter
 
     private var apActionsManager: APActionsManager? = null
-    private var customActionCallback: APCustomAction? = null
+    private var customActionListener: APCustomActionListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +69,8 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewModel::class.java)
 
             apActionsManager = provideAPActionsManager(this, viewModel)
-            customActionCallback?.let { callback ->
-                apActionsManager?.setAPCustomAction(callback)
+            customActionListener?.let { callback ->
+                apActionsManager?.setAPCustomActionListener(callback)
             }
         }
     }
@@ -235,9 +235,9 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         }
     }
 
-    fun setAPCustomAction(callback: APCustomAction) {
-        this.customActionCallback = callback
-        apActionsManager?.setAPCustomAction(callback)
+    fun setAPCustomActionListener(listener: APCustomActionListener) {
+        this.customActionListener = listener
+        apActionsManager?.setAPCustomActionListener(listener)
     }
 
     fun setAPViewId(apViewId: String) {

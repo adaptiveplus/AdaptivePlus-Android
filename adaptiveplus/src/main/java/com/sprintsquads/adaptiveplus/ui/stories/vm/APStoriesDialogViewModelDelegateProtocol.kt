@@ -1,7 +1,7 @@
 package com.sprintsquads.adaptiveplus.ui.stories.vm
 
 import androidx.lifecycle.LiveData
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 
 
 internal interface APStoriesDialogViewModelDelegateProtocol {

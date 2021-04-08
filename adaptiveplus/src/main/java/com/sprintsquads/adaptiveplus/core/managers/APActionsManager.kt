@@ -1,12 +1,12 @@
 package com.sprintsquads.adaptiveplus.core.managers
 
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 
 
 internal interface APActionsManager {
     fun setAPStories(apStories: List<APStory>?)
-    fun setAPCustomAction(apCustomAction: APCustomAction?)
+    fun setAPCustomActionListener(listener: APCustomActionListener?)
     fun runAction(action: APAction, campaignId: String)
 }

@@ -1,7 +1,7 @@
 package com.sprintsquads.adaptiveplus.ui.stories.vm
 
 import androidx.lifecycle.ViewModel
-import com.sprintsquads.adaptiveplus.data.models.APAction
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.ui.components.APComponentContainerViewModel

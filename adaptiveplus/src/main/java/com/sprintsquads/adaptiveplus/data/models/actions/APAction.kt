@@ -1,15 +1,10 @@
-package com.sprintsquads.adaptiveplus.data.models
+package com.sprintsquads.adaptiveplus.data.models.actions
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 @Keep
-internal data class APAction(
-    val type: Type,
-    val parameters: HashMap<String, Any>?
-) : Serializable {
-
+internal interface APAction {
     enum class Type {
         @SerializedName("SHOW_STORY")
         SHOW_STORY,

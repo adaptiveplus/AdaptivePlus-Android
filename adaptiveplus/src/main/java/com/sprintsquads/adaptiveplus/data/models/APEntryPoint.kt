@@ -1,6 +1,7 @@
 package com.sprintsquads.adaptiveplus.data.models
 
 import androidx.annotation.Keep
+import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import java.io.Serializable
 
 @Keep

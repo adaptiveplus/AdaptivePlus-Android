@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomAction
+import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.APViewFragment
 
 
@@ -39,7 +39,7 @@ class AdaptivePlusView : FrameLayout {
     private lateinit var apViewId: String
 
     private var apViewFragment: APViewFragment? = null
-    private var apCustomAction: APCustomAction? = null
+    private var apCustomActionListener: APCustomActionListener? = null
 
 
     /**
@@ -83,8 +83,8 @@ class AdaptivePlusView : FrameLayout {
                 }
             }
 
-            apCustomAction?.let { callback ->
-                apViewFragment?.setAPCustomAction(callback)
+            apCustomActionListener?.let {
+                apViewFragment?.setAPCustomActionListener(it)
             }
         }
     }
@@ -105,13 +105,13 @@ class AdaptivePlusView : FrameLayout {
     }
 
     /**
-     * Setter of adaptive plus custom action
+     * Setter of adaptive plus custom action listener
      *
-     * @param apCustomAction - adaptive plus custom action
-     * @see APCustomAction
+     * @param listener - adaptive plus custom action listener
+     * @see APCustomActionListener
      */
-    fun setAPCustomAction(apCustomAction: APCustomAction) {
-        this.apCustomAction = apCustomAction
-        apViewFragment?.setAPCustomAction(apCustomAction)
+    fun setAPCustomActionListener(listener: APCustomActionListener) {
+        this.apCustomActionListener = listener
+        apViewFragment?.setAPCustomActionListener(listener)
     }
 }
