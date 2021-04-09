@@ -56,26 +56,49 @@ internal class APImageComponentView : APBaseComponentView {
     private fun updateImageBorder() {
         (component as? APImageComponent)?.run {
             border?.let {
-                val borderState =
-                    if ((componentViewModel as? APImageComponentViewModel)?.isActive() == false) {
-                        it.inactive
-                    } else {
-                        it.active
+                if ((componentViewModel as? APImageComponentViewModel)?.showBorder() == true) {
+                    val borderState =
+                        if ((componentViewModel as? APImageComponentViewModel)?.isActive() == false) {
+                            it.inactive
+                        } else {
+                            it.active
+                        }
+
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(apComponentLayout)
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.START, borderState.padding.toInt())
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.END, borderState.padding.toInt())
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.TOP, borderState.padding.toInt())
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.BOTTOM, borderState.padding.toInt())
+                    constraintSet.applyTo(apComponentLayout)
+
+                    val borderDrawable = GradientDrawable().apply {
+                        setStroke(
+                            borderState.width.toInt(),
+                            getColorFromHex(borderState.color.startColor)
+                        )
+                        cornerRadius = borderState.cornerRadius.toFloat()
                     }
+                    apComponentBorderView.background = borderDrawable
+                } else {
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(apComponentLayout)
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.START, 0)
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.END, 0)
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.TOP, 0)
+                    constraintSet.setMargin(
+                        apComponentImageView.id, ConstraintSet.BOTTOM, 0)
+                    constraintSet.applyTo(apComponentLayout)
 
-                val constraintSet = ConstraintSet()
-                constraintSet.clone(apComponentLayout)
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.START, borderState.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.END, borderState.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.TOP, borderState.padding.toInt())
-                constraintSet.setMargin(apComponentImageView.id, ConstraintSet.BOTTOM, borderState.padding.toInt())
-                constraintSet.applyTo(apComponentLayout)
-
-                val borderDrawable = GradientDrawable().apply {
-                    setStroke(borderState.width.toInt(), getColorFromHex(borderState.color.startColor))
-                    cornerRadius = borderState.cornerRadius.toFloat()
+                    apComponentBorderView.background = null
                 }
-                apComponentBorderView.background = borderDrawable
             }
         }
     }

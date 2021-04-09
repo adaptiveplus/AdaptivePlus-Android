@@ -31,4 +31,6 @@ internal class APImageComponentViewModel(
 
     fun isActive() : Boolean = containerViewModel.isActive()
 
+    fun showBorder() : Boolean = containerViewModel.showBorder()
+
 }

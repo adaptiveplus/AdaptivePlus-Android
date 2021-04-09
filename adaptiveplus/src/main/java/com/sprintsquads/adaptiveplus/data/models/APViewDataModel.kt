@@ -20,7 +20,8 @@ internal data class APViewDataModel(
         val autoScroll: Double?,
         val padding: APPadding,
         val spacing: Double,
-        val screenWidth: Double
+        val screenWidth: Double,
+        val showBorder: Boolean?
     ) : Serializable
 
 }

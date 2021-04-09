@@ -110,6 +110,10 @@ internal class APViewModel(
         return _apViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
     }
 
+    override fun showBorder(): Boolean {
+        return _apViewDataModelLiveData.value?.options?.showBorder == true
+    }
+
     @Deprecated(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)

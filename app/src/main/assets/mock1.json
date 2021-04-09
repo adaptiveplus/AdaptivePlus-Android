@@ -12,7 +12,8 @@
       "right": 16
     },
     "spacing": 12,
-    "screenWidth": 375
+    "screenWidth": 375,
+    "showBorder": true
   },
   "campaigns": [
     {

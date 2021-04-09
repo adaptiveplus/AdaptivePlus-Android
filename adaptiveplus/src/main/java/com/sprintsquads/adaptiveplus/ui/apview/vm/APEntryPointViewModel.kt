@@ -118,6 +118,10 @@ internal class APEntryPointViewModel(
         return !preferences.getBoolean(prefKey)
     }
 
+    override fun showBorder(): Boolean {
+        return apViewModelDelegate.showBorder()
+    }
+
     private fun isReady() : Boolean {
         return componentReadinessSet.size == entryPoint.layers.size
     }

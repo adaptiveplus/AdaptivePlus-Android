@@ -42,4 +42,11 @@ internal interface APViewModelDelegateProtocol {
      * @return autoScroll period in milliseconds
      */
     fun getAutoScrollPeriod() : Long?
+
+    /**
+     * Getter of flag to show/hide border
+     *
+     * @return true/false to show/hide border on components
+     */
+    fun showBorder() : Boolean
 }

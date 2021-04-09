@@ -79,4 +79,6 @@ internal class APSnapViewModel(
     }
 
     override fun isActive(): Boolean = true
+
+    override fun showBorder(): Boolean = true
 }
