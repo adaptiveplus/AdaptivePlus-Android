@@ -494,6 +494,128 @@
           }
         }
       }
+    },
+    {
+      "id": "campaign4",
+      "updatedAt": "datetime",
+      "body": {
+        "showOnce": true,
+        "entryPoint": {
+          "id": "this4",
+          "type": "ENTRY_POINT",
+          "body": {
+            "layers": [
+              {
+                "type": "BACKGROUND",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 120,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "color": "#000000FF"
+                }
+              },
+              {
+                "type": "IMAGE",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 120,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
+                  "border": {
+                    "active": {
+                      "width": 4,
+                      "color": {
+                        "startColor": "#2765AE",
+                        "endColor": "#00A469",
+                        "angle": 45
+                      },
+                      "cornerRadius": 14,
+                      "padding": 2
+                    },
+                    "inactive": {
+                      "width": 1,
+                      "color": {
+                        "startColor": "#4DB9B9B9",
+                        "endColor": "#4DB9B9B9",
+                        "angle": 0
+                      },
+                      "cornerRadius": 14,
+                      "padding": 4
+                    }
+                  },
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
+                }
+              },
+              {
+                "type": "IMAGE",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 240,
+                    "height": 120,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3bf270fc057e842b4ae8552cbaa97a42.jpeg",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#00FF00"
+                }
+              },
+              {
+                "type": "TEXT",
+                "options": {
+                  "position": {
+                    "x": 16,
+                    "y": 44,
+                    "width": 80,
+                    "height": 40,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "value": "Alex Top",
+                  "font": {
+                    "family": "Roboto",
+                    "style": "semiboldItalic",
+                    "size": 14,
+                    "color": "#00FF00FF",
+                    "align": "center",
+                    "letterSpacing": 0
+                  }
+                }
+              }
+            ],
+            "actions": [
+              {
+                "type": "OPEN_WEB_LINK",
+                "parameters": {
+                  "url": "market://details?id=kz.ss.arnap"
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   ]
 }
