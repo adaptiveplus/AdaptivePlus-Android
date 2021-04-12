@@ -3,8 +3,9 @@ package com.sprintsquads.adaptiveplus.core.managers
 import android.content.Context
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
-import com.sprintsquads.adaptiveplus.utils.getDeserializedAPViewDataModel
-import com.sprintsquads.adaptiveplus.utils.getSerializedDataModel
+import com.sprintsquads.adaptiveplus.utils.getDeserializedUnprocessedAPViewDataModel
+import com.sprintsquads.adaptiveplus.utils.getDeserializedProcessedAPViewDataModel
+import com.sprintsquads.adaptiveplus.utils.getSerializedProcessedAPViewDataModel
 import java.io.*
 
 
@@ -30,7 +31,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedAPViewDataModel(json)
+            val dataModel = getDeserializedUnprocessedAPViewDataModel(json)
             if (dataModel != null) {
                 onSuccess.invoke(dataModel)
             }
@@ -55,10 +56,9 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedAPViewDataModel(json)
+            val dataModel = getDeserializedProcessedAPViewDataModel(json)
             onResult(dataModel)
         } catch (ex: FileNotFoundException) {
-            ex.printStackTrace()
             onResult(null)
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -75,7 +75,7 @@ internal class APCacheManagerImpl(
             val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
-            val json = getSerializedDataModel(dataModel)
+            val json = getSerializedProcessedAPViewDataModel(dataModel)
 
             if (json != null) {
                 outputStream.write(json.toByteArray())

@@ -1,29 +1,43 @@
 package com.sprintsquads.adaptiveplus.utils
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonObject
-import com.google.gson.JsonSyntaxException
+import com.google.gson.*
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.sprintsquads.adaptiveplus.data.models.*
 import com.sprintsquads.adaptiveplus.data.models.actions.*
 import com.sprintsquads.adaptiveplus.data.models.components.*
 
 
-internal fun getAPViewGson(): Gson {
+private fun getProcessedAPViewGson(): Gson {
+    val gsonBuilder = GsonBuilder()
+    gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionSerializer)
+    gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+    gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
+    return gsonBuilder.create()
+}
+
+internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): String? {
+    return getProcessedAPViewGson().toJson(dataModel)
+}
+
+internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataModel? {
+    return try {
+        getProcessedAPViewGson().fromJson(json, APViewDataModel::class.java)
+    } catch (e: JsonSyntaxException) {
+        e.printStackTrace()
+        null
+    }
+}
+
+internal fun getUnprocessedAPViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APViewDataModel::class.java, apViewDataModelDeserializer)
     return gsonBuilder.create()
 }
 
-internal fun getSerializedDataModel(dataModel: Any): String? {
-    return Gson().toJson(dataModel)
-}
-
-internal fun getDeserializedAPViewDataModel(json: String): APViewDataModel? {
+internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewDataModel? {
     return try {
-        getAPViewGson().fromJson(json, APViewDataModel::class.java)
+        getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
     } catch (e: JsonSyntaxException) {
         e.printStackTrace()
         null
@@ -178,6 +192,24 @@ private val apSnapActionAreaDeserializer =
         }
     }
 
+private val apSnapActionAreaSerializer =
+    JsonSerializer<APSnap.ActionArea> { src, _, _ ->
+        val jsonObject = JsonObject()
+
+        when (src) {
+            is APSnap.ButtonActionArea -> {
+                val clazz = APSnap.ActionArea.Type.BUTTON.javaClass
+                val name = APSnap.ActionArea.Type.BUTTON.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.addProperty("body", Gson().toJson(src))
+            }
+            else -> {}
+        }
+
+        jsonObject
+    }
+
 private val apActionDeserializer =
     JsonDeserializer { json, _, _ ->
         try {
@@ -203,6 +235,36 @@ private val apActionDeserializer =
             e.printStackTrace()
             null
         }
+    }
+
+private val apActionSerializer =
+    JsonSerializer<APAction> { src, _, _ ->
+        val jsonObject = JsonObject()
+
+        when (src) {
+            is APOpenWebLinkAction -> {
+                val clazz = APAction.Type.OPEN_WEB_LINK.javaClass
+                val name = APAction.Type.OPEN_WEB_LINK.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.addProperty("parameters", Gson().toJson(src))
+            }
+            is APCustomAction -> {
+                val clazz = APAction.Type.CUSTOM.javaClass
+                val name = APAction.Type.CUSTOM.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+
+                val paramsJson = JsonObject()
+                src.parameters?.forEach { entry ->
+                    paramsJson.addProperty(entry.key, Gson().toJson(entry.value))
+                }
+                jsonObject.addProperty("parameters", paramsJson.asString)
+            }
+            else -> {}
+        }
+
+        jsonObject
     }
 
 private val apEntryPointActionDeserializer =
@@ -238,4 +300,47 @@ private val apEntryPointActionDeserializer =
             e.printStackTrace()
             null
         }
+    }
+
+private val apEntryPointActionSerializer =
+    JsonSerializer<APAction> { src, _, _ ->
+        val jsonObject = JsonObject()
+
+        when (src) {
+            is APShowStoryAction -> {
+                val clazz = APAction.Type.SHOW_STORY.javaClass
+                val name = APAction.Type.SHOW_STORY.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+
+                val gsonBuilder = GsonBuilder()
+                gsonBuilder.registerTypeAdapter(APAction::class.java, apActionSerializer)
+                gsonBuilder.registerTypeAdapter(APSnap.ActionArea::class.java, apSnapActionAreaSerializer)
+                val apEntryPointActionGson = gsonBuilder.create()
+
+                jsonObject.addProperty("parameters", apEntryPointActionGson.toJson(src))
+            }
+            is APOpenWebLinkAction -> {
+                val clazz = APAction.Type.OPEN_WEB_LINK.javaClass
+                val name = APAction.Type.OPEN_WEB_LINK.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.addProperty("parameters", Gson().toJson(src))
+            }
+            is APCustomAction -> {
+                val clazz = APAction.Type.CUSTOM.javaClass
+                val name = APAction.Type.CUSTOM.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+
+                val paramsJson = JsonObject()
+                src.parameters?.forEach { entry ->
+                    paramsJson.addProperty(entry.key, Gson().toJson(entry.value))
+                }
+                jsonObject.addProperty("parameters", paramsJson.toString())
+            }
+            else -> {}
+        }
+
+        jsonObject
     }
