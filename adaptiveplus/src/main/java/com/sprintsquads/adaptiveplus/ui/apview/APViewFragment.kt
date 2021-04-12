@@ -89,6 +89,24 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         updateAPViewFragmentVisibility()
 
         entryPointsAdapter = APEntryPointsAdapter(listOf(), viewModel)
+        setupAPEntryPointsRecyclerView()
+
+        apViewFragmentLayout.addOnLayoutChangeListener(apViewFragmentLayoutChangeListener)
+
+        refresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onPause() {
+        viewModel.onPause()
+        super.onPause()
+    }
+
+    private fun setupAPEntryPointsRecyclerView() {
         val layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.HORIZONTAL, false)
         apEntryPointsRecyclerView.layoutManager = layoutManager
@@ -108,28 +126,6 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
                 }
             }
         )
-
-        apViewFragmentLayout.addOnLayoutChangeListener(apViewFragmentLayoutChangeListener)
-
-        // Mock is used only for development and testing purposes, not for release
-        if (context?.packageName == "com.sprintsquads.adaptiveplusqaapp" &&
-                apViewId.startsWith("mock")
-        ) {
-            viewModel.loadAPViewMockDataModelFromAssets(apViewId)
-        }
-        else {
-            refresh()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
-
-    override fun onPause() {
-        viewModel.onPause()
-        super.onPause()
     }
 
     private fun setupObservers() {
@@ -217,6 +213,15 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     fun refresh() {
         if (!::viewModel.isInitialized) {
+            return
+        }
+
+        // Mock is used only for development and testing purposes, not for release
+        if (context?.packageName == "com.sprintsquads.adaptiveplusqaapp" &&
+            apViewId.startsWith("mock") &&
+            apViewId.length <= 6
+        ) {
+            viewModel.loadAPViewMockDataModelFromAssets(apViewId)
             return
         }
 

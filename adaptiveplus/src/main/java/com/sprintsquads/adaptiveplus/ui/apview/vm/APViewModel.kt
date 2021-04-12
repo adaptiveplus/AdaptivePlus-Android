@@ -119,7 +119,7 @@ internal class APViewModel(
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
         cacheManager.loadAPViewMockDataModelFromAssets(apViewId) { dataModel ->
-            runDelayedTask({ setAPViewDataModel(dataModel) }, 2000)
+            setAPViewDataModel(dataModel)
         }
     }
 
