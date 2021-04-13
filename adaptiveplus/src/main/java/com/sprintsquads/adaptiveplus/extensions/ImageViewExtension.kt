@@ -23,13 +23,15 @@ import com.sprintsquads.adaptiveplus.data.GLIDE_TIMEOUT
  * @param cornerRadius - corner radius to round the image
  * @param onResourceReady - on resource loaded callback
  * @param onLoadFailed - on resource load failed callback
+ * @param onLoadProgressUpdate - on resource load progress update callback
  */
 internal fun ImageView.loadImage(
     url: String,
     defaultDrawable: Drawable? = null,
     cornerRadius: Int? = null,
     onResourceReady: (() -> Unit)? = null,
-    onLoadFailed: (() -> Unit)? = null
+    onLoadFailed: (() -> Unit)? = null,
+    onLoadProgressUpdate: ((progress: Float) -> Unit)? = null
 ) {
     val requestOptions =
         if (cornerRadius != null && cornerRadius > 0) {
@@ -46,8 +48,8 @@ internal fun ImageView.loadImage(
     val target = object: GlideProgressTarget<String, Bitmap>(url, imageViewTarget) {
         override fun onDownloading(bytesRead: Long, expectedLength: Long) {
             super.onDownloading(bytesRead, expectedLength)
-            val progress = bytesRead * 100f / expectedLength
-            // TODO: handle progress
+            val progress = bytesRead.toFloat() / expectedLength
+            onLoadProgressUpdate?.invoke(progress)
         }
     }
 
@@ -91,13 +93,15 @@ internal fun ImageView.loadImage(
  * @param cornerRadius - corner radius to round the image
  * @param onResourceReady - on resource loaded callback
  * @param onLoadFailed - on resource load failed callback
+ * @param onLoadProgressUpdate - on resource load progress update callback
  */
 internal fun ImageView.loadGIF(
     url: String,
     defaultDrawable: Drawable? = null,
     cornerRadius: Int? = null,
     onResourceReady: (() -> Unit)? = null,
-    onLoadFailed: (() -> Unit)? = null
+    onLoadFailed: (() -> Unit)? = null,
+    onLoadProgressUpdate: ((progress: Float) -> Unit)? = null
 ) {
     val requestOptions =
         if (cornerRadius != null && cornerRadius > 0) {
@@ -114,8 +118,8 @@ internal fun ImageView.loadGIF(
     val target = object: GlideProgressTarget<String, GifDrawable>(url, imageViewTarget) {
         override fun onDownloading(bytesRead: Long, expectedLength: Long) {
             super.onDownloading(bytesRead, expectedLength)
-            val progress = bytesRead * 100f / expectedLength
-            // TODO: handle progress
+            val progress = bytesRead.toFloat() / expectedLength
+            onLoadProgressUpdate?.invoke(progress)
         }
     }
 

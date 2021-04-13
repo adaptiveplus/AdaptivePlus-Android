@@ -31,6 +31,7 @@ internal class APEntryPointViewModel(
             override fun onReady(isReady: Boolean) { onComponentReady(index, isReady) }
             override fun onComplete() { onComponentComplete(index) }
             override fun onError() { onComponentError(index) }
+            override fun onPreparationProgressUpdate(progress: Float) {}
         }
 
         when (apLayer.type) {

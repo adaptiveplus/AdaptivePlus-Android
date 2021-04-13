@@ -30,6 +30,9 @@ internal class APSnapViewModel(
             override fun onReady(isReady: Boolean) { onComponentReady(index) }
             override fun onComplete() { onComponentComplete(index) }
             override fun onError() { onComponentError(index) }
+            override fun onPreparationProgressUpdate(progress: Float) {
+                onComponentPreparationProgressUpdate(index, progress)
+            }
         }
 
         return when (snap.layers.getOrNull(index)?.type) {
@@ -56,6 +59,10 @@ internal class APSnapViewModel(
     }
 
     private fun onComponentError(index: Int) {
+        // TODO: implement
+    }
+
+    private fun onComponentPreparationProgressUpdate(index: Int, progress: Float) {
         // TODO: implement
     }
 

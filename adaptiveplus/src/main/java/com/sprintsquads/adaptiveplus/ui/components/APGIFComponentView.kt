@@ -38,6 +38,9 @@ internal class APGIFComponentView : APBaseComponentView {
                 },
                 onLoadFailed = {
                     (componentViewModel as? APGIFComponentViewModel)?.onImageLoadFailed()
+                },
+                onLoadProgressUpdate = {
+                    (componentViewModel as? APGIFComponentViewModel)?.onImageLoadProgressUpdate(it)
                 }
             )
 

@@ -38,6 +38,9 @@ internal class APImageComponentView : APBaseComponentView {
                 },
                 onLoadFailed = {
                     (componentViewModel as? APImageComponentViewModel)?.onImageLoadFailed()
+                },
+                onLoadProgressUpdate = {
+                    (componentViewModel as? APImageComponentViewModel)?.onImageLoadProgressUpdate(it)
                 }
             )
 

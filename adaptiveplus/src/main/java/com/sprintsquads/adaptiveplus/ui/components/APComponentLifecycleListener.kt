@@ -18,4 +18,9 @@ internal interface APComponentLifecycleListener {
      * Method called if component got into error state
      */
     fun onError()
+
+    /**
+     * Method called on component preparation progress update
+     */
+    fun onPreparationProgressUpdate(progress: Float)
 }

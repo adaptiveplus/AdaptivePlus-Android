@@ -21,4 +21,11 @@ internal interface APComponentViewModel {
      * Lifecycle method to reset component
      */
     fun reset()
+
+    /**
+     * Getter of has preparation progress updates
+     *
+     * @return true if has preparation progress updates, false otherwise
+     */
+    fun hasPreparationProgressUpdates(): Boolean
 }

@@ -21,12 +21,18 @@ internal class APImageComponentViewModel(
         mComponentViewController?.reset()
     }
 
+    override fun hasPreparationProgressUpdates(): Boolean = true
+
     fun onImageResourceReady() {
         lifecycleListener.onReady(true)
     }
 
     fun onImageLoadFailed() {
         lifecycleListener.onError()
+    }
+
+    fun onImageLoadProgressUpdate(progress: Float) {
+        lifecycleListener.onPreparationProgressUpdate(progress)
     }
 
     fun isActive() : Boolean = containerViewModel.isActive()

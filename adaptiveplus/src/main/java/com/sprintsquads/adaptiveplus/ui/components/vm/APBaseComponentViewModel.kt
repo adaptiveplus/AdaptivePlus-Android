@@ -18,4 +18,6 @@ internal abstract class APBaseComponentViewModel(
     ) {
         this.mComponentViewController = controller
     }
+
+    override fun hasPreparationProgressUpdates(): Boolean = false
 }
