@@ -5,9 +5,12 @@ import android.view.*
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APSnap
+import com.sprintsquads.adaptiveplus.extensions.hide
+import com.sprintsquads.adaptiveplus.extensions.show
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModel
@@ -86,6 +89,25 @@ internal class APSnapFragment :
         drawSnap()
 
         apSnapLayout.addOnLayoutChangeListener(apSnapLayoutChangeListener)
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.isSnapReadyLiveData.observe(viewLifecycleOwner, isSnapReadyObserver)
+        viewModel.snapLoadingProgressLiveData.observe(viewLifecycleOwner, snapLoadingProgressObserver)
+    }
+
+    private val isSnapReadyObserver = Observer<Boolean> { isReady ->
+        if (isReady) {
+            apSnapLoadingLayout.hide()
+        } else {
+            apSnapLoadingLayout.show()
+        }
+    }
+
+    private val snapLoadingProgressObserver = Observer<Float> { progress ->
+        apSnapLoadingProgressBar.progress = (progress * 100).toInt()
     }
 
     private val apSnapLayoutChangeListener = View.OnLayoutChangeListener {

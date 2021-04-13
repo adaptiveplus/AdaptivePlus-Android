@@ -51,6 +51,8 @@ internal fun ImageView.loadImage(
             val progress = bytesRead.toFloat() / expectedLength
             onLoadProgressUpdate?.invoke(progress)
         }
+
+        override fun getGranularityPercentage(): Float = 1f
     }
 
     Glide
@@ -121,6 +123,8 @@ internal fun ImageView.loadGIF(
             val progress = bytesRead.toFloat() / expectedLength
             onLoadProgressUpdate?.invoke(progress)
         }
+
+        override fun getGranularityPercentage(): Float = 1f
     }
 
     Glide

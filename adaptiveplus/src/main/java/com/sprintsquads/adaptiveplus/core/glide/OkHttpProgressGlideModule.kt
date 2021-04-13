@@ -143,15 +143,17 @@ internal class OkHttpProgressGlideModule : AppGlideModule() {
 
                 override fun read(sink: Buffer, byteCount: Long): Long {
                     val bytesRead = super.read(sink, byteCount)
-                    val fullLength = responseBody?.contentLength() ?: -1
+                    val fullLength = responseBody?.contentLength() ?: -1L
 
-                    if (bytesRead == -1L) { // this source is exhausted
-                        totalBytesRead = fullLength
-                    } else {
-                        totalBytesRead += bytesRead
+                    if (fullLength != -1L) {
+                        if (bytesRead == -1L) { // this source is exhausted
+                            totalBytesRead = fullLength
+                        } else {
+                            totalBytesRead += bytesRead
+                        }
+
+                        progressListener.update(url, totalBytesRead, fullLength)
                     }
-
-                    progressListener.update(url, totalBytesRead, fullLength)
 
                     return bytesRead
                 }

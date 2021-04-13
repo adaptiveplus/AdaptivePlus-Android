@@ -21,11 +21,48 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/apContentLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="@android:color/holo_green_light"
-            />
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/apContentLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:background="@color/apSnapLoadingBg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/apSnapLoadingLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/apSnapLoadingBg"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ProgressBar
+                    android:id="@+id/apSnapLoadingProgressBar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    style="@style/APProgressBar"
+                    android:progress="0"
+                    tools:progress="60"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

@@ -8,4 +8,11 @@
         <item name="android:windowEnterAnimation">@anim/ap_enter_stories_bottom_top</item>
         <item name="android:windowExitAnimation">@anim/ap_exit_stories_top_bottom</item>
     </style>
+
+    <style name="APProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminate">false</item>
+        <item name="android:progressDrawable">@drawable/ap_fg_progress_bar</item>
+        <item name="android:background">@drawable/ap_bg_progress_bar</item>
+        <item name="android:max">100</item>
+    </style>
 </resources>
