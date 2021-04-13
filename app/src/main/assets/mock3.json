@@ -112,13 +112,13 @@
                                   "opacity": 1
                                 },
                                 "component": {
-                                  "color": "#00FF00FF"
+                                  "color": "#99CC99FF"
                                 }
                               },
                               {
                                 "type": "IMAGE",
                                 "component": {
-                                  "url": "https://api-staging.adaptive.plus/api/cdn/files/upload_3f270fc057e842b4ae8552cbaa97a42.jpeg",
+                                  "url": "https://free4kwallpapers.com/uploads/originals/2015/08/29/itachi-uchiwa-anime-wallpaper-background-4016-hd-wallpapers.jpg",
                                   "border": null,
                                   "cornerRadius": null,
                                   "loadingColor": "#FF0000"
@@ -126,9 +126,66 @@
                                 "options": {
                                   "position": {
                                     "x": 16,
-                                    "y": 44,
-                                    "width": 208,
-                                    "height": 60,
+                                    "y": 0,
+                                    "width": 270,
+                                    "height": 180,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                }
+                              },
+                              {
+                                "type": "GIF",
+                                "component": {
+                                  "url": "https://thumbs.gfycat.com/CircularGroundedAdeliepenguin-size_restricted.gif",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#FF0000"
+                                },
+                                "options": {
+                                  "position": {
+                                    "x": 48,
+                                    "y": 164,
+                                    "width": 270,
+                                    "height": 180,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                }
+                              },
+                              {
+                                "type": "GIF",
+                                "component": {
+                                  "url": "https://i.gifer.com/8Z1k.gif",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#FF0000"
+                                },
+                                "options": {
+                                  "position": {
+                                    "x": 96,
+                                    "y": 328,
+                                    "width": 270,
+                                    "height": 180,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                }
+                              },
+                              {
+                                "type": "GIF",
+                                "component": {
+                                  "url": "https://64.media.tumblr.com/61152d7c5c47ee76c42852970fe9f27c/tumblr_ns6605qXi21uz35lto1_500.gifv",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#FF0000"
+                                },
+                                "options": {
+                                  "position": {
+                                    "x": 16,
+                                    "y": 492,
+                                    "width": 270,
+                                    "height": 180,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -142,7 +199,7 @@
                                     "family": "Roboto",
                                     "style": "semiboldItalic",
                                     "size": 20,
-                                    "color": "#000000FF",
+                                    "color": "#FFFFFFFF",
                                     "align": "center",
                                     "letterSpacing": 0
                                   }
@@ -197,7 +254,7 @@
                                 }
                               }
                             },
-                            "showTime": 5
+                            "showTime": 10
                           }
                         },
                         {
