@@ -50,5 +50,12 @@ class MockFragment : Fragment() {
                 ).show()
             }
         })
+        mock4APView.setAPCustomActionListener(object: APCustomActionListener {
+            override fun onRun(params: HashMap<String, Any>) {
+                Toast.makeText(
+                    context, params["name"].toString(), Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 }
