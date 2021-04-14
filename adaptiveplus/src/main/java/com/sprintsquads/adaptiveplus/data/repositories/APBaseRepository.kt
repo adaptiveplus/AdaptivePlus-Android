@@ -105,7 +105,8 @@ internal open class APBaseRepository(
             userProperties = user.properties,
             userDevice = TokenRequestBody.UserDevice(
                 deviceId = user.deviceId
-            )
+            ),
+            userLocation = user.location
         )
         val body = RequestBody.create(JSON_MEDIA_TYPE, Gson().toJson(tokenRequestBody))
 

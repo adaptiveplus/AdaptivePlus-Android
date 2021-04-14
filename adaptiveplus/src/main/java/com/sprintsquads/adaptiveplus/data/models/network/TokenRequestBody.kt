@@ -1,6 +1,7 @@
 package com.sprintsquads.adaptiveplus.data.models.network
 
 import com.google.gson.annotations.SerializedName
+import com.sprintsquads.adaptiveplus.sdk.data.APLocation
 import java.io.Serializable
 
 
@@ -12,7 +13,9 @@ internal data class TokenRequestBody(
     @SerializedName("userDevice")
     val userDevice: UserDevice,
     @SerializedName("userProperties")
-    val userProperties: Map<String, Any?>? = null
+    val userProperties: Map<String, Any?>? = null,
+    @SerializedName("location")
+    val userLocation: APLocation? = null
 ) : Serializable {
 
     data class UserDevice(
