@@ -1,6 +1,7 @@
 package com.sprintsquads.adaptiveplus.data.repositories
 
 import com.google.gson.Gson
+import com.sprintsquads.adaptiveplus.core.managers.APAuthCredentialsManager
 import com.sprintsquads.adaptiveplus.core.managers.NetworkServiceManager
 import com.sprintsquads.adaptiveplus.data.SDK_API_URL
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
@@ -12,8 +13,10 @@ import okhttp3.RequestBody
 
 internal class APViewRepository(
     networkManager: NetworkServiceManager,
+    authCredentialsManager: APAuthCredentialsManager,
+    userRepository: APUserRepository,
     customGson: Gson
-) : APBaseRepository(networkManager, customGson) {
+) : APBaseRepository(networkManager, authCredentialsManager, userRepository, customGson) {
 
     /**
      * Method to request adaptive plus view data model
@@ -45,7 +48,8 @@ internal class APViewRepository(
             },
             { error ->
                 callback.failure(error)
-            }
+            },
+            isReauthorizationOn = true
         )
     }
 }

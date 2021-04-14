@@ -14,6 +14,7 @@ import com.sprintsquads.adaptiveplus.data.*
 import com.sprintsquads.adaptiveplus.data.BASE_API_URL
 import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
 import com.sprintsquads.adaptiveplus.data.LOCALE
+import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
@@ -91,7 +92,7 @@ class AdaptivePlusSDK {
                     tokenRequestState = RequestState.SUCCESS
                 }
 
-                override fun failure(error: Any?) {
+                override fun failure(error: APError?) {
                     tokenRequestState = RequestState.ERROR
                 }
             }

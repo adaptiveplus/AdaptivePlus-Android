@@ -5,6 +5,7 @@ import com.sprintsquads.adaptiveplus.core.managers.APCacheManager
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
+import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.Event
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
@@ -62,7 +63,7 @@ internal class APViewModel(
                     }
                 }
 
-                override fun failure(error: Any?) { }
+                override fun failure(error: APError?) { }
             }
         )
     }

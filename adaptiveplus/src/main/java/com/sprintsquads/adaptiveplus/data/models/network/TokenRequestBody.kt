@@ -9,8 +9,6 @@ internal data class TokenRequestBody(
     val apUserId: String? = null,
     @SerializedName("external_id")
     val externalUserId: String? = null,
-    @SerializedName("refresh_token")
-    val refreshToken: String? = null,
     @SerializedName("userDevice")
     val userDevice: UserDevice,
     @SerializedName("userProperties")
