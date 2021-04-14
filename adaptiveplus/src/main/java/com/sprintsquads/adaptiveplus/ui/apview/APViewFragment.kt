@@ -295,6 +295,9 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
                 ),
                 scaleFactor = scaleFactor
             )
+
+            val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
+            layoutManager?.scrollToPosition(0)
         }
     }
 
