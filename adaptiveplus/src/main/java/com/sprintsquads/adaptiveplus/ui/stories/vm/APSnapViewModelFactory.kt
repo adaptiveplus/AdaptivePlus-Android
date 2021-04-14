@@ -7,7 +7,7 @@ import com.sprintsquads.adaptiveplus.data.models.APSnap
 
 internal class APSnapViewModelFactory(
     private val snap: APSnap,
-    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol
+    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol?
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

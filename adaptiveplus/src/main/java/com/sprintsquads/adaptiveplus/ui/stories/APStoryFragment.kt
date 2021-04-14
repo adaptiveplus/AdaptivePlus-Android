@@ -15,6 +15,7 @@ import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
 import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.APStory
+import com.sprintsquads.adaptiveplus.ext.setTransitionDuration
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapState
@@ -93,6 +94,7 @@ internal class APStoryFragment :
 
         apSnapsViewPager.offscreenPageLimit = 1
         apSnapsViewPager.adapter = snapsAdapter
+        apSnapsViewPager.setTransitionDuration(0)
 
         apStoriesProgressView.setStoriesCount(story.snaps.size)
         apStoriesProgressView.setStoryDurations(story.snaps.map { (it.showTime * 1000).toLong() })

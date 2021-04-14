@@ -50,7 +50,7 @@ internal class APSnapFragment :
 
 
     private lateinit var snap: APSnap
-    private lateinit var storyViewModelDelegate: APStoryViewModelDelegateProtocol
+    private var storyViewModelDelegate: APStoryViewModelDelegateProtocol? = null
     private lateinit var viewModel: APSnapViewModel
     private var scaleFactor: Float = 1f
 
@@ -63,7 +63,7 @@ internal class APSnapFragment :
         (arguments?.get(EXTRA_SNAP) as? APSnap)?.let {
             snap = it
         } ?: run {
-            storyViewModelDelegate.onSnapEvent(
+            storyViewModelDelegate?.onSnapEvent(
                 APSnapEventInfo("", APSnapEvent.CLOSE_STORIES))
             return
         }
