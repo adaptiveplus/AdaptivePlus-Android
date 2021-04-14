@@ -81,6 +81,15 @@ internal class APEntryPointViewModel(
                 apViewModelDelegate.getAutoScrollPeriod()?.let { autoScrollPeriod ->
                     progressHandler?.postDelayed(progressCompleteTask, autoScrollPeriod)
                 }
+
+                APAnalytics.logEvent(
+                    APAnalyticsEvent(
+                        name = "shown-entryPoint",
+                        campaignId = entryPoint.campaignId,
+                        apViewId = apViewModelDelegate.getAPViewId(),
+                        params = mapOf("entryPointId" to entryPoint.id)
+                    )
+                )
             } else {
                 doResumeOnReady = true
             }
