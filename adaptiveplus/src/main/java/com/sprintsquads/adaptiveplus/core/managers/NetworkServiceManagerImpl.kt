@@ -58,7 +58,9 @@ private constructor(
     }
 
     override fun updateToken(token: String?) {
-        tokenLiveData.postValue(token)
+        if (tokenLiveData.value != token) {
+            tokenLiveData.postValue(token)
+        }
 
         if (token == null) {
             preferences?.remove(APSharedPreferences.AUTH_TOKEN)

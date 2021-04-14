@@ -7,7 +7,9 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.sprintsquads.adaptiveplus.sdk.data.APGender
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.Locale
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddCustomIPDialog
@@ -24,6 +26,12 @@ class LauncherActivity : AppCompatActivity() {
 
         updateEnvAdapter()
         updateIPsAdapter()
+
+        agePicker.minValue = 0
+        agePicker.maxValue = 100
+        agePicker.value = 24
+
+        maleRadioButton.isChecked = true
 
         val locales = listOf(
             Locale.EN.value,
@@ -93,6 +101,7 @@ class LauncherActivity : AppCompatActivity() {
 
         intent.putExtra(MainActivity.EXTRA_ENV_NAME, envName)
         intent.putExtra(MainActivity.EXTRA_USER_ID, userIdEditText.text.toString())
+        intent.putExtra(MainActivity.EXTRA_USER_PROPERTIES, getUserProperties())
         intent.putExtra(MainActivity.EXTRA_LOCALE, localeSpinner.selectedItem.toString())
         intent.putExtra(MainActivity.EXTRA_CUSTOM_IP, getCustomIPBySpinnerName(this, ipSpinner.selectedItem.toString())?.ip)
         intent.putExtra(MainActivity.EXTRA_LOCATION, getAdaptiveLocation())
@@ -130,6 +139,13 @@ class LauncherActivity : AppCompatActivity() {
 
         ipSpinner.adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_dropdown_item, ipNames)
+    }
+
+    private fun getUserProperties(): APUserProperties? {
+        return APUserProperties(
+            gender = if (maleRadioButton.isChecked) APGender.MALE else APGender.FEMALE,
+            age = agePicker.value
+        )
     }
 
     private fun getAdaptiveLocation(): APLocation? {

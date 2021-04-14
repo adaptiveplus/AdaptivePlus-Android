@@ -1,28 +1,32 @@
 package com.sprintsquads.adaptiveplus.sdk
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sprintsquads.adaptiveplus.BuildConfig
 import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
 import com.sprintsquads.adaptiveplus.core.providers.provideAPAnalyticsRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPAuthRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPClientCredentialsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPUserRepository
 import com.sprintsquads.adaptiveplus.data.*
-import com.sprintsquads.adaptiveplus.data.BASE_API_URL
-import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
-import com.sprintsquads.adaptiveplus.data.LOCALE
 import com.sprintsquads.adaptiveplus.data.models.APError
+import com.sprintsquads.adaptiveplus.data.models.APUser
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 import com.sprintsquads.adaptiveplus.sdk.exceptions.APInitializationException
+import com.sprintsquads.adaptiveplus.utils.*
+import com.sprintsquads.adaptiveplus.utils.getAppVersion
+import com.sprintsquads.adaptiveplus.utils.getDeviceId
+import com.sprintsquads.adaptiveplus.utils.getDeviceType
+import com.sprintsquads.adaptiveplus.utils.getMobileCountryCode
+import com.sprintsquads.adaptiveplus.utils.getMobileOperatorName
 
 
 class AdaptivePlusSDK {
@@ -31,11 +35,10 @@ class AdaptivePlusSDK {
     private var userRepository: APUserRepository? = null
 
 
-    @SuppressLint("HardwareIds")
     fun start(
         context: Context,
         userId: String? = null,
-        userProperties: Map<String, Any>? = null,
+        userProperties: APUserProperties? = null,
         location: APLocation? = null,
         locale: String? = null,
         isDebuggable: Boolean = false
@@ -70,10 +73,25 @@ class AdaptivePlusSDK {
             setExternalUserId(userId)
             setUserProperties(userProperties)
             setUserLocation(location)
-
-            setDeviceId(
-                Settings.Secure.getString(
-                    context.contentResolver, Settings.Secure.ANDROID_ID))
+            setUserDevice(
+                APUser.Device(
+                    id = getDeviceId(context),
+                    manufacturer = Build.MANUFACTURER,
+                    model = Build.MODEL,
+                    type = getDeviceType(context),
+                    locale = LOCALE,
+                    osName = OS_NAME,
+                    osVersion = Build.VERSION.RELEASE,
+                    storeAppId = context.packageName,
+                    appPackageName = context.packageName,
+                    appVersionName = getAppVersion(context),
+                    apSdkVersion = BuildConfig.AP_VERSION_NAME,
+                    limitEventTracking = false,
+                    operatorName = getMobileOperatorName(context),
+                    mcc = getMobileCountryCode(context),
+                    mnc = getMobileNetworkCode(context)
+                )
+            )
         }
 
         isStartedLiveData.value = true
@@ -90,7 +108,7 @@ class AdaptivePlusSDK {
         tokenRequestState = RequestState.IN_PROCESS
 
         authRepositoryInstance(context)?.requestToken(
-            object: RequestResultCallback<String>() {
+            object : RequestResultCallback<String>() {
                 override fun success(response: String) {
                     tokenRequestState = RequestState.SUCCESS
                 }
@@ -125,7 +143,8 @@ class AdaptivePlusSDK {
 
     @Deprecated(
         message = "Only for testing purposes.",
-        level = DeprecationLevel.WARNING)
+        level = DeprecationLevel.WARNING
+    )
     fun setTestEnvironment(
         context: Context,
         channelSecret: String,
@@ -135,7 +154,8 @@ class AdaptivePlusSDK {
         val testAppIds = listOf(
             "com.s10s.adaptiveplussampleapp",
             "com.s10s.adaptiveplusdemo",
-            "com.sprintsquads.adaptiveplusqaapp")
+            "com.sprintsquads.adaptiveplusqaapp"
+        )
         if (context.packageName !in testAppIds) {
             return
         }
@@ -147,7 +167,7 @@ class AdaptivePlusSDK {
 
     internal fun isStartedLiveData(): LiveData<Boolean> = isStartedLiveData
 
-    fun updateUserProperties(userProperties: Map<String, Any>?) {
+    fun updateUserProperties(userProperties: APUserProperties?) {
         userRepositoryInstance(null)?.setUserProperties(userProperties)
     }
 
@@ -157,6 +177,8 @@ class AdaptivePlusSDK {
 
 
     companion object {
+        private const val OS_NAME = "android"
+
         private var isStartedLiveData = MutableLiveData<Boolean>().apply {
             value = false
         }
