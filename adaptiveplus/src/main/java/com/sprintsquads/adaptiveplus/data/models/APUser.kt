@@ -43,7 +43,7 @@ internal data class APUser(
         @SerializedName("adaptiveSdkVersion")
         val apSdkVersion: String,
         @SerializedName("limitEventTracking")
-        val limitEventTracking: Boolean,
+        var isEventTrackingDisabled: Boolean = false,
         @SerializedName("operatorName")
         val operatorName: String?,
         @SerializedName("mcc")

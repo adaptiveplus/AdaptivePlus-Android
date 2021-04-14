@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sprintsquads.adaptiveplus.core.factories.Tls12SocketFactory
 import com.sprintsquads.adaptiveplus.data.CUSTOM_IP_ADDRESS
 import com.sprintsquads.adaptiveplus.data.IS_DEBUGGABLE
+import com.sprintsquads.adaptiveplus.data.REQUEST_TIMEOUT
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
@@ -25,10 +26,6 @@ private constructor(
 ): NetworkServiceManager {
 
     companion object {
-        private const val CONNECT_TIMEOUT_SECONDS: Long = 30
-        private const val WRITE_TIMEOUT_SECONDS: Long = 30
-        private const val READ_TIMEOUT_SECONDS: Long = 30
-
         private val tokenLiveData = MutableLiveData<String?>()
 
 
@@ -112,9 +109,9 @@ private constructor(
 
     private fun provideOkHttpClientBuilder(): OkHttpClient.Builder {
         val builder = OkHttpClient.Builder()
-            .writeTimeout(WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
 
         if (IS_DEBUGGABLE) {
             val httpLoggingInterceptor = HttpLoggingInterceptor()

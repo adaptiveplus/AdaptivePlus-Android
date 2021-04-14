@@ -14,6 +14,7 @@ import com.sprintsquads.adaptiveplus.core.providers.provideAPUserRepository
 import com.sprintsquads.adaptiveplus.data.*
 import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.APUser
+import com.sprintsquads.adaptiveplus.data.models.network.APConfigsResponseBody
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
@@ -46,7 +47,9 @@ class AdaptivePlusSDK {
         stop()
 
         provideAPClientCredentialsManager().init(context)
-        APAnalytics.init(provideAPAnalyticsRepository(context))
+        APAnalytics.init(
+            provideAPUserRepository(context),
+            provideAPAnalyticsRepository(context))
 
         val appInfo = context.packageManager.getApplicationInfo(
             context.packageName,
@@ -86,7 +89,6 @@ class AdaptivePlusSDK {
                     appPackageName = context.packageName,
                     appVersionName = getAppVersion(context),
                     apSdkVersion = BuildConfig.AP_VERSION_NAME,
-                    limitEventTracking = false,
                     operatorName = getMobileOperatorName(context),
                     mcc = getMobileCountryCode(context),
                     mnc = getMobileNetworkCode(context)
@@ -111,6 +113,7 @@ class AdaptivePlusSDK {
             object : RequestResultCallback<String>() {
                 override fun success(response: String) {
                     tokenRequestState = RequestState.SUCCESS
+                    requestAPConfigs()
                 }
 
                 override fun failure(error: APError?) {
@@ -123,6 +126,15 @@ class AdaptivePlusSDK {
     fun stop() {
         isStartedLiveData.value = false
         tokenRequestState = RequestState.NONE
+    }
+
+    private fun requestAPConfigs() {
+        authRepositoryInstance(null)?.requestAPConfigs(
+            object : RequestResultCallback<APConfigsResponseBody>() {
+                override fun success(response: APConfigsResponseBody) {}
+                override fun failure(error: APError?) {}
+            }
+        )
     }
 
     private fun authRepositoryInstance(context: Context?) : APAuthRepository? {

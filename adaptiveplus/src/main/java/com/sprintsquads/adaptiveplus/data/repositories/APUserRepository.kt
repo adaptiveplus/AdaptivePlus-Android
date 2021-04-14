@@ -16,6 +16,7 @@ internal class APUserRepository(
         private var userDevice: APUser.Device? = null
         private var userProperties: APUserProperties? = null
         private var userLocation: APLocation? = null
+        private var isEventTrackingDisabled: Boolean? = null
     }
 
 
@@ -44,11 +45,28 @@ internal class APUserRepository(
         userDevice = device
     }
 
+    fun setIsEventTrackingDisabled(isDisabled: Boolean?) {
+        if (isDisabled == null) {
+            preferences?.remove(APSharedPreferences.IS_EVENT_TRACKING_DISABLED)
+        } else {
+            preferences?.saveBoolean(APSharedPreferences.IS_EVENT_TRACKING_DISABLED, isDisabled)
+        }
+        isEventTrackingDisabled = isDisabled
+    }
+
+    fun getIsEventTrackingDisabled() : Boolean {
+        if (isEventTrackingDisabled == null) {
+            isEventTrackingDisabled =
+                preferences?.getBoolean(APSharedPreferences.IS_EVENT_TRACKING_DISABLED) ?: false
+        }
+        return isEventTrackingDisabled!!
+    }
+
     fun getAPUser() : APUser {
         return APUser(
             apId = getAPUserId(),
             externalId = externalUserId,
-            device = userDevice,
+            device = userDevice?.apply { isEventTrackingDisabled = getIsEventTrackingDisabled() },
             properties = userProperties,
             location = userLocation
         )

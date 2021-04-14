@@ -5,13 +5,15 @@ import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAnalyticsRepository
+import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.utils.getCurrentTimeString
 import com.sprintsquads.adaptiveplus.utils.runDelayedTask
 
 
 internal class APAnalytics
 private constructor(
-    private val repository: APAnalyticsRepository
+    private val userRepository: APUserRepository,
+    private val analyticsRepository: APAnalyticsRepository
 ) {
 
     companion object {
@@ -27,17 +29,17 @@ private constructor(
             analyticsInstance = null
         }
 
-        fun init(repository: APAnalyticsRepository) {
-            analyticsInstance = APAnalytics(repository)
+        fun init(userRepository: APUserRepository, analyticsRepository: APAnalyticsRepository) {
+            analyticsInstance = APAnalytics(userRepository, analyticsRepository)
         }
 
         fun logEvent(event: APAnalyticsEvent) {
             analyticsInstance?.logEvent(event)
         }
 
-        fun updateConfig(timeout: Long, eventCount: Int) {
-            SUBMIT_REQUEST_TIMEOUT = timeout * 1000
-            EVENTS_SUBMIT_COUNT = eventCount
+        fun updateConfig(timeout: Long?, eventCount: Int?) {
+            timeout?.let { SUBMIT_REQUEST_TIMEOUT = it }
+            eventCount?.let { EVENTS_SUBMIT_COUNT = it }
             analyticsInstance?.runCheckTask()
         }
     }
@@ -63,6 +65,10 @@ private constructor(
     }
 
     private fun logEvent(event: APAnalyticsEvent) {
+        if (userRepository.getIsEventTrackingDisabled()) {
+            return
+        }
+
         event.createdAt = getCurrentTimeString()
         eventBuffer.add(event)
 
@@ -92,7 +98,7 @@ private constructor(
             }
         }
 
-        repository.submitAnalytics(events, object: RequestResultCallback<Any?>() {
+        analyticsRepository.submitAnalytics(events, object: RequestResultCallback<Any?>() {
             override fun success(response: Any?) {
                 submitRequestState = RequestState.SUCCESS
                 eventBuffer.clear()

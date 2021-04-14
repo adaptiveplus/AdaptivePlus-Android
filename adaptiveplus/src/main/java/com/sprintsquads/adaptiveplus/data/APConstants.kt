@@ -23,8 +23,10 @@ internal var BASE_API_URL: String? = null
     }
 internal var SDK_API_URL: String = "$BASE_API_URL/v1"
 
+internal var REQUEST_TIMEOUT: Long = 30L // seconds
+internal var GLIDE_TIMEOUT: Int = 60000 // milliseconds
+
 internal const val DELAY_BETWEEN_CLICKS = 1000 // milliseconds
-internal const val GLIDE_TIMEOUT = 60000 // milliseconds
 
 internal const val META_KEY_BASE_API_URL = "apBaseApiUrl"
 internal const val META_KEY_CHANNEL_SECRET = "apChannelSecret"
