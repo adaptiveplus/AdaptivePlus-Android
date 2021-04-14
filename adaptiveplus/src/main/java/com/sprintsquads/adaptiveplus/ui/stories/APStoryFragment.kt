@@ -12,6 +12,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
+import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
+import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.APStory
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
@@ -311,6 +313,18 @@ internal class APStoryFragment :
     private fun resetLastSnap() {
         val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
         viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESET)
+
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "shown-snap",
+                campaignId = story.campaignId,
+                apViewId = storiesDialogViewModelDelegate.getAPViewId(),
+                params = mapOf(
+                    "snapId" to snapId,
+                    "watchedTime" to 0L
+                )
+            )
+        )
     }
 
 }

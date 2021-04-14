@@ -9,10 +9,9 @@ internal interface APViewModelDelegateProtocol {
      * Method to run/execute adaptive plus actions
      *
      * @param actions - list of adaptive plus actions to execute
-     * @param campaignId - id of adaptive plus campaign
      * @see APAction
      */
-    fun runActions(actions: List<APAction>, campaignId: String)
+    fun runActions(actions: List<APAction>)
 
     /**
      * Getter of stories paused state live data
@@ -49,4 +48,11 @@ internal interface APViewModelDelegateProtocol {
      * @return true/false to show/hide border on components
      */
     fun showBorder() : Boolean
+
+    /**
+     * Getter of APView id
+     *
+     * @return id of APView
+     */
+    fun getAPViewId() : String
 }

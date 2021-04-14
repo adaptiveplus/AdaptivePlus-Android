@@ -8,5 +8,5 @@ import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 internal interface APActionsManager {
     fun setAPStories(apStories: List<APStory>?)
     fun setAPCustomActionListener(listener: APCustomActionListener?)
-    fun runAction(action: APAction, campaignId: String)
+    fun runAction(action: APAction)
 }

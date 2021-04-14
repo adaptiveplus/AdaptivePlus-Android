@@ -24,13 +24,13 @@ internal class APViewModel(
 
     val apViewDataModelLiveData: LiveData<APViewDataModel?>
         get() = _apViewDataModelLiveData
-    val actionEventLiveData: LiveData<Event<Pair<APAction, String>>>
+    val actionEventLiveData: LiveData<Event<APAction>>
         get() = _actionEventLiveData
     val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
         get() = _magnetizeEntryPointEventLiveData
 
     private val _apViewDataModelLiveData = MutableLiveData<APViewDataModel?>()
-    private val _actionEventLiveData = MutableLiveData<Event<Pair<APAction, String>>>()
+    private val _actionEventLiveData = MutableLiveData<Event<APAction>>()
     private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
     private val _isAPStoriesPausedLiveData =
@@ -68,18 +68,14 @@ internal class APViewModel(
         )
     }
 
-    override fun runActions(
-        actions: List<APAction>,
-        campaignId: String
-    ) {
+    override fun runActions(actions: List<APAction>) {
         for (action in actions) {
-            runAction(action, campaignId)
+            runAction(action)
         }
     }
 
-    private fun runAction(action: APAction, campaignId: String) {
-        _actionEventLiveData.value =
-                Event(Pair(action, campaignId))
+    private fun runAction(action: APAction) {
+        _actionEventLiveData.value = Event(action)
     }
 
     override fun isAPStoriesPausedLiveData(): LiveData<Boolean> {
@@ -113,6 +109,10 @@ internal class APViewModel(
 
     override fun showBorder(): Boolean {
         return _apViewDataModelLiveData.value?.options?.showBorder == true
+    }
+
+    override fun getAPViewId(): String {
+        return _apViewDataModelLiveData.value?.id ?: ""
     }
 
     @Deprecated(

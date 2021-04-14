@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.extensions
+package com.sprintsquads.adaptiveplus.ext
 
 import android.view.View
 

@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APTextComponent
-import com.sprintsquads.adaptiveplus.extensions.applyAPFont
+import com.sprintsquads.adaptiveplus.ext.applyAPFont
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APTextComponentViewModel
 import kotlinx.android.synthetic.main.ap_component_text.view.*

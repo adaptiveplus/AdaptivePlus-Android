@@ -7,7 +7,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.components.APImageComponent
-import com.sprintsquads.adaptiveplus.extensions.loadImage
+import com.sprintsquads.adaptiveplus.ext.loadImage
 import com.sprintsquads.adaptiveplus.ui.components.vm.APComponentViewModel
 import com.sprintsquads.adaptiveplus.ui.components.vm.APImageComponentViewModel
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex

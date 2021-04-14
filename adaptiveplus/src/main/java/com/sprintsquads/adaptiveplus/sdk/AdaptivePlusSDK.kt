@@ -7,6 +7,8 @@ import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
+import com.sprintsquads.adaptiveplus.core.providers.provideAPAnalyticsRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPAuthRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPClientCredentialsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPUserRepository
@@ -41,6 +43,7 @@ class AdaptivePlusSDK {
         stop()
 
         provideAPClientCredentialsManager().init(context)
+        APAnalytics.init(provideAPAnalyticsRepository(context))
 
         val appInfo = context.packageManager.getApplicationInfo(
             context.packageName,

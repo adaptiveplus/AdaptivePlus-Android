@@ -9,8 +9,8 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.Transformation
 import android.widget.FrameLayout
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.extensions.hide
-import com.sprintsquads.adaptiveplus.extensions.show
+import com.sprintsquads.adaptiveplus.ext.hide
+import com.sprintsquads.adaptiveplus.ext.show
 import kotlinx.android.synthetic.main.ap_stoppable_progress_bar.view.*
 
 

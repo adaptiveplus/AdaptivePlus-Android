@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.LinearLayout
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APSnap
-import com.sprintsquads.adaptiveplus.extensions.applyAPFont
+import com.sprintsquads.adaptiveplus.ext.applyAPFont
 import com.sprintsquads.adaptiveplus.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_action_area_button.view.*
 

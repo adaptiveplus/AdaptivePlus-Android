@@ -2,7 +2,9 @@ package com.sprintsquads.adaptiveplus.ui.apview.vm
 
 import android.os.Handler
 import android.os.Looper
+import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
+import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APEntryPoint
 import com.sprintsquads.adaptiveplus.data.models.APLayer
@@ -102,11 +104,17 @@ internal class APEntryPointViewModel(
         componentViewModelList.forEach { it?.reset() }
     }
 
-    fun runActions(
-        actions: List<APAction>,
-        campaignId: String
-    ) {
-        apViewModelDelegate.runActions(actions, campaignId)
+    fun runActions(actions: List<APAction>) {
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "action-entryPoint",
+                campaignId = entryPoint.campaignId,
+                apViewId = apViewModelDelegate.getAPViewId(),
+                params = mapOf("entryPointId" to entryPoint.id)
+            )
+        )
+
+        apViewModelDelegate.runActions(actions)
     }
 
     override fun getAPComponentViewModel(index: Int) : APComponentViewModel? {

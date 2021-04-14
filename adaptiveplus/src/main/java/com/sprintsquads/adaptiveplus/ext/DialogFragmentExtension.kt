@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.extensions
+package com.sprintsquads.adaptiveplus.ext
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager

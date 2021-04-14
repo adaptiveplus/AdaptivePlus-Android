@@ -3,6 +3,8 @@ package com.sprintsquads.adaptiveplus.ui.stories.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
+import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APLayer
 import com.sprintsquads.adaptiveplus.data.models.APSnap
@@ -21,7 +23,7 @@ import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 
 internal class APSnapViewModel(
     private val snap: APSnap,
-    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol?
+    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol
 ) : ViewModel(), APComponentViewModelProvider, APActionAreaListener, APComponentContainerViewModel {
 
     val snapLoadingProgressLiveData: LiveData<Float>
@@ -71,7 +73,7 @@ internal class APSnapViewModel(
             val isSnapReady = componentReadinessList.all { it }
             _isSnapReadyLiveData.value = isSnapReady
 
-            storyViewModelDelegate?.updateSnapReadiness(
+            storyViewModelDelegate.updateSnapReadiness(
                 id = snap.id,
                 isReady = isSnapReady
             )
@@ -106,7 +108,16 @@ internal class APSnapViewModel(
     }
 
     override fun runActions(actions: List<APAction>) {
-        storyViewModelDelegate?.runActions(actions)
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "action-snap",
+                campaignId = storyViewModelDelegate.getCampaignId(),
+                apViewId = storyViewModelDelegate.getAPViewId(),
+                params = mapOf("snapId" to snap.id)
+            )
+        )
+
+        storyViewModelDelegate.runActions(actions)
     }
 
     fun runActionAreaActions() {
@@ -119,7 +130,7 @@ internal class APSnapViewModel(
     }
 
     fun onSnapEvent(event: APSnapEvent) {
-        storyViewModelDelegate?.onSnapEvent(
+        storyViewModelDelegate.onSnapEvent(
             APSnapEventInfo(snap.id, event)
         )
     }

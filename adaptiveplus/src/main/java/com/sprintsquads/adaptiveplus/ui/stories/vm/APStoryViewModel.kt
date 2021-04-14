@@ -53,7 +53,7 @@ internal class APStoryViewModel(
     }
 
     override fun runActions(actions: List<APAction>) {
-        storiesDialogViewModelDelegate.runActions(actions, story.campaignId)
+        storiesDialogViewModelDelegate.runActions(actions)
     }
 
     fun isStoriesPaused() : Boolean = isStoriesPausedLiveData.value == true
@@ -74,5 +74,13 @@ internal class APStoryViewModel(
         val userId = userRepository.getAPUser().apId ?: ""
         val prefKey = "${userId}_${story.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         preferences.saveBoolean(prefKey, true)
+    }
+
+    override fun getAPViewId(): String {
+        return storiesDialogViewModelDelegate.getAPViewId()
+    }
+
+    override fun getCampaignId(): String {
+        return story.campaignId
     }
 }

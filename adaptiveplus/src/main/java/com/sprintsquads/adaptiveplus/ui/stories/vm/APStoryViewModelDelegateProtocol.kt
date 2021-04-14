@@ -27,4 +27,18 @@ internal interface APStoryViewModelDelegateProtocol {
      * @param eventInfo - snap event info
      */
     fun onSnapEvent(eventInfo: APSnapEventInfo)
+
+    /**
+     * Getter of APView id
+     *
+     * @return id of APView
+     */
+    fun getAPViewId() : String
+
+    /**
+     * Getter of APCampaign id
+     *
+     * @return id of APCampaign
+     */
+    fun getCampaignId() : String
 }

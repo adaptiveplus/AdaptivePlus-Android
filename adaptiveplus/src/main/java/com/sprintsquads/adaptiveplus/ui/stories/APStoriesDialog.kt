@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.extensions.setTransitionDuration
+import com.sprintsquads.adaptiveplus.ext.setTransitionDuration
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModel
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APStoriesDialogViewModelFactory

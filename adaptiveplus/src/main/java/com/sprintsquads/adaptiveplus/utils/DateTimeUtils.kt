@@ -5,18 +5,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-internal const val DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-internal const val DATE_FORMAT_ISO_V2 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+internal const val DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 
 
-internal fun getCurrentTime(targetFmt: String = DATE_FORMAT_ISO) : String {
+internal fun getCurrentTimeString(targetFmt: String = DATE_FORMAT_ISO) : String {
     val sdf = SimpleDateFormat(targetFmt, Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("GMT")
     }
     return sdf.format(Calendar.getInstance().time)
 }
 
-internal fun parseDateString(dateStr: String, srcFormat: String = DATE_FORMAT_ISO_V2): Date? {
+internal fun parseDateString(dateStr: String, srcFormat: String = DATE_FORMAT_ISO): Date? {
     val sdf = SimpleDateFormat(srcFormat, Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("GMT")
     }

@@ -32,7 +32,7 @@ internal class APActionsManagerImpl(
         this.apCustomActionListener = listener
     }
 
-    override fun runAction(action: APAction, campaignId: String) {
+    override fun runAction(action: APAction) {
         when (action) {
             is APOpenWebLinkAction -> openWebView(action)
             is APCustomAction -> runAPCustomAction(action)

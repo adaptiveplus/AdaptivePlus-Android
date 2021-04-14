@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APSnap
-import com.sprintsquads.adaptiveplus.extensions.hide
-import com.sprintsquads.adaptiveplus.extensions.show
+import com.sprintsquads.adaptiveplus.ext.hide
+import com.sprintsquads.adaptiveplus.ext.show
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEvent
 import com.sprintsquads.adaptiveplus.ui.stories.data.APSnapEventInfo
 import com.sprintsquads.adaptiveplus.ui.stories.vm.APSnapViewModel

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APFont
-import com.sprintsquads.adaptiveplus.extensions.applyAPFont
+import com.sprintsquads.adaptiveplus.ext.applyAPFont
 import com.sprintsquads.adaptiveplus.utils.processHtmlText
 
 

@@ -75,8 +75,7 @@ internal class APEntryPointsAdapter(
             apEntryCardView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {
                     lastTimeClicked = SystemClock.elapsedRealtime()
-                    viewModel?.runActions(
-                        entryPoint.actions, entryPoint.campaignId)
+                    viewModel?.runActions(entryPoint.actions)
                 }
             }
 

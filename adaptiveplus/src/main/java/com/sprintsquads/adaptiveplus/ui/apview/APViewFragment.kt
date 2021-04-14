@@ -20,8 +20,8 @@ import com.sprintsquads.adaptiveplus.core.providers.provideNetworkServiceManager
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
-import com.sprintsquads.adaptiveplus.extensions.hide
-import com.sprintsquads.adaptiveplus.extensions.show
+import com.sprintsquads.adaptiveplus.ext.hide
+import com.sprintsquads.adaptiveplus.ext.show
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModel
@@ -159,10 +159,9 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         }
     }
 
-    private val actionEventObserver =
-            EventObserver<Pair<APAction, String>> {
-                apActionsManager?.runAction(action = it.first, campaignId = it.second)
-            }
+    private val actionEventObserver = EventObserver<APAction> {
+        apActionsManager?.runAction(action = it)
+    }
 
     private val magnetizeEntryPointEventObserver =
         EventObserver<String> {

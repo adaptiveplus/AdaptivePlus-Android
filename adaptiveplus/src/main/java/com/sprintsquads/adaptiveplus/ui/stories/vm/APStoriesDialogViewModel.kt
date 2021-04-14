@@ -29,11 +29,15 @@ internal class APStoriesDialogViewModel(
         _isIdleStateLiveData.value = isIdle
     }
 
-    override fun runActions(actions: List<APAction>, campaignId: String) {
-        apViewModelDelegate.runActions(actions, campaignId)
+    override fun runActions(actions: List<APAction>) {
+        apViewModelDelegate.runActions(actions)
     }
 
     override fun isAPStoriesPausedLiveData(): LiveData<Boolean> {
         return _isStoriesPausedLiveData
+    }
+
+    override fun getAPViewId(): String {
+        return apViewModelDelegate.getAPViewId()
     }
 }
