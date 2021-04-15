@@ -9,6 +9,7 @@
     tools:background="@color/apBlack">
 
     <ImageView
+        android:id="@+id/apArrowUpImageView"
         android:layout_width="24px"
         android:layout_height="16px"
         android:layout_marginBottom="4px"

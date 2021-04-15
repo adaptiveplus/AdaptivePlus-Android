@@ -1,10 +1,14 @@
 package com.sprintsquads.adaptiveplus.ui.stories.actionarea
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.LinearLayout
+import androidx.core.animation.addListener
 import com.sprintsquads.adaptiveplus.R
 import com.sprintsquads.adaptiveplus.data.models.APSnap
 import com.sprintsquads.adaptiveplus.ext.applyAPFont
@@ -53,5 +57,14 @@ internal class APActionAreaButtonView : LinearLayout {
                 apButtonTextView.applyAPFont(apFont = it)
             }
         }
+
+        val animY1 = ObjectAnimator.ofFloat(apArrowUpImageView, "translationY", -2f, 2f)
+        val animY2 = ObjectAnimator.ofFloat(apArrowUpImageView, "translationY", 2f, -2f)
+        val animSet = AnimatorSet()
+        animSet.playSequentially(animY1, animY2)
+        animSet.duration = 500
+        animSet.interpolator = AccelerateDecelerateInterpolator()
+        animSet.addListener(onEnd = { animSet.start() })
+        animSet.start()
     }
 }
