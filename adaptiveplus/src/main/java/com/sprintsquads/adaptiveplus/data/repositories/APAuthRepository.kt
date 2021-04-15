@@ -42,9 +42,9 @@ internal class APAuthRepository(
     }
 
     private fun applyAPConfigs(configs: APConfigsResponseBody) {
-        APAnalytics.updateConfig(configs.eventsSubmitPeriod, configs.eventsSubmitCount)
-        configs.requestTimeout?.let { REQUEST_TIMEOUT = it }
-        configs.imageRequestTimeout?.let { GLIDE_TIMEOUT = it.toInt() }
+        APAnalytics.updateConfig(configs.eventsSubmitPeriod?.let { (it * 1000).toLong() }, configs.eventsSubmitCount)
+        configs.requestTimeout?.let { REQUEST_TIMEOUT = it.toLong() }
+        configs.imageRequestTimeout?.let { GLIDE_TIMEOUT = (it * 1000).toInt() }
         configs.isEventTrackingDisabled?.let { userRepository.setIsEventTrackingDisabled(it) }
     }
 

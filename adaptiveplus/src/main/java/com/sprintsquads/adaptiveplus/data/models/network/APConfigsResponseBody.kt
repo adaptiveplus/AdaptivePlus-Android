@@ -6,15 +6,15 @@ import java.io.Serializable
 
 internal data class APConfigsResponseBody(
     @SerializedName("cacheTTL")
-    val cacheTTL: Long?,
+    val cacheTTL: Double?,
     @SerializedName("eventsSubmitCount")
     val eventsSubmitCount: Int?,
     @SerializedName("eventsSubmitPeriod")
-    val eventsSubmitPeriod: Long?,
+    val eventsSubmitPeriod: Double?,
     @SerializedName("requestTimeout")
-    val requestTimeout: Long?,
+    val requestTimeout: Double?,
     @SerializedName("imageRequestTimeout")
-    val imageRequestTimeout: Long?,
+    val imageRequestTimeout: Double?,
     @SerializedName("limitEventTracking")
     val isEventTrackingDisabled: Boolean?
 ) : Serializable
