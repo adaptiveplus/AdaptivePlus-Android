@@ -27,7 +27,7 @@ internal class APAuthRepository(
         callback: RequestResultCallback<APConfigsResponseBody>
     ) {
         val request = Request.Builder()
-            .url("$SDK_API_URL/channel-configs")
+            .url("$SDK_API_URL/configs")
             .build()
 
         executeRequest<APConfigsResponseBody>(request,
