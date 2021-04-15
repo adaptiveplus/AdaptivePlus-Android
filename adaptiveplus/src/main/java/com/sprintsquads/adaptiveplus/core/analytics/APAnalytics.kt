@@ -92,8 +92,8 @@ private constructor(
         val events = eventBuffer.map { event ->
             event.params.toMutableMap().apply {
                 put("eventName", event.name)
-                put("campaignId", event.campaignId)
-                put("apViewId", event.apViewId)
+                event.apViewId?.let { put("apViewId", it) }
+                event.campaignId?.let { put("campaignId", it) }
                 event.createdAt?.let { put("createdAt", it) }
             }
         }

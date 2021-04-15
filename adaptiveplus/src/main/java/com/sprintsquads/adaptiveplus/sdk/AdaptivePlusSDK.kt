@@ -3,6 +3,7 @@ package com.sprintsquads.adaptiveplus.sdk
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sprintsquads.adaptiveplus.BuildConfig
@@ -12,6 +13,7 @@ import com.sprintsquads.adaptiveplus.core.providers.provideAPAuthRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPClientCredentialsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPUserRepository
 import com.sprintsquads.adaptiveplus.data.*
+import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.APError
 import com.sprintsquads.adaptiveplus.data.models.APUser
 import com.sprintsquads.adaptiveplus.data.models.network.APConfigsResponseBody
@@ -36,6 +38,7 @@ class AdaptivePlusSDK {
     private var userRepository: APUserRepository? = null
 
 
+    @MainThread
     fun start(
         context: Context,
         userId: String? = null,
@@ -97,6 +100,11 @@ class AdaptivePlusSDK {
         }
 
         isStartedLiveData.value = true
+
+        APAnalytics.logEvent(
+            APAnalyticsEvent(name = "launch-sdk")
+        )
+
         authorize(context, true)
     }
 
@@ -123,6 +131,7 @@ class AdaptivePlusSDK {
         )
     }
 
+    @MainThread
     fun stop() {
         isStartedLiveData.value = false
         tokenRequestState = RequestState.NONE

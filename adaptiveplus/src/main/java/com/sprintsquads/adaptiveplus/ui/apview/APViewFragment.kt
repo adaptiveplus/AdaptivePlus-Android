@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.sprintsquads.adaptiveplus.R
+import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
 import com.sprintsquads.adaptiveplus.core.managers.APActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideAPActionsManager
 import com.sprintsquads.adaptiveplus.core.providers.provideNetworkServiceManager
+import com.sprintsquads.adaptiveplus.data.models.APAnalyticsEvent
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
@@ -63,6 +65,13 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         if (!::apViewId.isInitialized) {
             apViewId = arguments?.getString(EXTRA_AP_VIEW_ID) ?: ""
         }
+
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "launch-apView",
+                apViewId = apViewId
+            )
+        )
 
         activity?.let {
             val viewModelFactory = APViewModelFactory(it)

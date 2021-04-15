@@ -5,8 +5,8 @@ import java.io.Serializable
 
 internal data class APAnalyticsEvent(
     val name: String,
-    val campaignId: String,
-    val apViewId: String,
-    val params: Map<String, Any>,
+    val apViewId: String? = null,
+    val campaignId: String? = null,
+    val params: Map<String, Any> = mapOf(),
     var createdAt: String? = null
 ) : Serializable
