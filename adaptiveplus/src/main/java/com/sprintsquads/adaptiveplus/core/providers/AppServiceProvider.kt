@@ -19,11 +19,8 @@ internal fun provideAPSharedPreferences(
     return APSharedPreferences(context)
 }
 
-internal fun provideNetworkServiceManager(
-    context: Context?
-) : NetworkServiceManager {
-    val preferences = context?.let { provideAPSharedPreferences(it) }
-    return NetworkServiceManagerImpl.newInstance(preferences)
+internal fun provideNetworkServiceManager() : NetworkServiceManager {
+    return NetworkServiceManagerImpl()
 }
 
 internal fun provideAPActionsManager(

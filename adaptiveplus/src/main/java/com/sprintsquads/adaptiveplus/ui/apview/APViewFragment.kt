@@ -130,7 +130,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     private fun setupObservers() {
         view?.let {
-            val networkManager = provideNetworkServiceManager(context)
+            val networkManager = provideNetworkServiceManager()
             networkManager.getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
 
             AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
@@ -228,7 +228,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             viewModel.loadAPViewDataModelFromCache(apViewId)
         }
 
-        val networkManager = provideNetworkServiceManager(context)
+        val networkManager = provideNetworkServiceManager()
         val tokenLiveData = networkManager.getTokenLiveData()
 
         if (tokenLiveData.value == null) {

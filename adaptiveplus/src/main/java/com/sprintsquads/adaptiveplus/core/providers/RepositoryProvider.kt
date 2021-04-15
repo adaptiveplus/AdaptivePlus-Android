@@ -12,7 +12,7 @@ internal fun provideAPAnalyticsRepository(
     context: Context?
 ) : APAnalyticsRepository {
     return APAnalyticsRepository(
-        provideNetworkServiceManager(context),
+        provideNetworkServiceManager(),
         provideAPClientCredentialsManager(),
         provideAPUserRepository(context)
     )
@@ -22,7 +22,7 @@ internal fun provideAPAuthRepository(
     context: Context?
 ) : APAuthRepository {
     return APAuthRepository(
-        provideNetworkServiceManager(context),
+        provideNetworkServiceManager(),
         provideAPClientCredentialsManager(),
         provideAPUserRepository(context)
     )
@@ -40,7 +40,7 @@ internal fun provideAPViewRepository(
     context: Context?
 ) : APViewRepository {
     return APViewRepository(
-        provideNetworkServiceManager(context),
+        provideNetworkServiceManager(),
         provideAPClientCredentialsManager(),
         provideAPUserRepository(context),
         getUnprocessedAPViewGson()

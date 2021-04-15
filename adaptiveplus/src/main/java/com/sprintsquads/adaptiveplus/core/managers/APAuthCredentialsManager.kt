@@ -10,8 +10,8 @@ import com.sprintsquads.adaptiveplus.sdk.exceptions.APInitializationException
 internal class APAuthCredentialsManager {
 
     companion object {
-        private const val clientId: String = "43f4a067-aa4b-4e19-888f-05237cf8a865"
-        private const val clientSecret: String = "BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU"
+        private const val clientId: String = "4a99f85d-cfec-4a73-a487-ec3c116eb5d2"
+        private const val clientSecret: String = "2b3ea139d809b9ea47e521ad3336c4dc"
         private const val grantType: String = "channel_credentials"
         private var channelSecret: String? = null
         private var testChannelSecret: String? = null

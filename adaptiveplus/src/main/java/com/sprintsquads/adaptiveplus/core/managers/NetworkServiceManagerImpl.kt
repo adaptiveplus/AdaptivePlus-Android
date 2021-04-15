@@ -1,6 +1,7 @@
 package com.sprintsquads.adaptiveplus.core.managers
 
 import android.os.Build
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sprintsquads.adaptiveplus.core.factories.Tls12SocketFactory
@@ -20,54 +21,33 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 
-internal class NetworkServiceManagerImpl
-private constructor(
-    private val preferences: APSharedPreferences? = null
-): NetworkServiceManager {
+internal class NetworkServiceManagerImpl : NetworkServiceManager {
 
     companion object {
+        private var token: String? = null
         private val tokenLiveData = MutableLiveData<String?>()
-
-
-        fun newInstance(
-            preferences: APSharedPreferences? = null
-        ): NetworkServiceManagerImpl {
-            return NetworkServiceManagerImpl(preferences)
-        }
     }
 
 
     private var okHttpClient: OkHttpClient? = null
 
 
-    private fun tokenInstance(): String? {
-        return if (tokenLiveData.value == null) {
-            val token = preferences?.getString(APSharedPreferences.AUTH_TOKEN)
-
-            if (token != null) {
-                tokenLiveData.postValue(token)
-            }
-
-            token
-        } else {
-            tokenLiveData.value
-        }
-    }
-
     override fun updateToken(token: String?) {
+        NetworkServiceManagerImpl.token = token
+
         if (tokenLiveData.value != token) {
             tokenLiveData.postValue(token)
         }
-
-        if (token == null) {
-            preferences?.remove(APSharedPreferences.AUTH_TOKEN)
-        }
-        else {
-            preferences?.saveString(APSharedPreferences.AUTH_TOKEN, token)
-        }
     }
 
-    override fun getTokenLiveData(): LiveData<String?> = tokenLiveData
+    @MainThread
+    override fun getTokenLiveData(): LiveData<String?> {
+        if (tokenLiveData.value != token) {
+            tokenLiveData.value = token
+        }
+
+        return tokenLiveData
+    }
 
     override fun getOkHttpClient(): OkHttpClient {
         if (okHttpClient == null) {
@@ -79,7 +59,7 @@ private constructor(
     private fun provideOkHttpClient(): OkHttpClient {
         val builder = provideOkHttpClientBuilder()
         builder.addNetworkInterceptor { chain ->
-            tokenInstance()?.let { token ->
+            token?.let { token ->
                 val originalRequest = chain.request()
 
                 val authValue = "Bearer $token"

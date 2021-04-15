@@ -1,5 +1,6 @@
 package com.sprintsquads.adaptiveplus.core.managers
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import okhttp3.OkHttpClient
 
@@ -17,6 +18,7 @@ internal interface NetworkServiceManager {
      *
      * @return token live data
      */
+    @MainThread
     fun getTokenLiveData(): LiveData<String?>
 
     /**
