@@ -134,21 +134,16 @@ internal fun drawAPSnapActionArea(
 
         when (actionArea) {
             is APSnap.ButtonActionArea -> {
-                actionAreaView.apply {
-                    doOnPreDraw {
-                        pivotX = width.toFloat() / 2
-                        pivotY = height.toFloat()
-                    }
-                }
-
                 constraintSet.connect(
                     actionAreaView.id, ConstraintSet.START, layout.id, ConstraintSet.START)
                 constraintSet.connect(
                     actionAreaView.id, ConstraintSet.END, layout.id, ConstraintSet.END)
                 constraintSet.connect(
                     actionAreaView.id, ConstraintSet.BOTTOM,
-                    layout.id, ConstraintSet.BOTTOM,
-                    (2 * scaleFactor).toInt())
+                    layout.id, ConstraintSet.BOTTOM)
+                constraintSet.connect(
+                    actionAreaView.id, ConstraintSet.TOP,
+                    layout.id, ConstraintSet.TOP)
 
                 constraintSet.setScaleX(actionAreaView.id, scaleFactor)
                 constraintSet.setScaleY(actionAreaView.id, scaleFactor)

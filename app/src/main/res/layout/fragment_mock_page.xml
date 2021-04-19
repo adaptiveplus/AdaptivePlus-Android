@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
 
         <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
             android:id="@+id/mock1APView"
@@ -41,6 +42,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:apViewId="mock4"
+            />
+
+        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+            android:id="@+id/mock5APView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:apViewId="mock5"
             />
 
     </LinearLayout>
