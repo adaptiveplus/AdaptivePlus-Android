@@ -9,8 +9,6 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.Transformation
 import android.widget.FrameLayout
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.ext.hide
-import com.sprintsquads.adaptiveplus.ext.show
 import kotlinx.android.synthetic.main.ap_stoppable_progress_bar.view.*
 
 
@@ -50,68 +48,49 @@ internal class StoppableProgressBar : FrameLayout {
     }
 
     fun setMax() {
-        finishProgress(true)
-    }
-
-    fun setMin() {
-        finishProgress(false)
-    }
-
-    fun setMinWithoutCallback() {
-        apMaxProgressView?.setBackgroundResource(R.color.apWhite50)
-        apMaxProgressView?.show()
-
-        animation?.setAnimationListener(null)
-        animation?.cancel()
-    }
-
-    fun setMaxWithoutCallback() {
-        apMaxProgressView?.setBackgroundResource(R.color.apWhite)
-        apMaxProgressView?.show()
-
-        animation?.setAnimationListener(null)
-        animation?.cancel()
-    }
-
-    private fun finishProgress(isMax: Boolean) {
-        if (isMax)  {
-            apMaxProgressView?.setBackgroundResource(R.color.apWhite)
-            apMaxProgressView.show()
-        }
-        else {
-            apMaxProgressView?.hide()
-        }
-
-        animation?.setAnimationListener(null)
-        animation?.resume()
-        animation?.cancel()
-
+        setMaxWithoutCallback()
         callback?.onFinishProgress()
     }
 
+    fun setMin() {
+        setMinWithoutCallback()
+        callback?.onFinishProgress()
+    }
+
+    fun setMinWithoutCallback() {
+        clearProgressAnimation()
+        apFrontProgressView.visibility = View.INVISIBLE
+    }
+
+    fun setMaxWithoutCallback() {
+        clearProgressAnimation()
+        apFrontProgressView.visibility = View.VISIBLE
+    }
+
     fun startProgress() {
-        apMaxProgressView?.hide()
+        setMinWithoutCallback()
 
         animation = StoppableScaleAnimation(
             0f, 1f, 1f, 1f,
             Animation.ABSOLUTE, 0f,
             Animation.RELATIVE_TO_SELF, 0f)
-        animation!!.duration = duration
-        animation!!.interpolator = LinearInterpolator()
-        animation!!.setAnimationListener(object: Animation.AnimationListener {
+        animation?.duration = duration
+        animation?.interpolator = LinearInterpolator()
+        animation?.setAnimationListener(
+            object: Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    apFrontProgressView.visibility = View.VISIBLE
+                    callback?.onStartProgress()
+                }
 
-            override fun onAnimationStart(animation: Animation) {
-                apFrontProgressView.show()
-                callback?.onStartProgress()
+                override fun onAnimationRepeat(animation: Animation) {}
+
+                override fun onAnimationEnd(animation: Animation) {
+                    callback?.onFinishProgress()
+                }
             }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-
-            override fun onAnimationEnd(animation: Animation) {
-                callback?.onFinishProgress()
-            }
-        })
-        animation!!.fillAfter = true
+        )
+        animation?.fillAfter = true
 
         apFrontProgressView?.startAnimation(animation)
     }
@@ -128,7 +107,8 @@ internal class StoppableProgressBar : FrameLayout {
         startProgress()
     }
 
-    fun clear() {
+    private fun clearProgressAnimation() {
+        apFrontProgressView?.clearAnimation()
         animation?.setAnimationListener(null)
         animation?.cancel()
         animation = null
@@ -164,7 +144,7 @@ internal class StoppableProgressBar : FrameLayout {
 
         fun pause() {
             if (mPaused) return
-            mElapsedAtPause = 0
+            mElapsedAtPause = 0L
             mPaused = true
         }
 

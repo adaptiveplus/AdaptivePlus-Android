@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="ap_stories_close_btn_size">40dp</dimen>
+    <dimen name="ap_stories_progress_bar_height">2dp</dimen>
+    <dimen name="ap_stories_progress_bar_radius">1dp</dimen>
+    <dimen name="ap_stories_progress_bar_space_width">4dp</dimen>
 </resources>

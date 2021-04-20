@@ -4,40 +4,38 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import com.sprintsquads.adaptiveplus.R
 
 
 internal class APStoriesProgressView : LinearLayout {
 
-    companion object {
-        private val PROGRESS_BAR_LAYOUT_PARAM = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
-        private val SPACE_LAYOUT_PARAM = LayoutParams(5, LayoutParams.WRAP_CONTENT)
+    interface LifecycleListener {
+        fun onNext()
+        fun onPrev()
+        fun onComplete()
     }
+
 
     private var progressBars = mutableListOf<StoppableProgressBar>()
 
     private var storiesCount = 0
 
     private var current = -1
-    private var storiesListener: StoriesListener? = null
-    var isComplete: Boolean = false
+    private var lifecycleListener: LifecycleListener? = null
 
+    private var isComplete: Boolean = false
     private var isSkipStart: Boolean = false
     private var isReverseStart: Boolean = false
 
-    interface StoriesListener {
-        fun onNext()
-        fun onPrev()
-        fun onComplete()
-    }
 
     constructor(context: Context) : super(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr) {
         init()
     }
 
@@ -47,8 +45,9 @@ internal class APStoriesProgressView : LinearLayout {
     }
 
     private fun bindViews() {
-        progressBars.clear()
+        reset()
         removeAllViews()
+        progressBars.clear()
 
         for (i in 0 until storiesCount) {
             val p = createProgressBar()
@@ -63,12 +62,15 @@ internal class APStoriesProgressView : LinearLayout {
 
     private fun createProgressBar() =
         StoppableProgressBar(context).apply {
-            layoutParams = PROGRESS_BAR_LAYOUT_PARAM
+            val height = resources.getDimension(R.dimen.ap_stories_progress_bar_height).toInt()
+            layoutParams = LayoutParams(0, height, 1f)
         }
 
     private fun createSpace() =
         View(context).apply {
-            layoutParams = SPACE_LAYOUT_PARAM
+            val height = resources.getDimension(R.dimen.ap_stories_progress_bar_height).toInt()
+            val width = resources.getDimension(R.dimen.ap_stories_progress_bar_space_width).toInt()
+            layoutParams = LayoutParams(width, height)
         }
 
     fun setStoriesCount(storiesCount: Int) {
@@ -76,85 +78,83 @@ internal class APStoriesProgressView : LinearLayout {
         bindViews()
     }
 
-    fun setStoriesListener(storiesListener: StoriesListener) {
-        this.storiesListener = storiesListener
+    fun setStoriesListener(listener: LifecycleListener) {
+        this.lifecycleListener = listener
     }
 
     fun skip() {
         if (isSkipStart || isReverseStart) return
         if (isComplete) return
-        if (current < 0) return
 
-        val p = progressBars[current]
-        isSkipStart = true
-        p.setMax()
+        progressBars.getOrNull(current)?.let {
+            isSkipStart = true
+            it.setMax()
+        }
     }
 
     fun reverse() {
         if (isSkipStart || isReverseStart) return
         if (isComplete) return
-        if (current < 0) return
 
-        val p = progressBars[current]
-        isReverseStart = true
-        p.setMin()
+        progressBars.getOrNull(current)?.let {
+            isReverseStart = true
+            it.setMin()
+        }
     }
 
-    fun setStoryDuration(duration: Long) {
+    fun setSnapDuration(duration: Long) {
         for (i in 0 until progressBars.size) {
             progressBars[i].setDuration(duration)
-            progressBars[i].setCallback(buildCallback(i))
+            progressBars[i].setCallback(buildStoppableProgressBarCallback(i))
         }
     }
 
-    fun setStoryDurations(durations: List<Long>) {
-        if (durations.size != progressBars.size) {
-            setStoryDuration(durations.getOrNull(0) ?: 3000)
+    fun setSnapsDurations(durations: List<Long>) {
+        if (durations.size != storiesCount) {
+            setStoriesCount(durations.size)
         }
-        else {
-            for (i in 0 until progressBars.size) {
-                progressBars[i].setDuration(durations[i])
-                progressBars[i].setCallback(buildCallback(i))
+
+        for (i in 0 until progressBars.size) {
+            progressBars[i].setDuration(durations.getOrNull(i) ?: 3000)
+            progressBars[i].setCallback(buildStoppableProgressBarCallback(i))
+        }
+    }
+
+    private fun buildStoppableProgressBarCallback(index: Int) =
+        object : StoppableProgressBar.Callback {
+
+            override fun onStartProgress() {
+                current = index
             }
-        }
-    }
 
-    private fun buildCallback(index: Int) = object : StoppableProgressBar.Callback {
+            override fun onFinishProgress() {
+                if (isReverseStart) {
+                    isReverseStart = false
 
-        override fun onStartProgress() {
-            current = index
-        }
+                    if (current - 1 >= 0) {
+                        val p = progressBars[current - 1]
+                        p.setMinWithoutCallback()
+                        progressBars[--current].startProgress()
+                    } else {
+                        progressBars[current].startProgress()
+                    }
 
-        override fun onFinishProgress() {
-            if (isReverseStart) {
-                storiesListener?.onPrev()
-
-                if (0 <= (current - 1)) {
-                    val p = progressBars[current - 1]
-                    p.setMinWithoutCallback()
-                    progressBars[--current].startProgress()
+                    lifecycleListener?.onPrev()
                 } else {
-                    progressBars[current].startProgress()
+                    isSkipStart = false
+
+                    val next = current + 1
+
+                    if (next < progressBars.size) {
+                        progressBars[next].startProgress()
+                        lifecycleListener?.onNext()
+                    } else {
+                        isComplete = true
+                        lifecycleListener?.onComplete()
+                    }
                 }
-
-                isReverseStart = false
-
-                return
             }
-
-            val next = current + 1
-
-            if (next <= (progressBars.size - 1)) {
-                storiesListener?.onNext()
-                progressBars[next].startProgress()
-            } else {
-                isComplete = true
-                storiesListener?.onComplete()
-            }
-
-            isSkipStart = false
         }
-    }
 
     private fun reset() {
         destroy()
@@ -188,18 +188,16 @@ internal class APStoriesProgressView : LinearLayout {
 
     fun destroy() {
         for (p in progressBars) {
-            p.clear()
+            p.setMinWithoutCallback()
         }
     }
 
     fun pause() {
-        if (current < 0) return
-        progressBars[current].pauseProgress()
+        progressBars.getOrNull(current)?.pauseProgress()
     }
 
     fun resume() {
-        if (current < 0) return
-        progressBars[current].resumeProgress()
+        progressBars.getOrNull(current)?.resumeProgress()
     }
 
     fun hasStarted(): Boolean {

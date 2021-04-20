@@ -4,6 +4,6 @@
     <color name="apWhite">#FFFFFF</color>
     <color name="apDarkIndigo">#071222</color>
     <color name="apBlack">#000000</color>
-    <color name="apWhite50">#7FFFFFFF</color>
+    <color name="apWhite50">#80FFFFFF</color>
     <color name="apSnapLoadingBg">#343B4C</color>
 </resources>
