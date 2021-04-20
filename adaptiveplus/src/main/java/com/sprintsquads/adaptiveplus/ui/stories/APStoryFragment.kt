@@ -93,7 +93,6 @@ internal class APStoryFragment :
         apSnapsViewPager.adapter = snapsAdapter
         apSnapsViewPager.setTransitionDuration(0)
 
-        apStoriesProgressView.setStoriesCount(story.snaps.size)
         apStoriesProgressView.setSnapsDurations(story.snaps.map { (it.showTime * 1000).toLong() })
         apStoriesProgressView.setStoriesListener(this)
 
@@ -211,24 +210,24 @@ internal class APStoryFragment :
         }
     }
 
-    override fun onComplete() {
-        resetLastSnap()
+    override fun onComplete(elapsedTime: Long) {
+        resetLastSnap(elapsedTime)
         storiesProgressController.moveToNextStory(story.id)
         updateStoryProgressState()
     }
 
-    override fun onPrev() {
-        showPrev()
+    override fun onPrev(elapsedTime: Long) {
+        showPrev(elapsedTime)
     }
 
-    override fun onNext() {
-        showNext()
+    override fun onNext(elapsedTime: Long) {
+        showNext(elapsedTime)
     }
 
-    private fun showNext() {
+    private fun showNext(elapsedTime: Long) {
         if (apSnapsViewPager == null) return
 
-        resetLastSnap()
+        resetLastSnap(elapsedTime)
 
         if (apSnapsViewPager.currentItem < story.snaps.size - 1) {
             apSnapsViewPager.currentItem++
@@ -237,10 +236,10 @@ internal class APStoryFragment :
         updateStoryProgressState()
     }
 
-    private fun showPrev() {
+    private fun showPrev(elapsedTime: Long) {
         if (apSnapsViewPager == null) return
 
-        resetLastSnap()
+        resetLastSnap(elapsedTime)
 
         if (apSnapsViewPager.currentItem == 0) {
             storiesProgressController.moveToPrevStory(story.id)
@@ -294,7 +293,7 @@ internal class APStoryFragment :
         apStoriesProgressView?.reverse()
     }
 
-    private fun resetLastSnap() {
+    private fun resetLastSnap(elapsedTime: Long) {
         val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
         viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESET)
 
@@ -305,7 +304,7 @@ internal class APStoryFragment :
                 apViewId = storiesDialogViewModelDelegate.getAPViewId(),
                 params = mapOf(
                     "snapId" to snapId,
-                    "watchedTime" to 0L
+                    "watchedTime" to elapsedTime
                 )
             )
         )

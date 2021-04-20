@@ -10,9 +10,9 @@ import com.sprintsquads.adaptiveplus.R
 internal class APStoriesProgressView : LinearLayout {
 
     interface LifecycleListener {
-        fun onNext()
-        fun onPrev()
-        fun onComplete()
+        fun onNext(elapsedTime: Long)
+        fun onPrev(elapsedTime: Long)
+        fun onComplete(elapsedTime: Long)
     }
 
 
@@ -73,11 +73,6 @@ internal class APStoriesProgressView : LinearLayout {
             layoutParams = LayoutParams(width, height)
         }
 
-    fun setStoriesCount(storiesCount: Int) {
-        this.storiesCount = storiesCount
-        bindViews()
-    }
-
     fun setStoriesListener(listener: LifecycleListener) {
         this.lifecycleListener = listener
     }
@@ -102,16 +97,10 @@ internal class APStoriesProgressView : LinearLayout {
         }
     }
 
-    fun setSnapDuration(duration: Long) {
-        for (i in 0 until progressBars.size) {
-            progressBars[i].setDuration(duration)
-            progressBars[i].setCallback(buildStoppableProgressBarCallback(i))
-        }
-    }
-
     fun setSnapsDurations(durations: List<Long>) {
         if (durations.size != storiesCount) {
-            setStoriesCount(durations.size)
+            storiesCount = durations.size
+            bindViews()
         }
 
         for (i in 0 until progressBars.size) {
@@ -127,7 +116,7 @@ internal class APStoriesProgressView : LinearLayout {
                 current = index
             }
 
-            override fun onFinishProgress() {
+            override fun onFinishProgress(elapsedTime: Long) {
                 if (isReverseStart) {
                     isReverseStart = false
 
@@ -139,7 +128,7 @@ internal class APStoriesProgressView : LinearLayout {
                         progressBars[current].startProgress()
                     }
 
-                    lifecycleListener?.onPrev()
+                    lifecycleListener?.onPrev(elapsedTime)
                 } else {
                     isSkipStart = false
 
@@ -147,10 +136,10 @@ internal class APStoriesProgressView : LinearLayout {
 
                     if (next < progressBars.size) {
                         progressBars[next].startProgress()
-                        lifecycleListener?.onNext()
+                        lifecycleListener?.onNext(elapsedTime)
                     } else {
                         isComplete = true
-                        lifecycleListener?.onComplete()
+                        lifecycleListener?.onComplete(elapsedTime)
                     }
                 }
             }
@@ -172,19 +161,17 @@ internal class APStoriesProgressView : LinearLayout {
 
     fun startStories() {
         reset()
-        progressBars[0].startProgress()
+        progressBars.getOrNull(0)?.startProgress()
     }
 
     fun startStories(from: Int) {
         reset()
 
         for (i in 0 until from) {
-            progressBars[i].setMaxWithoutCallback()
+            progressBars.getOrNull(i)?.setMaxWithoutCallback()
         }
-        progressBars[from].startProgress()
+        progressBars.getOrNull(from)?.startProgress()
     }
-
-    fun getCurrentIndex() = current
 
     fun destroy() {
         for (p in progressBars) {

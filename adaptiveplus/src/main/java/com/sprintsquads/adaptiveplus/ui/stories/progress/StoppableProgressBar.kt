@@ -26,7 +26,7 @@ internal class StoppableProgressBar : FrameLayout {
 
     interface Callback {
         fun onStartProgress()
-        fun onFinishProgress()
+        fun onFinishProgress(elapsedTime: Long)
     }
 
 
@@ -48,13 +48,15 @@ internal class StoppableProgressBar : FrameLayout {
     }
 
     fun setMax() {
+        val elapsedTime = animation?.getElapsedTime() ?: 0L
         setMaxWithoutCallback()
-        callback?.onFinishProgress()
+        callback?.onFinishProgress(elapsedTime)
     }
 
     fun setMin() {
+        val elapsedTime = animation?.getElapsedTime() ?: 0L
         setMinWithoutCallback()
-        callback?.onFinishProgress()
+        callback?.onFinishProgress(elapsedTime)
     }
 
     fun setMinWithoutCallback() {
@@ -86,7 +88,8 @@ internal class StoppableProgressBar : FrameLayout {
                 override fun onAnimationRepeat(animation: Animation) {}
 
                 override fun onAnimationEnd(animation: Animation) {
-                    callback?.onFinishProgress()
+                    val elapsedTime = (animation as? StoppableScaleAnimation)?.getElapsedTime() ?: 0L
+                    callback?.onFinishProgress(elapsedTime)
                 }
             }
         )
@@ -125,14 +128,17 @@ internal class StoppableProgressBar : FrameLayout {
         pivotYType, pivotYValue
     ) {
 
+        private var mElapsedTime = 0L
         private var mElapsedAtPause = 0L
         private var mPaused = false
 
         override fun getTransformation(
             currentTime: Long, outTransformation: Transformation, scale: Float
         ) : Boolean {
+            mElapsedTime = currentTime - startTime
+
             if (mPaused && mElapsedAtPause == 0L) {
-                mElapsedAtPause = currentTime - startTime
+                mElapsedAtPause = mElapsedTime
             }
 
             if (mPaused) {
@@ -150,6 +156,10 @@ internal class StoppableProgressBar : FrameLayout {
 
         fun resume() {
             mPaused = false
+        }
+
+        fun getElapsedTime() : Long {
+            return mElapsedTime
         }
     }
 }
