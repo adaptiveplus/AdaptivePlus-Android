@@ -3,7 +3,6 @@ package com.sprintsquads.adaptiveplus.data.repositories
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APUser
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 
 
 internal class APUserRepository(
@@ -14,7 +13,7 @@ internal class APUserRepository(
         private var apUserId: String? = null
         private var externalUserId: String? = null
         private var userDevice: APUser.Device? = null
-        private var userProperties: APUserProperties? = null
+        private var userProperties: Map<String, String>? = null
         private var userLocation: APLocation? = null
         private var isEventTrackingDisabled: Boolean? = null
     }
@@ -33,7 +32,7 @@ internal class APUserRepository(
         externalUserId = userId
     }
 
-    fun setUserProperties(properties: APUserProperties?) {
+    fun setUserProperties(properties: Map<String, String>?) {
         userProperties = properties
     }
 

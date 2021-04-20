@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.data.Environment
@@ -19,7 +18,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ENV_NAME = "extra_env_name"
         const val EXTRA_USER_ID = "extra_user_id"
-        const val EXTRA_USER_PROPERTIES = "extra_user_properties"
+        const val EXTRA_GENDER = "extra_gender"
+        const val EXTRA_AGE = "extra_age"
         const val EXTRA_LOCALE = "extra_locale"
         const val EXTRA_CUSTOM_IP = "extra_custom_ip"
         const val EXTRA_LOCATION = "extra_location"
@@ -48,7 +48,17 @@ class MainActivity : AppCompatActivity() {
 
         val locale = intent?.getStringExtra(EXTRA_LOCALE) ?: "ru"
         val userId = intent?.getStringExtra(EXTRA_USER_ID)
-        val userProperties = intent?.getSerializableExtra(EXTRA_USER_PROPERTIES) as? APUserProperties
+
+        val userProperties = mutableMapOf<String, String>()
+        intent?.getStringExtra(EXTRA_GENDER)?.let {
+            userProperties.put("gender", it)
+        }
+        if (intent?.hasExtra(EXTRA_AGE) == true) {
+            intent?.getIntExtra(EXTRA_AGE, 0)?.let {
+                userProperties.put("age", it.toString())
+            }
+        }
+
         val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? APLocation
 
         AdaptivePlusSDK().apply {

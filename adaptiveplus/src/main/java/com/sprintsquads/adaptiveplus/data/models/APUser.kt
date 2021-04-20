@@ -2,7 +2,6 @@ package com.sprintsquads.adaptiveplus.data.models
 
 import com.google.gson.annotations.SerializedName
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 import java.io.Serializable
 
 
@@ -14,7 +13,7 @@ internal data class APUser(
     @SerializedName("userDevice")
     val device: Device?,
     @SerializedName("userProperties")
-    val properties: APUserProperties?,
+    val properties: Map<String, String>?,
     @SerializedName("location")
     val location: APLocation?
 ) : Serializable {

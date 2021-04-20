@@ -22,7 +22,6 @@ import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
 import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.data.APUserProperties
 import com.sprintsquads.adaptiveplus.sdk.exceptions.APInitializationException
 import com.sprintsquads.adaptiveplus.utils.*
 import com.sprintsquads.adaptiveplus.utils.getAppVersion
@@ -42,7 +41,7 @@ class AdaptivePlusSDK {
     fun start(
         context: Context,
         userId: String? = null,
-        userProperties: APUserProperties? = null,
+        userProperties: Map<String, String>? = null,
         location: APLocation? = null,
         locale: String? = null,
         isDebuggable: Boolean = false
@@ -188,7 +187,7 @@ class AdaptivePlusSDK {
 
     internal fun isStartedLiveData(): LiveData<Boolean> = isStartedLiveData
 
-    fun updateUserProperties(userProperties: APUserProperties?) {
+    fun updateUserProperties(userProperties: Map<String, String>?) {
         userRepositoryInstance(null)?.setUserProperties(userProperties)
     }
 
