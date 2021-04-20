@@ -114,4 +114,11 @@ class AdaptivePlusView : FrameLayout {
         this.apCustomActionListener = listener
         apViewFragment?.setAPCustomActionListener(listener)
     }
+
+    /**
+     * Method to scroll to the start of entry point list
+     */
+    fun scrollToStart() {
+        apViewFragment?.scrollToStart()
+    }
 }

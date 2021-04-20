@@ -12,6 +12,14 @@
         android:orientation="vertical"
         android:paddingBottom="32dp">
 
+        <Button
+            android:id="@+id/scrollToStartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Scrool To Start"
+            />
+
         <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
             android:id="@+id/mock1APView"
             android:layout_width="match_parent"

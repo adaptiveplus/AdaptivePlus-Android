@@ -259,6 +259,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         refresh()
     }
 
+    fun scrollToStart() {
+        magnetizeToPosition(0)
+    }
+
     private fun drawAPView(apViewDataModel: APViewDataModel) {
         if (context == null || view == null) return
 

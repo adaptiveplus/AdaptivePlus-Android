@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -79,32 +82,54 @@ class ApiFragment : Fragment() {
                 apViewsLayout?.removeAllViews()
 
                 for (apViewModel in configs.apViews) {
-                    val apViewNameTxtView = TextView(ctx).apply {
-                        val paddingSz = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
+                    val rewindImage = ImageView(ctx).apply {
+                        val paddingSz = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics
+                        ).toInt()
                         setPadding(paddingSz, paddingSz, paddingSz, paddingSz)
+
+                        setImageResource(R.drawable.ic_rewind)
+                    }
+                    val apViewNameTxtView = TextView(ctx).apply {
+                        val paddingSz = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics
+                        ).toInt()
+                        setPadding(0, paddingSz, paddingSz, paddingSz)
 
                         text = "APView: ${apViewModel.id}"
                         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                         setTextColor(ContextCompat.getColor(context, R.color.colorOnSecondary))
                         setTextIsSelectable(true)
                     }
-                    apViewsLayout?.addView(apViewNameTxtView)
+                    val apViewHeader = LinearLayout(ctx).apply {
+                        orientation = LinearLayout.HORIZONTAL
+                        gravity = Gravity.CENTER_VERTICAL
 
-                    when {
-                        else -> {
-                            val apView = AdaptivePlusView(ctx).apply {
-                                id = ViewCompat.generateViewId()
-                                setAdaptivePlusViewId(apViewModel.id)
-                                setAPCustomActionListener(object:
-                                    APCustomActionListener {
-                                    override fun onRun(params: HashMap<String, Any>) {
-                                        val name = params["name"]?.toString()
-                                        context?.toast("Custom action: $name")
-                                    }
-                                })
+                        val icSize = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 40f, resources.displayMetrics
+                        ).toInt()
+                        addView(rewindImage, LinearLayout.LayoutParams(icSize, icSize))
+                        val txtViewLayoutParams = LinearLayout.LayoutParams(
+                            0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                        addView(apViewNameTxtView, txtViewLayoutParams)
+                    }
+                    apViewsLayout?.addView(apViewHeader)
+
+                    val apView = AdaptivePlusView(ctx).apply {
+                        id = ViewCompat.generateViewId()
+                        setAdaptivePlusViewId(apViewModel.id)
+                        setAPCustomActionListener(object:
+                            APCustomActionListener {
+                            override fun onRun(params: HashMap<String, Any>) {
+                                val name = params["name"]?.toString()
+                                context?.toast("Custom action: $name")
                             }
-                            apViewsLayout?.addView(apView)
-                        }
+                        })
+                    }
+                    apViewsLayout?.addView(apView)
+
+                    rewindImage.setOnClickListener {
+                        apView.scrollToStart()
                     }
                 }
 

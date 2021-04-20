@@ -57,5 +57,20 @@ class MockFragment : Fragment() {
                 ).show()
             }
         })
+        mock5APView.setAPCustomActionListener(object: APCustomActionListener {
+            override fun onRun(params: HashMap<String, Any>) {
+                Toast.makeText(
+                    context, params["name"].toString(), Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
+        scrollToStartBtn.setOnClickListener {
+            mock1APView.scrollToStart()
+            mock2APView.scrollToStart()
+            mock3APView.scrollToStart()
+            mock4APView.scrollToStart()
+            mock5APView.scrollToStart()
+        }
     }
 }
