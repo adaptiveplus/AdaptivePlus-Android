@@ -8,7 +8,7 @@ import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.actions.APCustomAction
 import com.sprintsquads.adaptiveplus.data.models.actions.APOpenWebLinkAction
 import com.sprintsquads.adaptiveplus.data.models.actions.APShowStoryAction
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
+import com.sprintsquads.adaptiveplus.data.listeners.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.APViewDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelDelegateProtocol
 import com.sprintsquads.adaptiveplus.ui.dialogs.WebViewDialog

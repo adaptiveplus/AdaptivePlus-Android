@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.sdk.data
+package com.sprintsquads.adaptiveplus.data.models
 
 import java.io.Serializable
 

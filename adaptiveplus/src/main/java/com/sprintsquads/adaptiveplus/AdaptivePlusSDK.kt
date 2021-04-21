@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.sdk
+package com.sprintsquads.adaptiveplus
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.sprintsquads.adaptiveplus.BuildConfig
 import com.sprintsquads.adaptiveplus.core.analytics.APAnalytics
 import com.sprintsquads.adaptiveplus.core.providers.provideAPAnalyticsRepository
 import com.sprintsquads.adaptiveplus.core.providers.provideAPAuthRepository
@@ -21,8 +20,8 @@ import com.sprintsquads.adaptiveplus.data.models.network.RequestResultCallback
 import com.sprintsquads.adaptiveplus.data.models.network.RequestState
 import com.sprintsquads.adaptiveplus.data.repositories.APAuthRepository
 import com.sprintsquads.adaptiveplus.data.repositories.APUserRepository
-import com.sprintsquads.adaptiveplus.sdk.data.APLocation
-import com.sprintsquads.adaptiveplus.sdk.exceptions.APInitializationException
+import com.sprintsquads.adaptiveplus.data.models.APLocation
+import com.sprintsquads.adaptiveplus.data.exceptions.APInitializationException
 import com.sprintsquads.adaptiveplus.utils.*
 import com.sprintsquads.adaptiveplus.utils.getAppVersion
 import com.sprintsquads.adaptiveplus.utils.getDeviceId

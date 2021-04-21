@@ -2,7 +2,7 @@ package com.sprintsquads.adaptiveplus.data.repositories
 
 import com.sprintsquads.adaptiveplus.core.managers.APSharedPreferences
 import com.sprintsquads.adaptiveplus.data.models.APUser
-import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.data.models.APLocation
 
 
 internal class APUserRepository(

@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.sdk.ui
+package com.sprintsquads.adaptiveplus.ui
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.sprintsquads.adaptiveplus.R
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
+import com.sprintsquads.adaptiveplus.data.listeners.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.APViewFragment
 
 

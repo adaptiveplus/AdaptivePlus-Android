@@ -2,7 +2,7 @@ package com.sprintsquads.adaptiveplus.data.models.network
 
 import com.google.gson.annotations.SerializedName
 import com.sprintsquads.adaptiveplus.data.models.APUser
-import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.data.models.APLocation
 import java.io.Serializable
 
 

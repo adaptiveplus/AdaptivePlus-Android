@@ -18,8 +18,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
-import com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+import com.sprintsquads.adaptiveplus.data.listeners.APCustomActionListener
+import com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.ui.dialogs.AddNewAPViewDialog
 import com.sprintsquads.adaptiveplusqaapp.utils.getEnvByName

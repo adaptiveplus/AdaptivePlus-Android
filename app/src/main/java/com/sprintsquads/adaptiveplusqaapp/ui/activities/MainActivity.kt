@@ -3,8 +3,8 @@ package com.sprintsquads.adaptiveplusqaapp.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
-import com.sprintsquads.adaptiveplus.sdk.data.APLocation
+import com.sprintsquads.adaptiveplus.AdaptivePlusSDK
+import com.sprintsquads.adaptiveplus.data.models.APLocation
 import com.sprintsquads.adaptiveplusqaapp.R
 import com.sprintsquads.adaptiveplusqaapp.data.APSdkEnvironment
 import com.sprintsquads.adaptiveplusqaapp.data.Environment

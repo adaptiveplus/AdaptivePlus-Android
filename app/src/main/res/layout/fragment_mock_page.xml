@@ -20,7 +20,7 @@
             android:text="Scrool To Start"
             />
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+        <com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
             android:id="@+id/mock1APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             app:apViewId="mock1"
             />
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+        <com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
             android:id="@+id/mock2APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             app:apViewId="mock2"
             />
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+        <com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
             android:id="@+id/mock3APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             app:apViewId="mock3"
             />
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+        <com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
             android:id="@+id/mock4APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             app:apViewId="mock4"
             />
 
-        <com.sprintsquads.adaptiveplus.sdk.ui.AdaptivePlusView
+        <com.sprintsquads.adaptiveplus.ui.AdaptivePlusView
             android:id="@+id/mock5APView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

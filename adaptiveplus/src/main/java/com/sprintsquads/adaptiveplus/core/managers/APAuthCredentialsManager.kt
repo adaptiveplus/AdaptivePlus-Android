@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.sprintsquads.adaptiveplus.data.META_KEY_CHANNEL_SECRET
 import com.sprintsquads.adaptiveplus.data.models.APAuthCredentials
-import com.sprintsquads.adaptiveplus.sdk.exceptions.APInitializationException
+import com.sprintsquads.adaptiveplus.data.exceptions.APInitializationException
 
 
 internal class APAuthCredentialsManager {

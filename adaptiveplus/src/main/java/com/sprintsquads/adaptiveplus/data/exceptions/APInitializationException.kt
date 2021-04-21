@@ -1,4 +1,4 @@
-package com.sprintsquads.adaptiveplus.sdk.exceptions
+package com.sprintsquads.adaptiveplus.data.exceptions
 
 import java.lang.Exception
 

@@ -24,8 +24,8 @@ import com.sprintsquads.adaptiveplus.data.models.APViewDataModel
 import com.sprintsquads.adaptiveplus.data.models.EventObserver
 import com.sprintsquads.adaptiveplus.ext.hide
 import com.sprintsquads.adaptiveplus.ext.show
-import com.sprintsquads.adaptiveplus.sdk.AdaptivePlusSDK
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
+import com.sprintsquads.adaptiveplus.AdaptivePlusSDK
+import com.sprintsquads.adaptiveplus.data.listeners.APCustomActionListener
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModel
 import com.sprintsquads.adaptiveplus.ui.apview.vm.APViewModelFactory
 import com.sprintsquads.adaptiveplus.utils.getAPStoriesList

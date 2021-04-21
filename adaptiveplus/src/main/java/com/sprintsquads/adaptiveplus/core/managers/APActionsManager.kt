@@ -2,7 +2,7 @@ package com.sprintsquads.adaptiveplus.core.managers
 
 import com.sprintsquads.adaptiveplus.data.models.actions.APAction
 import com.sprintsquads.adaptiveplus.data.models.APStory
-import com.sprintsquads.adaptiveplus.sdk.data.APCustomActionListener
+import com.sprintsquads.adaptiveplus.data.listeners.APCustomActionListener
 
 
 internal interface APActionsManager {
