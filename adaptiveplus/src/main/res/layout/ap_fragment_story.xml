@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <com.sprintsquads.adaptiveplus.ui.stories.progress.APStoriesProgressView
+    <plus.adaptive.sdk.ui.stories.progress.APStoriesProgressView
         android:id="@+id/apStoriesProgressView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

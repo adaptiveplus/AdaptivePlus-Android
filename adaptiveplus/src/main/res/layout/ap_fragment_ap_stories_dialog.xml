@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/apBlack">
 
-    <com.sprintsquads.adaptiveplus.ui.stories.APStoriesViewPager
+    <plus.adaptive.sdk.ui.stories.APStoriesViewPager
         android:id="@+id/apStoriesViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

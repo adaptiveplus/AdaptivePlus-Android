@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">AdaptivePlusQA</string>
+    <string name="app_name">APQA</string>
     <string name="default_notification_channel_id">adaptive_plus_qa_app</string>
 </resources>

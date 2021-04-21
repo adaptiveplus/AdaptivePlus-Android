@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sprintsquads.adaptiveplusqaapp">
+    package="plus.adaptive.qaapp">
 
     <application
         android:allowBackup="true"
@@ -9,10 +9,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AdaptivePlusQaApp"
+        android:theme="@style/Theme.qaapp"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".ui.activities.LauncherActivity">
+        <activity android:name="plus.adaptive.qaapp.ui.activities.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,12 +20,12 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name="plus.adaptive.qaapp.ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
 
         <service
-            android:name=".core.APFirebaseMessagingService"
+            android:name="plus.adaptive.qaapp.core.APFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
