@@ -1,3 +1,3 @@
-include ':adaptiveplus'
+include ':sdk'
 include ':app'
 rootProject.name = "qaapp"
