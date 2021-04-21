@@ -39,10 +39,14 @@ internal class OkHttpProgressGlideModule : AppGlideModule() {
         return Interceptor { chain ->
             val request: Request = chain.request()
             val response: Response = chain.proceed(request)
-            response.newBuilder()
-                .body(OkHttpProgressResponseBody(
-                    request.url(), response.body(), listener))
-                .build()
+
+            response.body?.let {
+                response.newBuilder()
+                    .body(OkHttpProgressResponseBody(
+                        request.url, it, listener))
+                    .build()
+            }
+                ?: response
         }
     }
 
@@ -113,7 +117,7 @@ internal class OkHttpProgressGlideModule : AppGlideModule() {
 
     private class OkHttpProgressResponseBody(
         private val url: HttpUrl,
-        private val responseBody: ResponseBody?,
+        private val responseBody: ResponseBody,
         private val progressListener: ResponseProgressListener
     ) : ResponseBody() {
 
@@ -121,20 +125,18 @@ internal class OkHttpProgressGlideModule : AppGlideModule() {
 
 
         override fun contentType(): MediaType? {
-            return responseBody?.contentType()
+            return responseBody.contentType()
         }
 
         override fun contentLength(): Long {
-            return responseBody?.contentLength() ?: -1
+            return responseBody.contentLength()
         }
 
-        override fun source(): BufferedSource? {
+        override fun source(): BufferedSource {
             if (bufferedSource == null) {
-                responseBody?.source()?.let {
-                    bufferedSource = Okio.buffer(source(it))
-                }
+                bufferedSource = source(responseBody.source()).buffer()
             }
-            return bufferedSource
+            return bufferedSource!!
         }
 
         private fun source(source: Source): Source {
@@ -143,7 +145,7 @@ internal class OkHttpProgressGlideModule : AppGlideModule() {
 
                 override fun read(sink: Buffer, byteCount: Long): Long {
                     val bytesRead = super.read(sink, byteCount)
-                    val fullLength = responseBody?.contentLength() ?: -1L
+                    val fullLength = responseBody.contentLength()
 
                     if (fullLength != -1L) {
                         if (bytesRead == -1L) { // this source is exhausted

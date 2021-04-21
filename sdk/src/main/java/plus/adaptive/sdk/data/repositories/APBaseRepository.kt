@@ -10,9 +10,9 @@ import plus.adaptive.sdk.data.models.network.BaseResponseBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.models.network.TokenRequestBody
 import plus.adaptive.sdk.data.models.network.TokenResponseBody
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 internal open class APBaseRepository(
@@ -34,7 +34,7 @@ internal open class APBaseRepository(
                 if (response.isSuccessful) {
                     val dataType = object: TypeToken<BaseResponseBody<T>>(){}.type
                     val responseBody = (customGson ?: Gson())
-                        .fromJson<BaseResponseBody<T>>(response.body()?.string(), dataType)
+                        .fromJson<BaseResponseBody<T>>(response.body?.string(), dataType)
 
                     if (responseBody.code == 0) {
                         onSuccess.invoke(responseBody.data)
@@ -49,8 +49,8 @@ internal open class APBaseRepository(
                 } else {
                     onError.invoke(
                         APError(
-                            code = response.code(),
-                            message = response.message()
+                            code = response.code,
+                            message = response.message
                         )
                     )
                 }
@@ -106,7 +106,7 @@ internal open class APBaseRepository(
             userDevice = user.device,
             userLocation = user.location
         )
-        val body = RequestBody.create(JSON_MEDIA_TYPE, Gson().toJson(tokenRequestBody))
+        val body = Gson().toJson(tokenRequestBody).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
             .url("$SDK_API_URL/oauth/channel/token")
@@ -138,6 +138,6 @@ internal open class APBaseRepository(
         private const val HEADER_CHANNEL_SECRET = "channel_secret"
 
         @JvmStatic
-        protected val JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
+        protected val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaTypeOrNull()
     }
 }
