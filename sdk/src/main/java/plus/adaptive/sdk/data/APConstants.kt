@@ -14,7 +14,7 @@ internal var LOCALE: String = "ru"
     }
 internal var CUSTOM_IP_ADDRESS: String? = null
 
-internal var BASE_API_URL: String? = null
+internal var BASE_API_URL: String = "http://test.adaptive.plus:3000"
     set(value) {
         if (URLUtil.isValidUrl(value)) {
             field = value
@@ -28,5 +28,5 @@ internal var GLIDE_TIMEOUT: Int = 60000 // milliseconds
 
 internal const val DELAY_BETWEEN_CLICKS = 1000L // milliseconds
 
-internal const val META_KEY_BASE_API_URL = "apBaseApiUrl"
-internal const val META_KEY_CHANNEL_SECRET = "apChannelSecret"
+internal const val META_KEY_BASE_API_URL = "adaptivePlusBaseApiUrl"
+internal const val META_KEY_CHANNEL_SECRET = "adaptivePlusApiKey"

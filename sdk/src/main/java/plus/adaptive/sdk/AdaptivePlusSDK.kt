@@ -21,7 +21,6 @@ import plus.adaptive.sdk.data.models.network.RequestState
 import plus.adaptive.sdk.data.repositories.APAuthRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.models.APLocation
-import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.utils.*
 import plus.adaptive.sdk.utils.getAppVersion
 import plus.adaptive.sdk.utils.getDeviceId
@@ -59,10 +58,6 @@ class AdaptivePlusSDK {
 
         appInfo.metaData?.getString(META_KEY_BASE_API_URL)?.let { url ->
             BASE_API_URL = url
-        }
-
-        if (BASE_API_URL == null) {
-            throw APInitializationException()
         }
 
         IS_DEBUGGABLE = isDebuggable
