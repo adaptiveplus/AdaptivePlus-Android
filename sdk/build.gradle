@@ -5,6 +5,14 @@ plugins {
     id 'kotlin-kapt'
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'plus.adaptive'
+    PUBLISH_VERSION = '2.0.0'
+    PUBLISH_ARTIFACT_ID = 'android-sdk'
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-mavencentral.gradle"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
