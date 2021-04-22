@@ -69,14 +69,16 @@ private data class EnvsWrapper(
 fun addNewAPView(
     context: Context,
     envName: String,
-    apViewId: String
+    apViewId: String,
+    hasDrafts: Boolean
 ) {
     val envs = getEnvs(context).toMutableList()
     envs.firstOrNull { it.name == envName }?.run {
         apViews = apViews.toMutableList().apply {
             add(
                 APSdkEnvironment.APView(
-                    id = apViewId
+                    id = apViewId,
+                    hasDrafts = hasDrafts
                 )
             )
         }
@@ -172,5 +174,5 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
 }
 
 private val sdkV2APViews = listOf(
-    APSdkEnvironment.APView(id = "")
+    APSdkEnvironment.APView(id = "", hasDrafts = true)
 )

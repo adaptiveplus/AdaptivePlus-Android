@@ -118,6 +118,7 @@ class ApiFragment : Fragment() {
                     val apView = AdaptivePlusView(ctx).apply {
                         id = ViewCompat.generateViewId()
                         setAdaptivePlusViewId(apViewModel.id)
+                        setHasDrafts(apViewModel.hasDrafts ?: false)
                         setAPCustomActionListener(object:
                             APCustomActionListener {
                             override fun onRun(params: HashMap<String, Any>) {

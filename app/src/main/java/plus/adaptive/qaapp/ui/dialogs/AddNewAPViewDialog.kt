@@ -58,12 +58,14 @@ class AddNewAPViewDialog : DialogFragment() {
         addAPViewBtn.setOnClickListener {
             if (apViewIdEditText.text.toString().isNotEmpty()) {
                 val apViewId = apViewIdEditText.text.toString()
+                val hasDrafts = apHasDraftsCheckbox.isChecked
 
                 context?.let { ctx ->
                     addNewAPView(
                         context = ctx,
                         envName = envName,
-                        apViewId = apViewId
+                        apViewId = apViewId,
+                        hasDrafts = hasDrafts
                     )
                 }
 
