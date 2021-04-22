@@ -199,20 +199,25 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         }
     }
 
-    private fun magnetizeToPosition(adapterPosition: Int) {
+    private fun magnetizeToPosition(adapterPosition: Int, isSmoothly: Boolean = true) {
         context?.let {
             val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
-            val smoothScroller = object: LinearSmoothScroller(context) {
-                override fun getHorizontalSnapPreference(): Int {
-                    return SNAP_TO_START
-                }
 
-                override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+            if (isSmoothly) {
+                val smoothScroller = object : LinearSmoothScroller(context) {
+                    override fun getHorizontalSnapPreference(): Int {
+                        return SNAP_TO_START
+                    }
+
+                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                        return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+                    }
                 }
+                smoothScroller.targetPosition = adapterPosition
+                layoutManager?.startSmoothScroll(smoothScroller)
+            } else {
+                layoutManager?.scrollToPosition(adapterPosition)
             }
-            smoothScroller.targetPosition = adapterPosition
-            layoutManager?.startSmoothScroll(smoothScroller)
         }
     }
 
@@ -289,6 +294,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         val oldWidth = oldRight - oldLeft
         if (v.width != oldWidth) {
             updateEntriesViewOptions()
+            magnetizeToPosition(0, isSmoothly = false)
         }
     }
 
@@ -319,9 +325,6 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
                 ),
                 scaleFactor = scaleFactor
             )
-
-            val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
-            layoutManager?.scrollToPosition(0)
         }
     }
 
