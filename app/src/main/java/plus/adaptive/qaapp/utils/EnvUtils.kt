@@ -172,6 +172,5 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
 }
 
 private val sdkV2APViews = listOf(
-    APSdkEnvironment.APView(id = ""),
-    APSdkEnvironment.APView(id = "65ff0c32-4a6f-4431-83d3-eb340f62f405")
+    APSdkEnvironment.APView(id = "")
 )

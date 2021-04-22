@@ -146,6 +146,21 @@ private val apStoryDeserializer =
         }
     }
 
+private val apStorySerializer =
+    JsonSerializer<APStory> { src, _, _ ->
+        val jsonObject = JsonObject()
+
+        jsonObject.addProperty("id", src.id)
+
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(APSnap::class.java, apSnapSerializer)
+        val apStoryGson = gsonBuilder.create()
+
+        jsonObject.add("body", apStoryGson.toJsonTree(src))
+
+        jsonObject
+    }
+
 private val apSnapDeserializer =
     JsonDeserializer { json, _, _ ->
         try {
@@ -167,6 +182,22 @@ private val apSnapDeserializer =
             e.printStackTrace()
             null
         }
+    }
+
+private val apSnapSerializer =
+    JsonSerializer<APSnap> { src, _, _ ->
+        val jsonObject = JsonObject()
+
+        jsonObject.addProperty("id", src.id)
+
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(APAction::class.java, apActionSerializer)
+        gsonBuilder.registerTypeAdapter(APSnap.ActionArea::class.java, apSnapActionAreaSerializer)
+        val apSnapGson = gsonBuilder.create()
+
+        jsonObject.add("body", apSnapGson.toJsonTree(src))
+
+        jsonObject
     }
 
 private val apSnapActionAreaDeserializer =
@@ -202,7 +233,12 @@ private val apSnapActionAreaSerializer =
                 val name = APSnap.ActionArea.Type.BUTTON.name
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
-                jsonObject.addProperty("body", Gson().toJson(src))
+
+                val gsonBuilder = GsonBuilder()
+                gsonBuilder.registerTypeAdapter(APAction::class.java, apActionSerializer)
+                val apSnapActionAreaGson = gsonBuilder.create()
+
+                jsonObject.add("body", apSnapActionAreaGson.toJsonTree(src))
             }
             else -> {}
         }
@@ -247,19 +283,14 @@ private val apActionSerializer =
                 val name = APAction.Type.OPEN_WEB_LINK.name
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
-                jsonObject.addProperty("parameters", Gson().toJson(src))
+                jsonObject.add("parameters", Gson().toJsonTree(src))
             }
             is APCustomAction -> {
                 val clazz = APAction.Type.CUSTOM.javaClass
                 val name = APAction.Type.CUSTOM.name
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
-
-                val paramsJson = JsonObject()
-                src.parameters?.forEach { entry ->
-                    paramsJson.addProperty(entry.key, Gson().toJson(entry.value))
-                }
-                jsonObject.addProperty("parameters", paramsJson.asString)
+                jsonObject.add("parameters", Gson().toJsonTree(src.parameters))
             }
             else -> {}
         }
@@ -314,30 +345,24 @@ private val apEntryPointActionSerializer =
                 jsonObject.addProperty("type", annotation.value)
 
                 val gsonBuilder = GsonBuilder()
-                gsonBuilder.registerTypeAdapter(APAction::class.java, apActionSerializer)
-                gsonBuilder.registerTypeAdapter(APSnap.ActionArea::class.java, apSnapActionAreaSerializer)
+                gsonBuilder.registerTypeAdapter(APStory::class.java, apStorySerializer)
                 val apEntryPointActionGson = gsonBuilder.create()
 
-                jsonObject.addProperty("parameters", apEntryPointActionGson.toJson(src))
+                jsonObject.add("parameters", apEntryPointActionGson.toJsonTree(src))
             }
             is APOpenWebLinkAction -> {
                 val clazz = APAction.Type.OPEN_WEB_LINK.javaClass
                 val name = APAction.Type.OPEN_WEB_LINK.name
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
-                jsonObject.addProperty("parameters", Gson().toJson(src))
+                jsonObject.add("parameters", Gson().toJsonTree(src))
             }
             is APCustomAction -> {
                 val clazz = APAction.Type.CUSTOM.javaClass
                 val name = APAction.Type.CUSTOM.name
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
-
-                val paramsJson = JsonObject()
-                src.parameters?.forEach { entry ->
-                    paramsJson.addProperty(entry.key, Gson().toJson(entry.value))
-                }
-                jsonObject.addProperty("parameters", paramsJson.toString())
+                jsonObject.add("parameters", Gson().toJsonTree(src.parameters))
             }
             else -> {}
         }

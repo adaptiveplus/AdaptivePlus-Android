@@ -43,11 +43,16 @@ internal class APViewModel(
 
     private fun setAPViewDataModel(
         dataModel: APViewDataModel,
-        isCached: Boolean = false
+        isCached: Boolean = false,
+        isEmptyViewId: Boolean = false
     ) {
         if (!isCached || _apViewDataModelLiveData.value == null) {
             if (!isCached) {
                 saveAPViewDataModelToCache(dataModel.id, dataModel)
+
+                if (isEmptyViewId) {
+                    saveAPViewDataModelToCache("", dataModel)
+                }
             }
 
             _apViewDataModelLiveData.value = dataModel
@@ -59,7 +64,10 @@ internal class APViewModel(
             apViewId, object: RequestResultCallback<APViewDataModel>() {
                 override fun success(response: APViewDataModel) {
                     runOnMainThread {
-                        setAPViewDataModel(response)
+                        setAPViewDataModel(
+                            dataModel = response,
+                            isEmptyViewId = apViewId.isEmpty()
+                        )
                     }
                 }
 
@@ -129,7 +137,8 @@ internal class APViewModel(
             if (dataModel != null) {
                 setAPViewDataModel(
                     dataModel = dataModel,
-                    isCached = true
+                    isCached = true,
+                    isEmptyViewId = apViewId.isEmpty()
                 )
             }
         }
