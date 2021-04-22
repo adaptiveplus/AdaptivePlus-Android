@@ -14,6 +14,8 @@ import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.utils.getColorFromHex
 
 
+private val apFontMap = mutableMapOf<String, Typeface>()
+
 internal fun TextView.applyAPFont(
     apFont: APFont,
     onSuccess: (() -> Unit)? = null,
@@ -36,18 +38,26 @@ internal fun TextView.applyAPFont(
         apFont.lineHeight?.let { lineHeight = it.toInt() }
     }
 
-    requestFontDownload(
-        context = context,
-        familyName = apFont.family,
-        fontStyle = apFont.style,
-        onSuccess = {
-            typeface = it
-            onSuccess?.invoke()
-        },
-        onError = {
-            onError?.invoke()
-        }
-    )
+    val fontMapKey = "${apFont.family}:${apFont.style}"
+
+    if (fontMapKey !in apFontMap) {
+        requestFontDownload(
+            context = context,
+            familyName = apFont.family,
+            fontStyle = apFont.style,
+            onSuccess = {
+                typeface = it
+                apFontMap[fontMapKey] = it
+                onSuccess?.invoke()
+            },
+            onError = {
+                onError?.invoke()
+            }
+        )
+    } else {
+        typeface = apFontMap[fontMapKey]
+        onSuccess?.invoke()
+    }
 }
 
 private fun requestFontDownload(
