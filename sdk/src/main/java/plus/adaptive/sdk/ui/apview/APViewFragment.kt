@@ -39,13 +39,16 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         private const val MILLISECONDS_PER_INCH = 100f
 
         private const val EXTRA_AP_VIEW_ID = "extra_ap_view_id"
+        private const val EXTRA_AP_HAS_DRAFTS = "extra_ap_has_drafts"
 
         @JvmStatic
         fun newInstance(
             apViewId: String,
+            apHasDrafts: Boolean
         ) = APViewFragment().apply {
             arguments = bundleOf(
-                EXTRA_AP_VIEW_ID to apViewId
+                EXTRA_AP_VIEW_ID to apViewId,
+                EXTRA_AP_HAS_DRAFTS to apHasDrafts
             )
         }
     }
@@ -53,6 +56,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     private lateinit var viewModel: APViewModel
     private lateinit var apViewId: String
+    private var apHasDrafts: Boolean? = null
     private lateinit var entryPointsAdapter: APEntryPointsAdapter
 
     private var apActionsManager: APActionsManager? = null
@@ -64,6 +68,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
         if (!::apViewId.isInitialized) {
             apViewId = arguments?.getString(EXTRA_AP_VIEW_ID) ?: ""
+        }
+
+        if (apHasDrafts == null) {
+            apHasDrafts = arguments?.getBoolean(EXTRA_AP_HAS_DRAFTS, false)
         }
 
         APAnalytics.logEvent(
@@ -151,7 +159,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     private val tokenObserver = Observer<String?> { token ->
         if (token != null) {
-            viewModel.requestAPViewDataModel(apViewId)
+            viewModel.requestAPViewDataModel(apViewId, apHasDrafts ?: false)
         }
     }
 
@@ -244,7 +252,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             context?.let { AdaptivePlusSDK().authorize(it) }
         }
         else {
-            viewModel.requestAPViewDataModel(apViewId)
+            viewModel.requestAPViewDataModel(apViewId, apHasDrafts ?: false)
         }
     }
 
@@ -257,6 +265,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         this.apViewId = apViewId
 
         refresh()
+    }
+
+    fun setHasDrafts(hasDrafts: Boolean) {
+        this.apHasDrafts = hasDrafts
     }
 
     fun scrollToStart() {

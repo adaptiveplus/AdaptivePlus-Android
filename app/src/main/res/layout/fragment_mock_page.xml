@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:apViewId="mock1"
+            app:apHasDrafts="true"
             />
 
         <plus.adaptive.sdk.ui.AdaptivePlusView
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:apViewId="mock2"
+            app:apHasDrafts="true"
             />
 
         <plus.adaptive.sdk.ui.AdaptivePlusView

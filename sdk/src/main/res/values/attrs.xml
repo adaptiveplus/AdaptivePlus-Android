@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="AdaptivePlusView">
         <attr name="apViewId" format="string" />
+        <attr name="apHasDrafts" format="boolean" />
     </declare-styleable>
 </resources>

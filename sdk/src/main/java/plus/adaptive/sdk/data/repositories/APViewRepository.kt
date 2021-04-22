@@ -28,10 +28,12 @@ internal class APViewRepository(
      */
     fun requestAPView(
         apViewId: String,
+        hasDrafts: Boolean,
         callback: RequestResultCallback<APViewDataModel>
     ) {
         val obj = APViewRequestBody(
-            parserVersion = 1
+            parserVersion = 1,
+            hasDrafts = hasDrafts
         )
         val body = RequestBody.create(
             JSON_MEDIA_TYPE,

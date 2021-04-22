@@ -20,8 +20,9 @@ class AdaptivePlusView : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         val arr = context.obtainStyledAttributes(attrs, R.styleable.AdaptivePlusView)
         val apViewId = arr.getString(R.styleable.AdaptivePlusView_apViewId) ?: ""
+        val apHasDrafts = arr.getBoolean(R.styleable.AdaptivePlusView_apHasDrafts, false)
 
-        init(apViewId)
+        init(apViewId, apHasDrafts)
 
         arr.recycle()
     }
@@ -29,14 +30,16 @@ class AdaptivePlusView : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         val arr = context.obtainStyledAttributes(attrs, R.styleable.AdaptivePlusView, defStyleAttr, 0)
         val apViewId = arr.getString(R.styleable.AdaptivePlusView_apViewId) ?: ""
+        val apHasDrafts = arr.getBoolean(R.styleable.AdaptivePlusView_apHasDrafts, false)
 
-        init(apViewId)
+        init(apViewId, apHasDrafts)
 
         arr.recycle()
     }
 
 
     private lateinit var apViewId: String
+    private var apHasDrafts: Boolean = false
 
     private var apViewFragment: APViewFragment? = null
     private var apCustomActionListener: APCustomActionListener? = null
@@ -52,10 +55,22 @@ class AdaptivePlusView : FrameLayout {
         apViewFragment?.setAPViewId(apViewId)
     }
 
+    /**
+     * Setter of has AdaptivePlusView drafts or not
+     *
+     * @param hasDrafts - true if draft campaigns should be also shown
+     */
+    fun setHasDrafts(hasDrafts: Boolean) {
+        this.apHasDrafts = hasDrafts
+        apViewFragment?.setHasDrafts(hasDrafts)
+    }
+
     private fun init(
-        apViewId: String = ""
+        apViewId: String = "",
+        apHasDrafts: Boolean = false
     ) {
         this.apViewId = apViewId
+        this.apHasDrafts = apHasDrafts
     }
 
     override fun onAttachedToWindow() {
@@ -65,7 +80,8 @@ class AdaptivePlusView : FrameLayout {
             if (fragmentManager.findFragmentById(id) == null) {
                 apViewFragment =
                     APViewFragment.newInstance(
-                        apViewId = apViewId
+                        apViewId = apViewId,
+                        apHasDrafts = apHasDrafts
                     )
                 apViewFragment?.let {
                     try {

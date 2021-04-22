@@ -4,5 +4,6 @@ import java.io.Serializable
 
 
 internal data class APViewRequestBody(
-    val parserVersion: Int
+    val parserVersion: Int,
+    val hasDrafts: Boolean
 ) : Serializable

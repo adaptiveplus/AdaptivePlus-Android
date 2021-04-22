@@ -59,9 +59,9 @@ internal class APViewModel(
         }
     }
 
-    fun requestAPViewDataModel(apViewId: String) {
+    fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {
         apViewRepository.requestAPView(
-            apViewId, object: RequestResultCallback<APViewDataModel>() {
+            apViewId, hasDrafts, object: RequestResultCallback<APViewDataModel>() {
                 override fun success(response: APViewDataModel) {
                     runOnMainThread {
                         setAPViewDataModel(
