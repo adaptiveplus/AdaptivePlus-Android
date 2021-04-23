@@ -31,9 +31,13 @@ internal class APGIFComponentView : APBaseComponentView {
         View.inflate(context, R.layout.ap_component_gif, this)
 
         (component as? APGIFComponent)?.run {
+            val defaultDrawable = createDrawableFromColor(
+                color = getColorFromHex(loadingColor),
+                cornerRadius = cornerRadius?.toInt()
+            )
             apComponentImageView.loadGIF(
                 url,
-                defaultDrawable = createDrawableFromColor(getColorFromHex(loadingColor)),
+                defaultDrawable = defaultDrawable,
                 cornerRadius = cornerRadius?.toInt(),
                 onResourceReady = {
                     (componentViewModel as? APGIFComponentViewModel)?.onImageResourceReady()

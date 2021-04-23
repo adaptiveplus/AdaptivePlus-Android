@@ -31,9 +31,13 @@ internal class APImageComponentView : APBaseComponentView {
         View.inflate(context, R.layout.ap_component_image, this)
 
         (component as? APImageComponent)?.run {
+            val defaultDrawable = createDrawableFromColor(
+                color = getColorFromHex(loadingColor),
+                cornerRadius = cornerRadius?.toInt()
+            )
             apComponentImageView.loadImage(
                 url,
-                defaultDrawable = createDrawableFromColor(getColorFromHex(loadingColor)),
+                defaultDrawable = defaultDrawable,
                 cornerRadius = cornerRadius?.toInt(),
                 onResourceReady = {
                     (componentViewModel as? APImageComponentViewModel)?.onImageResourceReady()
