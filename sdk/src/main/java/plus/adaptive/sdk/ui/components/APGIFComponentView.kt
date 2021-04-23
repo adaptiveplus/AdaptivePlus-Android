@@ -12,6 +12,7 @@ import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.vm.APGIFComponentViewModel
 import plus.adaptive.sdk.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_gif.view.*
+import plus.adaptive.sdk.utils.createDrawableFromColor
 
 
 internal class APGIFComponentView : APBaseComponentView {
@@ -32,6 +33,7 @@ internal class APGIFComponentView : APBaseComponentView {
         (component as? APGIFComponent)?.run {
             apComponentImageView.loadGIF(
                 url,
+                defaultDrawable = createDrawableFromColor(getColorFromHex(loadingColor)),
                 cornerRadius = cornerRadius?.toInt(),
                 onResourceReady = {
                     (componentViewModel as? APGIFComponentViewModel)?.onImageResourceReady()
@@ -80,10 +82,9 @@ internal class APGIFComponentView : APBaseComponentView {
                     constraintSet.applyTo(apComponentLayout)
 
                     val borderDrawable = GradientDrawable().apply {
-                        setStroke(
-                            borderState.width.toInt(),
-                            getColorFromHex(borderState.color.startColor)
-                        )
+                        getColorFromHex(borderState.color.startColor)?.let { color ->
+                            setStroke(borderState.width.toInt(), color)
+                        }
                         cornerRadius = borderState.cornerRadius.toFloat()
                     }
                     apComponentBorderView.background = borderDrawable

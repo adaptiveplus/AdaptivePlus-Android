@@ -10,6 +10,7 @@ import plus.adaptive.sdk.data.models.components.APImageComponent
 import plus.adaptive.sdk.ext.loadImage
 import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.vm.APImageComponentViewModel
+import plus.adaptive.sdk.utils.createDrawableFromColor
 import plus.adaptive.sdk.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_image.view.*
 
@@ -32,6 +33,7 @@ internal class APImageComponentView : APBaseComponentView {
         (component as? APImageComponent)?.run {
             apComponentImageView.loadImage(
                 url,
+                defaultDrawable = createDrawableFromColor(getColorFromHex(loadingColor)),
                 cornerRadius = cornerRadius?.toInt(),
                 onResourceReady = {
                     (componentViewModel as? APImageComponentViewModel)?.onImageResourceReady()
@@ -80,10 +82,9 @@ internal class APImageComponentView : APBaseComponentView {
                     constraintSet.applyTo(apComponentLayout)
 
                     val borderDrawable = GradientDrawable().apply {
-                        setStroke(
-                            borderState.width.toInt(),
-                            getColorFromHex(borderState.color.startColor)
-                        )
+                        getColorFromHex(borderState.color.startColor)?.let { color ->
+                            setStroke(borderState.width.toInt(), color)
+                        }
                         cornerRadius = borderState.cornerRadius.toFloat()
                     }
                     apComponentBorderView.background = borderDrawable

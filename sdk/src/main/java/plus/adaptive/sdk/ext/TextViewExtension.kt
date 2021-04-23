@@ -22,7 +22,7 @@ internal fun TextView.applyAPFont(
     onError: (() -> Unit)? = null
 ) {
     setTextSize(TypedValue.COMPLEX_UNIT_PX, apFont.size.toFloat())
-    setTextColor(getColorFromHex(apFont.color))
+    getColorFromHex(apFont.color)?.let { setTextColor(it) }
 
     gravity = when (apFont.align) {
         APFont.Align.LEFT -> Gravity.START

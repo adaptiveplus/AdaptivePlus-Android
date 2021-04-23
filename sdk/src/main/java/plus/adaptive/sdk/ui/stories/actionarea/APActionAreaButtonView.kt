@@ -43,11 +43,13 @@ internal class APActionAreaButtonView : LinearLayout {
             }
 
             val bgDrawable = GradientDrawable().apply {
-                setColor(getColorFromHex(data.backgroundColor))
+                getColorFromHex(data.backgroundColor)?.let { setColor(it) }
                 cornerRadius = data.cornerRadius?.toFloat() ?: 0f
 
                 data.border?.let { border ->
-                    setStroke(border.width.toInt(), getColorFromHex(border.color.startColor))
+                    getColorFromHex(border.color.startColor)?.let {
+                        setStroke(border.width.toInt(), it)
+                    }
                 }
             }
             apButtonTextView.background = bgDrawable

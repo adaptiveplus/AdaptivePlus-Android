@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apTransparent">#00000000</color>
+    <color name="apTransparent">#0000</color>
     <color name="apWhite">#FFFFFF</color>
     <color name="apDarkIndigo">#071222</color>
     <color name="apBlack">#000000</color>

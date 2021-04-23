@@ -26,7 +26,7 @@ internal class APBackgroundComponentView : APBaseComponentView {
         View.inflate(context, R.layout.ap_component_background, this)
 
         (component as? APBackgroundComponent)?.run {
-            apComponentView.setBackgroundColor(getColorFromHex(color))
+            getColorFromHex(color)?.let { apComponentView.setBackgroundColor(it) }
         }
     }
 

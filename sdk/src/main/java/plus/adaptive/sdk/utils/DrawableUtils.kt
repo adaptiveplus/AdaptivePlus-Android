@@ -6,9 +6,7 @@ import android.graphics.drawable.GradientDrawable
 
 
 internal fun createDrawableFromColor(color: Int?): Drawable? {
-    if (color == null) return null
-
-    return ColorDrawable(color)
+    return color?.let { ColorDrawable(it) }
 }
 
 internal fun createDrawableFromVerticalGradient(

@@ -7,7 +7,8 @@ import java.io.Serializable
 internal data class APImageComponent(
     val url: String,
     val border: Border?,
-    val cornerRadius: Double?
+    val cornerRadius: Double?,
+    val loadingColor: String?
 ) : APComponent, Serializable {
 
     data class Border(
