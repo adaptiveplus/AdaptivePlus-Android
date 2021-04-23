@@ -27,14 +27,15 @@ internal class APTextComponentView : APBaseComponentView {
         View.inflate(context, R.layout.ap_component_text, this)
 
         (component as? APTextComponent)?.run {
-            apComponentTextView.text = value
             font?.let {
                 apComponentTextView.applyAPFont(
                     apFont = it,
                     onSuccess = {
+                        apComponentTextView.text = value
                         (componentViewModel as? APTextComponentViewModel)?.onTextResourceReady()
                     },
                     onError = {
+                        apComponentTextView.text = value
                         (componentViewModel as? APTextComponentViewModel)?.onError()
                     }
                 )

@@ -52,9 +52,16 @@ internal class APActionAreaButtonView : LinearLayout {
             }
             apButtonTextView.background = bgDrawable
 
-            apButtonTextView.text = data.text.value
             data.text.font?.let {
-                apButtonTextView.applyAPFont(apFont = it)
+                apButtonTextView.applyAPFont(
+                    apFont = it,
+                    onSuccess = {
+                        apButtonTextView.text = data.text.value
+                    },
+                    onError = {
+                        apButtonTextView.text = data.text.value
+                    }
+                )
             }
         }
 
