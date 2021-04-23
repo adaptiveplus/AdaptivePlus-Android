@@ -19,6 +19,7 @@
     {
       "id": "campaign1",
       "updatedAt": "datetime",
+      "status": "DRAFT",
       "body": {
         "showOnce": true,
         "entryPoint": {

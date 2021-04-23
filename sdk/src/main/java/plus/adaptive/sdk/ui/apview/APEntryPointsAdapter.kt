@@ -13,6 +13,8 @@ import plus.adaptive.sdk.data.models.APEntryPoint
 import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModelProvider
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
+import plus.adaptive.sdk.ext.hide
+import plus.adaptive.sdk.ext.show
 
 
 internal class APEntryPointsAdapter(
@@ -86,6 +88,12 @@ internal class APEntryPointsAdapter(
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
             drawAPLayersOnLayout(apEntryLayout, entryPoint.layers, scaleFactor, viewModel)
+
+            if (entryPoint.status == APEntryPoint.Status.DRAFT) {
+                apTagTextView.show()
+            } else {
+                apTagTextView.hide()
+            }
         }
     }
 }

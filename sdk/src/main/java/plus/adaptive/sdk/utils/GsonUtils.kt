@@ -58,6 +58,7 @@ private val apViewDataModelDeserializer =
                 val campaignJsonObject = campaignJson.asJsonObject
                 val campaignId = campaignJsonObject.get("id").asString
                 val updatedAt = campaignJsonObject.get("updatedAt").asString
+                val status = campaignJsonObject.get("status")?.asString
                 val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
                 val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
                 val entryPointJsonObject = campaignBodyJsonObject.get("entryPoint").asJsonObject
@@ -66,6 +67,7 @@ private val apViewDataModelDeserializer =
                 entryPointBodyJsonObject.addProperty("id", entryPointId)
                 entryPointBodyJsonObject.addProperty("updatedAt", updatedAt)
                 entryPointBodyJsonObject.addProperty("campaignId", campaignId)
+                entryPointBodyJsonObject.addProperty("status", status)
                 entryPointBodyJsonObject.addProperty("showOnce", showOnce)
 
                 val gsonBuilder = GsonBuilder()
