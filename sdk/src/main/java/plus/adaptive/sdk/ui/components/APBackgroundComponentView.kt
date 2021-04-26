@@ -30,6 +30,8 @@ internal class APBackgroundComponentView : APBaseComponentView {
         }
     }
 
+    override fun prepare() {}
+
     override fun resume() {}
 
     override fun pause() {}

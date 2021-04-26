@@ -29,7 +29,10 @@ internal class APImageComponentView : APBaseComponentView {
 
     override fun initElement() {
         View.inflate(context, R.layout.ap_component_image, this)
+        prepare()
+    }
 
+    override fun prepare() {
         (component as? APImageComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(loadingColor),

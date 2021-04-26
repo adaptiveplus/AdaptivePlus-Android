@@ -11,6 +11,7 @@ internal class APGIFComponentViewModel(
 
     override fun prepare() {
         lifecycleListener.onReady(false)
+        mComponentViewController?.prepare()
     }
 
     override fun resume() {}

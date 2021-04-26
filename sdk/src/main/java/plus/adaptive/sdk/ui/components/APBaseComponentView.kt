@@ -30,12 +30,18 @@ internal abstract class APBaseComponentView : LinearLayout, APComponentViewContr
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        (componentViewModel as? APBaseComponentViewModel)?.setComponentViewController(this)
+        bindViewToViewModel(doBind = true)
     }
 
     override fun onDetachedFromWindow() {
-        (componentViewModel as? APBaseComponentViewModel)?.setComponentViewController(null)
+        bindViewToViewModel(doBind = false)
         super.onDetachedFromWindow()
+    }
+
+    private fun bindViewToViewModel(doBind: Boolean) {
+        val viewController: APComponentViewController? = if (doBind) this else null
+        val viewModel = componentViewModel as? APBaseComponentViewModel
+        viewModel?.setComponentViewController(viewController)
     }
 
     protected abstract fun initElement()

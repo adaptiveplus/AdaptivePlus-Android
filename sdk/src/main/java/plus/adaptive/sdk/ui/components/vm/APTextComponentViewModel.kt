@@ -11,6 +11,7 @@ internal class APTextComponentViewModel(
 
     override fun prepare() {
         lifecycleListener.onReady(false)
+        mComponentViewController?.prepare()
     }
 
     override fun resume() {}

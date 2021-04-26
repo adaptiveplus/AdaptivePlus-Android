@@ -29,7 +29,10 @@ internal class APGIFComponentView : APBaseComponentView {
 
     override fun initElement() {
         View.inflate(context, R.layout.ap_component_gif, this)
+        prepare()
+    }
 
+    override fun prepare() {
         (component as? APGIFComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(loadingColor),
