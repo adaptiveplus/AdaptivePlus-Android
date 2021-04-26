@@ -16,7 +16,7 @@ internal class APStoriesProgressView : LinearLayout {
     }
 
 
-    private var progressBars = mutableListOf<StoppableProgressBar>()
+    private var progressBars = mutableListOf<APStoppableProgressBar>()
 
     private var storiesCount = 0
 
@@ -61,7 +61,7 @@ internal class APStoriesProgressView : LinearLayout {
     }
 
     private fun createProgressBar() =
-        StoppableProgressBar(context).apply {
+        APStoppableProgressBar(context).apply {
             val height = resources.getDimension(R.dimen.ap_stories_progress_bar_height).toInt()
             layoutParams = LayoutParams(0, height, 1f)
         }
@@ -110,7 +110,7 @@ internal class APStoriesProgressView : LinearLayout {
     }
 
     private fun buildStoppableProgressBarCallback(index: Int) =
-        object : StoppableProgressBar.Callback {
+        object : APStoppableProgressBar.Callback {
 
             override fun onStartProgress() {
                 current = index
@@ -121,9 +121,10 @@ internal class APStoriesProgressView : LinearLayout {
                     isReverseStart = false
 
                     if (current - 1 >= 0) {
-                        val p = progressBars[current - 1]
+                        current--
+                        val p = progressBars[current]
                         p.setMinWithoutCallback()
-                        progressBars[--current].startProgress()
+                        progressBars[current].startProgress()
                     } else {
                         progressBars[current].startProgress()
                     }
@@ -131,11 +132,10 @@ internal class APStoriesProgressView : LinearLayout {
                     lifecycleListener?.onPrev(elapsedTime)
                 } else {
                     isSkipStart = false
+                    current++
 
-                    val next = current + 1
-
-                    if (next < progressBars.size) {
-                        progressBars[next].startProgress()
+                    if (current < progressBars.size) {
+                        progressBars[current].startProgress()
                         lifecycleListener?.onNext(elapsedTime)
                     } else {
                         isComplete = true
@@ -161,6 +161,7 @@ internal class APStoriesProgressView : LinearLayout {
 
     fun startStories() {
         reset()
+        current = 0
         progressBars.getOrNull(0)?.startProgress()
     }
 
@@ -170,6 +171,7 @@ internal class APStoriesProgressView : LinearLayout {
         for (i in 0 until from) {
             progressBars.getOrNull(i)?.setMaxWithoutCallback()
         }
+        current = from
         progressBars.getOrNull(from)?.startProgress()
     }
 

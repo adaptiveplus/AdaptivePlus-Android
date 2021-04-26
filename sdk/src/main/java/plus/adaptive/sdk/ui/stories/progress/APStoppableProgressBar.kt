@@ -12,7 +12,7 @@ import plus.adaptive.sdk.R
 import kotlinx.android.synthetic.main.ap_stoppable_progress_bar.view.*
 
 
-internal class StoppableProgressBar : FrameLayout {
+internal class APStoppableProgressBar : FrameLayout {
 
     companion object {
         private const val DEFAULT_PROGRESS_DURATION = 2000L
@@ -137,11 +137,11 @@ internal class StoppableProgressBar : FrameLayout {
         ) : Boolean {
             mElapsedTime = currentTime - startTime
 
-            if (mPaused && mElapsedAtPause == 0L) {
+            if (mPaused && startTime != -1L && mElapsedAtPause == 0L) {
                 mElapsedAtPause = mElapsedTime
             }
 
-            if (mPaused) {
+            if (mPaused && startTime != -1L) {
                 startTime = currentTime - mElapsedAtPause
             }
 
