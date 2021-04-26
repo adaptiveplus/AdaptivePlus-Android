@@ -54,6 +54,21 @@
                     style="@style/APProgressBar"
                     android:progress="0"
                     tools:progress="60"
+                    android:visibility="visible"
+                    tools:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/apSnapRetryBtnImageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ap_ic_retry"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

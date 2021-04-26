@@ -90,12 +90,17 @@ internal class APSnapFragment :
 
         apSnapLayout.addOnLayoutChangeListener(apSnapLayoutChangeListener)
 
+        apSnapRetryBtnImageView.setOnClickListener {
+            viewModel.prepare()
+        }
+
         setupObservers()
     }
 
     private fun setupObservers() {
         viewModel.isSnapReadyLiveData.observe(viewLifecycleOwner, isSnapReadyObserver)
         viewModel.snapLoadingProgressLiveData.observe(viewLifecycleOwner, snapLoadingProgressObserver)
+        viewModel.isErrorStateLiveData.observe(viewLifecycleOwner, isErrorStateObserver)
     }
 
     private val isSnapReadyObserver = Observer<Boolean> { isReady ->
@@ -108,6 +113,16 @@ internal class APSnapFragment :
 
     private val snapLoadingProgressObserver = Observer<Float> { progress ->
         apSnapLoadingProgressBar.progress = (progress * 100).toInt()
+    }
+
+    private val isErrorStateObserver = Observer<Boolean> { isErrorState ->
+        if (isErrorState) {
+            apSnapLoadingProgressBar.hide()
+            apSnapRetryBtnImageView.show()
+        } else {
+            apSnapLoadingProgressBar.show()
+            apSnapRetryBtnImageView.hide()
+        }
     }
 
     private val apSnapLayoutChangeListener = View.OnLayoutChangeListener {

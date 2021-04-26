@@ -34,6 +34,10 @@ internal class APSnapViewModel(
         get() = _isSnapReadyLiveData
     private val _isSnapReadyLiveData = MutableLiveData<Boolean>().apply { value = false }
 
+    val isErrorStateLiveData: LiveData<Boolean>
+        get() = _isErrorStateLiveData
+    private val _isErrorStateLiveData = MutableLiveData<Boolean>().apply { value = false }
+
     private var hasPreparationProgressComponentCount: Int? = null
     private val componentPreparationProgressList = snap.layers.map { 0f }.toMutableList()
     private val componentReadinessList = snap.layers.map { false }.toMutableList()
@@ -85,7 +89,16 @@ internal class APSnapViewModel(
     }
 
     private fun onComponentError(index: Int) {
-        // TODO: implement
+        val viewModel = componentViewModelList[index]
+
+        if (viewModel is APImageComponentViewModel ||
+            viewModel is APGIFComponentViewModel
+        ) {
+            _isErrorStateLiveData.value = true
+        }
+        else {
+            onComponentReady(index, true)
+        }
     }
 
     private fun onComponentPreparationProgressUpdate(index: Int, progress: Float) {
@@ -133,6 +146,11 @@ internal class APSnapViewModel(
         storyViewModelDelegate?.onSnapEvent(
             APSnapEventInfo(snap.id, event)
         )
+    }
+
+    fun prepare() {
+        _isErrorStateLiveData.value = false
+        componentViewModelList.forEach { it?.prepare() }
     }
 
     override fun isActive(): Boolean = true
