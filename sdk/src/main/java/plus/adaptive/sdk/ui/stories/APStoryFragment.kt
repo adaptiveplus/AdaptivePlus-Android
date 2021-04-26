@@ -257,31 +257,26 @@ internal class APStoryFragment :
         val snapIndex = apSnapsViewPager.currentItem
         val snapId = story.snaps.getOrNull(snapIndex)?.id ?: ""
 
-        if (viewModel.isSnapReady(snapId)) {
-            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
-                && !viewModel.isStoriesPaused()
-                && !isUnderTouch
-            ) {
-                if (!apStoriesProgressView.hasStarted()) {
-                    apStoriesProgressView.startStories(snapIndex)
-                } else {
-                    apStoriesProgressView.resume()
-                }
-
-                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESUMED)
-
-                if (snapIndex == story.snaps.lastIndex) {
-                    viewModel.setStoryCampaignWatched()
-                }
+        if (viewModel.isSnapReady(snapId)
+            && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
+            && !viewModel.isStoriesPaused()
+            && !isUnderTouch
+        ) {
+            if (!apStoriesProgressView.hasStarted()) {
+                apStoriesProgressView.startStories(snapIndex)
+            } else {
+                apStoriesProgressView.resume()
             }
-            else {
-                apStoriesProgressView.pause()
-                viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.PAUSED)
+
+            viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.RESUMED)
+
+            if (snapIndex == story.snaps.lastIndex) {
+                viewModel.setStoryCampaignWatched()
             }
         }
         else {
             apStoriesProgressView.pause()
-            viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.PAUSED)
+            viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.PAUSED)
         }
     }
 
@@ -295,7 +290,7 @@ internal class APStoryFragment :
 
     private fun resetLastSnap(elapsedTime: Long) {
         val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
-        viewModel.updateStoryProgressState(snapId = snapId, state = APSnapState.RESET)
+        viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.RESET)
 
         APAnalytics.logEvent(
             APAnalyticsEvent(

@@ -58,7 +58,7 @@ internal class APStoryViewModel(
 
     fun isStoriesPaused() : Boolean = isStoriesPausedLiveData.value == true
 
-    fun updateStoryProgressState(snapId: String, state: APSnapState) {
+    fun updateSnapProgressState(snapId: String, state: APSnapState) {
         _snapStatusLiveData.value =
             APSnapStateInfo(
                 snapId = snapId,
