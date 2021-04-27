@@ -16,7 +16,7 @@ internal class APCrashlyticsRepository(
 ) : APBaseRepository(networkManager, authCredentialsManager, userRepository) {
 
     fun submitLog(log: APLog) {
-        val body = Gson().toJson(log).toRequestBody(JSON_MEDIA_TYPE)
+        val body = Gson().toJson(listOf(log)).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
             .url("$SDK_API_URL/channel-logs")

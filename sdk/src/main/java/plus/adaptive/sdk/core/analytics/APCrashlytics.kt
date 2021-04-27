@@ -32,7 +32,7 @@ private constructor(
             message = t.message ?: t.localizedMessage ?: "",
             code = -1,
             type = APLog.Type.FATAL,
-            data = mapOf("stacktrace" to t.stackTrace),
+            data = mapOf("stacktrace" to t.stackTrace.map { it.toString() }),
             createdAt = getCurrentTimeString()
         )
         submitLog(log)
