@@ -55,34 +55,39 @@ private val apViewDataModelDeserializer =
 
             val campaigns = jsonObject.get("campaigns").asJsonArray
             val entryPoints = campaigns.map { campaignJson ->
-                val campaignJsonObject = campaignJson.asJsonObject
-                val campaignId = campaignJsonObject.get("id").asString
-                val updatedAt = campaignJsonObject.get("updatedAt").asString
-                val status = campaignJsonObject.get("status")?.asString
-                val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
-                val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
-                val entryPointJsonObject = campaignBodyJsonObject.get("entryPoint").asJsonObject
-                val entryPointId = entryPointJsonObject.get("id").asString
-                val entryPointBodyJsonObject = entryPointJsonObject.get("body").asJsonObject
-                entryPointBodyJsonObject.addProperty("id", entryPointId)
-                entryPointBodyJsonObject.addProperty("updatedAt", updatedAt)
-                entryPointBodyJsonObject.addProperty("campaignId", campaignId)
-                entryPointBodyJsonObject.addProperty("status", status)
-                entryPointBodyJsonObject.addProperty("showOnce", showOnce)
+                try {
+                    val campaignJsonObject = campaignJson.asJsonObject
+                    val campaignId = campaignJsonObject.get("id").asString
+                    val updatedAt = campaignJsonObject.get("updatedAt").asString
+                    val status = campaignJsonObject.get("status")?.asString
+                    val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
+                    val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
+                    val entryPointJsonObject = campaignBodyJsonObject.get("entryPoint").asJsonObject
+                    val entryPointId = entryPointJsonObject.get("id").asString
+                    val entryPointBodyJsonObject = entryPointJsonObject.get("body").asJsonObject
+                    entryPointBodyJsonObject.addProperty("id", entryPointId)
+                    entryPointBodyJsonObject.addProperty("updatedAt", updatedAt)
+                    entryPointBodyJsonObject.addProperty("campaignId", campaignId)
+                    entryPointBodyJsonObject.addProperty("status", status)
+                    entryPointBodyJsonObject.addProperty("showOnce", showOnce)
 
-                val gsonBuilder = GsonBuilder()
-                gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
-                gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
-                val apEntryPointGson = gsonBuilder.create()
-                apEntryPointGson.fromJson(
-                    entryPointBodyJsonObject.toString(),
-                    APEntryPoint::class.java)
+                    val gsonBuilder = GsonBuilder()
+                    gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+                    gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
+                    val apEntryPointGson = gsonBuilder.create()
+                    apEntryPointGson.fromJson(
+                        entryPointBodyJsonObject.toString(),
+                        APEntryPoint::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
             }.toList()
 
             APViewDataModel(
                 id = id,
                 options = options,
-                entryPoints = entryPoints
+                entryPoints = entryPoints.filterNotNull()
             )
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
