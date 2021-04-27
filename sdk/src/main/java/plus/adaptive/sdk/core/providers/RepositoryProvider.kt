@@ -3,6 +3,7 @@ package plus.adaptive.sdk.core.providers
 import android.content.Context
 import plus.adaptive.sdk.data.repositories.APAnalyticsRepository
 import plus.adaptive.sdk.data.repositories.APAuthRepository
+import plus.adaptive.sdk.data.repositories.APCrashlyticsRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
 import plus.adaptive.sdk.utils.getUnprocessedAPViewGson
@@ -44,5 +45,13 @@ internal fun provideAPViewRepository(
         provideAPClientCredentialsManager(),
         provideAPUserRepository(context),
         getUnprocessedAPViewGson()
+    )
+}
+
+internal fun provideAPCrashlyticsRepository() : APCrashlyticsRepository {
+    return APCrashlyticsRepository(
+        provideNetworkServiceManager(),
+        provideAPClientCredentialsManager(),
+        provideAPUserRepository(null)
     )
 }

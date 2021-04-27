@@ -6,7 +6,7 @@ import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 internal class APAnalyticsRepository(
@@ -19,16 +19,14 @@ internal class APAnalyticsRepository(
         events: List<Map<String, Any>>,
         callback: RequestResultCallback<Any?>
     ) {
-        val body = RequestBody.create(
-            JSON_MEDIA_TYPE,
-            Gson().toJson(events))
+        val body = Gson().toJson(events).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
             .url("$SDK_API_URL/events")
             .post(body)
             .build()
 
-        executeRequest<Any>(request,
+        executeRequest<Any?>(request,
             { response ->
                 callback.success(response)
             },
