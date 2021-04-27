@@ -62,6 +62,14 @@
             app:apViewId="mock5"
             />
 
+        <plus.adaptive.sdk.ui.AdaptivePlusView
+            android:id="@+id/mock6APView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:apViewId="mock6"
+            />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

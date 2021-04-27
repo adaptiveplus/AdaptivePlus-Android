@@ -1,0 +1,855 @@
+{
+  "id": "Demo APView ID",
+  "options": {
+    "width": 343,
+    "height": 192,
+    "cornerRadius": 4,
+    "magnetize": false,
+    "autoScroll": null,
+    "padding": {
+      "top": 0,
+      "bottom": 0,
+      "left": 16,
+      "right": 16
+    },
+    "spacing": 12,
+    "screenWidth": 375,
+    "showBorder": true
+  },
+  "campaigns": [
+    {
+      "id": "Demo Campaign ID",
+      "updatedAt": "Demo DateTime",
+      "body": {
+        "showOnce": true,
+        "entryPoint": {
+          "id": "Demo EntryPoint ID",
+          "type": "ENTRY_POINT",
+          "body": {
+            "layers": [
+              {
+                "type": "BACKGROUND",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 343,
+                    "height": 192,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "color": "#FFFFFF"
+                }
+              },
+              {
+                "type": "IMAGE",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 343,
+                    "height": 192,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_PkqJZVOwpatperGp.jpg",
+                  "border": null,
+                  "cornerRadius": 4,
+                  "loadingColor": "#FFFFFF"
+                }
+              },
+              {
+                "type": "TEXT",
+                "options": {
+                  "position": {
+                    "x": 16,
+                    "y": 16,
+                    "width": 167,
+                    "height": 19,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "value": "BMW CHRONOLOGY.",
+                  "font": {
+                    "family": "Rokkitt",
+                    "style": "bold",
+                    "size": 17,
+                    "color": "#1A1F16",
+                    "align": "center",
+                    "letterSpacing": 0
+                  }
+                }
+              },
+              {
+                "type": "TEXT",
+                "options": {
+                  "position": {
+                    "x": 16,
+                    "y": 165,
+                    "width": 220,
+                    "height": 13,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "value": "Defining moments in the history of the BMW Group.",
+                  "font": {
+                    "family": "Rokkitt",
+                    "style": "regular",
+                    "size": 10,
+                    "color": "#000000",
+                    "align": "center",
+                    "letterSpacing": 0
+                  }
+                }
+              }
+            ],
+            "actions": [
+              {
+                "type": "SHOW_STORY",
+                "parameters": {
+                  "story": {
+                    "id": "Demo Story ID",
+                    "type": "STORY",
+                    "body": {
+                      "campaignId": "Demo Campaign ID",
+                      "snaps": [
+                        {
+                          "id": "Demo Snap ID #1",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#011E36"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_ETxJXLJWnGtOjUZB.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#011E36"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 178,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "1982.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 178,
+                                    "y": 132,
+                                    "width": 57,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW 320i",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 178,
+                                    "y": 160,
+                                    "width": 141,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "An elegant protest against mediocre engineering.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        },
+                        {
+                          "id": "Demo Snap ID #2",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#01152D"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_lldEiySdiTjamHzs.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#01152D"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "1975.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 132,
+                                    "width": 57,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW 316i",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 160,
+                                    "width": 177,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "A new car inspires dreams about the open road.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        },
+                        {
+                          "id": "Demo Snap ID #3",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#090317"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_GagpEePbojJnSxZM.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#090317"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "1990.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 132,
+                                    "width": 55,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW E36",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 160,
+                                    "width": 138,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "The sedan engineered to turn fuel into adrenalin.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        },
+                        {
+                          "id": "Demo Snap ID #4",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#365826"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_LRoPmaxYWcmDgsDp.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#365826"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "1998.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 132,
+                                    "width": 57,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW 318i",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 20,
+                                    "y": 160,
+                                    "width": 176,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "Heaven above and beneath you.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        },
+                        {
+                          "id": "Demo Snap ID #5",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#97A4AA"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_oUDnHZgpBmcHAIJm.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#97A4AA"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 169,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "2005.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 169,
+                                    "y": 132,
+                                    "width": 65,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW 750Li",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 169,
+                                    "y": 160,
+                                    "width": 170,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "Create perfection and continue.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        },
+                        {
+                          "id": "Demo Snap ID #6",
+                          "type": "SNAP",
+                          "body": {
+                            "layers": [
+                              {
+                                "type": "BACKGROUND",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "color": "#220309"
+                                }
+                              },
+                              {
+                                "type": "IMAGE",
+                                "options": {
+                                  "position": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 375,
+                                    "height": 667,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_fhhpZHkJaQfPMUzR.jpg",
+                                  "border": null,
+                                  "cornerRadius": null,
+                                  "loadingColor": "#220309"
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 185,
+                                    "y": 84,
+                                    "width": 66,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "2015.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 26,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 185,
+                                    "y": 132,
+                                    "width": 57,
+                                    "height": 16,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "BMW 328i",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "bold",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              },
+                              {
+                                "type": "TEXT",
+                                "options": {
+                                  "position": {
+                                    "x": 185,
+                                    "y": 160,
+                                    "width": 135,
+                                    "height": 32,
+                                    "angle": 0
+                                  },
+                                  "opacity": 1
+                                },
+                                "component": {
+                                  "value": "Proof you can put a price on happiness.",
+                                  "font": {
+                                    "family": "Roboto",
+                                    "style": "light",
+                                    "size": 12,
+                                    "color": "#FFFFFF",
+                                    "align": "left",
+                                    "letterSpacing": 0
+                                  }
+                                }
+                              }
+                            ],
+                            "width": 375,
+                            "height": 667,
+                            "actionAreaHeight": null,
+                            "actionArea": null,
+                            "showTime": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
