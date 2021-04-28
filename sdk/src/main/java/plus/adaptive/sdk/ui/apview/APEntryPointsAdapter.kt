@@ -15,6 +15,7 @@ import plus.adaptive.sdk.utils.drawAPLayersOnLayout
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
+import plus.adaptive.sdk.utils.safeRun
 
 
 internal class APEntryPointsAdapter(
@@ -87,7 +88,9 @@ internal class APEntryPointsAdapter(
             )
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
-            drawAPLayersOnLayout(apEntryLayout, entryPoint.layers, scaleFactor, viewModel)
+            safeRun {
+                drawAPLayersOnLayout(apEntryLayout, entryPoint.layers, scaleFactor, viewModel)
+            }
 
             if (entryPoint.status == APEntryPoint.Status.DRAFT) {
                 apTagTextView.show()

@@ -3,6 +3,7 @@ package plus.adaptive.sdk.utils
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.components.*
@@ -24,6 +25,7 @@ internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataMo
     return try {
         getProcessedAPViewGson().fromJson(json, APViewDataModel::class.java)
     } catch (e: JsonSyntaxException) {
+        APCrashlytics.logCrash(e)
         e.printStackTrace()
         null
     }
@@ -39,6 +41,7 @@ internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewData
     return try {
         getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
     } catch (e: JsonSyntaxException) {
+        APCrashlytics.logCrash(e)
         e.printStackTrace()
         null
     }
@@ -79,6 +82,7 @@ private val apViewDataModelDeserializer =
                         entryPointBodyJsonObject.toString(),
                         APEntryPoint::class.java)
                 } catch (e: Exception) {
+                    APCrashlytics.logCrash(e)
                     e.printStackTrace()
                     null
                 }

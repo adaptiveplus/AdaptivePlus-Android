@@ -18,6 +18,7 @@ import plus.adaptive.sdk.ui.stories.vm.APSnapViewModelFactory
 import plus.adaptive.sdk.ui.stories.vm.APStoryViewModelDelegateProtocol
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
 import plus.adaptive.sdk.utils.drawAPSnapActionArea
+import plus.adaptive.sdk.utils.safeRun
 import kotlinx.android.synthetic.main.ap_fragment_snap.*
 import kotlin.math.abs
 
@@ -172,11 +173,18 @@ internal class APSnapFragment :
 
         apContentCardViewConstraintSet.applyTo(apSnapLayout)
 
-        drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
+        safeRun(
+            executable = {
+                drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
 
-        snap.actionArea?.let { actionArea ->
-            drawAPSnapActionArea(apActionAreaLayout, actionArea, scaleFactor, viewModel)
-        }
+                snap.actionArea?.let { actionArea ->
+                    drawAPSnapActionArea(apActionAreaLayout, actionArea, scaleFactor, viewModel)
+                }
+            },
+            onExceptionCaught = {
+                viewModel.onSnapEvent(APSnapEvent.CLOSE_STORIES)
+            }
+        )
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {

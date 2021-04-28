@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.APViewFragment
+import plus.adaptive.sdk.utils.safeRun
 
 
 class AdaptivePlusView : FrameLayout {
@@ -45,26 +46,6 @@ class AdaptivePlusView : FrameLayout {
     private var apCustomActionListener: APCustomActionListener? = null
 
 
-    /**
-     * Setter of adaptive plus view id
-     *
-     * @param apViewId - id of adaptive plus view
-     */
-    fun setAdaptivePlusViewId(apViewId: String) {
-        this.apViewId = apViewId
-        apViewFragment?.setAPViewId(apViewId)
-    }
-
-    /**
-     * Setter of has AdaptivePlusView drafts or not
-     *
-     * @param hasDrafts - true if draft campaigns should be also shown
-     */
-    fun setHasDrafts(hasDrafts: Boolean) {
-        this.apHasDrafts = hasDrafts
-        apViewFragment?.setHasDrafts(hasDrafts)
-    }
-
     private fun init(
         apViewId: String = "",
         apHasDrafts: Boolean = false
@@ -84,14 +65,17 @@ class AdaptivePlusView : FrameLayout {
                         apHasDrafts = apHasDrafts
                     )
                 apViewFragment?.let {
-                    try {
-                        fragmentManager
-                            .beginTransaction()
-                            .replace(id, it)
-                            .commit()
-                    } catch (e: IllegalStateException) {
-                        e.printStackTrace()
-                    }
+                    safeRun(
+                        executable = {
+                            fragmentManager
+                                .beginTransaction()
+                                .replace(id, it)
+                                .commit()
+                        },
+                        onExceptionCaught = {
+                            apViewFragment = null
+                        }
+                    )
                 }
             } else {
                 fragmentManager.findFragmentById(id)?.let {
@@ -114,10 +98,23 @@ class AdaptivePlusView : FrameLayout {
     }
 
     /**
-     * Method to launch force update
+     * Setter of AdaptivePlusView id
+     *
+     * @param apViewId - id of adaptive plus view
      */
-    fun refresh() {
-        apViewFragment?.refresh()
+    fun setAdaptivePlusViewId(apViewId: String) {
+        this.apViewId = apViewId
+        apViewFragment?.setAPViewId(apViewId)
+    }
+
+    /**
+     * Setter of has AdaptivePlusView drafts or not
+     *
+     * @param hasDrafts - true if draft campaigns should be also shown
+     */
+    fun setHasDrafts(hasDrafts: Boolean) {
+        this.apHasDrafts = hasDrafts
+        apViewFragment?.setHasDrafts(hasDrafts)
     }
 
     /**
@@ -129,6 +126,13 @@ class AdaptivePlusView : FrameLayout {
     fun setAPCustomActionListener(listener: APCustomActionListener) {
         this.apCustomActionListener = listener
         apViewFragment?.setAPCustomActionListener(listener)
+    }
+
+    /**
+     * Method to launch force update
+     */
+    fun refresh() {
+        apViewFragment?.refresh()
     }
 
     /**

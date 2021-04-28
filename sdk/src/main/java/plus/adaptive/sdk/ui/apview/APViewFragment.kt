@@ -31,6 +31,7 @@ import plus.adaptive.sdk.ui.apview.vm.APViewModelFactory
 import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.utils.safeRun
 
 
 internal class APViewFragment : Fragment(), APViewDelegateProtocol {
@@ -200,23 +201,25 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     }
 
     private fun magnetizeToPosition(adapterPosition: Int, isSmoothly: Boolean = true) {
-        context?.let {
-            val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
+        safeRun {
+            context?.let {
+                val layoutManager = apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager
 
-            if (isSmoothly) {
-                val smoothScroller = object : LinearSmoothScroller(context) {
-                    override fun getHorizontalSnapPreference(): Int {
-                        return SNAP_TO_START
-                    }
+                if (isSmoothly) {
+                    val smoothScroller = object : LinearSmoothScroller(context) {
+                        override fun getHorizontalSnapPreference(): Int {
+                            return SNAP_TO_START
+                        }
 
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                        return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                            return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+                        }
                     }
+                    smoothScroller.targetPosition = adapterPosition
+                    layoutManager?.startSmoothScroll(smoothScroller)
+                } else {
+                    layoutManager?.scrollToPosition(adapterPosition)
                 }
-                smoothScroller.targetPosition = adapterPosition
-                layoutManager?.startSmoothScroll(smoothScroller)
-            } else {
-                layoutManager?.scrollToPosition(adapterPosition)
             }
         }
     }
