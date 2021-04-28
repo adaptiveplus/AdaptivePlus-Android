@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import plus.adaptive.sdk.R
@@ -88,8 +89,16 @@ internal class APEntryPointsAdapter(
             )
             apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
+            val apEntryLayoutConstraintSet = ConstraintSet()
+            apEntryLayoutConstraintSet.clone(apEntryLayout)
+            apEntryLayoutConstraintSet.constrainWidth(apEntryLayersLayout.id, options.width.toInt())
+            apEntryLayoutConstraintSet.constrainHeight(apEntryLayersLayout.id, options.height.toInt())
+            apEntryLayoutConstraintSet.setScaleX(apEntryLayersLayout.id, scaleFactor)
+            apEntryLayoutConstraintSet.setScaleY(apEntryLayersLayout.id, scaleFactor)
+            apEntryLayoutConstraintSet.applyTo(apEntryLayout)
+
             safeRun {
-                drawAPLayersOnLayout(apEntryLayout, entryPoint.layers, scaleFactor, viewModel)
+                drawAPLayersOnLayout(apEntryLayersLayout, entryPoint.layers, viewModel)
             }
 
             if (entryPoint.status == APEntryPoint.Status.DRAFT) {

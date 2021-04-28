@@ -132,7 +132,9 @@ internal class APSnapFragment :
         val oldWidth = oldRight - oldLeft
         if (v.width != oldWidth) {
             val newSnapHeight = (snap.height * scaleFactor).toInt()
-            val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
+            val oldActionAreaHeight = snap.actionAreaHeight ?: 0.0
+            val newActionAreaHeight = (oldActionAreaHeight * scaleFactor).toInt()
+            val newActionAreaBtmMargin = ((newActionAreaHeight - oldActionAreaHeight) / 2).toInt()
 
             val apContentCardViewConstraintSet = ConstraintSet()
             apContentCardViewConstraintSet.clone(apSnapLayout)
@@ -146,6 +148,8 @@ internal class APSnapFragment :
                     apActionAreaLayout.id, ConstraintSet.BOTTOM, apContentCardView.id, ConstraintSet.BOTTOM)
                 apContentCardViewConstraintSet.clear(
                     apActionAreaLayout.id, ConstraintSet.TOP)
+                apContentCardViewConstraintSet.setMargin(
+                    apActionAreaLayout.id, ConstraintSet.BOTTOM, newActionAreaBtmMargin)
             } else {
                 apContentCardViewConstraintSet.connect(
                     apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
@@ -155,6 +159,8 @@ internal class APSnapFragment :
                     apActionAreaLayout.id, ConstraintSet.TOP, apContentCardView.id, ConstraintSet.BOTTOM)
                 apContentCardViewConstraintSet.connect(
                     apActionAreaLayout.id, ConstraintSet.BOTTOM, apSnapLayout.id, ConstraintSet.BOTTOM)
+                apContentCardViewConstraintSet.setMargin(
+                    apActionAreaLayout.id, ConstraintSet.BOTTOM, 0)
             }
 
             apContentCardViewConstraintSet.applyTo(apSnapLayout)
@@ -162,23 +168,32 @@ internal class APSnapFragment :
     }
 
     private fun drawSnap() {
-        val apContentCardViewConstraintSet = ConstraintSet()
-        apContentCardViewConstraintSet.clone(apSnapLayout)
+        val apSnapLayoutConstraintSet = ConstraintSet()
+        apSnapLayoutConstraintSet.clone(apSnapLayout)
+        apSnapLayoutConstraintSet.constrainHeight(
+            apContentCardView.id, (snap.height * scaleFactor).toInt())
+        apSnapLayoutConstraintSet.constrainWidth(
+            apActionAreaLayout.id, snap.width.toInt())
+        apSnapLayoutConstraintSet.constrainHeight(
+            apActionAreaLayout.id, (snap.actionAreaHeight ?: 0.0).toInt())
+        apSnapLayoutConstraintSet.setScaleX(apActionAreaLayout.id, scaleFactor)
+        apSnapLayoutConstraintSet.setScaleY(apActionAreaLayout.id, scaleFactor)
+        apSnapLayoutConstraintSet.applyTo(apSnapLayout)
 
-        val newSnapHeight = (snap.height * scaleFactor).toInt()
-        apContentCardViewConstraintSet.constrainHeight(apContentCardView.id, newSnapHeight)
-
-        val newActionAreaHeight = ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt()
-        apContentCardViewConstraintSet.constrainHeight(apActionAreaLayout.id, newActionAreaHeight)
-
-        apContentCardViewConstraintSet.applyTo(apSnapLayout)
+        val apContentLayoutConstraintSet = ConstraintSet()
+        apContentLayoutConstraintSet.clone(apContentLayout)
+        apContentLayoutConstraintSet.constrainWidth(apSnapLayersLayout.id, snap.width.toInt())
+        apContentLayoutConstraintSet.constrainHeight(apSnapLayersLayout.id, snap.height.toInt())
+        apContentLayoutConstraintSet.setScaleX(apSnapLayersLayout.id, scaleFactor)
+        apContentLayoutConstraintSet.setScaleY(apSnapLayersLayout.id, scaleFactor)
+        apContentLayoutConstraintSet.applyTo(apContentLayout)
 
         safeRun(
             executable = {
-                drawAPLayersOnLayout(apContentLayout, snap.layers, scaleFactor, viewModel)
+                drawAPLayersOnLayout(apSnapLayersLayout, snap.layers, viewModel)
 
                 snap.actionArea?.let { actionArea ->
-                    drawAPSnapActionArea(apActionAreaLayout, actionArea, scaleFactor, viewModel)
+                    drawAPSnapActionArea(apActionAreaLayout, actionArea, viewModel)
                 }
             },
             onExceptionCaught = {

@@ -9,11 +9,12 @@
     app:cardBackgroundColor="@color/apTransparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/apEntryLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/apEntryLayout"
+            android:id="@+id/apEntryLayersLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"

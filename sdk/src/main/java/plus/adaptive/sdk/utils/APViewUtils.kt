@@ -41,7 +41,6 @@ internal fun buildComponentView(
 internal fun drawAPLayersOnLayout(
     layout: ConstraintLayout,
     layers: List<APLayer>,
-    scaleFactor: Float = 1f,
     componentViewModelProvider: APComponentViewModelProvider?
 ) {
     layout.removeAllViews()
@@ -54,27 +53,22 @@ internal fun drawAPLayersOnLayout(
 
             layout.addView(componentView)
 
-            val xDisplacement = layer.options.position.width * (scaleFactor - 1f) / 2
-            val yDisplacement = layer.options.position.height * (scaleFactor - 1f) / 2
-
             val componentConstraintSet = ConstraintSet()
             componentConstraintSet.clone(layout)
             componentConstraintSet.connect(
                 componentView.id, ConstraintSet.START,
                 layout.id, ConstraintSet.START,
-                (layer.options.position.x * scaleFactor + xDisplacement).toInt()
+                layer.options.position.x.toInt()
             )
             componentConstraintSet.connect(
                 componentView.id, ConstraintSet.TOP,
                 layout.id, ConstraintSet.TOP,
-                (layer.options.position.y * scaleFactor + yDisplacement).toInt()
+                layer.options.position.y.toInt()
             )
             componentConstraintSet.constrainWidth(
                 componentView.id, layer.options.position.width.toInt())
             componentConstraintSet.constrainHeight(
                 componentView.id, layer.options.position.height.toInt())
-            componentConstraintSet.setScaleX(componentView.id, scaleFactor)
-            componentConstraintSet.setScaleY(componentView.id, scaleFactor)
             componentConstraintSet.setAlpha(
                 componentView.id, layer.options.opacity.toFloat())
             componentConstraintSet.setRotation(
@@ -119,7 +113,6 @@ internal fun buildActionAreaView(
 internal fun drawAPSnapActionArea(
     layout: ConstraintLayout,
     actionArea: APSnap.ActionArea,
-    scaleFactor: Float = 1f,
     actionAreaListener: APActionAreaListener?
 ) {
     layout.removeAllViews()
@@ -143,9 +136,6 @@ internal fun drawAPSnapActionArea(
                 constraintSet.connect(
                     actionAreaView.id, ConstraintSet.TOP,
                     layout.id, ConstraintSet.TOP)
-
-                constraintSet.setScaleX(actionAreaView.id, scaleFactor)
-                constraintSet.setScaleY(actionAreaView.id, scaleFactor)
             }
         }
 
