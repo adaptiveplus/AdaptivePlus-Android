@@ -23,8 +23,10 @@ internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): 
 
 internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataModel? {
     return try {
-        getProcessedAPViewGson().fromJson(json, APViewDataModel::class.java)
-    } catch (e: JsonSyntaxException) {
+        val dataModel = getProcessedAPViewGson().fromJson(json, APViewDataModel::class.java)
+        checkAPViewDataModelProperties(dataModel)
+        dataModel
+    } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
         null
@@ -39,8 +41,10 @@ internal fun getUnprocessedAPViewGson(): Gson {
 
 internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewDataModel? {
     return try {
-        getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
-    } catch (e: JsonSyntaxException) {
+        val dataModel = getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
+        checkAPViewDataModelProperties(dataModel)
+        dataModel
+    } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
         null
@@ -78,9 +82,13 @@ private val apViewDataModelDeserializer =
                     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
                     gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
                     val apEntryPointGson = gsonBuilder.create()
-                    apEntryPointGson.fromJson(
+                    val apEntryPoint = apEntryPointGson.fromJson(
                         entryPointBodyJsonObject.toString(),
                         APEntryPoint::class.java)
+
+                    checkAPEntryPointProperties(apEntryPoint)
+
+                    apEntryPoint
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)
                     e.printStackTrace()
@@ -380,3 +388,195 @@ private val apEntryPointActionSerializer =
 
         jsonObject
     }
+
+private fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
+    dataModel.run {
+        id
+        options.run {
+            width
+            height
+            cornerRadius
+            magnetize
+            autoScroll
+            checkAPPaddingProperties(padding)
+            spacing
+            screenWidth
+            showBorder
+        }
+        entryPoints
+    }
+}
+
+private fun checkAPPaddingProperties(padding: APPadding) {
+    padding.run {
+        top
+        bottom
+        left
+        right
+    }
+}
+
+private fun checkAPEntryPointProperties(entryPoint: APEntryPoint) {
+    entryPoint.run {
+        id
+        updatedAt
+        campaignId
+        status
+        showOnce
+        layers.forEach { checkAPLayerProperties(it) }
+        actions.forEach { checkAPActionProperties(it) }
+    }
+}
+
+private fun checkAPLayerProperties(apLayer: APLayer) {
+    apLayer.run {
+        type
+        options.run {
+            position.run {
+                x
+                y
+                width
+                height
+                angle
+            }
+            opacity
+        }
+        component?.let { checkAPComponentProperties(component) }
+    }
+}
+
+private fun checkAPComponentProperties(apComponent: APComponent) {
+    apComponent.run {
+        when (this) {
+            is APBackgroundComponent -> {
+                color
+            }
+            is APTextComponent -> {
+                value
+                font?.let { checkAPFontProperties(it) }
+            }
+            is APImageComponent -> {
+                url
+                border?.run {
+                    active.run {
+                        width
+                        checkAPGradientColorProperties(color)
+                        padding
+                        cornerRadius
+                    }
+                    inactive.run {
+                        width
+                        checkAPGradientColorProperties(color)
+                        padding
+                        cornerRadius
+                    }
+                }
+                cornerRadius
+                loadingColor
+            }
+            is APGIFComponent -> {
+                url
+                border?.run {
+                    active.run {
+                        width
+                        checkAPGradientColorProperties(color)
+                        padding
+                        cornerRadius
+                    }
+                    inactive.run {
+                        width
+                        checkAPGradientColorProperties(color)
+                        padding
+                        cornerRadius
+                    }
+                }
+                cornerRadius
+                loadingColor
+            }
+            is APButtonComponent -> {
+                text.run {
+                    value
+                    font?.let { checkAPFontProperties(it) }
+                }
+                actions.forEach { checkAPActionProperties(it) }
+                cornerRadius
+                backgroundColor
+            }
+            else -> { }
+        }
+    }
+}
+
+private fun checkAPFontProperties(apFont: APFont) {
+    apFont.run {
+        family
+        style
+        size
+        color
+        align
+        letterSpacing
+        lineHeight
+    }
+}
+
+private fun checkAPGradientColorProperties(color: APGradientColor) {
+    color.run {
+        startColor
+        endColor
+        angle
+    }
+}
+
+private fun checkAPActionProperties(apAction: APAction) {
+    apAction.run {
+        when (this) {
+            is APShowStoryAction -> {
+                checkAPStoryProperties(story)
+            }
+            is APOpenWebLinkAction -> {
+                url
+            }
+            is APCustomAction -> {
+                parameters
+            }
+            else -> { }
+        }
+    }
+}
+
+private fun checkAPStoryProperties(apStory: APStory) {
+    apStory.run {
+        id
+        campaignId
+        snaps.forEach { checkAPSnapProperties(it) }
+    }
+}
+
+private fun checkAPSnapProperties(apSnap: APSnap) {
+    apSnap.run {
+        id
+        layers.forEach { checkAPLayerProperties(it) }
+        width
+        height
+        actionAreaHeight
+        actionArea.run {
+            when (this) {
+                is APSnap.ButtonActionArea -> {
+                    text.run {
+                        value
+                        font?.let { checkAPFontProperties(it) }
+                    }
+                    actions.forEach { checkAPActionProperties(it) }
+                    cornerRadius
+                    backgroundColor
+                    border?.run {
+                        width
+                        checkAPGradientColorProperties(color)
+                    }
+                }
+                else -> { }
+            }
+        }
+        showTime
+    }
+}
