@@ -1,19 +1,19 @@
 {
   "id": "Demo APView ID",
   "options": {
-    "width": 343,
-    "height": 192,
-    "cornerRadius": 4,
+    "width": 1372,
+    "height": 768,
+    "cornerRadius": 16,
     "magnetize": false,
     "autoScroll": null,
     "padding": {
       "top": 0,
       "bottom": 0,
-      "left": 16,
-      "right": 16
+      "left": 64,
+      "right": 64
     },
-    "spacing": 12,
-    "screenWidth": 375,
+    "spacing": 48,
+    "screenWidth": 1500,
     "showBorder": true
   },
   "campaigns": [
@@ -33,8 +33,8 @@
                   "position": {
                     "x": 0,
                     "y": 0,
-                    "width": 343,
-                    "height": 192,
+                    "width": 1372,
+                    "height": 768,
                     "angle": 0
                   },
                   "opacity": 1
@@ -49,8 +49,8 @@
                   "position": {
                     "x": 0,
                     "y": 0,
-                    "width": 343,
-                    "height": 192,
+                    "width": 1372,
+                    "height": 768,
                     "angle": 0
                   },
                   "opacity": 1
@@ -58,7 +58,7 @@
                 "component": {
                   "url": "https://aplus-4bf93439-2acd-4c7b-bbef-2f320f63a3b5.s3-us-west-2.amazonaws.com/20210427_PkqJZVOwpatperGp.jpg",
                   "border": null,
-                  "cornerRadius": 4,
+                  "cornerRadius": 16,
                   "loadingColor": "#FFFFFF"
                 }
               },
@@ -66,10 +66,10 @@
                 "type": "TEXT",
                 "options": {
                   "position": {
-                    "x": 16,
-                    "y": 16,
-                    "width": 167,
-                    "height": 19,
+                    "x": 64,
+                    "y": 64,
+                    "width": 676,
+                    "height": 76,
                     "angle": 0
                   },
                   "opacity": 1
@@ -79,7 +79,7 @@
                   "font": {
                     "family": "Rokkitt",
                     "style": "bold",
-                    "size": 17,
+                    "size": 68,
                     "color": "#1A1F16",
                     "align": "center",
                     "letterSpacing": 0
@@ -90,10 +90,10 @@
                 "type": "TEXT",
                 "options": {
                   "position": {
-                    "x": 16,
-                    "y": 165,
-                    "width": 220,
-                    "height": 13,
+                    "x": 64,
+                    "y": 660,
+                    "width": 880,
+                    "height": 52,
                     "angle": 0
                   },
                   "opacity": 1
@@ -103,7 +103,7 @@
                   "font": {
                     "family": "Rokkitt",
                     "style": "regular",
-                    "size": 10,
+                    "size": 40,
                     "color": "#000000",
                     "align": "center",
                     "letterSpacing": 0
@@ -132,8 +132,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -148,8 +148,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -165,10 +165,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 178,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 712,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -178,7 +178,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -189,10 +189,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 178,
-                                    "y": 132,
-                                    "width": 57,
-                                    "height": 16,
+                                    "x": 712,
+                                    "y": 528,
+                                    "width": 228,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -202,7 +202,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -213,10 +213,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 178,
-                                    "y": 160,
-                                    "width": 141,
-                                    "height": 32,
+                                    "x": 712,
+                                    "y": 640,
+                                    "width": 564,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -226,7 +226,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -234,8 +234,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
@@ -252,8 +252,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -268,8 +268,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -285,10 +285,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 80,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -298,7 +298,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -309,10 +309,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 132,
-                                    "width": 57,
-                                    "height": 16,
+                                    "x": 80,
+                                    "y": 528,
+                                    "width": 228,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -322,7 +322,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -333,10 +333,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 160,
-                                    "width": 177,
-                                    "height": 32,
+                                    "x": 80,
+                                    "y": 640,
+                                    "width": 708,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -346,7 +346,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -354,8 +354,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
@@ -372,8 +372,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -388,8 +388,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -405,10 +405,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 80,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -418,7 +418,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -429,10 +429,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 132,
-                                    "width": 55,
-                                    "height": 16,
+                                    "x": 80,
+                                    "y": 528,
+                                    "width": 220,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -442,7 +442,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -453,10 +453,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 160,
-                                    "width": 138,
-                                    "height": 32,
+                                    "x": 80,
+                                    "y": 640,
+                                    "width": 552,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -466,7 +466,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -474,8 +474,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
@@ -492,8 +492,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -508,8 +508,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -525,10 +525,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 80,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -538,7 +538,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -549,10 +549,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 132,
-                                    "width": 57,
-                                    "height": 16,
+                                    "x": 80,
+                                    "y": 528,
+                                    "width": 228,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -562,7 +562,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -573,10 +573,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 20,
-                                    "y": 160,
-                                    "width": 176,
-                                    "height": 16,
+                                    "x": 80,
+                                    "y": 640,
+                                    "width": 704,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -586,7 +586,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -594,8 +594,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
@@ -612,8 +612,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -628,8 +628,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -645,10 +645,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 169,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 676,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -658,7 +658,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -669,10 +669,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 169,
-                                    "y": 132,
-                                    "width": 65,
-                                    "height": 16,
+                                    "x": 676,
+                                    "y": 528,
+                                    "width": 260,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -682,7 +682,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -693,10 +693,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 169,
-                                    "y": 160,
-                                    "width": 170,
-                                    "height": 16,
+                                    "x": 676,
+                                    "y": 640,
+                                    "width": 680,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -706,7 +706,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -714,8 +714,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
@@ -732,8 +732,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -748,8 +748,8 @@
                                   "position": {
                                     "x": 0,
                                     "y": 0,
-                                    "width": 375,
-                                    "height": 667,
+                                    "width": 1500,
+                                    "height": 2668,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -765,10 +765,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 185,
-                                    "y": 84,
-                                    "width": 66,
-                                    "height": 32,
+                                    "x": 740,
+                                    "y": 336,
+                                    "width": 264,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -778,7 +778,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 26,
+                                    "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -789,10 +789,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 185,
-                                    "y": 132,
-                                    "width": 57,
-                                    "height": 16,
+                                    "x": 740,
+                                    "y": 528,
+                                    "width": 228,
+                                    "height": 64,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -802,7 +802,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "bold",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -813,10 +813,10 @@
                                 "type": "TEXT",
                                 "options": {
                                   "position": {
-                                    "x": 185,
-                                    "y": 160,
-                                    "width": 135,
-                                    "height": 32,
+                                    "x": 740,
+                                    "y": 640,
+                                    "width": 540,
+                                    "height": 128,
                                     "angle": 0
                                   },
                                   "opacity": 1
@@ -826,7 +826,7 @@
                                   "font": {
                                     "family": "Roboto",
                                     "style": "light",
-                                    "size": 12,
+                                    "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
                                     "letterSpacing": 0
@@ -834,8 +834,8 @@
                                 }
                               }
                             ],
-                            "width": 375,
-                            "height": 667,
+                            "width": 1500,
+                            "height": 2668,
                             "actionAreaHeight": null,
                             "actionArea": null,
                             "showTime": 3
