@@ -8,7 +8,7 @@ import plus.adaptive.sdk.data.models.APViewDataModel
 import plus.adaptive.sdk.data.models.network.APViewRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 internal class APViewRepository(
@@ -35,9 +35,7 @@ internal class APViewRepository(
             parserVersion = 1,
             hasDrafts = hasDrafts
         )
-        val body = RequestBody.create(
-            JSON_MEDIA_TYPE,
-            Gson().toJson(obj))
+        val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
             .url("$SDK_API_URL/ap-view-templates/$apViewId")
