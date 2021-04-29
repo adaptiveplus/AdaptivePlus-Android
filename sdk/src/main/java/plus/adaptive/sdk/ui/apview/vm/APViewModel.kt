@@ -47,6 +47,8 @@ internal class APViewModel(
         isEmptyViewId: Boolean = false
     ) {
         if (!isCached || _apViewDataModelLiveData.value == null) {
+            sortCampaigns(dataModel)
+
             if (!isCached) {
                 saveAPViewDataModelToCache(dataModel.id, dataModel)
 
@@ -57,6 +59,25 @@ internal class APViewModel(
 
             _apViewDataModelLiveData.value = dataModel
         }
+    }
+
+    private fun sortCampaigns(dataModel: APViewDataModel) {
+        val activeEntries = mutableListOf<APEntryPoint>()
+        val inactiveEntries = mutableListOf<APEntryPoint>()
+
+        dataModel.entryPoints.forEach {
+            if (getAPEntryPointViewModel(it)?.isActive() == true) {
+                activeEntries.add(it)
+            } else {
+                inactiveEntries.add(it)
+            }
+        }
+
+        val newEntryList = mutableListOf<APEntryPoint>().apply {
+            addAll(activeEntries)
+            addAll(inactiveEntries)
+        }
+        dataModel.entryPoints = newEntryList
     }
 
     fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {

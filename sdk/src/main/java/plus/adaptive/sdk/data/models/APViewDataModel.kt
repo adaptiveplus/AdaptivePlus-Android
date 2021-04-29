@@ -9,7 +9,7 @@ internal data class APViewDataModel(
     val id: String,
     val options: Options,
     @SerializedName("entryPoints")
-    val entryPoints: List<APEntryPoint>
+    var entryPoints: List<APEntryPoint>
 ) : Serializable {
 
     data class Options(
