@@ -92,7 +92,16 @@ internal class APViewModel(
                     }
                 }
 
-                override fun failure(error: APError?) { }
+                override fun failure(error: APError?) {
+                    runOnMainThread {
+                        _apViewDataModelLiveData.value?.let {
+                            setAPViewDataModel(
+                                dataModel = it,
+                                isEmptyViewId = apViewId.isEmpty()
+                            )
+                        }
+                    }
+                }
             }
         )
     }
