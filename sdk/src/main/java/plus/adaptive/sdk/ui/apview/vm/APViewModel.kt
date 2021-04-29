@@ -133,7 +133,11 @@ internal class APViewModel(
     }
 
     override fun getAutoScrollPeriod(): Long? {
-        return _apViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
+        val autoScroll = _apViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
+        if (autoScroll == null || autoScroll <= 0L) {
+            return null
+        }
+        return autoScroll
     }
 
     override fun showBorder(): Boolean {
