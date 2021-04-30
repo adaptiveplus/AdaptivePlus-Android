@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import plus.adaptive.sdk.R
@@ -54,6 +53,7 @@ internal class APStoryFragment :
     private var snapsAdapter: APSnapsPagerAdapter? = null
 
     private var isUnderTouch = false
+    private var isFragmentStateResumed = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,11 +109,13 @@ internal class APStoryFragment :
 
     override fun onResume() {
         super.onResume()
+        isFragmentStateResumed = true
         updateStoryProgressState()
     }
 
     override fun onPause() {
         super.onPause()
+        isFragmentStateResumed = false
         updateStoryProgressState()
     }
 
@@ -258,7 +260,7 @@ internal class APStoryFragment :
         val snapId = story.snaps.getOrNull(snapIndex)?.id ?: ""
 
         if (viewModel.isSnapReady(snapId)
-            && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
+            && isFragmentStateResumed
             && !viewModel.isStoriesPaused()
             && !isUnderTouch
         ) {
