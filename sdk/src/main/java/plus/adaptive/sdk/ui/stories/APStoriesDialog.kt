@@ -124,6 +124,9 @@ internal class APStoriesDialog :
 
     override fun closeStories() {
         dismiss()
-        apViewModelDelegate.onAPStoriesDismissed()
+
+        val lastShownStory = stories.getOrNull(apStoriesViewPager?.currentItem ?: -1)
+        val campaignId = lastShownStory?.campaignId
+        apViewModelDelegate.onAPStoriesDismissed(campaignId)
     }
 }

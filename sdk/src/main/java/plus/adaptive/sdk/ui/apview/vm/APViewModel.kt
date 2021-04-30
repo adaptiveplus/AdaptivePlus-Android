@@ -130,10 +130,10 @@ internal class APViewModel(
         _apStoriesPauseNumberLiveData.value = _apStoriesPauseNumberLiveData.value?.dec() ?: 0
     }
 
-    override fun onAPStoriesDismissed() {
+    override fun onAPStoriesDismissed(campaignId: String?) {
         _apViewDataModelLiveData.value?.let { dataModel ->
-            dataModel.entryPoints.findLast {
-                getAPEntryPointViewModel(it)?.isActive() != true
+            dataModel.entryPoints.firstOrNull {
+                it.campaignId == campaignId
             }?.let { entryPoint ->
                 _magnetizeEntryPointEventLiveData.value = Event(entryPoint.id)
             }

@@ -32,8 +32,10 @@ internal interface APViewModelDelegateProtocol {
 
     /**
      * Method to notify apView that stories dialog was dismissed
+     *
+     * @param campaignId - campaignId of the last shown story or null if undefined
      */
-    fun onAPStoriesDismissed()
+    fun onAPStoriesDismissed(campaignId: String?)
 
     /**
      * Getter of entry point auto scroll period
