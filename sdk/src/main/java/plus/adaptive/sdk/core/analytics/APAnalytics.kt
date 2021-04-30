@@ -17,6 +17,7 @@ private constructor(
 ) {
 
     companion object {
+        private const val ERROR_STATE_TIMEOUT = 15000L
         private var SUBMIT_REQUEST_TIMEOUT = 120000L
         private var EVENTS_SUBMIT_COUNT = 25
 
@@ -47,6 +48,7 @@ private constructor(
 
     private var submitRequestState = RequestState.NONE
     private var lastSubmitTime: Long = 0L
+    private var lastErrorTime: Long = 0L
 
     private val eventBuffer = mutableListOf<APAnalyticsEvent>()
 
@@ -78,7 +80,11 @@ private constructor(
     }
 
     private fun submitEvents() {
-        if (submitRequestState == RequestState.IN_PROCESS) {
+        val currentTime = System.currentTimeMillis()
+
+        if (submitRequestState == RequestState.IN_PROCESS ||
+            currentTime - lastErrorTime < ERROR_STATE_TIMEOUT - 50
+        ) {
             return
         }
 
@@ -108,12 +114,17 @@ private constructor(
 
             override fun failure(error: APError?) {
                 submitRequestState = RequestState.ERROR
-                runCheckTask()
+                lastErrorTime = System.currentTimeMillis()
+                runCheckTask(isError = true)
             }
         })
     }
 
-    private fun runCheckTask() {
-        runDelayedTask(task, SUBMIT_REQUEST_TIMEOUT)
+    private fun runCheckTask(isError: Boolean = false) {
+        if (isError) {
+            runDelayedTask(task, ERROR_STATE_TIMEOUT)
+        } else {
+            runDelayedTask(task, SUBMIT_REQUEST_TIMEOUT)
+        }
     }
 }
