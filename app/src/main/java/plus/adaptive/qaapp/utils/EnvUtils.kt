@@ -158,15 +158,13 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
         Environment.SDK_V2.value -> APSdkEnvironment(
             name = Environment.SDK_V2.value,
             appId = "plus.adaptive.qaapp",
-            channelSecret = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps",
-            baseApiUrl = "http://test.adaptive.plus:3000",
+            apiKey = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps",
             apViews = sdkV2APViews
         )
         Environment.MOCK.value -> APSdkEnvironment(
             name = Environment.MOCK.value,
             appId = "plus.adaptive.qaapp",
-            channelSecret = "",
-            baseApiUrl = "http://test.adaptive.plus:3000",
+            apiKey = "",
             apViews = listOf()
         )
         else -> null
@@ -174,5 +172,6 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
 }
 
 private val sdkV2APViews = listOf(
-    APSdkEnvironment.APView(id = "", hasDrafts = true)
+    APSdkEnvironment.APView(id = "", hasDrafts = true),
+    APSdkEnvironment.APView(id = "", hasDrafts = false)
 )

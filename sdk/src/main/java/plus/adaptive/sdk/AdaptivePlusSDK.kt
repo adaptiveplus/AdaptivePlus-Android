@@ -1,7 +1,6 @@
 package plus.adaptive.sdk
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
@@ -12,6 +11,7 @@ import plus.adaptive.sdk.core.providers.provideAPAuthRepository
 import plus.adaptive.sdk.core.providers.provideAPClientCredentialsManager
 import plus.adaptive.sdk.core.providers.provideAPUserRepository
 import plus.adaptive.sdk.data.*
+import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APUser
@@ -35,6 +35,10 @@ class AdaptivePlusSDK {
     private var userRepository: APUserRepository? = null
 
 
+    fun init(apiKey: String) {
+        provideAPClientCredentialsManager().setApiKey(apiKey)
+    }
+
     @MainThread
     fun start(
         context: Context,
@@ -46,19 +50,12 @@ class AdaptivePlusSDK {
     ) {
         stop()
 
-        provideAPClientCredentialsManager().init(context)
+        provideAPClientCredentialsManager().getAuthCredentials()
+            ?: throw APInitializationException()
+
         APAnalytics.init(
             provideAPUserRepository(context),
             provideAPAnalyticsRepository(context))
-
-        val appInfo = context.packageManager.getApplicationInfo(
-            context.packageName,
-            PackageManager.GET_META_DATA
-        )
-
-        appInfo.metaData?.getString(META_KEY_BASE_API_URL)?.let { url ->
-            BASE_API_URL = url
-        }
 
         IS_DEBUGGABLE = isDebuggable
         LOCALE = locale ?:
@@ -161,8 +158,7 @@ class AdaptivePlusSDK {
     )
     fun setTestEnvironment(
         context: Context,
-        channelSecret: String,
-        baseUrl: String,
+        apiKey: String,
         customIP: String?
     ) {
         val testAppIds = listOf(
@@ -175,8 +171,7 @@ class AdaptivePlusSDK {
             return
         }
 
-        provideAPClientCredentialsManager().setTestChannelSecret(channelSecret)
-        BASE_API_URL = baseUrl
+        provideAPClientCredentialsManager().setTestApiKey(apiKey)
         CUSTOM_IP_ADDRESS = customIP
     }
 

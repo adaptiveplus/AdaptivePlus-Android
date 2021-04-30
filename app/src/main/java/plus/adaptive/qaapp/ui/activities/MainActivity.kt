@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         val env = getEnvByName(this, envName)
 
         supportActionBar?.title = envName
-        supportActionBar?.subtitle = env?.baseApiUrl
 
         if (env == null) {
             finish()
@@ -64,8 +63,7 @@ class MainActivity : AppCompatActivity() {
         AdaptivePlusSDK().apply {
             setTestEnvironment(
                 context = this@MainActivity,
-                channelSecret = env.channelSecret,
-                baseUrl = env.baseApiUrl,
+                apiKey = env.apiKey,
                 customIP = customIP
             )
 

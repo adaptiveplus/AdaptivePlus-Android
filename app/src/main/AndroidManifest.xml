@@ -4,7 +4,7 @@
     package="plus.adaptive.qaapp">
 
     <application
-        android:name="androidx.multidex.MultiDexApplication"
+        android:name=".core.APQAApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -33,14 +33,6 @@
             </intent-filter>
         </service>
 
-<!--        <meta-data-->
-<!--            android:name="adaptivePlusBaseApiUrl"-->
-<!--            android:value="http://test.adaptive.plus:3000"-->
-<!--            />-->
-<!--        <meta-data-->
-<!--            android:name="adaptivePlusApiKey"-->
-<!--            android:value="uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps"-->
-<!--            />-->
     </application>
 
 </manifest>

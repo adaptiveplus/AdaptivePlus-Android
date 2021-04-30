@@ -30,9 +30,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "SDK_API_URL", "\"http://test.adaptive.plus:3000/v1\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "SDK_API_URL", "\"http://test.adaptive.plus:3000/v1\""
         }
     }
     compileOptions {

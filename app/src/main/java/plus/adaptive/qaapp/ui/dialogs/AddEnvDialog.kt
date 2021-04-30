@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil
 import androidx.fragment.app.DialogFragment
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.data.APSdkEnvironment
@@ -46,15 +45,12 @@ class AddEnvDialog : DialogFragment() {
         addEnvBtn.setOnClickListener {
             if (envNameEditText.text.toString().isNotEmpty() &&
                 appIdEditText.text.toString().isNotEmpty() &&
-                baseUrlEditText.text.toString().isNotEmpty() &&
-                URLUtil.isValidUrl(baseUrlEditText.text.toString()) &&
-                channelSecretEditText.text.toString().isNotEmpty()
+                apiKeyEditText.text.toString().isNotEmpty()
             ) {
                 val newEnv = APSdkEnvironment(
                     name = envNameEditText.text.toString(),
-                    baseApiUrl = baseUrlEditText.text.toString(),
                     appId = appIdEditText.text.toString(),
-                    channelSecret = channelSecretEditText.text.toString(),
+                    apiKey = apiKeyEditText.text.toString(),
                     apViews = listOf()
                 )
 

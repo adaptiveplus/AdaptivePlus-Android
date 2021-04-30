@@ -6,8 +6,7 @@ import java.io.Serializable
 data class APSdkEnvironment(
     val name: String,
     val appId: String,
-    val channelSecret: String,
-    val baseApiUrl: String,
+    val apiKey: String,
     var apViews: List<APView>
 ) : Serializable {
 

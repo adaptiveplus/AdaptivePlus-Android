@@ -28,16 +28,6 @@
             />
 
         <EditText
-            android:id="@+id/baseUrlEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="BASE API URL"
-            />
-
-        <EditText
             android:id="@+id/appIdEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,13 +38,13 @@
             />
 
         <EditText
-            android:id="@+id/channelSecretEditText"
+            android:id="@+id/apiKeyEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:hint="CHANNEL SECRET"
+            android:hint="API KEY"
             android:inputType="text"
             />
 

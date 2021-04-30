@@ -1,10 +1,6 @@
 package plus.adaptive.sdk.core.managers
 
-import android.content.Context
-import android.content.pm.PackageManager
-import plus.adaptive.sdk.data.META_KEY_CHANNEL_SECRET
 import plus.adaptive.sdk.data.models.APAuthCredentials
-import plus.adaptive.sdk.data.exceptions.APInitializationException
 
 
 internal class APAuthCredentialsManager {
@@ -18,18 +14,15 @@ internal class APAuthCredentialsManager {
     }
 
 
-    fun init(context: Context) {
-        val appInfo = context.packageManager.getApplicationInfo(
-            context.packageName,
-            PackageManager.GET_META_DATA
-        )
-        channelSecret = appInfo.metaData?.getString(META_KEY_CHANNEL_SECRET)
+    fun setApiKey(apiKey: String) {
+        channelSecret = apiKey
+    }
 
-        if (channelSecret == null) {
-            if (testChannelSecret == null) {
-                throw APInitializationException()
-            }
-        }
+    @Deprecated(
+        message = "Only for testing purposes.",
+        level = DeprecationLevel.WARNING)
+    fun setTestApiKey(channelSecret: String?) {
+        testChannelSecret = channelSecret
     }
 
     fun getAuthCredentials() : APAuthCredentials? {
@@ -41,12 +34,5 @@ internal class APAuthCredentialsManager {
                 channelSecret = it
             )
         }
-    }
-
-    @Deprecated(
-        message = "Only for testing purposes.",
-        level = DeprecationLevel.WARNING)
-    fun setTestChannelSecret(channelSecret: String?) {
-        testChannelSecret = channelSecret
     }
 }
