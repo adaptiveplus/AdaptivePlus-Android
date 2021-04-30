@@ -21,7 +21,7 @@
       "id": "Demo Campaign ID",
       "updatedAt": "Demo DateTime",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "Demo EntryPoint ID",
           "type": "ENTRY_POINT",

@@ -47,7 +47,7 @@ internal class APViewModel(
         isEmptyViewId: Boolean = false
     ) {
         if (!isCached || _apViewDataModelLiveData.value == null) {
-            sortCampaigns(dataModel)
+            sortAndFilterCampaigns(dataModel)
 
             if (!isCached) {
                 saveAPViewDataModelToCache(dataModel.id, dataModel)
@@ -61,7 +61,7 @@ internal class APViewModel(
         }
     }
 
-    private fun sortCampaigns(dataModel: APViewDataModel) {
+    private fun sortAndFilterCampaigns(dataModel: APViewDataModel) {
         val activeEntries = mutableListOf<APEntryPoint>()
         val inactiveEntries = mutableListOf<APEntryPoint>()
 
@@ -69,7 +69,9 @@ internal class APViewModel(
             if (getAPEntryPointViewModel(it)?.isActive() == true) {
                 activeEntries.add(it)
             } else {
-                inactiveEntries.add(it)
+                if (!it.showOnce) {
+                    inactiveEntries.add(it)
+                }
             }
         }
 

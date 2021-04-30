@@ -21,7 +21,7 @@
       "id": "campaign41",
       "updatedAt": "datetime",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "this41",
           "type": "ENTRY_POINT",

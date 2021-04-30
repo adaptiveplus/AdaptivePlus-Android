@@ -21,7 +21,7 @@
       "updatedAt": "datetime",
       "status": "DRAFT",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "this1",
           "type": "ENTRY_POINT",
@@ -257,7 +257,7 @@
       "id": "campaign2",
       "updatedAt": "datetime",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "this2",
           "type": "ENTRY_POINT",
@@ -379,7 +379,7 @@
       "id": "campaign3",
       "updatedAt": "datetime",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "this3",
           "type": "ENTRY_POINT",
@@ -501,7 +501,7 @@
       "id": "campaign4",
       "updatedAt": "datetime",
       "body": {
-        "showOnce": true,
+        "showOnce": false,
         "entryPoint": {
           "id": "this4",
           "type": "ENTRY_POINT",
