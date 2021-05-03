@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:paddingStart="8px"
+    android:paddingEnd="8px"
     tools:background="@color/apBlack">
 
     <ImageView
