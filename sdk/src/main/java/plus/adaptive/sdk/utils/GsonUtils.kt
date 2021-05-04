@@ -4,6 +4,7 @@ import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import plus.adaptive.sdk.core.analytics.APCrashlytics
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
 import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.components.*
@@ -43,7 +44,7 @@ internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewData
     return try {
         val dataModel = getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
         checkAPViewDataModelProperties(dataModel)
-        dataModel
+        magnifyAPViewDataModel(dataModel)
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
@@ -579,4 +580,168 @@ private fun checkAPSnapProperties(apSnap: APSnap) {
         }
         showTime
     }
+}
+
+private fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run {
+    APViewDataModel(
+        id = id,
+        options = APViewDataModel.Options(
+            width = options.width * BASE_SIZE_MULTIPLIER,
+            height = options.height * BASE_SIZE_MULTIPLIER,
+            cornerRadius = options.cornerRadius * BASE_SIZE_MULTIPLIER,
+            magnetize = options.magnetize,
+            autoScroll = options.autoScroll,
+            padding = magnifyAPPadding(options.padding),
+            spacing = options.spacing * BASE_SIZE_MULTIPLIER,
+            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER,
+            showBorder = options.showBorder
+        ),
+        entryPoints = entryPoints.map { magnifyAPEntryPoint(it) }
+    )
+}
+
+private fun magnifyAPEntryPoint(entryPoint: APEntryPoint) = entryPoint.run {
+    APEntryPoint(
+        id = id,
+        updatedAt = updatedAt,
+        campaignId = campaignId,
+        status = status,
+        showOnce = showOnce,
+        layers = layers.map { magnifyAPLayer(it) },
+        actions = actions.map { magnifyAPEntryPointAction(it) }
+    )
+}
+
+private fun magnifyAPLayer(layer: APLayer) = layer.run {
+    APLayer(
+        type = type,
+        options = APLayer.Options(
+            position = APLayer.Position(
+                x = options.position.x * BASE_SIZE_MULTIPLIER,
+                y = options.position.y * BASE_SIZE_MULTIPLIER,
+                width = options.position.width * BASE_SIZE_MULTIPLIER,
+                height = options.position.height * BASE_SIZE_MULTIPLIER,
+                angle = options.position.angle
+            ),
+            opacity = options.opacity
+        ),
+        component = component?.let { magnifyAPComponent(it) }
+    )
+}
+
+private fun magnifyAPComponent(component: APComponent) = when (component) {
+    is APButtonComponent -> component.run {
+        APButtonComponent(
+            text = APButtonComponent.Text(
+                value = text.value,
+                font = text.font?.let { magnifyAPFont(it) }
+            ),
+            actions = actions,
+            cornerRadius = cornerRadius * BASE_SIZE_MULTIPLIER,
+            backgroundColor = backgroundColor
+        )
+    }
+    is APGIFComponent -> component.run {
+        APGIFComponent(
+            url = url,
+            border = border?.let {
+                APGIFComponent.Border(
+                    active = APGIFComponent.Border.State(
+                        width = it.active.width * BASE_SIZE_MULTIPLIER,
+                        color = it.active.color,
+                        padding = it.active.padding * BASE_SIZE_MULTIPLIER,
+                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER
+                    ),
+                    inactive = APGIFComponent.Border.State(
+                        width = it.inactive.width * BASE_SIZE_MULTIPLIER,
+                        color = it.inactive.color,
+                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER,
+                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER
+                    )
+                )
+            },
+            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER),
+            loadingColor = loadingColor
+        )
+    }
+    is APImageComponent -> component.run {
+        APImageComponent(
+            url = url,
+            border = border?.let {
+                APImageComponent.Border(
+                    active = APImageComponent.Border.State(
+                        width = it.active.width * BASE_SIZE_MULTIPLIER,
+                        color = it.active.color,
+                        padding = it.active.padding * BASE_SIZE_MULTIPLIER,
+                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER
+                    ),
+                    inactive = APImageComponent.Border.State(
+                        width = it.inactive.width * BASE_SIZE_MULTIPLIER,
+                        color = it.inactive.color,
+                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER,
+                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER
+                    )
+                )
+            },
+            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER),
+            loadingColor = loadingColor
+        )
+    }
+    is APTextComponent -> component.run {
+        APTextComponent(
+            value = value,
+            font = font?.let { magnifyAPFont(it) }
+        )
+    }
+    else -> component
+}
+
+private fun magnifyAPEntryPointAction(action: APAction) = when (action) {
+    is APShowStoryAction -> action.run {
+        APShowStoryAction(
+            story = magnifyAPStory(story)
+        )
+    }
+    else -> action
+}
+
+private fun magnifyAPStory(story: APStory) = story.run {
+    APStory(
+        id = id,
+        campaignId = campaignId,
+        snaps = snaps.map { magnifyAPSnap(it) }
+    )
+}
+
+private fun magnifyAPSnap(snap: APSnap) = snap.run {
+    APSnap(
+        id = id,
+        layers = layers.map { magnifyAPLayer(it) },
+        width = width * BASE_SIZE_MULTIPLIER,
+        height = height * BASE_SIZE_MULTIPLIER,
+        actionAreaHeight = actionAreaHeight?.times(BASE_SIZE_MULTIPLIER),
+        actionArea = actionArea,
+        showTime = showTime
+    )
+}
+
+private fun magnifyAPPadding(padding: APPadding) = padding.run {
+    APPadding(
+        top = top * BASE_SIZE_MULTIPLIER,
+        bottom = bottom * BASE_SIZE_MULTIPLIER,
+        left = left * BASE_SIZE_MULTIPLIER,
+        right = right * BASE_SIZE_MULTIPLIER
+    )
+}
+
+private fun magnifyAPFont(font: APFont) = font.run {
+    APFont(
+        family = family,
+        style = style,
+        size = size * BASE_SIZE_MULTIPLIER,
+        color = color,
+        align = align,
+        letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER,
+        lineHeight = lineHeight?.times(BASE_SIZE_MULTIPLIER)
+    )
 }

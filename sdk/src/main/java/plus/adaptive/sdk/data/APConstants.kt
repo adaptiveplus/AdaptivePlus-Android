@@ -20,3 +20,5 @@ internal var REQUEST_TIMEOUT: Long = 30L // seconds
 internal var GLIDE_TIMEOUT: Int = 60000 // milliseconds
 
 internal const val DELAY_BETWEEN_CLICKS = 1000L // milliseconds
+
+internal const val BASE_SIZE_MULTIPLIER = 1 // to increase quality of view drawing
