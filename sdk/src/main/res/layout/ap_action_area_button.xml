@@ -6,15 +6,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:paddingStart="8px"
-    android:paddingEnd="8px"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     tools:background="@color/apBlack">
 
     <ImageView
         android:id="@+id/apArrowUpImageView"
-        android:layout_width="24px"
-        android:layout_height="16px"
-        android:layout_marginBottom="4px"
+        android:layout_width="24dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="4dp"
         android:src="@drawable/ap_ic_chevron_up"
         />
 
@@ -23,14 +23,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="8px"
-        android:paddingBottom="8px"
-        android:paddingStart="24px"
-        android:paddingEnd="24px"
-        tools:layout_height="48px"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        tools:layout_height="48dp"
         tools:background="@color/apWhite50"
         tools:text="Click Me"
-        tools:textSize="15px"
+        tools:textSize="15dp"
         tools:textColor="@color/apWhite"
         />
 

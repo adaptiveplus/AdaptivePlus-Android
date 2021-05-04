@@ -175,9 +175,7 @@ internal class APSnapFragment :
         apSnapLayoutConstraintSet.constrainWidth(
             apActionAreaLayout.id, snap.width.toInt())
         apSnapLayoutConstraintSet.constrainHeight(
-            apActionAreaLayout.id, (snap.actionAreaHeight ?: 0.0).toInt())
-        apSnapLayoutConstraintSet.setScaleX(apActionAreaLayout.id, scaleFactor)
-        apSnapLayoutConstraintSet.setScaleY(apActionAreaLayout.id, scaleFactor)
+            apActionAreaLayout.id, ((snap.actionAreaHeight ?: 0.0) * scaleFactor).toInt())
         apSnapLayoutConstraintSet.applyTo(apSnapLayout)
 
         val apContentLayoutConstraintSet = ConstraintSet()

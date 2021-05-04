@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.LinearLayout
@@ -44,11 +45,19 @@ internal class APActionAreaButtonView : LinearLayout {
 
             val bgDrawable = GradientDrawable().apply {
                 getColorFromHex(data.backgroundColor)?.let { setColor(it) }
-                cornerRadius = data.cornerRadius?.toFloat() ?: 0f
+                cornerRadius = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    data.cornerRadius?.toFloat() ?: 0f,
+                    resources.displayMetrics)
 
                 data.border?.let { border ->
                     getColorFromHex(border.color.startColor)?.let {
-                        setStroke(border.width.toInt(), it)
+                        val width = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP,
+                            border.width.toFloat(),
+                            resources.displayMetrics
+                        ).toInt()
+                        setStroke(width, it)
                     }
                 }
             }
@@ -57,6 +66,7 @@ internal class APActionAreaButtonView : LinearLayout {
             data.text.font?.let {
                 apButtonTextView.applyAPFont(
                     apFont = it,
+                    dimensionUnit = TypedValue.COMPLEX_UNIT_DIP,
                     onSuccess = {
                         apButtonTextView.text = data.text.value
                     },
