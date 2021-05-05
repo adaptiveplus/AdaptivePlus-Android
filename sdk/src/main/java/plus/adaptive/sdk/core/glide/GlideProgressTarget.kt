@@ -39,6 +39,7 @@ internal open class GlideProgressTarget<T, Z>(
      * In any case the best is to hide/reset any progress displays.
      */
     protected open fun onDelivered() {}
+
     /**
      * Convert a model into an Url string that is used to match up the OkHttp requests. For explicit
      * [GlideUrl][com.bumptech.glide.load.model.GlideUrl] loads this needs to return
@@ -47,7 +48,6 @@ internal open class GlideProgressTarget<T, Z>(
      * @param model return the representation of the given model, DO NOT use [.getModel] inside this method.
      * @return a stable Url representation of the model, otherwise the progress reporting won't work
      */
-
     private fun toUrlString(model: T?): String {
         return java.lang.String.valueOf(model)
     }

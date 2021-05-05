@@ -23,15 +23,13 @@ import plus.adaptive.sdk.data.GLIDE_TIMEOUT
  * @param cornerRadius - corner radius to round the image
  * @param onResourceReady - on resource loaded callback
  * @param onLoadFailed - on resource load failed callback
- * @param onLoadProgressUpdate - on resource load progress update callback
  */
 internal fun ImageView.loadImage(
     url: String,
     defaultDrawable: Drawable? = null,
     cornerRadius: Int? = null,
     onResourceReady: (() -> Unit)? = null,
-    onLoadFailed: (() -> Unit)? = null,
-    onLoadProgressUpdate: ((progress: Float) -> Unit)? = null
+    onLoadFailed: (() -> Unit)? = null
 ) {
     val requestOptions =
         if (cornerRadius != null && cornerRadius > 0) {
@@ -39,21 +37,6 @@ internal fun ImageView.loadImage(
         } else {
             RequestOptions()
         }
-
-    val imageViewTarget = object: ImageViewTarget<Bitmap>(this) {
-        override fun setResource(resource: Bitmap?) {
-            setImageBitmap(resource)
-        }
-    }
-    val target = object: GlideProgressTarget<String, Bitmap>(url, imageViewTarget) {
-        override fun onDownloading(bytesRead: Long, expectedLength: Long) {
-            super.onDownloading(bytesRead, expectedLength)
-            val progress = bytesRead.toFloat() / expectedLength
-            onLoadProgressUpdate?.invoke(progress)
-        }
-
-        override fun getGranularityPercentage(): Float = 1f
-    }
 
     Glide
         .with(context)
@@ -84,6 +67,54 @@ internal fun ImageView.loadImage(
             }
         })
         .apply(requestOptions)
+        .into(this)
+}
+
+/**
+ * Extension function to load and display image in ImageView
+ *
+ * @param url - image url
+ * @param defaultDrawable - default drawable (placeholder)
+ * @param cornerRadius - corner radius to round the image
+ * @param onResourceReady - on resource loaded callback
+ * @param onLoadFailed - on resource load failed callback
+ * @param onLoadProgressUpdate - on resource load progress update callback
+ */
+internal fun ImageView.loadImage(
+    url: String,
+    defaultDrawable: Drawable? = null,
+    cornerRadius: Int? = null,
+    onResourceReady: (() -> Unit)? = null,
+    onLoadFailed: (() -> Unit)? = null,
+    onLoadProgressUpdate: ((progress: Float) -> Unit)? = null
+) {
+    val imageViewTarget = object: ImageViewTarget<Bitmap>(this) {
+        override fun setResource(resource: Bitmap?) {
+            loadImage(
+                url = url,
+                defaultDrawable = defaultDrawable,
+                cornerRadius = cornerRadius,
+                onResourceReady = onResourceReady,
+                onLoadFailed = onLoadFailed
+            )
+        }
+    }
+    val target = object: GlideProgressTarget<String, Bitmap>(url, imageViewTarget) {
+        override fun onDownloading(bytesRead: Long, expectedLength: Long) {
+            super.onDownloading(bytesRead, expectedLength)
+            val progress = bytesRead.toFloat() / expectedLength
+            onLoadProgressUpdate?.invoke(progress)
+        }
+
+        override fun getGranularityPercentage(): Float = 1f
+    }
+
+    Glide
+        .with(context)
+        .asBitmap()
+        .load(url)
+        .timeout(GLIDE_TIMEOUT)
+        .placeholder(defaultDrawable)
         .into(target)
 }
 
