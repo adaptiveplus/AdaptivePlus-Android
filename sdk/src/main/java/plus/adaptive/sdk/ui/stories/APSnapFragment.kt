@@ -134,7 +134,6 @@ internal class APSnapFragment :
             val newSnapHeight = (snap.height * scaleFactor).toInt()
             val oldActionAreaHeight = snap.actionAreaHeight ?: 0.0
             val newActionAreaHeight = (oldActionAreaHeight * scaleFactor).toInt()
-            val newActionAreaBtmMargin = ((newActionAreaHeight - oldActionAreaHeight) / 2).toInt()
 
             val apContentCardViewConstraintSet = ConstraintSet()
             apContentCardViewConstraintSet.clone(apSnapLayout)
@@ -148,8 +147,6 @@ internal class APSnapFragment :
                     apActionAreaLayout.id, ConstraintSet.BOTTOM, apContentCardView.id, ConstraintSet.BOTTOM)
                 apContentCardViewConstraintSet.clear(
                     apActionAreaLayout.id, ConstraintSet.TOP)
-                apContentCardViewConstraintSet.setMargin(
-                    apActionAreaLayout.id, ConstraintSet.BOTTOM, newActionAreaBtmMargin)
             } else {
                 apContentCardViewConstraintSet.connect(
                     apContentCardView.id, ConstraintSet.TOP, apSnapLayout.id, ConstraintSet.TOP)
