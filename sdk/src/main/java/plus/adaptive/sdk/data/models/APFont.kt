@@ -24,41 +24,41 @@ internal data class APFont(
     }
 
     enum class Style {
-        @SerializedName("thin") // = "100"
+        @SerializedName("100")
         THIN,
-        @SerializedName("thinItalic") // = "100italic"
+        @SerializedName("100italic")
         THIN_ITALIC,
-        @SerializedName("extralight") // = "200"
+        @SerializedName("200")
         EXTRA_LIGHT,
-        @SerializedName("extralightItalic") // = "200italic"
+        @SerializedName("200italic")
         EXTRA_LIGHT_ITALIC,
-        @SerializedName("light") // = "300"
+        @SerializedName("300")
         LIGHT,
-        @SerializedName("lightItalic") // = "300italic"
+        @SerializedName("300italic")
         LIGHT_ITALIC,
-        @SerializedName("regular") // = "regular"
+        @SerializedName("regular")
         REGULAR,
-        @SerializedName("regularItalic") // = "italic"
+        @SerializedName("italic")
         REGULAR_ITALIC,
-        @SerializedName("medium") // = "500"
+        @SerializedName("500")
         MEDIUM,
-        @SerializedName("mediumItalic") // = "500italic"
+        @SerializedName("500italic")
         MEDIUM_ITALIC,
-        @SerializedName("semibold") // = "600"
+        @SerializedName("600")
         SEMIBOLD,
-        @SerializedName("semiboldItalic") // = "600italic"
+        @SerializedName("600italic")
         SEMIBOLD_ITALIC,
-        @SerializedName("bold") // = "700"
+        @SerializedName("700")
         BOLD,
-        @SerializedName("boldItalic") // = "700italic"
+        @SerializedName("700italic")
         BOLD_ITALIC,
-        @SerializedName("extrabold") // = "800"
+        @SerializedName("800")
         EXTRA_BOLD,
-        @SerializedName("extraboldItalic") // = "800italic"
+        @SerializedName("800italic")
         EXTRA_BOLD_ITALIC,
-        @SerializedName("black") // = "900"
+        @SerializedName("900")
         BLACK,
-        @SerializedName("blackItalic") // = "900italic"
+        @SerializedName("900italic")
         BLACK_ITALIC
     }
 }

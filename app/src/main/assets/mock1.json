@@ -183,7 +183,7 @@
                                   "value": "Hello yerbol pidor",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "semiboldItalic",
+                                    "style": "600italic",
                                     "size": 20,
                                     "color": "#000000FF",
                                     "align": "center",
@@ -354,7 +354,7 @@
                   "value": "Hello yerbol pidor",
                   "font": {
                     "family": "Roboto",
-                    "style": "semiboldItalic",
+                    "style": "600italic",
                     "size": 12,
                     "color": "#FFFFFFFF",
                     "align": "left",
@@ -476,7 +476,7 @@
                   "value": "Alex Top",
                   "font": {
                     "family": "Roboto",
-                    "style": "semiboldItalic",
+                    "style": "600italic",
                     "size": 14,
                     "color": "#00FF00FF",
                     "align": "center",
@@ -598,7 +598,7 @@
                   "value": "Alex Top",
                   "font": {
                     "family": "Roboto",
-                    "style": "semiboldItalic",
+                    "style": "600italic",
                     "size": 14,
                     "color": "#00FF00FF",
                     "align": "center",

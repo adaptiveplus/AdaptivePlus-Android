@@ -78,7 +78,7 @@
                   "value": "BMW CHRONOLOGY.",
                   "font": {
                     "family": "Rokkitt",
-                    "style": "bold",
+                    "style": "700",
                     "size": 68,
                     "color": "#1A1F16",
                     "align": "center",
@@ -177,7 +177,7 @@
                                   "value": "1982.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -201,7 +201,7 @@
                                   "value": "BMW 320i",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -225,7 +225,7 @@
                                   "value": "An elegant protest against mediocre engineering.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -297,7 +297,7 @@
                                   "value": "1975.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -321,7 +321,7 @@
                                   "value": "BMW 316i",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -345,7 +345,7 @@
                                   "value": "A new car inspires dreams about the open road.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -417,7 +417,7 @@
                                   "value": "1990.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -441,7 +441,7 @@
                                   "value": "BMW E36",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -465,7 +465,7 @@
                                   "value": "The sedan engineered to turn fuel into adrenalin.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -537,7 +537,7 @@
                                   "value": "1998.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -561,7 +561,7 @@
                                   "value": "BMW 318i",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -585,7 +585,7 @@
                                   "value": "Heaven above and beneath you.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -657,7 +657,7 @@
                                   "value": "2005.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -681,7 +681,7 @@
                                   "value": "BMW 750Li",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -705,7 +705,7 @@
                                   "value": "Create perfection and continue.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -777,7 +777,7 @@
                                   "value": "2015.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 104,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -801,7 +801,7 @@
                                   "value": "BMW 328i",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "bold",
+                                    "style": "700",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
@@ -825,7 +825,7 @@
                                   "value": "Proof you can put a price on happiness.",
                                   "font": {
                                     "family": "Roboto",
-                                    "style": "light",
+                                    "style": "300",
                                     "size": 48,
                                     "color": "#FFFFFF",
                                     "align": "left",
