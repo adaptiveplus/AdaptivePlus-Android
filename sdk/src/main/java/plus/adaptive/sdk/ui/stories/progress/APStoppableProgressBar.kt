@@ -47,6 +47,14 @@ internal class APStoppableProgressBar : FrameLayout {
         this.callback = callback
     }
 
+    fun getElapsedTime() : Long {
+        return animation?.getElapsedTime() ?:
+            if (apFrontProgressView.visibility == View.VISIBLE)
+                duration
+            else
+                0L
+    }
+
     fun setMax() {
         val elapsedTime = animation?.getElapsedTime() ?: 0L
         setMaxWithoutCallback()

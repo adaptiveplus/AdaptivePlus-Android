@@ -192,4 +192,8 @@ internal class APStoriesProgressView : LinearLayout {
     fun hasStarted(): Boolean {
         return !isComplete && current >= 0
     }
+
+    fun getElapsedTime(index: Int) : Long? {
+        return progressBars.getOrNull(index)?.getElapsedTime()
+    }
 }

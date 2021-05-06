@@ -119,9 +119,14 @@ internal class APStoryFragment :
         updateStoryProgressState()
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
+        apSnapsViewPager?.currentItem?.let { index ->
+            apStoriesProgressView?.getElapsedTime(index)?.let { elapsedTime ->
+                logCurrentSnapShownEvent(elapsedTime)
+            }
+        }
         apStoriesProgressView?.destroy()
-        super.onDestroy()
+        super.onDestroyView()
     }
 
     private val apStoryFragmentLayoutChangeListener = View.OnLayoutChangeListener {
@@ -213,41 +218,36 @@ internal class APStoryFragment :
     }
 
     override fun onComplete(elapsedTime: Long) {
-        resetLastSnap(elapsedTime)
+        logCurrentSnapShownEvent(elapsedTime)
+        resetCurrentSnap()
         storiesProgressController.moveToNextStory(story.id)
         updateStoryProgressState()
     }
 
     override fun onPrev(elapsedTime: Long) {
-        showPrev(elapsedTime)
-    }
-
-    override fun onNext(elapsedTime: Long) {
-        showNext(elapsedTime)
-    }
-
-    private fun showNext(elapsedTime: Long) {
         if (apSnapsViewPager == null) return
 
-        resetLastSnap(elapsedTime)
-
-        if (apSnapsViewPager.currentItem < story.snaps.size - 1) {
-            apSnapsViewPager.currentItem++
-        }
-
-        updateStoryProgressState()
-    }
-
-    private fun showPrev(elapsedTime: Long) {
-        if (apSnapsViewPager == null) return
-
-        resetLastSnap(elapsedTime)
+        logCurrentSnapShownEvent(elapsedTime)
+        resetCurrentSnap()
 
         if (apSnapsViewPager.currentItem == 0) {
             storiesProgressController.moveToPrevStory(story.id)
         }
         else {
             apSnapsViewPager.currentItem = maxOf(0, apSnapsViewPager.currentItem - 1)
+        }
+
+        updateStoryProgressState()
+    }
+
+    override fun onNext(elapsedTime: Long) {
+        if (apSnapsViewPager == null) return
+
+        logCurrentSnapShownEvent(elapsedTime)
+        resetCurrentSnap()
+
+        if (apSnapsViewPager.currentItem < story.snaps.size - 1) {
+            apSnapsViewPager.currentItem++
         }
 
         updateStoryProgressState()
@@ -290,9 +290,15 @@ internal class APStoryFragment :
         apStoriesProgressView?.reverse()
     }
 
-    private fun resetLastSnap(elapsedTime: Long) {
+    private fun resetCurrentSnap() {
         val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
         viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.RESET)
+    }
+
+    private fun logCurrentSnapShownEvent(elapsedTime: Long) {
+        if (apSnapsViewPager == null || elapsedTime == 0L) return
+
+        val snapId = story.snaps.getOrNull(apSnapsViewPager.currentItem)?.id ?: ""
 
         APAnalytics.logEvent(
             APAnalyticsEvent(
@@ -306,5 +312,4 @@ internal class APStoryFragment :
             )
         )
     }
-
 }
