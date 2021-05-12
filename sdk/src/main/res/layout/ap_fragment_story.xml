@@ -18,8 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <plus.adaptive.sdk.ui.stories.progress.APStoriesProgressView
-        android:id="@+id/apStoriesProgressView"
+    <plus.adaptive.sdk.ui.stories.progress.APStoryProgressView
+        android:id="@+id/apStoryProgressView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -40,7 +40,7 @@
         android:padding="8dp"
         android:src="@drawable/ap_ic_close_white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/apStoriesProgressView"
+        app:layout_constraintTop_toBottomOf="@id/apStoryProgressView"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

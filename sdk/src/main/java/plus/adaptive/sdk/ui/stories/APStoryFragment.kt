@@ -18,7 +18,7 @@ import plus.adaptive.sdk.ext.setTransitionDuration
 import plus.adaptive.sdk.ui.stories.data.APSnapEvent
 import plus.adaptive.sdk.ui.stories.data.APSnapEventInfo
 import plus.adaptive.sdk.ui.stories.data.APSnapState
-import plus.adaptive.sdk.ui.stories.progress.APStoriesProgressView
+import plus.adaptive.sdk.ui.stories.progress.APStoryProgressView
 import plus.adaptive.sdk.ui.stories.vm.APStoriesDialogViewModelDelegateProtocol
 import plus.adaptive.sdk.ui.stories.vm.APStoryViewModel
 import plus.adaptive.sdk.ui.stories.vm.APStoryViewModelFactory
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.ap_fragment_story.*
 
 
 internal class APStoryFragment :
-    Fragment(), APStoriesProgressView.LifecycleListener {
+    Fragment(), APStoryProgressView.LifecycleListener {
 
     companion object {
         private const val EXTRA_STORY = "extra_story"
@@ -93,8 +93,8 @@ internal class APStoryFragment :
         apSnapsViewPager.adapter = snapsAdapter
         apSnapsViewPager.setTransitionDuration(0)
 
-        apStoriesProgressView.setSnapsDurations(story.snaps.map { (it.showTime * 1000).toLong() })
-        apStoriesProgressView.setStoriesListener(this)
+        apStoryProgressView.setSnapsDurations(story.snaps.map { (it.showTime * 1000).toLong() })
+        apStoryProgressView.setStoriesListener(this)
 
         apCloseButtonImageView.setOnClickListener {
             storiesProgressController.closeStories()
@@ -121,11 +121,11 @@ internal class APStoryFragment :
 
     override fun onDestroyView() {
         apSnapsViewPager?.currentItem?.let { index ->
-            apStoriesProgressView?.getElapsedTime(index)?.let { elapsedTime ->
+            apStoryProgressView?.getElapsedTime(index)?.let { elapsedTime ->
                 logCurrentSnapShownEvent(elapsedTime)
             }
         }
-        apStoriesProgressView?.destroy()
+        apStoryProgressView?.destroy()
         super.onDestroyView()
     }
 
@@ -159,7 +159,7 @@ internal class APStoryFragment :
 
             val constraintSet = ConstraintSet()
             constraintSet.clone(apStoryFragmentLayout)
-            constraintSet.setMargin(apStoriesProgressView.id, ConstraintSet.TOP, marginTop)
+            constraintSet.setMargin(apStoryProgressView.id, ConstraintSet.TOP, marginTop)
             constraintSet.applyTo(apStoryFragmentLayout)
         }
     }
@@ -209,8 +209,8 @@ internal class APStoryFragment :
                     storiesProgressController.closeStories()
                 }
                 APSnapEvent.RESET_AND_PAUSE_SNAP_PROGRESS -> {
-                    apStoriesProgressView?.resetCurrentSnap()
-                    apStoriesProgressView?.pause()
+                    apStoryProgressView?.resetCurrentSnap()
+                    apStoryProgressView?.pause()
                 }
                 else -> { }
             }
@@ -264,10 +264,10 @@ internal class APStoryFragment :
             && !viewModel.isStoriesPaused()
             && !isUnderTouch
         ) {
-            if (!apStoriesProgressView.hasStarted()) {
-                apStoriesProgressView.startStories(snapIndex)
+            if (!apStoryProgressView.hasStarted()) {
+                apStoryProgressView.startStories(snapIndex)
             } else {
-                apStoriesProgressView.resume()
+                apStoryProgressView.resume()
             }
 
             viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.RESUMED)
@@ -277,17 +277,17 @@ internal class APStoryFragment :
             }
         }
         else {
-            apStoriesProgressView.pause()
+            apStoryProgressView.pause()
             viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.PAUSED)
         }
     }
 
     private fun goToNextSnap() {
-        apStoriesProgressView?.skip()
+        apStoryProgressView?.skip()
     }
 
     private fun goToPrevSnap() {
-        apStoriesProgressView?.reverse()
+        apStoryProgressView?.reverse()
     }
 
     private fun resetCurrentSnap() {

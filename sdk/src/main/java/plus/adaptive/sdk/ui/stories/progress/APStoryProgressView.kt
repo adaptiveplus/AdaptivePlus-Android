@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import plus.adaptive.sdk.R
 
 
-internal class APStoriesProgressView : LinearLayout {
+internal class APStoryProgressView : LinearLayout {
 
     interface LifecycleListener {
         fun onNext(elapsedTime: Long)
