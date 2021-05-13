@@ -10,6 +10,7 @@ import plus.adaptive.sdk.core.providers.provideAPAnalyticsRepository
 import plus.adaptive.sdk.core.providers.provideAPAuthRepository
 import plus.adaptive.sdk.core.providers.provideAPClientCredentialsManager
 import plus.adaptive.sdk.core.providers.provideAPUserRepository
+import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
 import plus.adaptive.sdk.data.*
 import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
@@ -105,6 +106,12 @@ class AdaptivePlusSDK {
             return
         }
 
+        val networkManager = provideNetworkServiceManager(context)
+        if (!networkManager.isTokenExpired()) {
+            requestAPConfigs()
+            return
+        }
+
         tokenRequestState = RequestState.IN_PROCESS
 
         authRepositoryInstance(context)?.requestToken(
@@ -187,8 +194,6 @@ class AdaptivePlusSDK {
 
 
     companion object {
-        private const val OS_NAME = "android"
-
         private var isStartedLiveData = MutableLiveData<Boolean>().apply {
             value = false
         }

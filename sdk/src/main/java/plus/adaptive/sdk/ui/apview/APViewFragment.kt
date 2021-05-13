@@ -31,6 +31,7 @@ import plus.adaptive.sdk.ui.apview.vm.APViewModelFactory
 import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.utils.safeRun
 
 
@@ -148,7 +149,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
 
     private fun setupObservers() {
         view?.let {
-            val networkManager = provideNetworkServiceManager()
+            val networkManager = provideNetworkServiceManager(context)
             networkManager.getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
 
             AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
@@ -158,8 +159,8 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         }
     }
 
-    private val tokenObserver = Observer<String?> { token ->
-        if (token != null) {
+    private val tokenObserver = Observer<AuthTokenData?> { tokenData ->
+        if (tokenData?.token != null && !tokenData.isFromCache) {
             viewModel.requestAPViewDataModel(apViewId, apHasDrafts ?: false)
         }
     }
@@ -253,10 +254,10 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             viewModel.loadAPViewDataModelFromCache(apViewId)
         }
 
-        val networkManager = provideNetworkServiceManager()
+        val networkManager = provideNetworkServiceManager(context)
         val tokenLiveData = networkManager.getTokenLiveData()
 
-        if (tokenLiveData.value == null) {
+        if (tokenLiveData.value?.token == null) {
             context?.let { AdaptivePlusSDK().authorize(it) }
         }
         else {

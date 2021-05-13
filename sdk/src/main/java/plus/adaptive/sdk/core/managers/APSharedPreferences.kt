@@ -8,6 +8,8 @@ internal class APSharedPreferences(context: Context) {
     companion object {
         private const val PREF_ADAPTIVE_PLUS = "adaptive_plus_sdk_preferences"
 
+        const val AUTH_TOKEN = "auth_token"
+        const val AUTH_TOKEN_EXPIRATION_DATE = "auth_token_expiration_date"
         const val AP_USER_ID = "ap_user_id"
         const val IS_CAMPAIGN_WATCHED = "is_campaign_watched"
         const val IS_EVENT_TRACKING_DISABLED = "is_event_tracking_disabled"

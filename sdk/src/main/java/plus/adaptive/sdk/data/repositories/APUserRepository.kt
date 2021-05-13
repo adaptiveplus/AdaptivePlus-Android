@@ -71,7 +71,7 @@ internal class APUserRepository(
         )
     }
 
-    private fun getAPUserId() : String? {
+    fun getAPUserId() : String? {
         if (apUserId == null) {
             apUserId = preferences?.getString(APSharedPreferences.AP_USER_ID)
         }

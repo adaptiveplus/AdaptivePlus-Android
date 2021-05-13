@@ -120,11 +120,11 @@ internal open class APBaseRepository(
         executeRequest<TokenResponseBody>(request,
             { response ->
                 userRepository.setAPUserId(response.apUserId)
-                networkManager.updateToken(response.token)
+                networkManager.updateToken(response.token, response.tokenExpirationDate)
                 callback.success(response.token)
             },
             { error ->
-                networkManager.updateToken(null)
+                networkManager.updateToken(null, null)
                 callback.failure(error)
             }
         )

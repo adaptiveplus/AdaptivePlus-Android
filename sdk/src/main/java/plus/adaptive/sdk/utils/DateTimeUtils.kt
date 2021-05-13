@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-internal const val DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+internal const val DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
 
 internal fun getCurrentTimeString(targetFmt: String = DATE_FORMAT_ISO) : String {

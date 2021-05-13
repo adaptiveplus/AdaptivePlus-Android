@@ -19,8 +19,13 @@ internal fun provideAPSharedPreferences(
     return APSharedPreferences(context)
 }
 
-internal fun provideNetworkServiceManager() : NetworkServiceManager {
-    return NetworkServiceManagerImpl()
+internal fun provideNetworkServiceManager(
+    context: Context? = null
+) : NetworkServiceManager {
+    return NetworkServiceManagerImpl(
+        context?.let { provideAPSharedPreferences(context) },
+        provideAPUserRepository(context)
+    )
 }
 
 internal fun provideAPActionsManager(

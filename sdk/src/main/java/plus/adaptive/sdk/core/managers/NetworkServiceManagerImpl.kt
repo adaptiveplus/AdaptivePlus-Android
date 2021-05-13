@@ -12,6 +12,9 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
+import plus.adaptive.sdk.data.models.AuthTokenData
+import plus.adaptive.sdk.data.repositories.APUserRepository
+import plus.adaptive.sdk.utils.parseDateString
 import java.security.KeyStore
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -21,32 +24,91 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 
-internal class NetworkServiceManagerImpl : NetworkServiceManager {
+internal class NetworkServiceManagerImpl(
+    private val preferences: APSharedPreferences? = null,
+    private val userRepository: APUserRepository? = null
+): NetworkServiceManager {
 
     companion object {
         private var token: String? = null
-        private val tokenLiveData = MutableLiveData<String?>()
+        private val tokenLiveData = MutableLiveData<AuthTokenData?>()
     }
 
 
     private var okHttpClient: OkHttpClient? = null
 
 
-    override fun updateToken(token: String?) {
+    private fun tokenInstance(): String? {
+        if (token == null) {
+            token = userRepository?.getAPUserId()?.let { userId ->
+                preferences?.getString("${userId}_${APSharedPreferences.AUTH_TOKEN}")
+            }
+
+            if (token != null) {
+                tokenLiveData.postValue(
+                    AuthTokenData(token, true)
+                )
+            }
+        }
+
+        return token
+    }
+
+    override fun updateToken(token: String?, expirationDate: String?) {
         NetworkServiceManagerImpl.token = token
 
-        if (tokenLiveData.value != token) {
-            tokenLiveData.postValue(token)
+        if (tokenLiveData.value?.token != token) {
+            tokenLiveData.postValue(
+                AuthTokenData(token)
+            )
+        }
+
+        userRepository?.getAPUserId()?.let { userId ->
+            if (token == null) {
+                preferences?.remove(
+                    "${userId}_${APSharedPreferences.AUTH_TOKEN}"
+                )
+            }
+            else {
+                preferences?.saveString(
+                    "${userId}_${APSharedPreferences.AUTH_TOKEN}",
+                    token
+                )
+            }
+
+            if (token == null || expirationDate == null) {
+                preferences?.remove(
+                    "${userId}_${APSharedPreferences.AUTH_TOKEN_EXPIRATION_DATE}"
+                )
+            }
+            else {
+                preferences?.saveString(
+                    "${userId}_${APSharedPreferences.AUTH_TOKEN_EXPIRATION_DATE}",
+                    expirationDate
+                )
+            }
         }
     }
 
     @MainThread
-    override fun getTokenLiveData(): LiveData<String?> {
-        if (tokenLiveData.value != token) {
-            tokenLiveData.value = token
+    override fun getTokenLiveData(): LiveData<AuthTokenData?> {
+        if (tokenLiveData.value?.token != token) {
+            tokenLiveData.value =
+                AuthTokenData(token, tokenLiveData.value?.isFromCache ?: false)
         }
 
         return tokenLiveData
+    }
+
+    override fun isTokenExpired(): Boolean {
+        val expiresAt = userRepository?.getAPUserId()?.let { userId ->
+            preferences?.getString(
+                "${userId}_${APSharedPreferences.AUTH_TOKEN_EXPIRATION_DATE}"
+            )
+        }?.let { parseDateString(it) }
+
+        val now = Calendar.getInstance().time
+        return tokenInstance() == null || expiresAt == null || expiresAt.before(now)
     }
 
     override fun getOkHttpClient(): OkHttpClient {
@@ -59,7 +121,7 @@ internal class NetworkServiceManagerImpl : NetworkServiceManager {
     private fun provideOkHttpClient(): OkHttpClient {
         val builder = provideOkHttpClientBuilder()
         builder.addNetworkInterceptor { chain ->
-            token?.let { token ->
+            tokenInstance()?.let { token ->
                 val originalRequest = chain.request()
 
                 val authValue = "Bearer $token"
