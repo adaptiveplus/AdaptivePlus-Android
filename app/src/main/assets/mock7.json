@@ -1,0 +1,140 @@
+{
+  "id": "5f859fb96aa1a80012ee31fg",
+  "options": {
+    "screenWidth": 375
+  },
+  "campaigns": [
+    {
+      "id": "campaign71",
+      "updatedAt": "datetime",
+      "body": {
+        "launcherScreen": {
+          "id": "launchScreen71",
+          "type": "LAUNCH_SCREEN",
+          "body": {
+            "showCount": 500,
+            "duration": 3.0,
+            "layers": [
+              {
+                "type": "BACKGROUND",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 375,
+                    "height": 667,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "color": "#99CC99FF"
+                }
+              },
+              {
+                "type": "IMAGE",
+                "component": {
+                  "url": "https://free4kwallpapers.com/uploads/originals/2015/08/29/itachi-uchiwa-anime-wallpaper-background-4016-hd-wallpapers.jpg",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#FF0000"
+                },
+                "options": {
+                  "position": {
+                    "x": 16,
+                    "y": 0,
+                    "width": 270,
+                    "height": 180,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                }
+              },
+              {
+                "type": "GIF",
+                "component": {
+                  "url": "https://thumbs.gfycat.com/CircularGroundedAdeliepenguin-size_restricted.gif",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#FF0000"
+                },
+                "options": {
+                  "position": {
+                    "x": 48,
+                    "y": 164,
+                    "width": 270,
+                    "height": 180,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                }
+              },
+              {
+                "type": "GIF",
+                "component": {
+                  "url": "https://i.gifer.com/8Z1k.gif",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#FF0000"
+                },
+                "options": {
+                  "position": {
+                    "x": 96,
+                    "y": 328,
+                    "width": 270,
+                    "height": 180,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                }
+              },
+              {
+                "type": "GIF",
+                "component": {
+                  "url": "https://64.media.tumblr.com/61152d7c5c47ee76c42852970fe9f27c/tumblr_ns6605qXi21uz35lto1_500.gifv",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#FF0000"
+                },
+                "options": {
+                  "position": {
+                    "x": 16,
+                    "y": 492,
+                    "width": 270,
+                    "height": 180,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                }
+              },
+              {
+                "type": "TEXT",
+                "component": {
+                  "value": "Hello yerbol pidor",
+                  "font": {
+                    "family": "Roboto",
+                    "style": "600italic",
+                    "size": 20,
+                    "color": "#FFFFFFFF",
+                    "align": "center",
+                    "letterSpacing": 0
+                  }
+                },
+                "options": {
+                  "position": {
+                    "x": 100,
+                    "y": 60,
+                    "width": 180,
+                    "height": 60,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
