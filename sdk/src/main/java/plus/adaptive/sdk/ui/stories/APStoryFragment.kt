@@ -307,7 +307,7 @@ internal class APStoryFragment :
                 apViewId = storiesDialogViewModelDelegate.getAPViewId(),
                 params = mapOf(
                     "snapId" to snapId,
-                    "watchedTime" to elapsedTime
+                    "watchedTime" to (elapsedTime.toDouble() / 1000)
                 )
             )
         )
