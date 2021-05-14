@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.qaapp.R
-import plus.adaptive.qaapp.data.Locale
+import plus.adaptive.qaapp.data.Language
 import plus.adaptive.qaapp.ui.dialogs.AddCustomIPDialog
 import plus.adaptive.qaapp.ui.dialogs.AddEnvDialog
 import plus.adaptive.qaapp.utils.*
@@ -31,14 +31,14 @@ class LauncherActivity : AppCompatActivity() {
 
         maleRadioButton.isChecked = true
 
-        val locales = listOf(
-            Locale.EN.value,
-            Locale.RU.value,
-            Locale.KZ.value
+        val languages = listOf(
+            Language.EN.value,
+            Language.RU.value,
+            Language.KZ.value
         )
 
-        localeSpinner.adapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_dropdown_item, locales)
+        languageSpinner.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_dropdown_item, languages)
 
         userIdEditText.setText("s10s_QA_user")
 
@@ -101,7 +101,7 @@ class LauncherActivity : AppCompatActivity() {
         intent.putExtra(MainActivity.EXTRA_USER_ID, userIdEditText.text.toString())
         intent.putExtra(MainActivity.EXTRA_GENDER, if (maleRadioButton.isChecked) "male" else "female")
         intent.putExtra(MainActivity.EXTRA_AGE, agePicker.value)
-        intent.putExtra(MainActivity.EXTRA_LOCALE, localeSpinner.selectedItem.toString())
+        intent.putExtra(MainActivity.EXTRA_LANGUAGE, languageSpinner.selectedItem.toString())
         intent.putExtra(MainActivity.EXTRA_CUSTOM_IP, getCustomIPBySpinnerName(this, ipSpinner.selectedItem.toString())?.ip)
         intent.putExtra(MainActivity.EXTRA_LOCATION, getAdaptiveLocation())
 

@@ -80,12 +80,12 @@
                 />
 
             <TextView
-                android:id="@+id/localeLabel"
+                android:id="@+id/languageLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
-                android:text="Locale"
+                android:text="Language"
                 android:textSize="24sp"
                 android:textColor="@color/colorOnSecondary"
                 app:layout_constraintTop_toBottomOf="@id/envDivider"
@@ -93,14 +93,14 @@
                 />
 
             <Spinner
-                android:id="@+id/localeSpinner"
+                android:id="@+id/languageSpinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/bg_spinner"
-                app:layout_constraintTop_toBottomOf="@id/localeLabel"
-                app:layout_constraintStart_toStartOf="@id/localeLabel"
-                app:layout_constraintEnd_toEndOf="@id/localeLabel"
+                app:layout_constraintTop_toBottomOf="@id/languageLabel"
+                app:layout_constraintStart_toStartOf="@id/languageLabel"
+                app:layout_constraintEnd_toEndOf="@id/languageLabel"
                 />
 
             <TextView
@@ -113,8 +113,8 @@
                 android:text="Location"
                 android:textSize="24sp"
                 android:textColor="@color/colorOnSecondary"
-                app:layout_constraintTop_toTopOf="@id/localeLabel"
-                app:layout_constraintStart_toEndOf="@id/localeSpinner"
+                app:layout_constraintTop_toTopOf="@id/languageLabel"
+                app:layout_constraintStart_toEndOf="@id/languageLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 
@@ -156,7 +156,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="User ID"
-                app:layout_constraintTop_toBottomOf="@id/localeSpinner"
+                app:layout_constraintTop_toBottomOf="@id/languageSpinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />

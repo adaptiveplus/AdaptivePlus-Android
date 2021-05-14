@@ -1,5 +1,7 @@
 package plus.adaptive.sdk.data
 
+import java.util.*
+
 
 private val strings = mapOf(
     "en" to mapOf(
@@ -38,6 +40,6 @@ private val strings = mapOf(
 )
 
 internal fun getAdaptiveStringResource(stringId: String): String? {
-    return strings[LOCALE]?.get(stringId)
-        ?: strings["ru"]?.get(stringId)
+    return strings[LOCALE.language]?.get(stringId)
+        ?: strings[Locale.ENGLISH.language]?.get(stringId)
 }

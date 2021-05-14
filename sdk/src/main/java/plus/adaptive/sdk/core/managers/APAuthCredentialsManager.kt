@@ -10,7 +10,6 @@ internal class APAuthCredentialsManager {
         private const val clientSecret: String = "2b3ea139d809b9ea47e521ad3336c4dc"
         private const val grantType: String = "channel_credentials"
         private var channelSecret: String? = null
-        private var testChannelSecret: String? = null
     }
 
 
@@ -18,15 +17,8 @@ internal class APAuthCredentialsManager {
         channelSecret = apiKey
     }
 
-    @Deprecated(
-        message = "Only for testing purposes.",
-        level = DeprecationLevel.WARNING)
-    fun setTestApiKey(channelSecret: String?) {
-        testChannelSecret = channelSecret
-    }
-
     fun getAuthCredentials() : APAuthCredentials? {
-        return (testChannelSecret ?: channelSecret)?.let {
+        return channelSecret?.let {
             APAuthCredentials(
                 clientId = clientId,
                 clientSecret = clientSecret,

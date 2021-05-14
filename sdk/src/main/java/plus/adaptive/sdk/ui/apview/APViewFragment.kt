@@ -17,22 +17,22 @@ import plus.adaptive.sdk.R
 import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APActionsManager
 import plus.adaptive.sdk.core.providers.provideAPActionsManager
+import plus.adaptive.sdk.core.providers.provideAPSDKManager
 import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
-import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.data.models.EventObserver
+import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
-import plus.adaptive.sdk.AdaptivePlusSDK
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.vm.APViewModel
 import plus.adaptive.sdk.ui.apview.vm.APViewModelFactory
 import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
-import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
-import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.utils.safeRun
+import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
 
 
 internal class APViewFragment : Fragment(), APViewDelegateProtocol {
@@ -152,7 +152,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
             val networkManager = provideNetworkServiceManager(context)
             networkManager.getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
 
-            AdaptivePlusSDK().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
+            provideAPSDKManager().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
             viewModel.apViewDataModelLiveData.observe(viewLifecycleOwner, apViewDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
             viewModel.magnetizeEntryPointEventLiveData.observe(viewLifecycleOwner, magnetizeEntryPointEventObserver)
@@ -258,7 +258,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         val tokenLiveData = networkManager.getTokenLiveData()
 
         if (tokenLiveData.value?.token == null) {
-            context?.let { AdaptivePlusSDK().authorize(it) }
+            context?.let { provideAPSDKManager(it).authorize() }
         }
         else {
             viewModel.requestAPViewDataModel(apViewId, apHasDrafts ?: false)
@@ -333,7 +333,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
     }
 
     private fun updateAPViewFragmentVisibility() {
-        if (AdaptivePlusSDK().isStartedLiveData().value == true &&
+        if (provideAPSDKManager().isStartedLiveData().value == true &&
             !isAPViewDataModelNullOrEmpty(viewModel.apViewDataModelLiveData.value)
         ) {
             apViewFragmentLayout?.show()

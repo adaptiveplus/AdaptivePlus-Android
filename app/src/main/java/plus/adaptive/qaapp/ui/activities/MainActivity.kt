@@ -8,9 +8,11 @@ import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.data.APSdkEnvironment
 import plus.adaptive.qaapp.data.Environment
+import plus.adaptive.qaapp.data.Language
 import plus.adaptive.qaapp.ui.fragments.ApiFragment
 import plus.adaptive.qaapp.ui.fragments.MockFragment
 import plus.adaptive.qaapp.utils.getEnvByName
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         const val EXTRA_USER_ID = "extra_user_id"
         const val EXTRA_GENDER = "extra_gender"
         const val EXTRA_AGE = "extra_age"
-        const val EXTRA_LOCALE = "extra_locale"
+        const val EXTRA_LANGUAGE = "extra_language"
         const val EXTRA_CUSTOM_IP = "extra_custom_ip"
         const val EXTRA_LOCATION = "extra_location"
     }
@@ -45,7 +47,12 @@ class MainActivity : AppCompatActivity() {
             customIP = null
         }
 
-        val locale = intent?.getStringExtra(EXTRA_LOCALE) ?: "ru"
+        val locale = when (intent?.getStringExtra(EXTRA_LANGUAGE)) {
+            Language.RU.value -> Locale("ru","RU")
+            Language.EN.value -> Locale.ENGLISH
+            Language.KZ.value -> Locale("kk", "KZ")
+            else -> Locale.ENGLISH
+        }
         val userId = intent?.getStringExtra(EXTRA_USER_ID)
 
         val userProperties = mutableMapOf<String, String>()
@@ -60,22 +67,17 @@ class MainActivity : AppCompatActivity() {
 
         val location = intent?.getSerializableExtra(EXTRA_LOCATION) as? APLocation
 
-        AdaptivePlusSDK().apply {
-            setTestEnvironment(
-                context = this@MainActivity,
-                apiKey = env.apiKey,
-                customIP = customIP
-            )
+        AdaptivePlusSDK.init(env.apiKey)
+        AdaptivePlusSDK.setCustomIP(this, customIP)
 
-            start(
-                context = this@MainActivity,
-                userId = userId,
-                userProperties = userProperties,
-                location = location,
-                locale = locale,
-                isDebuggable = true
-            )
-        }
+        AdaptivePlusSDK
+            .newInstance(this)
+            .setUserId(userId)
+            .setUserProperties(userProperties)
+            .setLocation(location)
+            .setLocale(locale)
+            .setIsDebuggable(true)
+            .start()
 
         if (envName == Environment.MOCK.value) {
             showMockFragment()
@@ -112,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        AdaptivePlusSDK().stop()
+        AdaptivePlusSDK.newInstance(this).stop()
         super.onDestroy()
     }
 }

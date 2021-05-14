@@ -9,7 +9,7 @@ class APQAApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        AdaptivePlusSDK().init(
+        AdaptivePlusSDK.init(
             apiKey = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps")
     }
 }
