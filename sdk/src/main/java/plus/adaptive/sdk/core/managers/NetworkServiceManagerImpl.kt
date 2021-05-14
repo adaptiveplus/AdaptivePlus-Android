@@ -14,6 +14,7 @@ import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
 import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.data.repositories.APUserRepository
+import plus.adaptive.sdk.utils.formatDateToString
 import plus.adaptive.sdk.utils.parseDateString
 import java.security.KeyStore
 import java.util.*
@@ -54,7 +55,7 @@ internal class NetworkServiceManagerImpl(
         return token
     }
 
-    override fun updateToken(token: String?, expirationDate: String?) {
+    override fun updateToken(token: String?, expiresIn: Int?) {
         NetworkServiceManagerImpl.token = token
 
         if (tokenLiveData.value?.token != token) {
@@ -76,15 +77,19 @@ internal class NetworkServiceManagerImpl(
                 )
             }
 
-            if (token == null || expirationDate == null) {
+            if (token == null || expiresIn == null) {
                 preferences?.remove(
                     "${userId}_${APSharedPreferences.AUTH_TOKEN_EXPIRATION_DATE}"
                 )
             }
             else {
+                val expirationDate = Calendar.getInstance().apply {
+                    add(Calendar.SECOND, expiresIn)
+                }
+                val expirationDateStr = formatDateToString(expirationDate.time)
                 preferences?.saveString(
                     "${userId}_${APSharedPreferences.AUTH_TOKEN_EXPIRATION_DATE}",
-                    expirationDate
+                    expirationDateStr
                 )
             }
         }

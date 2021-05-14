@@ -26,3 +26,10 @@ internal fun parseDateString(dateStr: String, srcFormat: String = DATE_FORMAT_IS
         null
     }
 }
+
+internal fun formatDateToString(date: Date, destFormat: String = DATE_FORMAT_ISO): String {
+    val sdf = SimpleDateFormat(destFormat, Locale.getDefault()).apply {
+        timeZone = TimeZone.getTimeZone("GMT")
+    }
+    return sdf.format(date)
+}

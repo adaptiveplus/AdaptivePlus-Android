@@ -11,9 +11,9 @@ internal interface NetworkServiceManager {
      * Method to update auth token
      *
      * @param token - auth token
-     * @param expirationDate - auth token expiration date
+     * @param expiresIn - auth token expires in ${value} seconds
      */
-    fun updateToken(token: String?, expirationDate: String?)
+    fun updateToken(token: String?, expiresIn: Int?)
 
     /**
      * Getter of token live data

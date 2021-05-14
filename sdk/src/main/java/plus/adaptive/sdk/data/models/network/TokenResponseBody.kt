@@ -8,11 +8,11 @@ internal data class TokenResponseBody(
     @SerializedName("access_token")
     val token: String,
     @SerializedName("access_token_expires_in")
-    val tokenExpiresIn: String,
+    val tokenExpiresIn: Int,
     @SerializedName("refresh_token")
     val refreshToken: String,
     @SerializedName("refresh_token_expires_in")
-    val refreshTokenExpiresIn: String,
+    val refreshTokenExpiresIn: Int,
     @SerializedName("ap_id")
     val apUserId: String
 ) : Serializable
