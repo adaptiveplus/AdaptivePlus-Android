@@ -18,8 +18,18 @@ private fun getProcessedAPViewGson(): Gson {
     return gsonBuilder.create()
 }
 
+private fun getProcessedAPLaunchScreenGson(): Gson {
+    val gsonBuilder = GsonBuilder()
+    gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+    return gsonBuilder.create()
+}
+
 internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): String? {
     return getProcessedAPViewGson().toJson(dataModel)
+}
+
+internal fun getSerializedProcessedAPLaunchScreenModel(dataModel: APLaunchScreen): String? {
+    return getProcessedAPLaunchScreenGson().toJson(dataModel)
 }
 
 internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataModel? {
@@ -34,9 +44,27 @@ internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataMo
     }
 }
 
+internal fun getDeserializedProcessedAPLaunchScreenModel(json: String): APLaunchScreen? {
+    return try {
+        val dataModel = getProcessedAPLaunchScreenGson().fromJson(json, APLaunchScreen::class.java)
+        checkAPLaunchScreenModelProperties(dataModel)
+        dataModel
+    } catch (e: Exception) {
+        APCrashlytics.logCrash(e)
+        e.printStackTrace()
+        null
+    }
+}
+
 internal fun getUnprocessedAPViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APViewDataModel::class.java, apViewDataModelDeserializer)
+    return gsonBuilder.create()
+}
+
+internal fun getUnprocessedAPLaunchScreenGson(): Gson {
+    val gsonBuilder = GsonBuilder()
+    gsonBuilder.registerTypeAdapter(APLaunchScreen::class.java, apLaunchScreenModelDeserializer)
     return gsonBuilder.create()
 }
 
@@ -45,6 +73,19 @@ internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewData
         val dataModel = getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
         checkAPViewDataModelProperties(dataModel)
         magnifyAPViewDataModel(dataModel)
+    } catch (e: Exception) {
+        APCrashlytics.logCrash(e)
+        e.printStackTrace()
+        null
+    }
+}
+
+internal fun getDeserializedUnprocessedAPLaunchScreenModel(json: String): APLaunchScreen? {
+    return try {
+        val dataModel = getUnprocessedAPLaunchScreenGson()
+            .fromJson(json, APLaunchScreen::class.java)
+        checkAPLaunchScreenModelProperties(dataModel)
+        magnifyAPLaunchScreenModel(dataModel)
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
@@ -101,6 +142,55 @@ private val apViewDataModelDeserializer =
                 id = id,
                 options = options,
                 entryPoints = entryPoints.filterNotNull()
+            )
+        } catch (e: JsonSyntaxException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+private val apLaunchScreenModelDeserializer =
+    JsonDeserializer { json, _, _ ->
+        try {
+            val jsonObject: JsonObject = json.asJsonObject
+            val id = jsonObject.get("id").asString
+            val options = Gson().fromJson(
+                jsonObject.get("options").toString(),
+                APLaunchScreen.Options::class.java)
+
+            val campaigns = jsonObject.get("campaigns").asJsonArray
+            val launchScreenInstances = campaigns.map { campaignJson ->
+                try {
+                    val campaignJsonObject = campaignJson.asJsonObject
+                    val campaignId = campaignJsonObject.get("id").asString
+                    val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
+                    val launchScreenJsonObject = campaignBodyJsonObject.get("launchScreen").asJsonObject
+                    val launchScreenId = launchScreenJsonObject.get("id").asString
+                    val launchScreenBodyJsonObject = launchScreenJsonObject.get("body").asJsonObject
+                    launchScreenBodyJsonObject.addProperty("id", launchScreenId)
+                    launchScreenBodyJsonObject.addProperty("campaignId", campaignId)
+
+                    val gsonBuilder = GsonBuilder()
+                    gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+                    val apLaunchScreenGson = gsonBuilder.create()
+                    val apLaunchScreen = apLaunchScreenGson.fromJson(
+                        launchScreenBodyJsonObject.toString(),
+                        APLaunchScreenInstance::class.java)
+
+                    checkAPLaunchScreenInstanceProperties(apLaunchScreen)
+
+                    apLaunchScreen
+                } catch (e: Exception) {
+                    APCrashlytics.logCrash(e)
+                    e.printStackTrace()
+                    null
+                }
+            }.toList()
+
+            APLaunchScreen(
+                id = id,
+                options = options,
+                instances = launchScreenInstances.filterNotNull()
             )
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
@@ -408,6 +498,16 @@ private fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
     }
 }
 
+private fun checkAPLaunchScreenModelProperties(dataModel: APLaunchScreen) {
+    dataModel.run {
+        id
+        options.run {
+            screenWidth
+        }
+        instances
+    }
+}
+
 private fun checkAPPaddingProperties(padding: APPadding) {
     padding.run {
         top
@@ -426,6 +526,18 @@ private fun checkAPEntryPointProperties(entryPoint: APEntryPoint) {
         showOnce
         layers.forEach { checkAPLayerProperties(it) }
         actions.forEach { checkAPActionProperties(it) }
+    }
+}
+
+private fun checkAPLaunchScreenInstanceProperties(
+    launchScreenInstance: APLaunchScreenInstance
+) {
+    launchScreenInstance.run {
+        id
+        campaignId
+        showCount
+        showTime
+        layers.forEach { checkAPLayerProperties(it) }
     }
 }
 
@@ -600,6 +712,16 @@ private fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run {
     )
 }
 
+private fun magnifyAPLaunchScreenModel(dataModel: APLaunchScreen) = dataModel.run {
+    APLaunchScreen(
+        id = id,
+        options = APLaunchScreen.Options(
+            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER
+        ),
+        instances = instances.map { magnifyAPLaunchScreenInstance(it) }
+    )
+}
+
 private fun magnifyAPEntryPoint(entryPoint: APEntryPoint) = entryPoint.run {
     APEntryPoint(
         id = id,
@@ -609,6 +731,16 @@ private fun magnifyAPEntryPoint(entryPoint: APEntryPoint) = entryPoint.run {
         showOnce = showOnce,
         layers = layers.map { magnifyAPLayer(it) },
         actions = actions.map { magnifyAPEntryPointAction(it) }
+    )
+}
+
+private fun magnifyAPLaunchScreenInstance(instance: APLaunchScreenInstance) = instance.run {
+    APLaunchScreenInstance(
+        id = id,
+        campaignId = campaignId,
+        showCount = showCount,
+        showTime = showTime,
+        layers = layers.map { magnifyAPLayer(it) }
     )
 }
 

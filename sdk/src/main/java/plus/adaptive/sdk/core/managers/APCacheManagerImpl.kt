@@ -1,11 +1,10 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
+import plus.adaptive.sdk.data.models.APLaunchScreen
 import plus.adaptive.sdk.data.models.APViewDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
-import plus.adaptive.sdk.utils.getDeserializedUnprocessedAPViewDataModel
-import plus.adaptive.sdk.utils.getDeserializedProcessedAPViewDataModel
-import plus.adaptive.sdk.utils.getSerializedProcessedAPViewDataModel
+import plus.adaptive.sdk.utils.*
 import java.io.*
 
 
@@ -46,7 +45,7 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -72,7 +71,7 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
             val json = getSerializedProcessedAPViewDataModel(dataModel)
@@ -93,7 +92,86 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
+            dataModelFile.delete()
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
+    }
+
+    override fun loadAPLaunchScreenMockModelFromAssets(
+        onSuccess: (dataModel: APLaunchScreen) -> Unit
+    ) {
+        try {
+            val inputStream: InputStream =
+                context.assets.open("launchscreen.json")
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+
+            inputStream.read(buffer)
+            inputStream.close()
+
+            val json = String(buffer, Charsets.UTF_8)
+
+            val dataModel = getDeserializedUnprocessedAPLaunchScreenModel(json)
+            if (dataModel != null) {
+                onSuccess.invoke(dataModel)
+            }
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
+    }
+
+    override fun loadAPLaunchScreenModelFromCache(
+        onResult: (dataModel: APLaunchScreen?) -> Unit
+    ) {
+        try {
+            val userId = userRepository.getAPUser().apId ?: ""
+            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
+            val inputStream: InputStream = dataModelFile.inputStream()
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+
+            inputStream.read(buffer)
+            inputStream.close()
+
+            val json = String(buffer, Charsets.UTF_8)
+
+            val dataModel = getDeserializedProcessedAPLaunchScreenModel(json)
+            onResult(dataModel)
+        } catch (ex: FileNotFoundException) {
+            onResult(null)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            onResult(null)
+        }
+    }
+
+    override fun saveAPLaunchScreenModelToCache(
+        dataModel: APLaunchScreen
+    ) {
+        try {
+            val userId = userRepository.getAPUser().apId ?: ""
+            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
+            dataModelFile.createNewFile()
+            val outputStream: OutputStream = dataModelFile.outputStream()
+            val json = getSerializedProcessedAPLaunchScreenModel(dataModel)
+
+            if (json != null) {
+                outputStream.write(json.toByteArray())
+            }
+
+            outputStream.flush()
+            outputStream.close()
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
+    }
+
+    override fun removeAPLaunchScreenModelFromCache() {
+        try {
+            val userId = userRepository.getAPUser().apId ?: ""
+            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
             dataModelFile.delete()
         } catch (ex: IOException) {
             ex.printStackTrace()
