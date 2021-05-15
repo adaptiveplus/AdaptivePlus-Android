@@ -3,6 +3,7 @@ package plus.adaptive.sdk.core.managers
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.actions.APCustomAction
@@ -80,6 +81,7 @@ internal class APActionsManagerImpl(
                         .newInstance(stories, storyIndex, apViewModelDelegate)
                     apViewDelegate.showDialog(apStoriesDialog)
                 } catch (e: IllegalStateException) {
+                    APCrashlytics.logCrash(e)
                     e.printStackTrace()
                 }
             }

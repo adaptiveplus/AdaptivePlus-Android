@@ -1,5 +1,9 @@
 package plus.adaptive.sdk.ui.launchscreen
 
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.fragment.app.FragmentActivity
+import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APLaunchScreen
@@ -8,6 +12,7 @@ import plus.adaptive.sdk.data.repositories.APLaunchScreenRepository
 
 
 internal class APLaunchScreenViewController(
+    private val context: Context,
     private val cacheManager: APCacheManager,
     private val launchScreenRepository: APLaunchScreenRepository
 ) {
@@ -33,7 +38,28 @@ internal class APLaunchScreenViewController(
     }
 
     private fun showLaunchScreenDialog(dataModel: APLaunchScreen) {
-        // TODO: show dialog
+        try {
+            getFragmentActivity()?.run {
+                val apLaunchScreenDialog = APLaunchScreenDialog.newInstance(dataModel)
+                apLaunchScreenDialog.show(supportFragmentManager, apLaunchScreenDialog.tag)
+            }
+        } catch (e: IllegalStateException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+        }
+    }
+
+    private fun getFragmentActivity(): FragmentActivity? {
+        var context = context
+
+        while (context is ContextWrapper) {
+            if (context is FragmentActivity) {
+                return context
+            }
+            context = context.baseContext
+        }
+
+        return null
     }
 
     private fun requestAPLaunchScreenModel() {

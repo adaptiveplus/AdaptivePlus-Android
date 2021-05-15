@@ -14,4 +14,15 @@
     </style>
 
     <style name="APStoriesDialogTheme" parent="APStoriesDialogBaseTheme"/>
+
+    <style name="APLaunchScreenDialogBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/apBlack</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:windowAnimationStyle">@style/APStoriesDialogBottomTopAnimation</item>
+    </style>
+
+    <style name="APLaunchScreenDialogTheme" parent="APLaunchScreenDialogBaseTheme"/>
 </resources>

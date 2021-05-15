@@ -8,6 +8,7 @@ internal fun provideAPLaunchScreenViewController(
     context: Context
 ) : APLaunchScreenViewController {
     return APLaunchScreenViewController(
+        context,
         provideAPCacheManager(context),
         provideAPLaunchScreenRepository(context)
     )
