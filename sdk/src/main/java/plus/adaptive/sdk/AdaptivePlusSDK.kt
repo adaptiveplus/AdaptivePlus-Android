@@ -7,6 +7,7 @@ import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
 import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.data.models.APLocation
+import plus.adaptive.sdk.utils.isQAApp
 import java.util.*
 
 
@@ -36,8 +37,7 @@ interface AdaptivePlusSDK {
             context: Context,
             customIP: String?
         ) {
-            val testAppIds = listOf("plus.adaptive.qaapp")
-            if (context.packageName !in testAppIds) {
+            if (!isQAApp(context)) {
                 return
             }
 
@@ -60,4 +60,13 @@ interface AdaptivePlusSDK {
     fun setLocale(locale: Locale?) : AdaptivePlusSDK
 
     fun setIsDebuggable(isDebuggable: Boolean) : AdaptivePlusSDK
+
+    @MainThread
+    fun showLaunchScreen() : AdaptivePlusSDK
+
+    @Deprecated(
+        message = "Only for testing purposes.",
+        level = DeprecationLevel.WARNING
+    )
+    fun showMockLaunchScreen() : AdaptivePlusSDK
 }

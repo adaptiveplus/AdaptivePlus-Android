@@ -35,7 +35,10 @@ internal class APSDKManagerImpl(
 
     override fun isStartedLiveData(): LiveData<Boolean> = isStartedLiveData
 
-    override fun authorize(isForced: Boolean) {
+    override fun authorize(
+        isForced: Boolean,
+        requestResultCallback: RequestResultCallback<Any?>?
+    ) {
         if (isStartedLiveData.value != true ||
             (!isForced && tokenRequestState == RequestState.IN_PROCESS)
         ) {
@@ -43,6 +46,7 @@ internal class APSDKManagerImpl(
         }
 
         if (networkServiceManager?.isTokenExpired() != true) {
+            requestResultCallback?.success(null)
             requestAPConfigs()
             return
         }
@@ -54,10 +58,12 @@ internal class APSDKManagerImpl(
                 override fun success(response: String) {
                     tokenRequestState = RequestState.SUCCESS
                     requestAPConfigs()
+                    requestResultCallback?.success(null)
                 }
 
                 override fun failure(error: APError?) {
                     tokenRequestState = RequestState.ERROR
+                    requestResultCallback?.failure(error)
                 }
             }
         )

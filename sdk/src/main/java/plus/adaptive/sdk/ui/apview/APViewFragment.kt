@@ -33,6 +33,7 @@ import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
 import plus.adaptive.sdk.utils.safeRun
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.utils.isQAApp
 
 
 internal class APViewFragment : Fragment(), APViewDelegateProtocol {
@@ -242,7 +243,7 @@ internal class APViewFragment : Fragment(), APViewDelegateProtocol {
         }
 
         // Mock is used only for development and testing purposes, not for release
-        if (context?.packageName == "plus.adaptive.qaapp" &&
+        if (isQAApp(context) &&
             apViewId.startsWith("mock") &&
             apViewId.length <= 6
         ) {

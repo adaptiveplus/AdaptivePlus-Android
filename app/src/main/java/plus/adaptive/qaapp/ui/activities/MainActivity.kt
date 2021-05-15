@@ -96,6 +96,10 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.content, ApiFragment.newInstance(env.name))
             .commit()
+
+        AdaptivePlusSDK
+            .newInstance(this)
+            .showLaunchScreen()
     }
 
     private fun showMockFragment() {
@@ -111,6 +115,10 @@ class MainActivity : AppCompatActivity() {
                 MockFragment.newInstance()
             )
             .commit()
+
+        AdaptivePlusSDK
+            .newInstance(this)
+            .showMockLaunchScreen()
     }
 
     override fun onDestroy() {
