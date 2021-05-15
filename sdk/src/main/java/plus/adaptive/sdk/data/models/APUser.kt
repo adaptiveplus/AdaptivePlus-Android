@@ -27,7 +27,7 @@ internal data class APUser(
         @SerializedName("deviceType")
         val type: Type,
         @SerializedName("deviceLocale")
-        val locale: String,
+        var locale: String,
         @SerializedName("osName")
         val osName: String,
         @SerializedName("osVersion")

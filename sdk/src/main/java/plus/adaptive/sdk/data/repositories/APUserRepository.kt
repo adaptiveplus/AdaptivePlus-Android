@@ -1,6 +1,7 @@
 package plus.adaptive.sdk.data.repositories
 
 import plus.adaptive.sdk.core.managers.APSharedPreferences
+import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.models.APUser
 import plus.adaptive.sdk.data.models.APLocation
 
@@ -62,10 +63,15 @@ internal class APUserRepository(
     }
 
     fun getAPUser() : APUser {
+        userDevice?.apply {
+            locale = LOCALE.language
+            isEventTrackingDisabled = getIsEventTrackingDisabled()
+        }
+
         return APUser(
             apId = getAPUserId(),
             externalId = externalUserId,
-            device = userDevice?.apply { isEventTrackingDisabled = getIsEventTrackingDisabled() },
+            device = userDevice,
             properties = userProperties,
             location = userLocation
         )
