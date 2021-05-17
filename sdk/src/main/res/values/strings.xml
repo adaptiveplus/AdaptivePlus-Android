@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ap_draft_tag">Draft</string>
+    <string name="ap_skip">SKIP %1$d</string>
 </resources>

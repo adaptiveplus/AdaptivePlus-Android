@@ -1,5 +1,7 @@
 package plus.adaptive.sdk.ui.launchscreen.vm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import plus.adaptive.sdk.data.models.APLaunchScreen
 import plus.adaptive.sdk.data.models.APLayer
@@ -17,10 +19,15 @@ internal class APLaunchScreenDialogViewModel(
     launchScreen: APLaunchScreen
 ) : ViewModel(), APComponentViewModelProvider, APComponentContainerViewModel {
 
+    val isLaunchScreenReadyLiveData: LiveData<Boolean>
+        get() = _isLaunchScreenReadyLiveData
+    private val _isLaunchScreenReadyLiveData = MutableLiveData<Boolean>().apply { value = false }
+
+    private val componentReadinessList = launchScreen.layers.map { false }.toMutableList()
     private val componentViewModelList: List<APComponentViewModel?> =
-        launchScreen.layers.mapIndexed { _, apLayer ->
+        launchScreen.layers.mapIndexed { index, apLayer ->
             val componentLifecycleListener = object: APComponentLifecycleListener {
-                override fun onReady(isReady: Boolean) { }
+                override fun onReady(isReady: Boolean) { onComponentReady(index, isReady) }
                 override fun onComplete() { }
                 override fun onError() { }
                 override fun onPreparationProgressUpdate(progress: Float) { }
@@ -43,5 +50,14 @@ internal class APLaunchScreenDialogViewModel(
     override fun isActive(): Boolean = false
 
     override fun showBorder(): Boolean = false
+
+    private fun onComponentReady(index: Int, isReady: Boolean) {
+        if (index >= 0 && index < componentReadinessList.size) {
+            componentReadinessList[index] = isReady
+
+            val isLaunchScreenReady = componentReadinessList.all { it }
+            _isLaunchScreenReadyLiveData.value = isLaunchScreenReady
+        }
+    }
 
 }

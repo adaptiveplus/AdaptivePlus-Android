@@ -2,6 +2,7 @@ package plus.adaptive.sdk.ui.launchscreen
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.*
+import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.apContentCardView
+import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.apContentLayout
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
 import plus.adaptive.sdk.data.models.APLaunchScreen
@@ -45,6 +49,8 @@ internal class APLaunchScreenDialog : DialogFragment() {
     private var baseScreenWidth: Double? = null
     private lateinit var launchScreen: APLaunchScreen
     private lateinit var viewModel: APLaunchScreenDialogViewModel
+
+    private var countDownTimer: CountDownTimer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,9 +93,28 @@ internal class APLaunchScreenDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val showTime = launchScreen.showTime?.toInt() ?: 3
+        apSkipTextView.text = getString(R.string.ap_skip, showTime)
+        apSkipTextView.setOnClickListener {
+            dismiss()
+        }
+
+        countDownTimer = object: CountDownTimer(showTime * 1000L, 100L) {
+            override fun onTick(millisUntilFinished: Long) {
+                val timeLeft = ((millisUntilFinished + 900) / 1000).toInt()
+                apSkipTextView.text = getString(R.string.ap_skip, timeLeft)
+            }
+
+            override fun onFinish() {
+                dismiss()
+            }
+        }
+
         drawLaunchScreen()
 
         apLaunchScreenLayout.addOnLayoutChangeListener(apLaunchScreenLayoutChangeListener)
+
+        setupObservers()
     }
 
     private val apLaunchScreenLayoutChangeListener = View.OnLayoutChangeListener {
@@ -141,5 +166,15 @@ internal class APLaunchScreenDialog : DialogFragment() {
         apContentLayoutConstraintSet.setScaleX(apLaunchScreenLayersLayout.id, scaleFactor)
         apContentLayoutConstraintSet.setScaleY(apLaunchScreenLayersLayout.id, scaleFactor)
         apContentLayoutConstraintSet.applyTo(apContentLayout)
+    }
+
+    private fun setupObservers() {
+        viewModel.isLaunchScreenReadyLiveData.observe(viewLifecycleOwner, isLaunchScreenReadyObserver)
+    }
+
+    private val isLaunchScreenReadyObserver = Observer<Boolean> { isReady ->
+        if (isReady) {
+            countDownTimer?.start()
+        }
     }
 }
