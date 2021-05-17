@@ -8,7 +8,7 @@ import java.io.Serializable
 internal data class APLaunchScreen(
     val id: String,
     val campaignId: String,
-    val showCount: Int,
-    val showTime: Double,
+    val showCount: Int?,
+    val showTime: Double?,
     val layers: List<APLayer>
 ) : Serializable

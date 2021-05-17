@@ -40,8 +40,11 @@ internal class APLaunchScreenViewController(
     private fun showLaunchScreenDialog(dataModel: APLaunchScreenTemplate) {
         try {
             getFragmentActivity()?.run {
-                val apLaunchScreenDialog = APLaunchScreenDialog.newInstance(dataModel)
-                apLaunchScreenDialog.show(supportFragmentManager, apLaunchScreenDialog.tag)
+                dataModel.launchScreens.firstOrNull()?.let {
+                    val apLaunchScreenDialog = APLaunchScreenDialog.newInstance(
+                        dataModel.options.screenWidth, it)
+                    apLaunchScreenDialog.show(supportFragmentManager, apLaunchScreenDialog.tag)
+                }
             }
         } catch (e: IllegalStateException) {
             APCrashlytics.logCrash(e)

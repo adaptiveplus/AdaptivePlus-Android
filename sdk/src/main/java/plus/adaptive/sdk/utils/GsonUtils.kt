@@ -163,7 +163,7 @@ private val apLaunchScreenModelDeserializer =
                 try {
                     val campaignJsonObject = campaignJson.asJsonObject
                     val campaignId = campaignJsonObject.get("id").asString
-                    val showCount = campaignJsonObject.get("showCount").asInt
+                    val showCount = campaignJsonObject.get("showCount")?.asInt
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
                     val launchScreenJsonObject = campaignBodyJsonObject.get("launchScreen").asJsonObject
                     val launchScreenId = launchScreenJsonObject.get("id").asString
