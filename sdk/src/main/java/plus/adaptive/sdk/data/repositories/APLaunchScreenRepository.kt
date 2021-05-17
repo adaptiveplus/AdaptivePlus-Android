@@ -6,7 +6,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
-import plus.adaptive.sdk.data.models.APLaunchScreen
+import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
 import plus.adaptive.sdk.data.models.network.APLaunchScreenRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 
@@ -19,7 +19,7 @@ internal class APLaunchScreenRepository(
 ) : APBaseRepository(networkManager, authCredentialsManager, userRepository, customGson) {
 
     fun requestAPLaunchScreen(
-        callback: RequestResultCallback<APLaunchScreen>
+        callback: RequestResultCallback<APLaunchScreenTemplate>
     ) {
         val obj = APLaunchScreenRequestBody(
             parserVersion = 1
@@ -32,7 +32,7 @@ internal class APLaunchScreenRepository(
             .post(body)
             .build()
 
-        executeRequest<APLaunchScreen>(request,
+        executeRequest<APLaunchScreenTemplate>(request,
             { response ->
                 callback.success(response)
             },

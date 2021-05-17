@@ -1,7 +1,7 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
-import plus.adaptive.sdk.data.models.APLaunchScreen
+import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
 import plus.adaptive.sdk.data.models.APViewDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.*
@@ -100,7 +100,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun loadAPLaunchScreenMockModelFromAssets(
-        onSuccess: (dataModel: APLaunchScreen) -> Unit
+        onSuccess: (dataModel: APLaunchScreenTemplate) -> Unit
     ) {
         try {
             val inputStream: InputStream =
@@ -123,7 +123,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun loadAPLaunchScreenModelFromCache(
-        onResult: (dataModel: APLaunchScreen?) -> Unit
+        onResult: (dataModel: APLaunchScreenTemplate?) -> Unit
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
@@ -148,7 +148,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun saveAPLaunchScreenModelToCache(
-        dataModel: APLaunchScreen
+        dataModel: APLaunchScreenTemplate
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""

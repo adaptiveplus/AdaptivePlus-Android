@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import plus.adaptive.sdk.R
-import plus.adaptive.sdk.data.models.APLaunchScreen
+import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
 import plus.adaptive.sdk.ui.launchscreen.vm.APLaunchScreenDialogViewModel
 import plus.adaptive.sdk.ui.launchscreen.vm.APLaunchScreenDialogViewModelFactory
 
@@ -22,16 +22,16 @@ internal class APLaunchScreenDialog : DialogFragment() {
 
         @JvmStatic
         fun newInstance(
-            launchScreen: APLaunchScreen
+            launchScreenTemplate: APLaunchScreenTemplate
         ) = APLaunchScreenDialog().apply {
             arguments = bundleOf(
-                EXTRA_LAUNCH_SCREEN to launchScreen
+                EXTRA_LAUNCH_SCREEN to launchScreenTemplate
             )
         }
     }
 
 
-    private lateinit var launchScreen: APLaunchScreen
+    private lateinit var launchScreenTemplate: APLaunchScreenTemplate
     private lateinit var viewModel: APLaunchScreenDialogViewModel
 
 
@@ -39,11 +39,11 @@ internal class APLaunchScreenDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.APLaunchScreenDialogTheme)
 
-        (arguments?.getSerializable(EXTRA_LAUNCH_SCREEN) as? APLaunchScreen)?.let {
-            this.launchScreen = it
+        (arguments?.getSerializable(EXTRA_LAUNCH_SCREEN) as? APLaunchScreenTemplate)?.let {
+            this.launchScreenTemplate = it
         }
 
-        if (!::launchScreen.isInitialized || launchScreen.instances.isEmpty()) {
+        if (!::launchScreenTemplate.isInitialized || launchScreenTemplate.launchScreens.isEmpty()) {
             dismiss()
             return
         }

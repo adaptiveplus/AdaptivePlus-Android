@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.APLaunchScreen
+import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APLaunchScreenRepository
 
@@ -37,7 +37,7 @@ internal class APLaunchScreenViewController(
         }
     }
 
-    private fun showLaunchScreenDialog(dataModel: APLaunchScreen) {
+    private fun showLaunchScreenDialog(dataModel: APLaunchScreenTemplate) {
         try {
             getFragmentActivity()?.run {
                 val apLaunchScreenDialog = APLaunchScreenDialog.newInstance(dataModel)
@@ -64,8 +64,8 @@ internal class APLaunchScreenViewController(
 
     private fun requestAPLaunchScreenModel() {
         launchScreenRepository.requestAPLaunchScreen(
-            object: RequestResultCallback<APLaunchScreen>() {
-                override fun success(response: APLaunchScreen) {
+            object: RequestResultCallback<APLaunchScreenTemplate>() {
+                override fun success(response: APLaunchScreenTemplate) {
                     saveAPLaunchScreenModelToCache(response)
                 }
 
@@ -74,7 +74,7 @@ internal class APLaunchScreenViewController(
         )
     }
 
-    private fun saveAPLaunchScreenModelToCache(dataModel: APLaunchScreen) {
+    private fun saveAPLaunchScreenModelToCache(dataModel: APLaunchScreenTemplate) {
         cacheManager.saveAPLaunchScreenModelToCache(dataModel)
     }
 }
