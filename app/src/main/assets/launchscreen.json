@@ -7,12 +7,12 @@
     {
       "id": "campaign71",
       "updatedAt": "datetime",
+      "showCount": 500,
       "body": {
         "launchScreen": {
           "id": "launchScreen71",
           "type": "LAUNCH_SCREEN",
           "body": {
-            "showCount": 500,
             "showTime": 3.0,
             "layers": [
               {
