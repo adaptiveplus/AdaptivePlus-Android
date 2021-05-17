@@ -21,7 +21,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="android:windowAnimationStyle">@style/APStoriesDialogBottomTopAnimation</item>
+        <item name="android:windowAnimationStyle">@style/APLaunchScreenDialogBottomTopAnimation</item>
     </style>
 
     <style name="APLaunchScreenDialogTheme" parent="APLaunchScreenDialogBaseTheme"/>
