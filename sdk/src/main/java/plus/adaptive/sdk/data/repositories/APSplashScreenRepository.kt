@@ -22,13 +22,13 @@ internal class APSplashScreenRepository(
         callback: RequestResultCallback<APSplashScreenTemplate>
     ) {
         val obj = APSplashScreenTemplateRequestBody(
-            parserVersion = 1
+            parserVersion = 1,
+            hasDrafts = false
         )
         val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
 
-        // TODO: update url on endpoint readiness
         val request = Request.Builder()
-            .url("$SDK_API_URL/ap-splashscreen-templates")
+            .url("$SDK_API_URL/ap-view-launch-screen-templates")
             .post(body)
             .build()
 
