@@ -147,7 +147,8 @@ internal class APCacheManagerImpl(
     }
 
     override fun saveAPSplashScreenTemplateToCache(
-        dataModel: APSplashScreenTemplate
+        dataModel: APSplashScreenTemplate,
+        onSuccess: (() -> Unit)?
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
@@ -158,6 +159,7 @@ internal class APCacheManagerImpl(
 
             if (json != null) {
                 outputStream.write(json.toByteArray())
+                onSuccess?.invoke()
             }
 
             outputStream.flush()

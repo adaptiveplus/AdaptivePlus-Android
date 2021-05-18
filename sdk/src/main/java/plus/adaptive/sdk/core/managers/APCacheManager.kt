@@ -39,7 +39,8 @@ internal interface APCacheManager {
     )
 
     fun saveAPSplashScreenTemplateToCache(
-        dataModel: APSplashScreenTemplate
+        dataModel: APSplashScreenTemplate,
+        onSuccess: (() -> Unit)? = null
     )
 
     fun removeAPSplashScreenTemplateFromCache()

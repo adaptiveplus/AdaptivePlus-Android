@@ -11,9 +11,15 @@ import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.components.APGIFComponent
+import plus.adaptive.sdk.data.models.components.APImageComponent
+import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
+import plus.adaptive.sdk.utils.preloadAPFont
+import plus.adaptive.sdk.utils.preloadGIF
+import plus.adaptive.sdk.utils.preloadImage
 
 
 internal class APSplashScreenViewController(
@@ -102,7 +108,27 @@ internal class APSplashScreenViewController(
     }
 
     private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenTemplate) {
-        cacheManager.saveAPSplashScreenTemplateToCache(dataModel)
+        cacheManager.saveAPSplashScreenTemplateToCache(dataModel) {
+            preloadSplashScreenContent(dataModel)
+        }
+    }
+
+    private fun preloadSplashScreenContent(dataModel: APSplashScreenTemplate) {
+        dataModel.splashScreens.forEach { splashScreen ->
+            splashScreen.layers.forEach { apLayer ->
+                when (apLayer.component) {
+                    is APImageComponent -> {
+                        apLayer.component.url.let { preloadImage(context, it) }
+                    }
+                    is APGIFComponent -> {
+                        apLayer.component.url.let { preloadGIF(context, it) }
+                    }
+                    is APTextComponent -> {
+                        apLayer.component.font?.let { preloadAPFont(context, it) }
+                    }
+                }
+            }
+        }
     }
 
     private fun getSplashScreenToShow(splashScreens: List<APSplashScreen>) : APSplashScreen? {
