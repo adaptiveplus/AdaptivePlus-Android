@@ -4,10 +4,10 @@ import android.content.Context
 import plus.adaptive.sdk.data.repositories.APAnalyticsRepository
 import plus.adaptive.sdk.data.repositories.APAuthRepository
 import plus.adaptive.sdk.data.repositories.APCrashlyticsRepository
-import plus.adaptive.sdk.data.repositories.APLaunchScreenRepository
+import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
-import plus.adaptive.sdk.utils.getUnprocessedAPLaunchScreenGson
+import plus.adaptive.sdk.utils.getUnprocessedAPSplashScreenGson
 import plus.adaptive.sdk.utils.getUnprocessedAPViewGson
 
 
@@ -58,13 +58,13 @@ internal fun provideAPCrashlyticsRepository() : APCrashlyticsRepository {
     )
 }
 
-internal fun provideAPLaunchScreenRepository(
+internal fun provideAPSplashScreenRepository(
     context: Context?
-) : APLaunchScreenRepository {
-    return APLaunchScreenRepository(
+) : APSplashScreenRepository {
+    return APSplashScreenRepository(
         provideNetworkServiceManager(context),
         provideAPClientCredentialsManager(),
         provideAPUserRepository(context),
-        getUnprocessedAPLaunchScreenGson()
+        getUnprocessedAPSplashScreenGson()
     )
 }

@@ -6,33 +6,33 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
-import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
-import plus.adaptive.sdk.data.models.network.APLaunchScreenRequestBody
+import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.network.APSplashScreenTemplateRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 
 
-internal class APLaunchScreenRepository(
+internal class APSplashScreenRepository(
     networkManager: NetworkServiceManager,
     authCredentialsManager: APAuthCredentialsManager,
     userRepository: APUserRepository,
     customGson: Gson
 ) : APBaseRepository(networkManager, authCredentialsManager, userRepository, customGson) {
 
-    fun requestAPLaunchScreen(
-        callback: RequestResultCallback<APLaunchScreenTemplate>
+    fun requestAPSplashScreenTemplate(
+        callback: RequestResultCallback<APSplashScreenTemplate>
     ) {
-        val obj = APLaunchScreenRequestBody(
+        val obj = APSplashScreenTemplateRequestBody(
             parserVersion = 1
         )
         val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
 
         // TODO: update url on endpoint readiness
         val request = Request.Builder()
-            .url("$SDK_API_URL/ap-launchscreen-templates")
+            .url("$SDK_API_URL/ap-splashscreen-templates")
             .post(body)
             .build()
 
-        executeRequest<APLaunchScreenTemplate>(request,
+        executeRequest<APSplashScreenTemplate>(request,
             { response ->
                 callback.success(response)
             },

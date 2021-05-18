@@ -4,7 +4,7 @@
         <item name="android:navigationBarColor">@color/apBlack</item>
     </style>
 
-    <style name="APLaunchScreenDialogTheme" parent="APLaunchScreenDialogBaseTheme">
+    <style name="APSplashScreenDialogTheme" parent="APSplashScreenDialogBaseTheme">
         <item name="android:navigationBarColor">@color/apBlack</item>
     </style>
 </resources>

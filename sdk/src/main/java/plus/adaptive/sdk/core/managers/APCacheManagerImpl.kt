@@ -1,7 +1,7 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
-import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.data.models.APViewDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.*
@@ -99,12 +99,12 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun loadAPLaunchScreenMockModelFromAssets(
-        onSuccess: (dataModel: APLaunchScreenTemplate) -> Unit
+    override fun loadAPSplashScreenMockTemplateFromAssets(
+        onSuccess: (dataModel: APSplashScreenTemplate) -> Unit
     ) {
         try {
             val inputStream: InputStream =
-                context.assets.open("launchscreen.json")
+                context.assets.open("splashscreen.json")
             val size = inputStream.available()
             val buffer = ByteArray(size)
 
@@ -113,7 +113,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedUnprocessedAPLaunchScreenModel(json)
+            val dataModel = getDeserializedUnprocessedAPSplashScreenModel(json)
             if (dataModel != null) {
                 onSuccess.invoke(dataModel)
             }
@@ -122,12 +122,12 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun loadAPLaunchScreenModelFromCache(
-        onResult: (dataModel: APLaunchScreenTemplate?) -> Unit
+    override fun loadAPSplashScreenTemplateFromCache(
+        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -137,7 +137,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedProcessedAPLaunchScreenModel(json)
+            val dataModel = getDeserializedProcessedAPSplashScreenModel(json)
             onResult(dataModel)
         } catch (ex: FileNotFoundException) {
             onResult(null)
@@ -147,15 +147,15 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun saveAPLaunchScreenModelToCache(
-        dataModel: APLaunchScreenTemplate
+    override fun saveAPSplashScreenTemplateToCache(
+        dataModel: APSplashScreenTemplate
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
-            val json = getSerializedProcessedAPLaunchScreenModel(dataModel)
+            val json = getSerializedProcessedAPSplashScreenModel(dataModel)
 
             if (json != null) {
                 outputStream.write(json.toByteArray())
@@ -168,10 +168,10 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun removeAPLaunchScreenModelFromCache() {
+    override fun removeAPSplashScreenTemplateFromCache() {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_launchscreen.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             dataModelFile.delete()
         } catch (ex: IOException) {
             ex.printStackTrace()

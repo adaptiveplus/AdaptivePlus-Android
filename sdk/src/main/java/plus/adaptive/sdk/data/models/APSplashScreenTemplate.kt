@@ -4,10 +4,10 @@ import androidx.annotation.Keep
 import java.io.Serializable
 
 @Keep
-internal data class APLaunchScreenTemplate(
+internal data class APSplashScreenTemplate(
     val id: String,
     val options: Options,
-    var launchScreens: List<APLaunchScreen>
+    var splashScreens: List<APSplashScreen>
 ) : Serializable {
 
     data class Options(

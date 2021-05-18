@@ -1,15 +1,15 @@
 package plus.adaptive.sdk.core.providers
 
 import android.content.Context
-import plus.adaptive.sdk.ui.launchscreen.APLaunchScreenViewController
+import plus.adaptive.sdk.ui.splashscreen.APSplashScreenViewController
 
 
-internal fun provideAPLaunchScreenViewController(
+internal fun provideAPSplashScreenViewController(
     context: Context
-) : APLaunchScreenViewController {
-    return APLaunchScreenViewController(
+) : APSplashScreenViewController {
+    return APSplashScreenViewController(
         context,
         provideAPCacheManager(context),
-        provideAPLaunchScreenRepository(context)
+        provideAPSplashScreenRepository(context)
     )
 }

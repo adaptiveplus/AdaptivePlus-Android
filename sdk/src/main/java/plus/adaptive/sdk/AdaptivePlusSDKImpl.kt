@@ -6,7 +6,7 @@ import androidx.annotation.MainThread
 import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APSDKManager
 import plus.adaptive.sdk.core.providers.provideAPAnalyticsRepository
-import plus.adaptive.sdk.core.providers.provideAPLaunchScreenViewController
+import plus.adaptive.sdk.core.providers.provideAPSplashScreenViewController
 import plus.adaptive.sdk.data.IS_DEBUGGABLE
 import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.OS_NAME
@@ -16,7 +16,6 @@ import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.sdk.data.models.APUser
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APUserRepository
-import plus.adaptive.sdk.utils.*
 import plus.adaptive.sdk.utils.getAppVersion
 import plus.adaptive.sdk.utils.getDeviceId
 import plus.adaptive.sdk.utils.getDeviceType
@@ -119,13 +118,13 @@ internal class AdaptivePlusSDKImpl(
         return this
     }
 
-    override fun showLaunchScreen(): AdaptivePlusSDK {
+    override fun showSplashScreen(): AdaptivePlusSDK {
         init()
 
         sdkManager.start()
         sdkManager.authorize(true, object: RequestResultCallback<Any?>() {
             override fun success(response: Any?) {
-                provideAPLaunchScreenViewController(context).show()
+                provideAPSplashScreenViewController(context).show()
             }
 
             override fun failure(error: APError?) {}
@@ -134,9 +133,9 @@ internal class AdaptivePlusSDKImpl(
         return this
     }
 
-    override fun showMockLaunchScreen(): AdaptivePlusSDK {
+    override fun showMockSplashScreen(): AdaptivePlusSDK {
         if (isQAApp(context)) {
-            provideAPLaunchScreenViewController(context).showMock()
+            provideAPSplashScreenViewController(context).showMock()
         }
 
         return this

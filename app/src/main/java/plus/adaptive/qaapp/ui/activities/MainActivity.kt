@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .showLaunchScreen()
+            .showSplashScreen()
     }
 
     private fun showMockFragment() {
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .showMockLaunchScreen()
+            .showMockSplashScreen()
     }
 
     override fun onDestroy() {

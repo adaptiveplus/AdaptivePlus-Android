@@ -62,11 +62,11 @@ interface AdaptivePlusSDK {
     fun setIsDebuggable(isDebuggable: Boolean) : AdaptivePlusSDK
 
     @MainThread
-    fun showLaunchScreen() : AdaptivePlusSDK
+    fun showSplashScreen() : AdaptivePlusSDK
 
     @Deprecated(
         message = "Only for testing purposes.",
         level = DeprecationLevel.WARNING
     )
-    fun showMockLaunchScreen() : AdaptivePlusSDK
+    fun showMockSplashScreen() : AdaptivePlusSDK
 }

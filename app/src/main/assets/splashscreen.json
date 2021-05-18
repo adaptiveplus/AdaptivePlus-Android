@@ -9,9 +9,9 @@
       "updatedAt": "datetime",
       "showCount": 500,
       "body": {
-        "launchScreen": {
-          "id": "launchScreen71",
-          "type": "LAUNCH_SCREEN",
+        "splashScreen": {
+          "id": "splashScreen71",
+          "type": "SPLASH_SCREEN",
           "body": {
             "showTime": 3.0,
             "layers": [

@@ -18,7 +18,7 @@ private fun getProcessedAPViewGson(): Gson {
     return gsonBuilder.create()
 }
 
-private fun getProcessedAPLaunchScreenGson(): Gson {
+private fun getProcessedAPSplashScreenGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
     return gsonBuilder.create()
@@ -28,8 +28,8 @@ internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): 
     return getProcessedAPViewGson().toJson(dataModel)
 }
 
-internal fun getSerializedProcessedAPLaunchScreenModel(dataModel: APLaunchScreenTemplate): String? {
-    return getProcessedAPLaunchScreenGson().toJson(dataModel)
+internal fun getSerializedProcessedAPSplashScreenModel(dataModel: APSplashScreenTemplate): String? {
+    return getProcessedAPSplashScreenGson().toJson(dataModel)
 }
 
 internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataModel? {
@@ -44,10 +44,10 @@ internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataMo
     }
 }
 
-internal fun getDeserializedProcessedAPLaunchScreenModel(json: String): APLaunchScreenTemplate? {
+internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplashScreenTemplate? {
     return try {
-        val dataModel = getProcessedAPLaunchScreenGson().fromJson(json, APLaunchScreenTemplate::class.java)
-        checkAPLaunchScreenModelProperties(dataModel)
+        val dataModel = getProcessedAPSplashScreenGson().fromJson(json, APSplashScreenTemplate::class.java)
+        checkAPSplashScreenModelProperties(dataModel)
         dataModel
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
@@ -62,9 +62,9 @@ internal fun getUnprocessedAPViewGson(): Gson {
     return gsonBuilder.create()
 }
 
-internal fun getUnprocessedAPLaunchScreenGson(): Gson {
+internal fun getUnprocessedAPSplashScreenGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APLaunchScreenTemplate::class.java, apLaunchScreenModelDeserializer)
+    gsonBuilder.registerTypeAdapter(APSplashScreenTemplate::class.java, apSplashScreenModelDeserializer)
     return gsonBuilder.create()
 }
 
@@ -80,12 +80,12 @@ internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewData
     }
 }
 
-internal fun getDeserializedUnprocessedAPLaunchScreenModel(json: String): APLaunchScreenTemplate? {
+internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSplashScreenTemplate? {
     return try {
-        val dataModel = getUnprocessedAPLaunchScreenGson()
-            .fromJson(json, APLaunchScreenTemplate::class.java)
-        checkAPLaunchScreenModelProperties(dataModel)
-        magnifyAPLaunchScreenModel(dataModel)
+        val dataModel = getUnprocessedAPSplashScreenGson()
+            .fromJson(json, APSplashScreenTemplate::class.java)
+        checkAPSplashScreenModelProperties(dataModel)
+        magnifyAPSplashScreenModel(dataModel)
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
@@ -149,39 +149,39 @@ private val apViewDataModelDeserializer =
         }
     }
 
-private val apLaunchScreenModelDeserializer =
+private val apSplashScreenModelDeserializer =
     JsonDeserializer { json, _, _ ->
         try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val options = Gson().fromJson(
                 jsonObject.get("options").toString(),
-                APLaunchScreenTemplate.Options::class.java)
+                APSplashScreenTemplate.Options::class.java)
 
             val campaigns = jsonObject.get("campaigns").asJsonArray
-            val launchScreens = campaigns.map { campaignJson ->
+            val splashScreens = campaigns.map { campaignJson ->
                 try {
                     val campaignJsonObject = campaignJson.asJsonObject
                     val campaignId = campaignJsonObject.get("id").asString
                     val showCount = campaignJsonObject.get("showCount")?.asInt
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
-                    val launchScreenJsonObject = campaignBodyJsonObject.get("launchScreen").asJsonObject
-                    val launchScreenId = launchScreenJsonObject.get("id").asString
-                    val launchScreenBodyJsonObject = launchScreenJsonObject.get("body").asJsonObject
-                    launchScreenBodyJsonObject.addProperty("id", launchScreenId)
-                    launchScreenBodyJsonObject.addProperty("campaignId", campaignId)
-                    launchScreenBodyJsonObject.addProperty("showCount", showCount)
+                    val splashScreenJsonObject = campaignBodyJsonObject.get("splashScreen").asJsonObject
+                    val splashScreenId = splashScreenJsonObject.get("id").asString
+                    val splashScreenBodyJsonObject = splashScreenJsonObject.get("body").asJsonObject
+                    splashScreenBodyJsonObject.addProperty("id", splashScreenId)
+                    splashScreenBodyJsonObject.addProperty("campaignId", campaignId)
+                    splashScreenBodyJsonObject.addProperty("showCount", showCount)
 
                     val gsonBuilder = GsonBuilder()
                     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
-                    val apLaunchScreenGson = gsonBuilder.create()
-                    val apLaunchScreen = apLaunchScreenGson.fromJson(
-                        launchScreenBodyJsonObject.toString(),
-                        APLaunchScreen::class.java)
+                    val apSplashScreenGson = gsonBuilder.create()
+                    val apSplashScreen = apSplashScreenGson.fromJson(
+                        splashScreenBodyJsonObject.toString(),
+                        APSplashScreen::class.java)
 
-                    checkAPLaunchScreenInstanceProperties(apLaunchScreen)
+                    checkAPSplashScreenInstanceProperties(apSplashScreen)
 
-                    apLaunchScreen
+                    apSplashScreen
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)
                     e.printStackTrace()
@@ -189,10 +189,10 @@ private val apLaunchScreenModelDeserializer =
                 }
             }.toList()
 
-            APLaunchScreenTemplate(
+            APSplashScreenTemplate(
                 id = id,
                 options = options,
-                launchScreens = launchScreens.filterNotNull()
+                splashScreens = splashScreens.filterNotNull()
             )
         } catch (e: JsonSyntaxException) {
             e.printStackTrace()
@@ -500,13 +500,13 @@ private fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
     }
 }
 
-private fun checkAPLaunchScreenModelProperties(dataModel: APLaunchScreenTemplate) {
+private fun checkAPSplashScreenModelProperties(dataModel: APSplashScreenTemplate) {
     dataModel.run {
         id
         options.run {
             screenWidth
         }
-        launchScreens
+        splashScreens
     }
 }
 
@@ -531,10 +531,10 @@ private fun checkAPEntryPointProperties(entryPoint: APEntryPoint) {
     }
 }
 
-private fun checkAPLaunchScreenInstanceProperties(
-    launchScreen: APLaunchScreen
+private fun checkAPSplashScreenInstanceProperties(
+    splashScreen: APSplashScreen
 ) {
-    launchScreen.run {
+    splashScreen.run {
         id
         campaignId
         showCount
@@ -714,13 +714,13 @@ private fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run {
     )
 }
 
-private fun magnifyAPLaunchScreenModel(dataModel: APLaunchScreenTemplate) = dataModel.run {
-    APLaunchScreenTemplate(
+private fun magnifyAPSplashScreenModel(dataModel: APSplashScreenTemplate) = dataModel.run {
+    APSplashScreenTemplate(
         id = id,
-        options = APLaunchScreenTemplate.Options(
+        options = APSplashScreenTemplate.Options(
             screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER
         ),
-        launchScreens = launchScreens.map { magnifyAPLaunchScreenInstance(it) }
+        splashScreens = splashScreens.map { magnifyAPSplashScreenInstance(it) }
     )
 }
 
@@ -736,8 +736,8 @@ private fun magnifyAPEntryPoint(entryPoint: APEntryPoint) = entryPoint.run {
     )
 }
 
-private fun magnifyAPLaunchScreenInstance(launchScreen: APLaunchScreen) = launchScreen.run {
-    APLaunchScreen(
+private fun magnifyAPSplashScreenInstance(splashScreen: APSplashScreen) = splashScreen.run {
+    APSplashScreen(
         id = id,
         campaignId = campaignId,
         showCount = showCount,

@@ -1,4 +1,4 @@
-package plus.adaptive.sdk.ui.launchscreen
+package plus.adaptive.sdk.ui.splashscreen
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -6,25 +6,25 @@ import androidx.fragment.app.FragmentActivity
 import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
-import plus.adaptive.sdk.data.repositories.APLaunchScreenRepository
+import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 
 
-internal class APLaunchScreenViewController(
+internal class APSplashScreenViewController(
     private val context: Context,
     private val cacheManager: APCacheManager,
-    private val launchScreenRepository: APLaunchScreenRepository
+    private val splashScreenRepository: APSplashScreenRepository
 ) {
 
     fun show() {
-        cacheManager.loadAPLaunchScreenModelFromCache { dataModel ->
+        cacheManager.loadAPSplashScreenTemplateFromCache { dataModel ->
             if (dataModel != null) {
-                showLaunchScreenDialog(dataModel)
+                showSplashScreenDialog(dataModel)
             }
         }
 
-        requestAPLaunchScreenModel()
+        requestAPSplashScreenTemplate()
     }
 
     @Deprecated(
@@ -32,18 +32,18 @@ internal class APLaunchScreenViewController(
         level = DeprecationLevel.WARNING
     )
     fun showMock() {
-        cacheManager.loadAPLaunchScreenMockModelFromAssets { dataModel ->
-            showLaunchScreenDialog(dataModel)
+        cacheManager.loadAPSplashScreenMockTemplateFromAssets { dataModel ->
+            showSplashScreenDialog(dataModel)
         }
     }
 
-    private fun showLaunchScreenDialog(dataModel: APLaunchScreenTemplate) {
+    private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate) {
         try {
             getFragmentActivity()?.run {
-                dataModel.launchScreens.firstOrNull()?.let {
-                    val apLaunchScreenDialog = APLaunchScreenDialog.newInstance(
+                dataModel.splashScreens.firstOrNull()?.let {
+                    val apSplashScreenDialog = APSplashScreenDialog.newInstance(
                         dataModel.options.screenWidth, it)
-                    apLaunchScreenDialog.show(supportFragmentManager, apLaunchScreenDialog.tag)
+                    apSplashScreenDialog.show(supportFragmentManager, apSplashScreenDialog.tag)
                 }
             }
         } catch (e: IllegalStateException) {
@@ -65,11 +65,11 @@ internal class APLaunchScreenViewController(
         return null
     }
 
-    private fun requestAPLaunchScreenModel() {
-        launchScreenRepository.requestAPLaunchScreen(
-            object: RequestResultCallback<APLaunchScreenTemplate>() {
-                override fun success(response: APLaunchScreenTemplate) {
-                    saveAPLaunchScreenModelToCache(response)
+    private fun requestAPSplashScreenTemplate() {
+        splashScreenRepository.requestAPSplashScreenTemplate(
+            object: RequestResultCallback<APSplashScreenTemplate>() {
+                override fun success(response: APSplashScreenTemplate) {
+                    saveAPSplashScreenTemplateToCache(response)
                 }
 
                 override fun failure(error: APError?) { }
@@ -77,7 +77,7 @@ internal class APLaunchScreenViewController(
         )
     }
 
-    private fun saveAPLaunchScreenModelToCache(dataModel: APLaunchScreenTemplate) {
-        cacheManager.saveAPLaunchScreenModelToCache(dataModel)
+    private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenTemplate) {
+        cacheManager.saveAPSplashScreenTemplateToCache(dataModel)
     }
 }

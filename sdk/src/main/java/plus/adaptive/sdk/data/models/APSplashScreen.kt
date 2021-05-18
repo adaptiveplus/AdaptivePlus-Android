@@ -5,7 +5,7 @@ import java.io.Serializable
 
 
 @Keep
-internal data class APLaunchScreen(
+internal data class APSplashScreen(
     val id: String,
     val campaignId: String,
     val showCount: Int?,

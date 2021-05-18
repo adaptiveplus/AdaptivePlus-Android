@@ -1,6 +1,6 @@
 package plus.adaptive.sdk.core.managers
 
-import plus.adaptive.sdk.data.models.APLaunchScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.data.models.APViewDataModel
 
 
@@ -30,17 +30,17 @@ internal interface APCacheManager {
     @Deprecated(
         message = "Only for development purposes.",
         level = DeprecationLevel.WARNING)
-    fun loadAPLaunchScreenMockModelFromAssets(
-        onSuccess: (dataModel: APLaunchScreenTemplate) -> Unit
+    fun loadAPSplashScreenMockTemplateFromAssets(
+        onSuccess: (dataModel: APSplashScreenTemplate) -> Unit
     )
 
-    fun loadAPLaunchScreenModelFromCache(
-        onResult: (dataModel: APLaunchScreenTemplate?) -> Unit
+    fun loadAPSplashScreenTemplateFromCache(
+        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
     )
 
-    fun saveAPLaunchScreenModelToCache(
-        dataModel: APLaunchScreenTemplate
+    fun saveAPSplashScreenTemplateToCache(
+        dataModel: APSplashScreenTemplate
     )
 
-    fun removeAPLaunchScreenModelFromCache()
+    fun removeAPSplashScreenTemplateFromCache()
 }

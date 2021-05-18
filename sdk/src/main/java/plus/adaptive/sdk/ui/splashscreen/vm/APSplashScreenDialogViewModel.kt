@@ -1,9 +1,9 @@
-package plus.adaptive.sdk.ui.launchscreen.vm
+package plus.adaptive.sdk.ui.splashscreen.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import plus.adaptive.sdk.data.models.APLaunchScreen
+import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.ui.components.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.APComponentLifecycleListener
@@ -15,17 +15,17 @@ import plus.adaptive.sdk.ui.components.vm.APImageComponentViewModel
 import plus.adaptive.sdk.ui.components.vm.APTextComponentViewModel
 
 
-internal class APLaunchScreenDialogViewModel(
-    launchScreen: APLaunchScreen
+internal class APSplashScreenDialogViewModel(
+    splashScreen: APSplashScreen
 ) : ViewModel(), APComponentViewModelProvider, APComponentContainerViewModel {
 
-    val isLaunchScreenReadyLiveData: LiveData<Boolean>
-        get() = _isLaunchScreenReadyLiveData
-    private val _isLaunchScreenReadyLiveData = MutableLiveData<Boolean>().apply { value = false }
+    val isSplashScreenReadyLiveData: LiveData<Boolean>
+        get() = _isSplashScreenReadyLiveData
+    private val _isSplashScreenReadyLiveData = MutableLiveData<Boolean>().apply { value = false }
 
-    private val componentReadinessList = launchScreen.layers.map { false }.toMutableList()
+    private val componentReadinessList = splashScreen.layers.map { false }.toMutableList()
     private val componentViewModelList: List<APComponentViewModel?> =
-        launchScreen.layers.mapIndexed { index, apLayer ->
+        splashScreen.layers.mapIndexed { index, apLayer ->
             val componentLifecycleListener = object: APComponentLifecycleListener {
                 override fun onReady(isReady: Boolean) { onComponentReady(index, isReady) }
                 override fun onComplete() { }
@@ -55,8 +55,8 @@ internal class APLaunchScreenDialogViewModel(
         if (index >= 0 && index < componentReadinessList.size) {
             componentReadinessList[index] = isReady
 
-            val isLaunchScreenReady = componentReadinessList.all { it }
-            _isLaunchScreenReadyLiveData.value = isLaunchScreenReady
+            val isSplashScreenReady = componentReadinessList.all { it }
+            _isSplashScreenReadyLiveData.value = isSplashScreenReady
         }
     }
 

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/apLaunchScreenLayout"
+    android:id="@+id/apSplashScreenLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/apBlack">
@@ -26,7 +26,7 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/apLaunchScreenLayersLayout"
+                android:id="@+id/apSplashScreenLayersLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 tools:background="@color/apSnapLoadingBg"

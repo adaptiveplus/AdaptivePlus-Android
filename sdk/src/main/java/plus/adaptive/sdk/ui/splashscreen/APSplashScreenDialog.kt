@@ -1,4 +1,4 @@
-package plus.adaptive.sdk.ui.launchscreen
+package plus.adaptive.sdk.ui.splashscreen
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,53 +12,53 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.*
-import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.apContentCardView
-import kotlinx.android.synthetic.main.ap_fragment_ap_launch_screen_dialog.apContentLayout
+import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.*
+import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentCardView
+import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentLayout
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
-import plus.adaptive.sdk.data.models.APLaunchScreen
-import plus.adaptive.sdk.ui.launchscreen.vm.APLaunchScreenDialogViewModel
-import plus.adaptive.sdk.ui.launchscreen.vm.APLaunchScreenDialogViewModelFactory
+import plus.adaptive.sdk.data.models.APSplashScreen
+import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModel
+import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModelFactory
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
 import plus.adaptive.sdk.utils.safeRun
 
 
-internal class APLaunchScreenDialog : DialogFragment() {
+internal class APSplashScreenDialog : DialogFragment() {
 
     companion object {
-        private const val EXTRA_LAUNCH_SCREEN_WIDTH = 375 * BASE_SIZE_MULTIPLIER
-        private const val EXTRA_LAUNCH_SCREEN_HEIGHT = 667 * BASE_SIZE_MULTIPLIER
+        private const val EXTRA_SPLASH_SCREEN_WIDTH = 375 * BASE_SIZE_MULTIPLIER
+        private const val EXTRA_SPLASH_SCREEN_HEIGHT = 667 * BASE_SIZE_MULTIPLIER
 
         private const val EXTRA_SCREEN_WIDTH = "extra_screen_width"
-        private const val EXTRA_LAUNCH_SCREEN = "extra_launch_screen"
+        private const val EXTRA_SPLASH_SCREEN = "extra_splash_screen"
 
         @JvmStatic
         fun newInstance(
             baseScreenWidth: Double,
-            launchScreen: APLaunchScreen
-        ) = APLaunchScreenDialog().apply {
+            splashScreen: APSplashScreen
+        ) = APSplashScreenDialog().apply {
             arguments = bundleOf(
                 EXTRA_SCREEN_WIDTH to baseScreenWidth,
-                EXTRA_LAUNCH_SCREEN to launchScreen
+                EXTRA_SPLASH_SCREEN to splashScreen
             )
         }
     }
 
 
     private var baseScreenWidth: Double? = null
-    private lateinit var launchScreen: APLaunchScreen
-    private lateinit var viewModel: APLaunchScreenDialogViewModel
+    private lateinit var splashScreen: APSplashScreen
+    private lateinit var viewModel: APSplashScreenDialogViewModel
 
     private var countDownTimer: CountDownTimer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.APLaunchScreenDialogTheme)
+        setStyle(STYLE_NO_TITLE, R.style.APSplashScreenDialogTheme)
 
-        (arguments?.getSerializable(EXTRA_LAUNCH_SCREEN) as? APLaunchScreen)?.let {
-            this.launchScreen = it
+        (arguments?.getSerializable(EXTRA_SPLASH_SCREEN) as? APSplashScreen)?.let {
+            this.splashScreen = it
         }
         (arguments?.getDouble(EXTRA_SCREEN_WIDTH, -1.0))?.let {
             if (it >= 0.0) {
@@ -66,14 +66,14 @@ internal class APLaunchScreenDialog : DialogFragment() {
             }
         }
 
-        if (!::launchScreen.isInitialized || baseScreenWidth == null) {
+        if (!::splashScreen.isInitialized || baseScreenWidth == null) {
             dismiss()
             return
         }
 
-        val viewModelFactory = APLaunchScreenDialogViewModelFactory(launchScreen)
+        val viewModelFactory = APSplashScreenDialogViewModelFactory(splashScreen)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        viewModel = viewModelProvider.get(APLaunchScreenDialogViewModel::class.java)
+        viewModel = viewModelProvider.get(APSplashScreenDialogViewModel::class.java)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -87,13 +87,13 @@ internal class APLaunchScreenDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.ap_fragment_ap_launch_screen_dialog, container, false)
+        return inflater.inflate(R.layout.ap_fragment_splash_screen_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val showTime = launchScreen.showTime?.toInt() ?: 3
+        val showTime = splashScreen.showTime?.toInt() ?: 3
         apSkipTextView.text = getString(R.string.ap_skip, showTime)
         apSkipTextView.setOnClickListener {
             dismiss()
@@ -110,14 +110,14 @@ internal class APLaunchScreenDialog : DialogFragment() {
             }
         }
 
-        drawLaunchScreen()
+        drawSplashScreen()
 
-        apLaunchScreenLayout.addOnLayoutChangeListener(apLaunchScreenLayoutChangeListener)
+        apSplashScreenLayout.addOnLayoutChangeListener(apSplashScreenLayoutChangeListener)
 
         setupObservers()
     }
 
-    private val apLaunchScreenLayoutChangeListener = View.OnLayoutChangeListener {
+    private val apSplashScreenLayoutChangeListener = View.OnLayoutChangeListener {
         v, _, _, _, _, oldLeft, _, oldRight, _ ->
 
         val oldWidth = oldRight - oldLeft
@@ -126,18 +126,18 @@ internal class APLaunchScreenDialog : DialogFragment() {
         }
     }
 
-    private fun drawLaunchScreen() {
+    private fun drawSplashScreen() {
         val apContentLayoutConstraintSet = ConstraintSet()
         apContentLayoutConstraintSet.clone(apContentLayout)
         apContentLayoutConstraintSet.constrainWidth(
-            apLaunchScreenLayersLayout.id, EXTRA_LAUNCH_SCREEN_WIDTH)
+            apSplashScreenLayersLayout.id, EXTRA_SPLASH_SCREEN_WIDTH)
         apContentLayoutConstraintSet.constrainHeight(
-            apLaunchScreenLayersLayout.id, EXTRA_LAUNCH_SCREEN_HEIGHT)
+            apSplashScreenLayersLayout.id, EXTRA_SPLASH_SCREEN_HEIGHT)
         apContentLayoutConstraintSet.applyTo(apContentLayout)
 
         safeRun(
             executable = {
-                drawAPLayersOnLayout(apLaunchScreenLayersLayout, launchScreen.layers, viewModel)
+                drawAPLayersOnLayout(apSplashScreenLayersLayout, splashScreen.layers, viewModel)
             },
             onExceptionCaught = {
                 dismiss()
@@ -146,33 +146,33 @@ internal class APLaunchScreenDialog : DialogFragment() {
     }
 
     private fun updateScaleFactor() {
-        if (apLaunchScreenLayout.width == 0 || baseScreenWidth == null) {
+        if (apSplashScreenLayout.width == 0 || baseScreenWidth == null) {
             return
         }
         val scaleFactor = baseScreenWidth?.let {
-            (apLaunchScreenLayout.width / it).toFloat()
+            (apSplashScreenLayout.width / it).toFloat()
         } ?: 1f
 
         val apSnapLayoutConstraintSet = ConstraintSet()
-        apSnapLayoutConstraintSet.clone(apLaunchScreenLayout)
+        apSnapLayoutConstraintSet.clone(apSplashScreenLayout)
         apSnapLayoutConstraintSet.constrainWidth(
-            apContentCardView.id, (EXTRA_LAUNCH_SCREEN_WIDTH * scaleFactor).toInt())
+            apContentCardView.id, (EXTRA_SPLASH_SCREEN_WIDTH * scaleFactor).toInt())
         apSnapLayoutConstraintSet.constrainHeight(
-            apContentCardView.id, (EXTRA_LAUNCH_SCREEN_HEIGHT * scaleFactor).toInt())
-        apSnapLayoutConstraintSet.applyTo(apLaunchScreenLayout)
+            apContentCardView.id, (EXTRA_SPLASH_SCREEN_HEIGHT * scaleFactor).toInt())
+        apSnapLayoutConstraintSet.applyTo(apSplashScreenLayout)
 
         val apContentLayoutConstraintSet = ConstraintSet()
         apContentLayoutConstraintSet.clone(apContentLayout)
-        apContentLayoutConstraintSet.setScaleX(apLaunchScreenLayersLayout.id, scaleFactor)
-        apContentLayoutConstraintSet.setScaleY(apLaunchScreenLayersLayout.id, scaleFactor)
+        apContentLayoutConstraintSet.setScaleX(apSplashScreenLayersLayout.id, scaleFactor)
+        apContentLayoutConstraintSet.setScaleY(apSplashScreenLayersLayout.id, scaleFactor)
         apContentLayoutConstraintSet.applyTo(apContentLayout)
     }
 
     private fun setupObservers() {
-        viewModel.isLaunchScreenReadyLiveData.observe(viewLifecycleOwner, isLaunchScreenReadyObserver)
+        viewModel.isSplashScreenReadyLiveData.observe(viewLifecycleOwner, isSplashScreenReadyObserver)
     }
 
-    private val isLaunchScreenReadyObserver = Observer<Boolean> { isReady ->
+    private val isSplashScreenReadyObserver = Observer<Boolean> { isReady ->
         if (isReady) {
             countDownTimer?.start()
         }
