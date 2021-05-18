@@ -1,12 +1,16 @@
 package plus.adaptive.sdk.data.repositories
 
 import com.google.gson.Gson
+import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.network.APViewRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
+import plus.adaptive.sdk.utils.checkAPViewDataModelProperties
+import plus.adaptive.sdk.utils.magnifyAPViewDataModel
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -44,7 +48,20 @@ internal class APViewRepository(
 
         executeRequest<APViewDataModel>(request,
             { response ->
-                callback.success(response)
+                try {
+                    checkAPViewDataModelProperties(response)
+                    val dataModel = magnifyAPViewDataModel(response)
+                    callback.success(dataModel)
+                } catch (e: Exception) {
+                    APCrashlytics.logCrash(e)
+                    e.printStackTrace()
+                    callback.failure(
+                        APError(
+                            code = -1,
+                            message = e.message
+                        )
+                    )
+                }
             },
             { error ->
                 callback.failure(error)

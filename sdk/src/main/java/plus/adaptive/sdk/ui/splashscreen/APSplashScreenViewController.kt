@@ -64,8 +64,8 @@ internal class APSplashScreenViewController(
             getFragmentActivity()?.run {
                 getSplashScreenToShow(dataModel.splashScreens)?.let { splashScreen ->
                     val apSplashScreenDialog = APSplashScreenDialog.newInstance(
-                        dataModel.options.screenWidth,
                         splashScreen,
+                        dataModel.options,
                         object: APSplashScreenDialogListener {
                             override fun onDismiss() {
                                 splashScreenListener?.onFinish()

@@ -17,8 +17,8 @@ import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.*
 import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentCardView
 import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentLayout
 import plus.adaptive.sdk.R
-import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
 import plus.adaptive.sdk.data.models.APSplashScreen
+import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModel
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModelFactory
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
@@ -28,32 +28,29 @@ import plus.adaptive.sdk.utils.safeRun
 internal class APSplashScreenDialog : DialogFragment() {
 
     companion object {
-        private const val EXTRA_SPLASH_SCREEN_WIDTH = 375 * BASE_SIZE_MULTIPLIER
-        private const val EXTRA_SPLASH_SCREEN_HEIGHT = 667 * BASE_SIZE_MULTIPLIER
-
-        private const val EXTRA_SCREEN_WIDTH = "extra_screen_width"
         private const val EXTRA_SPLASH_SCREEN = "extra_splash_screen"
+        private const val EXTRA_OPTIONS = "extra_options"
 
         @JvmStatic
         fun newInstance(
-            baseScreenWidth: Double,
             splashScreen: APSplashScreen,
+            options: APSplashScreenTemplate.Options,
             listener: APSplashScreenDialogListener? = null
         ) = APSplashScreenDialog().apply {
             arguments = bundleOf(
-                EXTRA_SCREEN_WIDTH to baseScreenWidth,
-                EXTRA_SPLASH_SCREEN to splashScreen
+                EXTRA_SPLASH_SCREEN to splashScreen,
+                EXTRA_OPTIONS to options
             )
             this.listener = listener
         }
     }
 
 
-    private var baseScreenWidth: Double? = null
-    private var listener: APSplashScreenDialogListener? = null
     private lateinit var splashScreen: APSplashScreen
+    private lateinit var options: APSplashScreenTemplate.Options
     private lateinit var viewModel: APSplashScreenDialogViewModel
 
+    private var listener: APSplashScreenDialogListener? = null
     private var countDownTimer: CountDownTimer? = null
 
 
@@ -64,13 +61,11 @@ internal class APSplashScreenDialog : DialogFragment() {
         (arguments?.getSerializable(EXTRA_SPLASH_SCREEN) as? APSplashScreen)?.let {
             this.splashScreen = it
         }
-        (arguments?.getDouble(EXTRA_SCREEN_WIDTH, -1.0))?.let {
-            if (it >= 0.0) {
-                this.baseScreenWidth = it
-            }
+        (arguments?.getSerializable(EXTRA_OPTIONS) as? APSplashScreenTemplate.Options)?.let {
+            this.options = it
         }
 
-        if (!::splashScreen.isInitialized || baseScreenWidth == null) {
+        if (!::splashScreen.isInitialized || !::options.isInitialized) {
             dismiss()
             return
         }
@@ -134,9 +129,9 @@ internal class APSplashScreenDialog : DialogFragment() {
         val apContentLayoutConstraintSet = ConstraintSet()
         apContentLayoutConstraintSet.clone(apContentLayout)
         apContentLayoutConstraintSet.constrainWidth(
-            apSplashScreenLayersLayout.id, EXTRA_SPLASH_SCREEN_WIDTH)
+            apSplashScreenLayersLayout.id, options.width.toInt())
         apContentLayoutConstraintSet.constrainHeight(
-            apSplashScreenLayersLayout.id, EXTRA_SPLASH_SCREEN_HEIGHT)
+            apSplashScreenLayersLayout.id, options.height.toInt())
         apContentLayoutConstraintSet.applyTo(apContentLayout)
 
         safeRun(
@@ -150,19 +145,18 @@ internal class APSplashScreenDialog : DialogFragment() {
     }
 
     private fun updateScaleFactor() {
-        if (apSplashScreenLayout.width == 0 || baseScreenWidth == null) {
+        if (apSplashScreenLayout.width == 0) {
             return
         }
-        val scaleFactor = baseScreenWidth?.let {
-            (apSplashScreenLayout.width / it).toFloat()
-        } ?: 1f
+
+        val scaleFactor = (apSplashScreenLayout.width / options.screenWidth).toFloat()
 
         val apSnapLayoutConstraintSet = ConstraintSet()
         apSnapLayoutConstraintSet.clone(apSplashScreenLayout)
         apSnapLayoutConstraintSet.constrainWidth(
-            apContentCardView.id, (EXTRA_SPLASH_SCREEN_WIDTH * scaleFactor).toInt())
+            apContentCardView.id, (options.width * scaleFactor).toInt())
         apSnapLayoutConstraintSet.constrainHeight(
-            apContentCardView.id, (EXTRA_SPLASH_SCREEN_HEIGHT * scaleFactor).toInt())
+            apContentCardView.id, (options.height * scaleFactor).toInt())
         apSnapLayoutConstraintSet.applyTo(apSplashScreenLayout)
 
         val apContentLayoutConstraintSet = ConstraintSet()

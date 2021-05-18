@@ -11,6 +11,8 @@ internal data class APSplashScreenTemplate(
 ) : Serializable {
 
     data class Options(
+        val width: Double,
+        val height: Double,
         val screenWidth: Double
     ) : Serializable
 
