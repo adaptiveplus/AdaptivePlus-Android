@@ -5,15 +5,21 @@ import android.content.ContextWrapper
 import androidx.fragment.app.FragmentActivity
 import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
+import plus.adaptive.sdk.core.managers.APSharedPreferences
+import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.CAMPAIGN_WATCHED_COUNT
 import plus.adaptive.sdk.data.models.APError
+import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
+import plus.adaptive.sdk.data.repositories.APUserRepository
 
 
 internal class APSplashScreenViewController(
     private val context: Context,
     private val cacheManager: APCacheManager,
+    private val preferences: APSharedPreferences,
+    private val userRepository: APUserRepository,
     private val splashScreenRepository: APSplashScreenRepository
 ) {
 
@@ -40,9 +46,16 @@ internal class APSplashScreenViewController(
     private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate) {
         try {
             getFragmentActivity()?.run {
-                dataModel.splashScreens.firstOrNull()?.let {
+                getSplashScreenToShow(dataModel.splashScreens)?.let { splashScreen ->
                     val apSplashScreenDialog = APSplashScreenDialog.newInstance(
-                        dataModel.options.screenWidth, it)
+                        dataModel.options.screenWidth,
+                        splashScreen,
+                        object: APSplashScreenDialogListener {
+                            override fun onDismiss() {
+                                // TODO("Not yet implemented")
+                            }
+                        }
+                    )
                     apSplashScreenDialog.show(supportFragmentManager, apSplashScreenDialog.tag)
                 }
             }
@@ -79,5 +92,27 @@ internal class APSplashScreenViewController(
 
     private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenTemplate) {
         cacheManager.saveAPSplashScreenTemplateToCache(dataModel)
+    }
+
+    private fun getSplashScreenToShow(splashScreens: List<APSplashScreen>) : APSplashScreen? {
+        var resIndex = 0
+
+        userRepository.getAPUserId()?.let { userId ->
+            var minWatchedCount = -1
+
+            splashScreens.forEachIndexed { index, splashScreen ->
+                val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
+                val watchedCount = maxOf(0, preferences.getInt(prefKey))
+
+                if ((splashScreen.showCount == null || watchedCount < splashScreen.showCount) &&
+                    (minWatchedCount == -1 || watchedCount < minWatchedCount)
+                ) {
+                    minWatchedCount = watchedCount
+                    resIndex = index
+                }
+            }
+        }
+
+        return splashScreens.getOrNull(resIndex)
     }
 }

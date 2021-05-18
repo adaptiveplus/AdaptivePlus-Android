@@ -3,8 +3,11 @@ package plus.adaptive.sdk.ui.splashscreen.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import plus.adaptive.sdk.core.managers.APSharedPreferences
+import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.CAMPAIGN_WATCHED_COUNT
 import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APLayer
+import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.ui.components.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.APComponentLifecycleListener
 import plus.adaptive.sdk.ui.components.vm.APBackgroundComponentViewModel
@@ -16,7 +19,9 @@ import plus.adaptive.sdk.ui.components.vm.APTextComponentViewModel
 
 
 internal class APSplashScreenDialogViewModel(
-    splashScreen: APSplashScreen
+    private val splashScreen: APSplashScreen,
+    private val preferences: APSharedPreferences?,
+    private val userRepository: APUserRepository?
 ) : ViewModel(), APComponentViewModelProvider, APComponentContainerViewModel {
 
     val isSplashScreenReadyLiveData: LiveData<Boolean>
@@ -57,6 +62,14 @@ internal class APSplashScreenDialogViewModel(
 
             val isSplashScreenReady = componentReadinessList.all { it }
             _isSplashScreenReadyLiveData.value = isSplashScreenReady
+        }
+    }
+
+    fun increaseSplashScreenWatchedCount() {
+        userRepository?.getAPUserId()?.let { userId ->
+            val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
+            val watchedCount = maxOf(0, preferences?.getInt(prefKey) ?: 0)
+            preferences?.saveInt(prefKey, watchedCount + 1)
         }
     }
 

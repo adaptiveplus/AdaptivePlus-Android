@@ -1,6 +1,7 @@
 package plus.adaptive.sdk.ui.splashscreen
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
@@ -36,17 +37,20 @@ internal class APSplashScreenDialog : DialogFragment() {
         @JvmStatic
         fun newInstance(
             baseScreenWidth: Double,
-            splashScreen: APSplashScreen
+            splashScreen: APSplashScreen,
+            listener: APSplashScreenDialogListener? = null
         ) = APSplashScreenDialog().apply {
             arguments = bundleOf(
                 EXTRA_SCREEN_WIDTH to baseScreenWidth,
                 EXTRA_SPLASH_SCREEN to splashScreen
             )
+            this.listener = listener
         }
     }
 
 
     private var baseScreenWidth: Double? = null
+    private var listener: APSplashScreenDialogListener? = null
     private lateinit var splashScreen: APSplashScreen
     private lateinit var viewModel: APSplashScreenDialogViewModel
 
@@ -71,7 +75,7 @@ internal class APSplashScreenDialog : DialogFragment() {
             return
         }
 
-        val viewModelFactory = APSplashScreenDialogViewModelFactory(splashScreen)
+        val viewModelFactory = APSplashScreenDialogViewModelFactory(context, splashScreen)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         viewModel = viewModelProvider.get(APSplashScreenDialogViewModel::class.java)
     }
@@ -102,7 +106,7 @@ internal class APSplashScreenDialog : DialogFragment() {
         countDownTimer = object: CountDownTimer(showTime * 1000L, 100L) {
             override fun onTick(millisUntilFinished: Long) {
                 val timeLeft = ((millisUntilFinished + 900) / 1000).toInt()
-                apSkipTextView.text = getString(R.string.ap_skip, timeLeft)
+                apSkipTextView?.text = getString(R.string.ap_skip, timeLeft)
             }
 
             override fun onFinish() {
@@ -176,5 +180,12 @@ internal class APSplashScreenDialog : DialogFragment() {
         if (isReady) {
             countDownTimer?.start()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        countDownTimer?.cancel()
+        viewModel.increaseSplashScreenWatchedCount()
+        super.onDismiss(dialog)
+        listener?.onDismiss()
     }
 }

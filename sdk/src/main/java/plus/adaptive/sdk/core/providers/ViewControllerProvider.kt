@@ -10,6 +10,8 @@ internal fun provideAPSplashScreenViewController(
     return APSplashScreenViewController(
         context,
         provideAPCacheManager(context),
+        provideAPSharedPreferences(context),
+        provideAPUserRepository(context),
         provideAPSplashScreenRepository(context)
     )
 }
