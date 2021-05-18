@@ -31,7 +31,7 @@ internal interface APCacheManager {
         message = "Only for development purposes.",
         level = DeprecationLevel.WARNING)
     fun loadAPSplashScreenMockTemplateFromAssets(
-        onSuccess: (dataModel: APSplashScreenTemplate) -> Unit
+        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
     )
 
     fun loadAPSplashScreenTemplateFromCache(

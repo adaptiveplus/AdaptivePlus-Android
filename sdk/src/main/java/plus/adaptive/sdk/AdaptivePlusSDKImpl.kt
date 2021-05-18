@@ -10,6 +10,7 @@ import plus.adaptive.sdk.core.providers.provideAPSplashScreenViewController
 import plus.adaptive.sdk.data.IS_DEBUGGABLE
 import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.OS_NAME
+import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APLocation
@@ -35,6 +36,8 @@ internal class AdaptivePlusSDKImpl(
     private var externalUserId: String? = null
     private var userProperties: Map<String, String>? = null
     private var userLocation: APLocation? = null
+
+    private var splashScreenListener: APSplashScreenListener? = null
 
 
     private fun init() {
@@ -124,7 +127,10 @@ internal class AdaptivePlusSDKImpl(
         sdkManager.start()
         sdkManager.authorize(true, object: RequestResultCallback<Any?>() {
             override fun success(response: Any?) {
-                provideAPSplashScreenViewController(context).show()
+                provideAPSplashScreenViewController(context).apply {
+                    setSplashScreenListener(splashScreenListener)
+                    show()
+                }
             }
 
             override fun failure(error: APError?) {}
@@ -135,9 +141,17 @@ internal class AdaptivePlusSDKImpl(
 
     override fun showMockSplashScreen(): AdaptivePlusSDK {
         if (isQAApp(context)) {
-            provideAPSplashScreenViewController(context).showMock()
+            provideAPSplashScreenViewController(context).apply {
+                setSplashScreenListener(splashScreenListener)
+                showMock()
+            }
         }
 
+        return this
+    }
+
+    override fun setSplashScreenListener(listener: APSplashScreenListener?): AdaptivePlusSDK {
+        this.splashScreenListener = listener
         return this
     }
 

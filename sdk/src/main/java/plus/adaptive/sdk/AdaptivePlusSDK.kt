@@ -6,6 +6,7 @@ import plus.adaptive.sdk.core.providers.provideAPClientCredentialsManager
 import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
 import plus.adaptive.sdk.data.exceptions.APInitializationException
+import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.sdk.utils.isQAApp
 import java.util.*
@@ -69,4 +70,6 @@ interface AdaptivePlusSDK {
         level = DeprecationLevel.WARNING
     )
     fun showMockSplashScreen() : AdaptivePlusSDK
+
+    fun setSplashScreenListener(listener: APSplashScreenListener?) : AdaptivePlusSDK
 }

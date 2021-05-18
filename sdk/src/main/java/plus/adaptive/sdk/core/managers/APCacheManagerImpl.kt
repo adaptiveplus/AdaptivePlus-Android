@@ -100,7 +100,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun loadAPSplashScreenMockTemplateFromAssets(
-        onSuccess: (dataModel: APSplashScreenTemplate) -> Unit
+        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
     ) {
         try {
             val inputStream: InputStream =
@@ -114,11 +114,10 @@ internal class APCacheManagerImpl(
             val json = String(buffer, Charsets.UTF_8)
 
             val dataModel = getDeserializedUnprocessedAPSplashScreenModel(json)
-            if (dataModel != null) {
-                onSuccess.invoke(dataModel)
-            }
+            onResult.invoke(dataModel)
         } catch (ex: IOException) {
             ex.printStackTrace()
+            onResult.invoke(null)
         }
     }
 

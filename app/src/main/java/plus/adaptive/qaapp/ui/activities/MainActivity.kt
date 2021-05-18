@@ -2,9 +2,8 @@ package plus.adaptive.qaapp.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import plus.adaptive.sdk.AdaptivePlusSDK
-import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.data.APSdkEnvironment
 import plus.adaptive.qaapp.data.Environment
@@ -12,6 +11,9 @@ import plus.adaptive.qaapp.data.Language
 import plus.adaptive.qaapp.ui.fragments.ApiFragment
 import plus.adaptive.qaapp.ui.fragments.MockFragment
 import plus.adaptive.qaapp.utils.getEnvByName
+import plus.adaptive.sdk.AdaptivePlusSDK
+import plus.adaptive.sdk.data.listeners.APSplashScreenListener
+import plus.adaptive.sdk.data.models.APLocation
 import java.util.*
 
 
@@ -99,6 +101,17 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
+            .setSplashScreenListener(
+                object: APSplashScreenListener {
+                    override fun onFinish() {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            )
             .showSplashScreen()
     }
 
@@ -118,6 +131,17 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
+            .setSplashScreenListener(
+                object: APSplashScreenListener {
+                    override fun onFinish() {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            )
             .showMockSplashScreen()
     }
 

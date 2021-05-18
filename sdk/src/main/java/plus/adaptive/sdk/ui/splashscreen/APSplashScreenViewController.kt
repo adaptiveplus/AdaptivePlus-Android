@@ -7,6 +7,7 @@ import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.CAMPAIGN_WATCHED_COUNT
+import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
@@ -23,10 +24,15 @@ internal class APSplashScreenViewController(
     private val splashScreenRepository: APSplashScreenRepository
 ) {
 
+    private var splashScreenListener: APSplashScreenListener? = null
+
+
     fun show() {
         cacheManager.loadAPSplashScreenTemplateFromCache { dataModel ->
             if (dataModel != null) {
                 showSplashScreenDialog(dataModel)
+            } else {
+                splashScreenListener?.onFinish()
             }
         }
 
@@ -39,7 +45,11 @@ internal class APSplashScreenViewController(
     )
     fun showMock() {
         cacheManager.loadAPSplashScreenMockTemplateFromAssets { dataModel ->
-            showSplashScreenDialog(dataModel)
+            if (dataModel != null) {
+                showSplashScreenDialog(dataModel)
+            } else {
+                splashScreenListener?.onFinish()
+            }
         }
     }
 
@@ -52,7 +62,7 @@ internal class APSplashScreenViewController(
                         splashScreen,
                         object: APSplashScreenDialogListener {
                             override fun onDismiss() {
-                                // TODO("Not yet implemented")
+                                splashScreenListener?.onFinish()
                             }
                         }
                     )
@@ -62,6 +72,7 @@ internal class APSplashScreenViewController(
         } catch (e: IllegalStateException) {
             APCrashlytics.logCrash(e)
             e.printStackTrace()
+            splashScreenListener?.onFinish()
         }
     }
 
@@ -114,5 +125,9 @@ internal class APSplashScreenViewController(
         }
 
         return splashScreens.getOrNull(resIndex)
+    }
+
+    fun setSplashScreenListener(listener: APSplashScreenListener?) {
+        this.splashScreenListener = listener
     }
 }
