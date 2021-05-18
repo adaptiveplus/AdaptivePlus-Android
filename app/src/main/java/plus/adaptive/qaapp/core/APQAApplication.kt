@@ -10,6 +10,6 @@ class APQAApplication : MultiDexApplication() {
         super.onCreate()
 
         AdaptivePlusSDK.init(
-            apiKey = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps")
+            apiKey = "7f5kpYzMgApEncRK")
     }
 }

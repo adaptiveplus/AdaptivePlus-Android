@@ -158,7 +158,7 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
         Environment.SDK_V2.value -> APSdkEnvironment(
             name = Environment.SDK_V2.value,
             appId = "plus.adaptive.qaapp",
-            apiKey = "uHMYZLfGaEFPyynhwJyzAHyfjXUlrGhblTtxWduqtCDMLxiDHIMGFpXzpLGIehps",
+            apiKey = "7f5kpYzMgApEncRK",
             apViews = sdkV2APViews
         )
         Environment.MOCK.value -> APSdkEnvironment(
