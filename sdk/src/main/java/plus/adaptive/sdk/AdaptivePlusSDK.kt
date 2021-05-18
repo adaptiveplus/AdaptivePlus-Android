@@ -2,7 +2,7 @@ package plus.adaptive.sdk
 
 import android.content.Context
 import androidx.annotation.MainThread
-import plus.adaptive.sdk.core.providers.provideAPClientCredentialsManager
+import plus.adaptive.sdk.core.providers.provideAPAuthCredentialsManager
 import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
 import plus.adaptive.sdk.data.exceptions.APInitializationException
@@ -17,13 +17,13 @@ interface AdaptivePlusSDK {
     companion object {
         @JvmStatic
         fun init(apiKey: String) {
-            provideAPClientCredentialsManager().setApiKey(apiKey)
+            provideAPAuthCredentialsManager().setApiKey(apiKey)
         }
 
         @JvmStatic
         @Throws(APInitializationException::class)
         fun newInstance(context: Context) : AdaptivePlusSDK {
-            provideAPClientCredentialsManager().getAuthCredentials()
+            provideAPAuthCredentialsManager().getAuthCredentials()
                 ?: throw APInitializationException()
 
             return provideAdaptivePlusSDK(context)

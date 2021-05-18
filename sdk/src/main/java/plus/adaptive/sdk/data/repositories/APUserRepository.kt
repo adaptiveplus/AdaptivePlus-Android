@@ -1,5 +1,6 @@
 package plus.adaptive.sdk.data.repositories
 
+import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.models.APUser
@@ -7,7 +8,8 @@ import plus.adaptive.sdk.data.models.APLocation
 
 
 internal class APUserRepository(
-    private val preferences: APSharedPreferences?
+    private val preferences: APSharedPreferences?,
+    private val authCredentialsManager: APAuthCredentialsManager
 ) {
 
     companion object {
@@ -21,15 +23,28 @@ internal class APUserRepository(
 
 
     fun setAPUserId(apUserId: String?) {
+        val apiKey = authCredentialsManager.getAuthCredentials()?.channelSecret ?: ""
+
         if (apUserId == null) {
-            preferences?.remove(APSharedPreferences.AP_USER_ID)
+            preferences?.remove("${apiKey}_${APSharedPreferences.AP_USER_ID}")
         } else {
-            preferences?.saveString(APSharedPreferences.AP_USER_ID, apUserId)
+            preferences?.saveString("${apiKey}_${APSharedPreferences.AP_USER_ID}", apUserId)
         }
+
         APUserRepository.apUserId = apUserId
     }
 
     fun setExternalUserId(userId: String?) {
+        if (userId != null) {
+            val apiKey = authCredentialsManager.getAuthCredentials()?.channelSecret ?: ""
+            val oldUserId = preferences?.getString("${apiKey}_${APSharedPreferences.EXTERNAL_USER_ID}")
+
+            if (userId != oldUserId) {
+                setAPUserId(null)
+                preferences?.saveString("${apiKey}_${APSharedPreferences.EXTERNAL_USER_ID}", userId)
+            }
+        }
+
         externalUserId = userId
     }
 
@@ -79,7 +94,8 @@ internal class APUserRepository(
 
     fun getAPUserId() : String? {
         if (apUserId == null) {
-            apUserId = preferences?.getString(APSharedPreferences.AP_USER_ID)
+            val apiKey = authCredentialsManager.getAuthCredentials()?.channelSecret ?: ""
+            apUserId = preferences?.getString("${apiKey}_${APSharedPreferences.AP_USER_ID}")
         }
         return apUserId
     }

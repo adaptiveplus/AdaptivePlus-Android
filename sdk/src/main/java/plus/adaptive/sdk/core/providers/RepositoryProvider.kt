@@ -16,7 +16,7 @@ internal fun provideAPAnalyticsRepository(
 ) : APAnalyticsRepository {
     return APAnalyticsRepository(
         provideNetworkServiceManager(context),
-        provideAPClientCredentialsManager(),
+        provideAPAuthCredentialsManager(),
         provideAPUserRepository(context)
     )
 }
@@ -26,7 +26,7 @@ internal fun provideAPAuthRepository(
 ) : APAuthRepository {
     return APAuthRepository(
         provideNetworkServiceManager(context),
-        provideAPClientCredentialsManager(),
+        provideAPAuthCredentialsManager(),
         provideAPUserRepository(context)
     )
 }
@@ -35,7 +35,8 @@ internal fun provideAPUserRepository(
     context: Context?
 ) : APUserRepository {
     return APUserRepository(
-        context?.let { provideAPSharedPreferences(it) }
+        context?.let { provideAPSharedPreferences(it) },
+        provideAPAuthCredentialsManager()
     )
 }
 
@@ -44,7 +45,7 @@ internal fun provideAPViewRepository(
 ) : APViewRepository {
     return APViewRepository(
         provideNetworkServiceManager(context),
-        provideAPClientCredentialsManager(),
+        provideAPAuthCredentialsManager(),
         provideAPUserRepository(context),
         getUnprocessedAPViewGson()
     )
@@ -53,7 +54,7 @@ internal fun provideAPViewRepository(
 internal fun provideAPCrashlyticsRepository() : APCrashlyticsRepository {
     return APCrashlyticsRepository(
         provideNetworkServiceManager(),
-        provideAPClientCredentialsManager(),
+        provideAPAuthCredentialsManager(),
         provideAPUserRepository(null)
     )
 }
@@ -63,7 +64,7 @@ internal fun provideAPSplashScreenRepository(
 ) : APSplashScreenRepository {
     return APSplashScreenRepository(
         provideNetworkServiceManager(context),
-        provideAPClientCredentialsManager(),
+        provideAPAuthCredentialsManager(),
         provideAPUserRepository(context),
         getUnprocessedAPSplashScreenGson()
     )

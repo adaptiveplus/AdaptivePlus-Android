@@ -104,11 +104,15 @@ class MainActivity : AppCompatActivity() {
             .setSplashScreenListener(
                 object: APSplashScreenListener {
                     override fun onFinish() {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Launch Screen Finished",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        try {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Launch Screen Finished",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             )
@@ -134,11 +138,15 @@ class MainActivity : AppCompatActivity() {
             .setSplashScreenListener(
                 object: APSplashScreenListener {
                     override fun onFinish() {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Launch Screen Finished",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        try {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Launch Screen Finished",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             )

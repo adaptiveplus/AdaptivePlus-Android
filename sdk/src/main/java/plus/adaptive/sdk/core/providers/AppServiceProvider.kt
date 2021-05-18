@@ -64,6 +64,6 @@ internal fun provideAPCacheManager(
     return APCacheManagerImpl(context, provideAPUserRepository(context))
 }
 
-internal fun provideAPClientCredentialsManager() : APAuthCredentialsManager {
+internal fun provideAPAuthCredentialsManager() : APAuthCredentialsManager {
     return APAuthCredentialsManager()
 }
