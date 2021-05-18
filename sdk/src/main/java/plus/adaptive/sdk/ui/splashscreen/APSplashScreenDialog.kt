@@ -94,7 +94,7 @@ internal class APSplashScreenDialog : DialogFragment() {
 
         val showTime = splashScreen.showTime?.toInt() ?: 3
         apSkipTextView.text = getString(R.string.ap_skip, showTime)
-        apSkipTextView.setOnClickListener {
+        apSkipBtnLayout.setOnClickListener {
             dismiss()
         }
 

@@ -40,20 +40,25 @@
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/apSkipTextView"
+    <LinearLayout
+        android:id="@+id/apSkipBtnLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:background="@drawable/ap_bg_btn_skip"
-        android:fontFamily="@font/ap_roboto_medium"
-        android:text="@string/ap_skip"
-        android:textSize="13dp"
-        android:textColor="#FFFFFF"
+        android:padding="12dp"
         app:layout_constraintTop_toTopOf="@id/apContentCardView"
-        app:layout_constraintEnd_toEndOf="@id/apContentCardView"
-        />
+        app:layout_constraintEnd_toEndOf="@id/apContentCardView">
+
+        <TextView
+            android:id="@+id/apSkipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ap_bg_btn_skip"
+            android:fontFamily="@font/ap_roboto_medium"
+            android:text="@string/ap_skip"
+            android:textSize="13dp"
+            android:textColor="#FFFFFF"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
