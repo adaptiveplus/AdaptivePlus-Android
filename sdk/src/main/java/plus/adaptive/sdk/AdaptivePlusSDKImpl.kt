@@ -121,7 +121,7 @@ internal class AdaptivePlusSDKImpl(
         return this
     }
 
-    override fun showSplashScreen(): AdaptivePlusSDK {
+    override fun showSplashScreen(hasDrafts: Boolean): AdaptivePlusSDK {
         init()
 
         sdkManager.start()
@@ -129,7 +129,7 @@ internal class AdaptivePlusSDKImpl(
             override fun success(response: Any?) {
                 provideAPSplashScreenViewController(context).apply {
                     setSplashScreenListener(splashScreenListener)
-                    show()
+                    show(hasDrafts)
                 }
             }
 

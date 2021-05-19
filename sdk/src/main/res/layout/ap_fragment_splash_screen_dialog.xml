@@ -36,6 +36,24 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 
+            <TextView
+                android:id="@+id/apTagTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/ap_bg_draft_tag"
+                android:fontFamily="@font/ap_circular_std_medium"
+                android:text="@string/ap_draft_tag"
+                android:textSize="10dp"
+                android:textColor="#4CC0F8"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

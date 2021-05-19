@@ -23,16 +23,17 @@ internal class APSplashScreenRepository(
 ) : APBaseRepository(networkManager, authCredentialsManager, userRepository, customGson) {
 
     fun requestAPSplashScreenTemplate(
+        hasDrafts: Boolean,
         callback: RequestResultCallback<APSplashScreenTemplate>
     ) {
         val obj = APSplashScreenTemplateRequestBody(
             parserVersion = 1,
-            hasDrafts = false
+            hasDrafts = hasDrafts
         )
         val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
-            .url("$SDK_API_URL/ap-view-launch-screen-templates")
+            .url("$SDK_API_URL/ap-view-splash-screen-templates")
             .post(body)
             .build()
 

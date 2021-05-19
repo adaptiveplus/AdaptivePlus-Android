@@ -38,16 +38,16 @@ internal class APSplashScreenViewController(
     private var splashScreenListener: APSplashScreenListener? = null
 
 
-    fun show() {
+    fun show(hasDrafts: Boolean) {
         cacheManager.loadAPSplashScreenTemplateFromCache { dataModel ->
             if (dataModel != null) {
-                showSplashScreenDialog(dataModel)
+                showSplashScreenDialog(dataModel, hasDrafts)
             } else {
                 splashScreenListener?.onFinish()
             }
         }
 
-        requestAPSplashScreenTemplate()
+        requestAPSplashScreenTemplate(hasDrafts)
     }
 
     @Deprecated(
@@ -57,15 +57,15 @@ internal class APSplashScreenViewController(
     fun showMock() {
         cacheManager.loadAPSplashScreenMockTemplateFromAssets { dataModel ->
             if (dataModel != null) {
-                showSplashScreenDialog(dataModel)
+                showSplashScreenDialog(dataModel, hasDrafts = false)
             } else {
                 splashScreenListener?.onFinish()
             }
         }
     }
 
-    private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate) {
-        getSplashScreenToShow(dataModel.splashScreens)?.let { splashScreen ->
+    private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate, hasDrafts: Boolean) {
+        getSplashScreenToShow(dataModel.splashScreens, hasDrafts)?.let { splashScreen ->
             val apSplashScreenDialog = APSplashScreenDialog.newInstance(
                 splashScreen,
                 dataModel.options,
@@ -87,8 +87,9 @@ internal class APSplashScreenViewController(
         }
     }
 
-    private fun requestAPSplashScreenTemplate() {
+    private fun requestAPSplashScreenTemplate(hasDrafts: Boolean) {
         splashScreenRepository.requestAPSplashScreenTemplate(
+            hasDrafts,
             object: RequestResultCallback<APSplashScreenTemplate>() {
                 override fun success(response: APSplashScreenTemplate) {
                     saveAPSplashScreenTemplateToCache(response)
@@ -123,7 +124,10 @@ internal class APSplashScreenViewController(
         }
     }
 
-    private fun getSplashScreenToShow(splashScreens: List<APSplashScreen>) : APSplashScreen? {
+    private fun getSplashScreenToShow(
+        splashScreens: List<APSplashScreen>,
+        hasDrafts: Boolean
+    ) : APSplashScreen? {
         var resIndex = 0
 
         userRepository.getAPUserId()?.let { userId ->
@@ -133,7 +137,8 @@ internal class APSplashScreenViewController(
                 val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
                 val watchedCount = maxOf(0, preferences.getInt(prefKey))
 
-                if ((splashScreen.showCount == null || watchedCount < splashScreen.showCount) &&
+                if ((hasDrafts || splashScreen.status == APSplashScreen.Status.ACTIVE) &&
+                    (splashScreen.showCount == null || watchedCount < splashScreen.showCount) &&
                     (minWatchedCount == -1 || watchedCount < minWatchedCount)
                 ) {
                     minWatchedCount = watchedCount

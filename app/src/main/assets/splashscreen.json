@@ -9,9 +9,10 @@
     {
       "id": "campaign71",
       "updatedAt": "datetime",
+      "status": "ACTIVE",
       "showCount": 500,
       "body": {
-        "launchScreen": {
+        "splashScreen": {
           "id": "splashScreen71",
           "type": "SPLASH_SCREEN",
           "body": {
@@ -149,9 +150,10 @@
     {
       "id": "campaign72",
       "updatedAt": "datetime",
+      "status": "DRAFT",
       "showCount": 3,
       "body": {
-        "launchScreen": {
+        "splashScreen": {
           "id": "splashScreen72",
           "type": "SPLASH_SCREEN",
           "body": {

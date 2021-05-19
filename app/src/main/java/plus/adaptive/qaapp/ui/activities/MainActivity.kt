@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             )
-            .showSplashScreen()
+            .showSplashScreen(hasDrafts = true)
     }
 
     private fun showMockFragment() {

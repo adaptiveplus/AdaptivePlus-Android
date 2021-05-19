@@ -163,13 +163,15 @@ private val apSplashScreenTemplateDeserializer =
                 try {
                     val campaignJsonObject = campaignJson.asJsonObject
                     val campaignId = campaignJsonObject.get("id").asString
+                    val status = campaignJsonObject.get("status").asString
                     val showCount = campaignJsonObject.get("showCount")?.asInt
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
-                    val splashScreenJsonObject = campaignBodyJsonObject.get("launchScreen").asJsonObject
+                    val splashScreenJsonObject = campaignBodyJsonObject.get("splashScreen").asJsonObject
                     val splashScreenId = splashScreenJsonObject.get("id").asString
                     val splashScreenBodyJsonObject = splashScreenJsonObject.get("body").asJsonObject
                     splashScreenBodyJsonObject.addProperty("id", splashScreenId)
                     splashScreenBodyJsonObject.addProperty("campaignId", campaignId)
+                    splashScreenBodyJsonObject.addProperty("status", status)
                     splashScreenBodyJsonObject.addProperty("showCount", showCount)
 
                     val gsonBuilder = GsonBuilder()
@@ -540,6 +542,7 @@ private fun checkAPSplashScreenProperties(
     splashScreen.run {
         id
         campaignId
+        status
         showCount
         showTime
         layers.forEach { checkAPLayerProperties(it) }
@@ -746,6 +749,7 @@ private fun magnifyAPSplashScreen(splashScreen: APSplashScreen) = splashScreen.r
     APSplashScreen(
         id = id,
         campaignId = campaignId,
+        status = status,
         showCount = showCount,
         showTime = showTime,
         layers = layers.map { magnifyAPLayer(it) },

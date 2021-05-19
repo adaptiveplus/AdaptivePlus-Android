@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContent
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.ext.hide
+import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModel
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModelFactory
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
@@ -112,6 +114,12 @@ internal class APSplashScreenDialog : DialogFragment() {
         drawSplashScreen()
 
         apSplashScreenLayout.addOnLayoutChangeListener(apSplashScreenLayoutChangeListener)
+
+        if (splashScreen.status == APSplashScreen.Status.DRAFT) {
+            apTagTextView.show()
+        } else {
+            apTagTextView.hide()
+        }
 
         setupObservers()
     }
