@@ -102,7 +102,7 @@ internal class APSplashScreenDialog : DialogFragment() {
 
         countDownTimer = object: CountDownTimer(showTime * 1000L, 100L) {
             override fun onTick(millisUntilFinished: Long) {
-                val timeLeft = ((millisUntilFinished + 900) / 1000).toInt()
+                val timeLeft = maxOf(((millisUntilFinished + 900) / 1000).toInt(), 1)
                 apSkipTextView?.text = getString(R.string.ap_skip, timeLeft)
             }
 
