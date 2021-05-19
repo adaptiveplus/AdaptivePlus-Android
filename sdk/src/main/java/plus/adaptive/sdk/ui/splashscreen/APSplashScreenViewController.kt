@@ -2,21 +2,26 @@ package plus.adaptive.sdk.ui.splashscreen
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.CAMPAIGN_WATCHED_COUNT
+import plus.adaptive.sdk.core.providers.provideAPActionsManager
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.components.APGIFComponent
 import plus.adaptive.sdk.data.models.components.APImageComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
+import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.utils.preloadAPFont
 import plus.adaptive.sdk.utils.preloadGIF
 import plus.adaptive.sdk.utils.preloadImage
@@ -24,11 +29,11 @@ import plus.adaptive.sdk.utils.preloadImage
 
 internal class APSplashScreenViewController(
     private val context: Context,
-    private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences,
+    private val cacheManager: APCacheManager,
     private val userRepository: APUserRepository,
     private val splashScreenRepository: APSplashScreenRepository
-) {
+) : ViewControllerDelegateProtocol {
 
     private var splashScreenListener: APSplashScreenListener? = null
 
@@ -60,39 +65,26 @@ internal class APSplashScreenViewController(
     }
 
     private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate) {
-        try {
-            getFragmentActivity()?.run {
-                getSplashScreenToShow(dataModel.splashScreens)?.let { splashScreen ->
-                    val apSplashScreenDialog = APSplashScreenDialog.newInstance(
-                        splashScreen,
-                        dataModel.options,
-                        object: APSplashScreenDialogListener {
-                            override fun onDismiss() {
-                                splashScreenListener?.onFinish()
-                            }
+        getSplashScreenToShow(dataModel.splashScreens)?.let { splashScreen ->
+            val apSplashScreenDialog = APSplashScreenDialog.newInstance(
+                splashScreen,
+                dataModel.options,
+                object: APSplashScreenDialogListener {
+                    override fun onSplashScreenDialogDismissed() {
+                        splashScreenListener?.onFinish()
+                    }
+
+                    override fun onRunActions(actions: List<APAction>) {
+                        actions.forEach {
+                            provideAPActionsManager(
+                                this@APSplashScreenViewController
+                            ).runAction(it)
                         }
-                    )
-                    apSplashScreenDialog.show(supportFragmentManager, apSplashScreenDialog.tag)
+                    }
                 }
-            }
-        } catch (e: IllegalStateException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            splashScreenListener?.onFinish()
+            )
+            showDialog(apSplashScreenDialog)
         }
-    }
-
-    private fun getFragmentActivity(): FragmentActivity? {
-        var context = context
-
-        while (context is ContextWrapper) {
-            if (context is FragmentActivity) {
-                return context
-            }
-            context = context.baseContext
-        }
-
-        return null
     }
 
     private fun requestAPSplashScreenTemplate() {
@@ -155,5 +147,39 @@ internal class APSplashScreenViewController(
 
     fun setSplashScreenListener(listener: APSplashScreenListener?) {
         this.splashScreenListener = listener
+    }
+
+    override fun startActivity(intent: Intent) {
+        context.startActivity(intent)
+    }
+
+    override fun showDialog(dialogFragment: DialogFragment) {
+        try {
+            getFragmentActivity()?.run {
+                dialogFragment.show(supportFragmentManager, dialogFragment.tag)
+            }
+        } catch (e: Exception) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+
+            if (dialogFragment is APSplashScreenDialog) {
+                splashScreenListener?.onFinish()
+            }
+        }
+    }
+
+    override fun dismissAllDialogs() { }
+
+    private fun getFragmentActivity(): FragmentActivity? {
+        var context = context
+
+        while (context is ContextWrapper) {
+            if (context is FragmentActivity) {
+                return context
+            }
+            context = context.baseContext
+        }
+
+        return null
     }
 }

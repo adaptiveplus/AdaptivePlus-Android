@@ -174,6 +174,7 @@ private val apSplashScreenTemplateDeserializer =
 
                     val gsonBuilder = GsonBuilder()
                     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+                    gsonBuilder.registerTypeAdapter(APAction::class.java, apActionDeserializer)
                     val apSplashScreenGson = gsonBuilder.create()
                     val apSplashScreen = apSplashScreenGson.fromJson(
                         splashScreenBodyJsonObject.toString(),
@@ -542,6 +543,7 @@ private fun checkAPSplashScreenProperties(
         showCount
         showTime
         layers.forEach { checkAPLayerProperties(it) }
+        actions?.forEach { checkAPActionProperties(it) }
     }
 }
 
@@ -746,7 +748,8 @@ private fun magnifyAPSplashScreen(splashScreen: APSplashScreen) = splashScreen.r
         campaignId = campaignId,
         showCount = showCount,
         showTime = showTime,
-        layers = layers.map { magnifyAPLayer(it) }
+        layers = layers.map { magnifyAPLayer(it) },
+        actions = actions
     )
 }
 

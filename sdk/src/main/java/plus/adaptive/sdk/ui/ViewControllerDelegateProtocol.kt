@@ -1,10 +1,10 @@
-package plus.adaptive.sdk.ui.apview
+package plus.adaptive.sdk.ui
 
 import android.content.Intent
 import androidx.fragment.app.DialogFragment
 
 
-internal interface APViewDelegateProtocol {
+internal interface ViewControllerDelegateProtocol {
 
     fun showDialog(dialogFragment: DialogFragment)
 

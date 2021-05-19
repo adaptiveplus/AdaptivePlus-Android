@@ -33,10 +33,11 @@ import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
 import plus.adaptive.sdk.utils.safeRun
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.utils.isQAApp
 
 
-internal class APViewFragment : Fragment(), APViewDelegateProtocol {
+internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
     companion object {
         private const val MILLISECONDS_PER_INCH = 100f

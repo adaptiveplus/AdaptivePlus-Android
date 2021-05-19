@@ -133,6 +133,14 @@
                   "opacity": 1
                 }
               }
+            ],
+            "actions": [
+              {
+                "type": "OPEN_WEB_LINK",
+                "parameters": {
+                  "url": "https://sprintsquads.com/"
+                }
+              }
             ]
           }
         }

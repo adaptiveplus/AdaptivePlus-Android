@@ -172,6 +172,12 @@ internal class APSplashScreenDialog : DialogFragment() {
 
     private val isSplashScreenReadyObserver = Observer<Boolean> { isReady ->
         if (isReady) {
+            splashScreen.actions?.let { actions ->
+                apContentCardView?.setOnClickListener {
+                    listener?.onRunActions(actions)
+                    dismiss()
+                }
+            }
             countDownTimer?.start()
         }
     }
@@ -180,6 +186,6 @@ internal class APSplashScreenDialog : DialogFragment() {
         countDownTimer?.cancel()
         viewModel.increaseSplashScreenWatchedCount()
         super.onDismiss(dialog)
-        listener?.onDismiss()
+        listener?.onSplashScreenDialogDismissed()
     }
 }
