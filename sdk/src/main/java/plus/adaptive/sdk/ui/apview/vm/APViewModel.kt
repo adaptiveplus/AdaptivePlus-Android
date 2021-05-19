@@ -130,7 +130,7 @@ internal class APViewModel(
         _apStoriesPauseNumberLiveData.value = _apStoriesPauseNumberLiveData.value?.dec() ?: 0
     }
 
-    override fun onAPStoriesDismissed(campaignId: String?) {
+    override fun onAPStoriesFinished(campaignId: String?) {
         _apViewDataModelLiveData.value?.let { dataModel ->
             dataModel.entryPoints.firstOrNull {
                 it.campaignId == campaignId

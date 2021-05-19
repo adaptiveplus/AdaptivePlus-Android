@@ -18,7 +18,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.AdaptivePlusView
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.ui.dialogs.AddNewAPViewDialog
@@ -119,13 +118,10 @@ class ApiFragment : Fragment() {
                         id = ViewCompat.generateViewId()
                         setAdaptivePlusViewId(apViewModel.id)
                         setHasDrafts(apViewModel.hasDrafts ?: false)
-                        setAPCustomActionListener(object:
-                            APCustomActionListener {
-                            override fun onRun(params: HashMap<String, Any>) {
-                                val name = params["name"]?.toString()
-                                context?.toast("Custom action: $name")
-                            }
-                        })
+                        setAPCustomActionListener { params ->
+                            val name = params["name"]?.toString()
+                            context?.toast("Custom action: $name")
+                        }
                     }
                     apViewsLayout?.addView(apView)
 
@@ -156,11 +152,9 @@ class ApiFragment : Fragment() {
     }
 
     private fun showAddNewAPViewDialog(envName: String) {
-        val dialog = AddNewAPViewDialog.newInstance(envName, object: AddNewAPViewDialog.InteractionInterface {
-            override fun onDismiss() {
-                setAdaptivePlusViews()
-            }
-        })
+        val dialog = AddNewAPViewDialog.newInstance(envName).apply {
+            setOnDismissListener { setAdaptivePlusViews() }
+        }
         dialog.show(childFragmentManager, dialog.tag)
     }
 }

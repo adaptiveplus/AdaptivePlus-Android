@@ -16,13 +16,8 @@ class AddCustomIPDialog : DialogFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(interactor: InteractionInterface) = AddCustomIPDialog().apply {
-            this.interactor = interactor
-        }
+        fun newInstance() = AddCustomIPDialog()
     }
-
-
-    private var interactor: InteractionInterface? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,12 +54,19 @@ class AddCustomIPDialog : DialogFragment() {
     }
 
 
-    interface InteractionInterface {
+    private var onDismissListener: OnDismissListener? = null
+
+
+    fun interface OnDismissListener {
         fun onDismiss()
+    }
+
+    fun setOnDismissListener(listener: OnDismissListener?) {
+        this.onDismissListener = listener
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        interactor?.onDismiss()
+        onDismissListener?.onDismiss()
     }
 }

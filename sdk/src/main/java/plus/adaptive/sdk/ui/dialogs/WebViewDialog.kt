@@ -19,26 +19,20 @@ import plus.adaptive.sdk.R
 import kotlinx.android.synthetic.main.ap_fragment_webview_dialog.*
 
 
-internal class WebViewDialog : BottomSheetDialogFragment() {
+internal class WebViewDialog : BottomSheetDialogFragment(), APDialogFragment {
 
     companion object {
         private const val EXTRA_URL = "url"
 
         @JvmStatic
-        fun newInstance(url: String, lifecycleListener: LifecycleListener? = null) =
+        fun newInstance(url: String) =
             WebViewDialog().apply {
                 arguments = bundleOf(EXTRA_URL to url)
-                this.lifecycleListener = lifecycleListener
             }
     }
 
 
-    interface LifecycleListener {
-        fun onDismiss()
-    }
-
-
-    private var lifecycleListener: LifecycleListener? = null
+    private val onDismissListeners = mutableSetOf<APDialogFragment.OnDismissListener>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,6 +141,18 @@ internal class WebViewDialog : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        lifecycleListener?.onDismiss()
+        onDismissListeners.forEach { it.onDismiss() }
+    }
+
+    override fun addOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.add(listener)
+    }
+
+    override fun removeOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.remove(listener)
+    }
+
+    override fun clearAllOnDismissListeners() {
+        this.onDismissListeners.clear()
     }
 }

@@ -12,7 +12,6 @@ import plus.adaptive.qaapp.ui.fragments.ApiFragment
 import plus.adaptive.qaapp.ui.fragments.MockFragment
 import plus.adaptive.qaapp.utils.getEnvByName
 import plus.adaptive.sdk.AdaptivePlusSDK
-import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APLocation
 import java.util.*
 
@@ -101,21 +100,17 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .setSplashScreenListener(
-                object: APSplashScreenListener {
-                    override fun onFinish() {
-                        try {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Launch Screen Finished",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+            .setSplashScreenListener {
+                try {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Launch Screen Finished",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            )
+            }
             .showSplashScreen(hasDrafts = true)
     }
 
@@ -135,21 +130,17 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .setSplashScreenListener(
-                object: APSplashScreenListener {
-                    override fun onFinish() {
-                        try {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Launch Screen Finished",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+            .setSplashScreenListener {
+                try {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Launch Screen Finished",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            )
+            }
             .showMockSplashScreen()
     }
 

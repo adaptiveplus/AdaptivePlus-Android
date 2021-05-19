@@ -31,11 +31,11 @@ internal interface APViewModelDelegateProtocol {
     fun resumeAPStories()
 
     /**
-     * Method to notify apView that stories dialog was dismissed
+     * Method to notify apView that stories dialog has been finished
      *
      * @param campaignId - campaignId of the last shown story or null if undefined
      */
-    fun onAPStoriesDismissed(campaignId: String?)
+    fun onAPStoriesFinished(campaignId: String?)
 
     /**
      * Getter of entry point auto scroll period

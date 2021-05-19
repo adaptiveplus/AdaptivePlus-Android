@@ -22,6 +22,7 @@ import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
+import plus.adaptive.sdk.ui.dialogs.APDialogFragment
 import plus.adaptive.sdk.utils.preloadAPFont
 import plus.adaptive.sdk.utils.preloadGIF
 import plus.adaptive.sdk.utils.preloadImage
@@ -35,6 +36,7 @@ internal class APSplashScreenViewController(
     private val splashScreenRepository: APSplashScreenRepository
 ) : ViewControllerDelegateProtocol {
 
+    private var activeDialogCount = 0
     private var splashScreenListener: APSplashScreenListener? = null
 
 
@@ -69,12 +71,8 @@ internal class APSplashScreenViewController(
             val apSplashScreenDialog = APSplashScreenDialog.newInstance(
                 splashScreen,
                 dataModel.options,
-                object: APSplashScreenDialogListener {
-                    override fun onSplashScreenDialogDismissed() {
-                        splashScreenListener?.onFinish()
-                    }
-
-                    override fun onRunActions(actions: List<APAction>) {
+                object: APSplashScreenViewControllerDelegateProtocol {
+                    override fun runActions(actions: List<APAction>) {
                         actions.forEach {
                             provideAPActionsManager(
                                 this@APSplashScreenViewController
@@ -161,14 +159,21 @@ internal class APSplashScreenViewController(
     override fun showDialog(dialogFragment: DialogFragment) {
         try {
             getFragmentActivity()?.run {
+                if (dialogFragment is APDialogFragment) {
+                    increaseActiveDialogCount()
+                    dialogFragment.addOnDismissListener {
+                        decreaseActiveDialogCount()
+                    }
+                }
+
                 dialogFragment.show(supportFragmentManager, dialogFragment.tag)
             }
         } catch (e: Exception) {
             APCrashlytics.logCrash(e)
             e.printStackTrace()
 
-            if (dialogFragment is APSplashScreenDialog) {
-                splashScreenListener?.onFinish()
+            if (dialogFragment is APDialogFragment) {
+                decreaseActiveDialogCount()
             }
         }
     }
@@ -186,5 +191,18 @@ internal class APSplashScreenViewController(
         }
 
         return null
+    }
+
+    private fun increaseActiveDialogCount() {
+        activeDialogCount++
+    }
+
+    private fun decreaseActiveDialogCount() {
+        activeDialogCount--
+
+        if (activeDialogCount <= 0) {
+            splashScreenListener?.onFinish()
+            splashScreenListener = null
+        }
     }
 }

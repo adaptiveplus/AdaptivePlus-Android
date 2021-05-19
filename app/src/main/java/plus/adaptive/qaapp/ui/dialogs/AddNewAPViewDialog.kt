@@ -19,16 +19,11 @@ class AddNewAPViewDialog : DialogFragment() {
 
         @JvmStatic
         fun newInstance(
-            envName: String,
-            interactor: InteractionInterface
+            envName: String
         ) = AddNewAPViewDialog().apply {
             arguments = bundleOf(EXTRA_ENV_NAME to envName)
-            this.interactor = interactor
         }
     }
-
-
-    private var interactor: InteractionInterface? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,12 +68,19 @@ class AddNewAPViewDialog : DialogFragment() {
     }
 
 
-    interface InteractionInterface {
+    private var onDismissListener: OnDismissListener? = null
+
+
+    fun setOnDismissListener(listener: OnDismissListener?) {
+        this.onDismissListener = listener
+    }
+
+    fun interface OnDismissListener {
         fun onDismiss()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        interactor?.onDismiss()
+        onDismissListener?.onDismiss()
     }
 }

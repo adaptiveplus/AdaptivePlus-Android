@@ -21,13 +21,14 @@ import plus.adaptive.sdk.data.models.APSplashScreen
 import plus.adaptive.sdk.data.models.APSplashScreenTemplate
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
+import plus.adaptive.sdk.ui.dialogs.APDialogFragment
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModel
 import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModelFactory
 import plus.adaptive.sdk.utils.drawAPLayersOnLayout
 import plus.adaptive.sdk.utils.safeRun
 
 
-internal class APSplashScreenDialog : DialogFragment() {
+internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
 
     companion object {
         private const val EXTRA_SPLASH_SCREEN = "extra_splash_screen"
@@ -37,13 +38,13 @@ internal class APSplashScreenDialog : DialogFragment() {
         fun newInstance(
             splashScreen: APSplashScreen,
             options: APSplashScreenTemplate.Options,
-            listener: APSplashScreenDialogListener? = null
+            delegate: APSplashScreenViewControllerDelegateProtocol? = null
         ) = APSplashScreenDialog().apply {
             arguments = bundleOf(
                 EXTRA_SPLASH_SCREEN to splashScreen,
                 EXTRA_OPTIONS to options
             )
-            this.listener = listener
+            this.viewControllerDelegate = delegate
         }
     }
 
@@ -52,8 +53,10 @@ internal class APSplashScreenDialog : DialogFragment() {
     private lateinit var options: APSplashScreenTemplate.Options
     private lateinit var viewModel: APSplashScreenDialogViewModel
 
-    private var listener: APSplashScreenDialogListener? = null
+    private var viewControllerDelegate: APSplashScreenViewControllerDelegateProtocol? = null
     private var countDownTimer: CountDownTimer? = null
+
+    private val onDismissListeners = mutableSetOf<APDialogFragment.OnDismissListener>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -181,9 +184,11 @@ internal class APSplashScreenDialog : DialogFragment() {
     private val isSplashScreenReadyObserver = Observer<Boolean> { isReady ->
         if (isReady) {
             splashScreen.actions?.let { actions ->
-                apContentCardView?.setOnClickListener {
-                    listener?.onRunActions(actions)
-                    dismiss()
+                if (actions.isNotEmpty()) {
+                    apContentCardView?.setOnClickListener {
+                        viewControllerDelegate?.runActions(actions)
+                        dismiss()
+                    }
                 }
             }
             countDownTimer?.start()
@@ -191,9 +196,21 @@ internal class APSplashScreenDialog : DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
         countDownTimer?.cancel()
         viewModel.increaseSplashScreenWatchedCount()
-        super.onDismiss(dialog)
-        listener?.onSplashScreenDialogDismissed()
+        onDismissListeners.forEach { it.onDismiss() }
+    }
+
+    override fun addOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.add(listener)
+    }
+
+    override fun removeOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.remove(listener)
+    }
+
+    override fun clearAllOnDismissListeners() {
+        this.onDismissListeners.clear()
     }
 }

@@ -46,13 +46,11 @@ internal class APActionsManagerImpl(
         if (action.url.startsWith("http")) {
             apViewModelDelegate?.pauseAPStories()
 
-            val webViewDialog = WebViewDialog.newInstance(
-                action.url,
-                object: WebViewDialog.LifecycleListener {
-                    override fun onDismiss() {
-                        apViewModelDelegate?.resumeAPStories()
-                    }
-                })
+            val webViewDialog = WebViewDialog.newInstance(action.url).apply {
+                addOnDismissListener {
+                    apViewModelDelegate?.resumeAPStories()
+                }
+            }
             viewControllerDelegate.showDialog(webViewDialog)
         } else {
             try {

@@ -109,20 +109,16 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun showAddEnvDialog() {
-        val dialog = AddEnvDialog.newInstance(object: AddEnvDialog.InteractionInterface {
-            override fun onDismiss() {
-                updateEnvAdapter()
-            }
-        })
+        val dialog = AddEnvDialog.newInstance().apply {
+            setOnDismissListener { updateEnvAdapter() }
+        }
         dialog.show(supportFragmentManager, dialog.tag)
     }
 
     private fun showAddCustomIPDialog() {
-        val dialog = AddCustomIPDialog.newInstance(object: AddCustomIPDialog.InteractionInterface {
-            override fun onDismiss() {
-                updateIPsAdapter()
-            }
-        })
+        val dialog = AddCustomIPDialog.newInstance().apply {
+            setOnDismissListener { updateIPsAdapter() }
+        }
         dialog.show(supportFragmentManager, dialog.tag)
     }
 

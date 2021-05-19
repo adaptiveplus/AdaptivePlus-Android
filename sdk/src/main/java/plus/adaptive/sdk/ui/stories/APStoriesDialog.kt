@@ -1,6 +1,7 @@
 package plus.adaptive.sdk.ui.stories
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.ext.setTransitionDuration
 import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
+import plus.adaptive.sdk.ui.dialogs.APDialogFragment
 import plus.adaptive.sdk.ui.stories.vm.APStoriesDialogViewModel
 import plus.adaptive.sdk.ui.stories.vm.APStoriesDialogViewModelFactory
 import plus.adaptive.sdk.utils.restrictToRange
@@ -21,7 +23,7 @@ import kotlinx.android.synthetic.main.ap_fragment_ap_stories_dialog.*
 
 
 internal class APStoriesDialog :
-    DialogFragment(), APStoriesProgressController {
+    DialogFragment(), APStoriesProgressController, APDialogFragment {
 
     companion object {
         const val EXTRA_STORIES = "extra_stories"
@@ -47,6 +49,8 @@ internal class APStoriesDialog :
 
     private lateinit var viewModel: APStoriesDialogViewModel
     private lateinit var apViewModelDelegate: APViewModelDelegateProtocol
+
+    private val onDismissListeners = mutableSetOf<APDialogFragment.OnDismissListener>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,6 +131,23 @@ internal class APStoriesDialog :
 
         val lastShownStory = stories.getOrNull(apStoriesViewPager?.currentItem ?: -1)
         val campaignId = lastShownStory?.campaignId
-        apViewModelDelegate.onAPStoriesDismissed(campaignId)
+        apViewModelDelegate.onAPStoriesFinished(campaignId)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListeners.forEach { it.onDismiss() }
+    }
+
+    override fun addOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.add(listener)
+    }
+
+    override fun removeOnDismissListener(listener: APDialogFragment.OnDismissListener) {
+        this.onDismissListeners.remove(listener)
+    }
+
+    override fun clearAllOnDismissListeners() {
+        this.onDismissListeners.clear()
     }
 }

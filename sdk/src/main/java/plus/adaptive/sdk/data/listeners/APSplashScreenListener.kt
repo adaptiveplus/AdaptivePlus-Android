@@ -1,6 +1,6 @@
 package plus.adaptive.sdk.data.listeners
 
 
-interface APSplashScreenListener {
+fun interface APSplashScreenListener {
     fun onFinish()
 }
