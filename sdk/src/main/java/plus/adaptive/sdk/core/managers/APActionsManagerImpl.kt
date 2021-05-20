@@ -5,11 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.data.models.APStory
+import plus.adaptive.sdk.data.listeners.APCustomActionListener
+import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.actions.APCustomAction
 import plus.adaptive.sdk.data.models.actions.APOpenWebLinkAction
+import plus.adaptive.sdk.data.models.actions.APSendSMSAction
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
-import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
 import plus.adaptive.sdk.ui.dialogs.WebViewDialog
@@ -38,6 +40,8 @@ internal class APActionsManagerImpl(
             is APOpenWebLinkAction -> openWebView(action)
             is APCustomAction -> runAPCustomAction(action)
             is APShowStoryAction -> showAPStory(action)
+            is APSendSMSAction -> sendSms(action)
+            is APCallPhoneAction -> callPhone(action)
             else -> {}
         }
     }
@@ -84,5 +88,18 @@ internal class APActionsManagerImpl(
                 }
             }
         }
+    }
+
+    private fun sendSms(action: APSendSMSAction) {
+        val uri = Uri.parse("smsto:${action.phoneNumber}")
+        val intent = Intent(Intent.ACTION_SENDTO, uri)
+        intent.putExtra("sms_body", action.message)
+        viewControllerDelegate.startActivity(intent)
+    }
+
+    private fun callPhone(action: APCallPhoneAction) {
+        val uri = Uri.parse("tel:${action.phoneNumber}")
+        val intent = Intent(Intent.ACTION_DIAL, uri)
+        viewControllerDelegate.startActivity(intent)
     }
 }

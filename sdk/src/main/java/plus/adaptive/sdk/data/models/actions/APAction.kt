@@ -11,6 +11,10 @@ internal interface APAction {
         @SerializedName("OPEN_WEB_LINK")
         OPEN_WEB_LINK,
         @SerializedName("CUSTOM")
-        CUSTOM
+        CUSTOM,
+        @SerializedName("SEND_SMS")
+        SEND_SMS,
+        @SerializedName("CALL")
+        CALL
     }
 }

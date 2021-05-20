@@ -380,6 +380,15 @@ private val apActionDeserializer =
                         jsonObject.get("parameters").toString(), paramsType)
                     APCustomAction(params)
                 }
+                APAction.Type.SEND_SMS -> {
+                    val phoneNumber = paramsJsonObject.get("phoneNumber").asString
+                    val message = paramsJsonObject.get("message").asString
+                    APSendSMSAction(phoneNumber = phoneNumber, message = message)
+                }
+                APAction.Type.CALL -> {
+                    val phoneNumber = paramsJsonObject.get("phoneNumber").asString
+                    APCallPhoneAction(phoneNumber)
+                }
                 else -> null
             }
         } catch (e: JsonSyntaxException) {
@@ -406,6 +415,20 @@ private val apActionSerializer =
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
                 jsonObject.add("parameters", Gson().toJsonTree(src.parameters))
+            }
+            is APSendSMSAction -> {
+                val clazz = APAction.Type.SEND_SMS.javaClass
+                val name = APAction.Type.SEND_SMS.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.add("parameters", Gson().toJsonTree(src))
+            }
+            is APCallPhoneAction -> {
+                val clazz = APAction.Type.CALL.javaClass
+                val name = APAction.Type.CALL.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.add("parameters", Gson().toJsonTree(src))
             }
             else -> {}
         }
@@ -439,6 +462,15 @@ private val apEntryPointActionDeserializer =
                     val params = Gson().fromJson<HashMap<String, Any>>(
                         jsonObject.get("parameters").toString(), paramsType)
                     APCustomAction(params)
+                }
+                APAction.Type.SEND_SMS -> {
+                    val phoneNumber = paramsJsonObject.get("phoneNumber").asString
+                    val message = paramsJsonObject.get("message").asString
+                    APSendSMSAction(phoneNumber = phoneNumber, message = message)
+                }
+                APAction.Type.CALL -> {
+                    val phoneNumber = paramsJsonObject.get("phoneNumber").asString
+                    APCallPhoneAction(phoneNumber)
                 }
                 else -> null
             }
@@ -478,6 +510,20 @@ private val apEntryPointActionSerializer =
                 val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
                 jsonObject.addProperty("type", annotation.value)
                 jsonObject.add("parameters", Gson().toJsonTree(src.parameters))
+            }
+            is APSendSMSAction -> {
+                val clazz = APAction.Type.SEND_SMS.javaClass
+                val name = APAction.Type.SEND_SMS.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.add("parameters", Gson().toJsonTree(src))
+            }
+            is APCallPhoneAction -> {
+                val clazz = APAction.Type.CALL.javaClass
+                val name = APAction.Type.CALL.name
+                val annotation = clazz.getField(name).getAnnotation(SerializedName::class.java)
+                jsonObject.addProperty("type", annotation.value)
+                jsonObject.add("parameters", Gson().toJsonTree(src))
             }
             else -> {}
         }
@@ -660,6 +706,13 @@ private fun checkAPActionProperties(apAction: APAction) {
             }
             is APCustomAction -> {
                 parameters
+            }
+            is APSendSMSAction -> {
+                phoneNumber
+                message
+            }
+            is APCallPhoneAction -> {
+                phoneNumber
             }
             else -> { }
         }
