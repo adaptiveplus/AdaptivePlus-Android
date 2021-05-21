@@ -41,7 +41,7 @@ internal class APSplashScreenViewController(
 
 
     fun show(hasDrafts: Boolean) {
-        cacheManager.loadAPSplashScreenTemplateFromCache { dataModel ->
+        cacheManager.loadAPSplashScreenViewDataModelFromCache { dataModel ->
             if (dataModel != null) {
                 showSplashScreenDialog(dataModel, hasDrafts)
             } else {
@@ -49,7 +49,7 @@ internal class APSplashScreenViewController(
             }
         }
 
-        requestAPSplashScreenTemplate(hasDrafts)
+        requestAPSplashScreenViewDataModel(hasDrafts)
     }
 
     @Deprecated(
@@ -93,12 +93,12 @@ internal class APSplashScreenViewController(
         }
     }
 
-    private fun requestAPSplashScreenTemplate(hasDrafts: Boolean) {
-        splashScreenRepository.requestAPSplashScreenTemplate(
+    private fun requestAPSplashScreenViewDataModel(hasDrafts: Boolean) {
+        splashScreenRepository.requestAPSplashScreenViewDataModel(
             hasDrafts,
             object: RequestResultCallback<APSplashScreenViewDataModel>() {
                 override fun success(response: APSplashScreenViewDataModel) {
-                    saveAPSplashScreenTemplateToCache(response)
+                    saveAPSplashScreenViewDataModelToCache(response)
                 }
 
                 override fun failure(error: APError?) { }
@@ -106,8 +106,8 @@ internal class APSplashScreenViewController(
         )
     }
 
-    private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenViewDataModel) {
-        cacheManager.saveAPSplashScreenTemplateToCache(dataModel) {
+    private fun saveAPSplashScreenViewDataModelToCache(dataModel: APSplashScreenViewDataModel) {
+        cacheManager.saveAPSplashScreenViewDataModelToCache(dataModel) {
             preloadSplashScreenContent(dataModel)
         }
     }

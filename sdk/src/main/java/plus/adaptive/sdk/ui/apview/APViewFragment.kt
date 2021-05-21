@@ -20,17 +20,17 @@ import plus.adaptive.sdk.core.providers.provideAPActionsManager
 import plus.adaptive.sdk.core.providers.provideAPSDKManager
 import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.data.models.EventObserver
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
-import plus.adaptive.sdk.ui.apview.vm.APViewModel
+import plus.adaptive.sdk.ui.apview.vm.APViewViewModel
 import plus.adaptive.sdk.ui.apview.vm.APViewModelFactory
 import plus.adaptive.sdk.utils.getAPStoriesList
-import plus.adaptive.sdk.utils.isAPViewDataModelNullOrEmpty
+import plus.adaptive.sdk.utils.isAPCarouselViewDataModelNullOrEmpty
 import plus.adaptive.sdk.utils.safeRun
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
@@ -58,7 +58,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
     }
 
 
-    private lateinit var viewModel: APViewModel
+    private lateinit var viewModel: APViewViewModel
     private lateinit var apViewId: String
     private var apHasDrafts: Boolean? = null
     private lateinit var entryPointsAdapter: APEntryPointsAdapter
@@ -87,7 +87,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
         activity?.let {
             val viewModelFactory = APViewModelFactory(it)
-            viewModel = ViewModelProvider(this, viewModelFactory).get(APViewModel::class.java)
+            viewModel = ViewModelProvider(this, viewModelFactory).get(APViewViewModel::class.java)
 
             apActionsManager = provideAPActionsManager(this, viewModel)
             customActionListener?.let { callback ->
@@ -155,7 +155,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
             networkManager.getTokenLiveData().observe(viewLifecycleOwner, tokenObserver)
 
             provideAPSDKManager().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
-            viewModel.apViewDataModelLiveData.observe(viewLifecycleOwner, apViewDataModelObserver)
+            viewModel.apCarouselViewDataModelLiveData.observe(viewLifecycleOwner, apCarouselViewDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
             viewModel.magnetizeEntryPointEventLiveData.observe(viewLifecycleOwner, magnetizeEntryPointEventObserver)
         }
@@ -171,11 +171,11 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         updateAPViewFragmentVisibility()
     }
 
-    private val apViewDataModelObserver = Observer<APViewDataModel?> { dataModel ->
+    private val apCarouselViewDataModelObserver = Observer<APCarouselViewDataModel?> { dataModel ->
         updateAPViewFragmentVisibility()
         apActionsManager?.setAPStories(getAPStoriesList(dataModel))
 
-        if (!isAPViewDataModelNullOrEmpty(dataModel)) {
+        if (!isAPCarouselViewDataModelNullOrEmpty(dataModel)) {
             drawAPView(dataModel!!)
         }
     }
@@ -191,7 +191,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         }
 
     private fun autoMagnetize() {
-        if (viewModel.apViewDataModelLiveData.value?.options?.magnetize == true) {
+        if (viewModel.apCarouselViewDataModelLiveData.value?.options?.magnetize == true) {
             (apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager)?.run {
                 val firstVisiblePos = findFirstVisibleItemPosition()
                 val firstCompletelyVisiblePos = findFirstCompletelyVisibleItemPosition()
@@ -252,8 +252,8 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
             return
         }
 
-        if (viewModel.apViewDataModelLiveData.value == null) {
-            viewModel.loadAPViewDataModelFromCache(apViewId)
+        if (viewModel.apCarouselViewDataModelLiveData.value == null) {
+            viewModel.loadAPCarouselViewDataModelFromCache(apViewId)
         }
 
         val networkManager = provideNetworkServiceManager(context)
@@ -286,10 +286,10 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         magnetizeToPosition(0)
     }
 
-    private fun drawAPView(apViewDataModel: APViewDataModel) {
+    private fun drawAPView(apCarouselViewDataModel: APCarouselViewDataModel) {
         if (context == null || view == null) return
 
-        entryPointsAdapter.updateDataSet(apViewDataModel.entryPoints)
+        entryPointsAdapter.updateDataSet(apCarouselViewDataModel.entryPoints)
 
         updateEntriesViewOptions()
     }
@@ -305,7 +305,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
     }
 
     private fun updateEntriesViewOptions() {
-        viewModel.apViewDataModelLiveData.value?.options?.let { options ->
+        viewModel.apCarouselViewDataModelLiveData.value?.options?.let { options ->
             val baseScreenWidth = maxOf(options.screenWidth, 0.001)
             val scaleFactor = (apViewFragmentLayout.width / baseScreenWidth).toFloat()
 
@@ -336,7 +336,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
     private fun updateAPViewFragmentVisibility() {
         if (provideAPSDKManager().isStartedLiveData().value == true &&
-            !isAPViewDataModelNullOrEmpty(viewModel.apViewDataModelLiveData.value)
+            !isAPCarouselViewDataModelNullOrEmpty(viewModel.apCarouselViewDataModelLiveData.value)
         ) {
             apViewFragmentLayout?.show()
         } else {

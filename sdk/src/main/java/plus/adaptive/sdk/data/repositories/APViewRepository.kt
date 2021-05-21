@@ -5,12 +5,12 @@ import plus.adaptive.sdk.core.analytics.APCrashlytics
 import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.network.APViewRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
-import plus.adaptive.sdk.utils.checkAPViewDataModelProperties
-import plus.adaptive.sdk.utils.magnifyAPViewDataModel
+import plus.adaptive.sdk.utils.checkAPCarouselViewDataModelProperties
+import plus.adaptive.sdk.utils.magnifyAPCarouselViewDataModel
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -27,13 +27,13 @@ internal class APViewRepository(
      *
      * @param apViewId - id of the adaptive plus view
      * @param callback - APView data model request result callback
-     * @see APViewDataModel
+     * @see APCarouselViewDataModel
      * @see RequestResultCallback
      */
     fun requestAPView(
         apViewId: String,
         hasDrafts: Boolean,
-        callback: RequestResultCallback<APViewDataModel>
+        callback: RequestResultCallback<APCarouselViewDataModel>
     ) {
         val obj = APViewRequestBody(
             parserVersion = 1,
@@ -46,11 +46,11 @@ internal class APViewRepository(
             .post(body)
             .build()
 
-        executeRequest<APViewDataModel>(request,
+        executeRequest<APCarouselViewDataModel>(request,
             { response ->
                 try {
-                    checkAPViewDataModelProperties(response)
-                    val dataModel = magnifyAPViewDataModel(response)
+                    checkAPCarouselViewDataModelProperties(response)
+                    val dataModel = magnifyAPCarouselViewDataModel(response)
                     callback.success(dataModel)
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)

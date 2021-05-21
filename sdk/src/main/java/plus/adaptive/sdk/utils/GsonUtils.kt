@@ -24,7 +24,7 @@ private fun getProcessedAPSplashScreenGson(): Gson {
     return gsonBuilder.create()
 }
 
-internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): String? {
+internal fun getSerializedProcessedAPCarouselViewDataModel(dataModel: APCarouselViewDataModel): String? {
     return getProcessedAPViewGson().toJson(dataModel)
 }
 
@@ -32,10 +32,10 @@ internal fun getSerializedProcessedAPSplashScreenModel(dataModel: APSplashScreen
     return getProcessedAPSplashScreenGson().toJson(dataModel)
 }
 
-internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataModel? {
+internal fun getDeserializedProcessedAPCarouselViewDataModel(json: String): APCarouselViewDataModel? {
     return try {
-        val dataModel = getProcessedAPViewGson().fromJson(json, APViewDataModel::class.java)
-        checkAPViewDataModelProperties(dataModel)
+        val dataModel = getProcessedAPViewGson().fromJson(json, APCarouselViewDataModel::class.java)
+        checkAPCarouselViewDataModelProperties(dataModel)
         dataModel
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
@@ -47,7 +47,7 @@ internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataMo
 internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplashScreenViewDataModel? {
     return try {
         val dataModel = getProcessedAPSplashScreenGson().fromJson(json, APSplashScreenViewDataModel::class.java)
-        checkAPSplashScreenTemplateProperties(dataModel)
+        checkAPSplashScreenViewDataModelProperties(dataModel)
         dataModel
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
@@ -58,21 +58,21 @@ internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplash
 
 internal fun getUnprocessedAPViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APViewDataModel::class.java, apViewDataModelDeserializer)
+    gsonBuilder.registerTypeAdapter(APCarouselViewDataModel::class.java, apCarouselViewDataModelDeserializer)
     return gsonBuilder.create()
 }
 
 internal fun getUnprocessedAPSplashScreenGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APSplashScreenViewDataModel::class.java, apSplashScreenTemplateDeserializer)
+    gsonBuilder.registerTypeAdapter(APSplashScreenViewDataModel::class.java, apSplashScreenViewDataModelDeserializer)
     return gsonBuilder.create()
 }
 
-internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewDataModel? {
+internal fun getDeserializedUnprocessedAPCarouselViewDataModel(json: String): APCarouselViewDataModel? {
     return try {
-        val dataModel = getUnprocessedAPViewGson().fromJson(json, APViewDataModel::class.java)
-        checkAPViewDataModelProperties(dataModel)
-        magnifyAPViewDataModel(dataModel)
+        val dataModel = getUnprocessedAPViewGson().fromJson(json, APCarouselViewDataModel::class.java)
+        checkAPCarouselViewDataModelProperties(dataModel)
+        magnifyAPCarouselViewDataModel(dataModel)
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
@@ -84,8 +84,8 @@ internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSpla
     return try {
         val dataModel = getUnprocessedAPSplashScreenGson()
             .fromJson(json, APSplashScreenViewDataModel::class.java)
-        checkAPSplashScreenTemplateProperties(dataModel)
-        magnifyAPSplashScreenTemplate(dataModel)
+        checkAPSplashScreenViewDataModelProperties(dataModel)
+        magnifyAPSplashScreenViewDataModel(dataModel)
     } catch (e: Exception) {
         APCrashlytics.logCrash(e)
         e.printStackTrace()
@@ -93,14 +93,14 @@ internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSpla
     }
 }
 
-private val apViewDataModelDeserializer =
+private val apCarouselViewDataModelDeserializer =
     JsonDeserializer { json, _, _ ->
         try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val options = Gson().fromJson(
                 jsonObject.get("options").toString(),
-                APViewDataModel.Options::class.java)
+                APCarouselViewDataModel.Options::class.java)
 
             val campaigns = jsonObject.get("campaigns").asJsonArray
             val entryPoints = campaigns.map { campaignJson ->
@@ -138,7 +138,7 @@ private val apViewDataModelDeserializer =
                 }
             }.toList()
 
-            APViewDataModel(
+            APCarouselViewDataModel(
                 id = id,
                 options = options,
                 entryPoints = entryPoints.filterNotNull()
@@ -149,7 +149,7 @@ private val apViewDataModelDeserializer =
         }
     }
 
-private val apSplashScreenTemplateDeserializer =
+private val apSplashScreenViewDataModelDeserializer =
     JsonDeserializer { json, _, _ ->
         try {
             val jsonObject: JsonObject = json.asJsonObject
@@ -531,7 +531,7 @@ private val apEntryPointActionSerializer =
         jsonObject
     }
 
-internal fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
+internal fun checkAPCarouselViewDataModelProperties(dataModel: APCarouselViewDataModel) {
     dataModel.run {
         id
         options.run {
@@ -549,7 +549,7 @@ internal fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
     }
 }
 
-internal fun checkAPSplashScreenTemplateProperties(dataModel: APSplashScreenViewDataModel) {
+internal fun checkAPSplashScreenViewDataModelProperties(dataModel: APSplashScreenViewDataModel) {
     dataModel.run {
         id
         options.run {
@@ -756,10 +756,10 @@ private fun checkAPSnapProperties(apSnap: APSnap) {
     }
 }
 
-internal fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run {
-    APViewDataModel(
+internal fun magnifyAPCarouselViewDataModel(dataModel: APCarouselViewDataModel) = dataModel.run {
+    APCarouselViewDataModel(
         id = id,
-        options = APViewDataModel.Options(
+        options = APCarouselViewDataModel.Options(
             width = options.width * BASE_SIZE_MULTIPLIER,
             height = options.height * BASE_SIZE_MULTIPLIER,
             cornerRadius = options.cornerRadius * BASE_SIZE_MULTIPLIER,
@@ -774,7 +774,7 @@ internal fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run 
     )
 }
 
-internal fun magnifyAPSplashScreenTemplate(dataModel: APSplashScreenViewDataModel) = dataModel.run {
+internal fun magnifyAPSplashScreenViewDataModel(dataModel: APSplashScreenViewDataModel) = dataModel.run {
     APSplashScreenViewDataModel(
         id = id,
         options = APSplashScreenViewDataModel.Options(

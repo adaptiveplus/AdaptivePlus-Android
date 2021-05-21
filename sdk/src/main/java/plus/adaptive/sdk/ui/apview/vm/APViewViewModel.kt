@@ -6,7 +6,7 @@ import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.APEntryPoint
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.Event
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APUserRepository
@@ -15,21 +15,21 @@ import plus.adaptive.sdk.ui.apview.APEntryPointLifecycleListener
 import plus.adaptive.sdk.utils.*
 
 
-internal class APViewModel(
+internal class APViewViewModel(
     private val apViewRepository: APViewRepository,
     private val userRepository: APUserRepository,
     private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences
 ) : ViewModel(), APViewModelDelegateProtocol, APEntryPointViewModelProvider {
 
-    val apViewDataModelLiveData: LiveData<APViewDataModel?>
-        get() = _apViewDataModelLiveData
+    val apCarouselViewDataModelLiveData: LiveData<APCarouselViewDataModel?>
+        get() = _apCarouselViewDataModelLiveData
     val actionEventLiveData: LiveData<Event<APAction>>
         get() = _actionEventLiveData
     val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
         get() = _magnetizeEntryPointEventLiveData
 
-    private val _apViewDataModelLiveData = MutableLiveData<APViewDataModel?>()
+    private val _apCarouselViewDataModelLiveData = MutableLiveData<APCarouselViewDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<APAction>>()
     private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
@@ -41,27 +41,27 @@ internal class APViewModel(
     private var _visibleEntryPointsPositionRange: IntRange = 0..0
 
 
-    private fun setAPViewDataModel(
-        dataModel: APViewDataModel,
+    private fun setAPCarouselViewDataModel(
+        dataModel: APCarouselViewDataModel,
         isCached: Boolean = false,
         isEmptyViewId: Boolean = false
     ) {
-        if (!isCached || _apViewDataModelLiveData.value == null) {
+        if (!isCached || _apCarouselViewDataModelLiveData.value == null) {
             sortAndFilterCampaigns(dataModel)
 
             if (!isCached) {
-                saveAPViewDataModelToCache(dataModel.id, dataModel)
+                saveAPCarouselViewDataModelToCache(dataModel.id, dataModel)
 
                 if (isEmptyViewId) {
-                    saveAPViewDataModelToCache("", dataModel)
+                    saveAPCarouselViewDataModelToCache("", dataModel)
                 }
             }
 
-            _apViewDataModelLiveData.value = dataModel
+            _apCarouselViewDataModelLiveData.value = dataModel
         }
     }
 
-    private fun sortAndFilterCampaigns(dataModel: APViewDataModel) {
+    private fun sortAndFilterCampaigns(dataModel: APCarouselViewDataModel) {
         val activeEntries = mutableListOf<APEntryPoint>()
         val inactiveEntries = mutableListOf<APEntryPoint>()
 
@@ -84,10 +84,10 @@ internal class APViewModel(
 
     fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {
         apViewRepository.requestAPView(
-            apViewId, hasDrafts, object: RequestResultCallback<APViewDataModel>() {
-                override fun success(response: APViewDataModel) {
+            apViewId, hasDrafts, object: RequestResultCallback<APCarouselViewDataModel>() {
+                override fun success(response: APCarouselViewDataModel) {
                     runOnMainThread {
-                        setAPViewDataModel(
+                        setAPCarouselViewDataModel(
                             dataModel = response,
                             isEmptyViewId = apViewId.isEmpty()
                         )
@@ -96,8 +96,8 @@ internal class APViewModel(
 
                 override fun failure(error: APError?) {
                     runOnMainThread {
-                        _apViewDataModelLiveData.value?.let {
-                            setAPViewDataModel(
+                        _apCarouselViewDataModelLiveData.value?.let {
+                            setAPCarouselViewDataModel(
                                 dataModel = it,
                                 isEmptyViewId = apViewId.isEmpty()
                             )
@@ -131,7 +131,7 @@ internal class APViewModel(
     }
 
     override fun onAPStoriesFinished(campaignId: String?) {
-        _apViewDataModelLiveData.value?.let { dataModel ->
+        _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             dataModel.entryPoints.firstOrNull {
                 it.campaignId == campaignId
             }?.let { entryPoint ->
@@ -144,7 +144,7 @@ internal class APViewModel(
     }
 
     override fun getAutoScrollPeriod(): Long? {
-        val autoScroll = _apViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
+        val autoScroll = _apCarouselViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
         if (autoScroll == null || autoScroll <= 0L) {
             return null
         }
@@ -152,11 +152,11 @@ internal class APViewModel(
     }
 
     override fun showBorder(): Boolean {
-        return _apViewDataModelLiveData.value?.options?.showBorder == true
+        return _apCarouselViewDataModelLiveData.value?.options?.showBorder == true
     }
 
     override fun getAPViewId(): String {
-        return _apViewDataModelLiveData.value?.id ?: ""
+        return _apCarouselViewDataModelLiveData.value?.id ?: ""
     }
 
     @Deprecated(
@@ -164,14 +164,14 @@ internal class APViewModel(
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
         cacheManager.loadAPViewMockDataModelFromAssets(apViewId) { dataModel ->
-            setAPViewDataModel(dataModel)
+            setAPCarouselViewDataModel(dataModel)
         }
     }
 
-    fun loadAPViewDataModelFromCache(apViewId: String) {
-        cacheManager.loadAPViewDataModelFromCache(apViewId) { dataModel ->
+    fun loadAPCarouselViewDataModelFromCache(apViewId: String) {
+        cacheManager.loadAPCarouselViewDataModelFromCache(apViewId) { dataModel ->
             if (dataModel != null) {
-                setAPViewDataModel(
+                setAPCarouselViewDataModel(
                     dataModel = dataModel,
                     isCached = true,
                     isEmptyViewId = apViewId.isEmpty()
@@ -180,8 +180,8 @@ internal class APViewModel(
         }
     }
 
-    private fun saveAPViewDataModelToCache(apViewId: String, dataModel: APViewDataModel) {
-        cacheManager.saveAPViewDataModelToCache(apViewId, dataModel)
+    private fun saveAPCarouselViewDataModelToCache(apViewId: String, dataModel: APCarouselViewDataModel) {
+        cacheManager.saveAPCarouselViewDataModelToCache(apViewId, dataModel)
     }
 
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
@@ -205,7 +205,7 @@ internal class APViewModel(
     }
 
     private fun onEntryPointReady(id: String, isReady: Boolean) {
-        _apViewDataModelLiveData.value?.let { dataModel ->
+        _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             val firstVisibleEntryPoint =
                 dataModel.entryPoints.getOrNull(_visibleEntryPointsPositionRange.first)
 
@@ -221,7 +221,7 @@ internal class APViewModel(
         if (id == _resumedEntryPointId) {
             _resumedEntryPointId = null
 
-            _apViewDataModelLiveData.value?.let { dataModel ->
+            _apCarouselViewDataModelLiveData.value?.let { dataModel ->
                 if (getAutoScrollPeriod() != null) {
                     val resumedEntryPointPosition =
                         dataModel.entryPoints.indexOfFirst {
@@ -238,7 +238,7 @@ internal class APViewModel(
     }
 
     private fun pauseEntryPoint(id: String) {
-        _apViewDataModelLiveData.value?.let { dataModel ->
+        _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             dataModel.entryPoints.find { it.id == id }?.let { entryPoint ->
                 getAPEntryPointViewModel(entryPoint)?.run {
                     if (id == _resumedEntryPointId) {
@@ -251,7 +251,7 @@ internal class APViewModel(
     }
 
     private fun resumeEntryPoint(id: String) {
-        _apViewDataModelLiveData.value?.let { dataModel ->
+        _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             dataModel.entryPoints.find { it.id == id }?.let { entryPoint ->
                 _magnetizeEntryPointEventLiveData.value = Event(id)
                 getAPEntryPointViewModel(entryPoint)?.run {
@@ -275,7 +275,7 @@ internal class APViewModel(
     }
 
     private fun resetAutoScroll() {
-        _apViewDataModelLiveData.value?.let { dataModel ->
+        _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             if (getAutoScrollPeriod() != null) {
                 val range = _visibleEntryPointsPositionRange
                 val resumedEntryPointPosition =

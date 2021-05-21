@@ -1,7 +1,7 @@
 package plus.adaptive.sdk.core.managers
 
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 
 
 internal interface APCacheManager {
@@ -10,20 +10,20 @@ internal interface APCacheManager {
         level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(
         apViewId: String,
-        onSuccess: (dataModel: APViewDataModel) -> Unit
+        onSuccess: (dataModel: APCarouselViewDataModel) -> Unit
     )
 
-    fun loadAPViewDataModelFromCache(
+    fun loadAPCarouselViewDataModelFromCache(
         apViewId: String,
-        onResult: (dataModel: APViewDataModel?) -> Unit
+        onResult: (dataModel: APCarouselViewDataModel?) -> Unit
     )
 
-    fun saveAPViewDataModelToCache(
+    fun saveAPCarouselViewDataModelToCache(
         apViewId: String,
-        dataModel: APViewDataModel
+        dataModel: APCarouselViewDataModel
     )
 
-    fun removeAPViewDataModelFromCache(
+    fun removeAPCarouselViewDataModelFromCache(
         apViewId: String
     )
 
@@ -34,14 +34,14 @@ internal interface APCacheManager {
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     )
 
-    fun loadAPSplashScreenTemplateFromCache(
+    fun loadAPSplashScreenViewDataModelFromCache(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     )
 
-    fun saveAPSplashScreenTemplateToCache(
+    fun saveAPSplashScreenViewDataModelToCache(
         dataModel: APSplashScreenViewDataModel,
         onSuccess: (() -> Unit)? = null
     )
 
-    fun removeAPSplashScreenTemplateFromCache()
+    fun removeAPSplashScreenViewDataModelFromCache()
 }

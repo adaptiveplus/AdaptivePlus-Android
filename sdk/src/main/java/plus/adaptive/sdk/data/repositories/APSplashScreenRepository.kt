@@ -9,10 +9,10 @@ import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
-import plus.adaptive.sdk.data.models.network.APSplashScreenTemplateRequestBody
+import plus.adaptive.sdk.data.models.network.APSplashScreenViewDataModelRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
-import plus.adaptive.sdk.utils.checkAPSplashScreenTemplateProperties
-import plus.adaptive.sdk.utils.magnifyAPSplashScreenTemplate
+import plus.adaptive.sdk.utils.checkAPSplashScreenViewDataModelProperties
+import plus.adaptive.sdk.utils.magnifyAPSplashScreenViewDataModel
 
 
 internal class APSplashScreenRepository(
@@ -22,11 +22,11 @@ internal class APSplashScreenRepository(
     customGson: Gson
 ) : APBaseRepository(networkManager, authCredentialsManager, userRepository, customGson) {
 
-    fun requestAPSplashScreenTemplate(
+    fun requestAPSplashScreenViewDataModel(
         hasDrafts: Boolean,
         callback: RequestResultCallback<APSplashScreenViewDataModel>
     ) {
-        val obj = APSplashScreenTemplateRequestBody(
+        val obj = APSplashScreenViewDataModelRequestBody(
             parserVersion = 1,
             hasDrafts = hasDrafts
         )
@@ -40,8 +40,8 @@ internal class APSplashScreenRepository(
         executeRequest<APSplashScreenViewDataModel>(request,
             { response ->
                 try {
-                    checkAPSplashScreenTemplateProperties(response)
-                    val dataModel = magnifyAPSplashScreenTemplate(response)
+                    checkAPSplashScreenViewDataModelProperties(response)
+                    val dataModel = magnifyAPSplashScreenViewDataModel(response)
                     callback.success(dataModel)
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)

@@ -2,7 +2,7 @@ package plus.adaptive.sdk.core.managers
 
 import android.content.Context
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.*
 import java.io.*
@@ -17,7 +17,7 @@ internal class APCacheManagerImpl(
         level = DeprecationLevel.WARNING)
     override fun loadAPViewMockDataModelFromAssets(
         apViewId: String,
-        onSuccess: (dataModel: APViewDataModel) -> Unit
+        onSuccess: (dataModel: APCarouselViewDataModel) -> Unit
     ) {
         try {
             val inputStream: InputStream =
@@ -30,7 +30,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedUnprocessedAPViewDataModel(json)
+            val dataModel = getDeserializedUnprocessedAPCarouselViewDataModel(json)
             if (dataModel != null) {
                 onSuccess.invoke(dataModel)
             }
@@ -39,9 +39,9 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun loadAPViewDataModelFromCache(
+    override fun loadAPCarouselViewDataModelFromCache(
         apViewId: String,
-        onResult: (dataModel: APViewDataModel?) -> Unit
+        onResult: (dataModel: APCarouselViewDataModel?) -> Unit
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
@@ -55,7 +55,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedProcessedAPViewDataModel(json)
+            val dataModel = getDeserializedProcessedAPCarouselViewDataModel(json)
             onResult(dataModel)
         } catch (ex: FileNotFoundException) {
             onResult(null)
@@ -65,16 +65,16 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun saveAPViewDataModelToCache(
+    override fun saveAPCarouselViewDataModelToCache(
         apViewId: String,
-        dataModel: APViewDataModel
+        dataModel: APCarouselViewDataModel
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
-            val json = getSerializedProcessedAPViewDataModel(dataModel)
+            val json = getSerializedProcessedAPCarouselViewDataModel(dataModel)
 
             if (json != null) {
                 outputStream.write(json.toByteArray())
@@ -87,7 +87,7 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun removeAPViewDataModelFromCache(
+    override fun removeAPCarouselViewDataModelFromCache(
         apViewId: String
     ) {
         try {
@@ -121,7 +121,7 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun loadAPSplashScreenTemplateFromCache(
+    override fun loadAPSplashScreenViewDataModelFromCache(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
@@ -146,7 +146,7 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun saveAPSplashScreenTemplateToCache(
+    override fun saveAPSplashScreenViewDataModelToCache(
         dataModel: APSplashScreenViewDataModel,
         onSuccess: (() -> Unit)?
     ) {
@@ -169,7 +169,7 @@ internal class APCacheManagerImpl(
         }
     }
 
-    override fun removeAPSplashScreenTemplateFromCache() {
+    override fun removeAPSplashScreenViewDataModelFromCache() {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")

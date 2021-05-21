@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APSnap
 import plus.adaptive.sdk.data.models.APStory
-import plus.adaptive.sdk.data.models.APViewDataModel
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.APBackgroundComponent
 import plus.adaptive.sdk.data.models.components.APGIFComponent
@@ -78,11 +78,11 @@ internal fun drawAPLayersOnLayout(
     }
 }
 
-internal fun isAPViewDataModelNullOrEmpty(dataModel: APViewDataModel?): Boolean {
+internal fun isAPCarouselViewDataModelNullOrEmpty(dataModel: APCarouselViewDataModel?): Boolean {
     return dataModel?.entryPoints.isNullOrEmpty()
 }
 
-internal fun getAPStoriesList(dataModel: APViewDataModel?) : List<APStory>? {
+internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStory>? {
     return dataModel?.run {
         val stories = mutableListOf<APStory>()
 

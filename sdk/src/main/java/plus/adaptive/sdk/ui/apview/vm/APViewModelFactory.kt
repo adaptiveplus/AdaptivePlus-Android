@@ -14,8 +14,8 @@ internal class APViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(APViewModel::class.java)) {
-            return APViewModel(
+        if (modelClass.isAssignableFrom(APViewViewModel::class.java)) {
+            return APViewViewModel(
                 provideAPViewRepository(context),
                 provideAPUserRepository(context),
                 provideAPCacheManager(context),

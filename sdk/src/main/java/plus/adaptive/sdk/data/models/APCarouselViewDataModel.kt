@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 @Keep
-internal data class APViewDataModel(
+internal data class APCarouselViewDataModel(
     val id: String,
     val options: Options,
     @SerializedName("entryPoints")
