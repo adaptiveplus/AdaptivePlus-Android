@@ -13,7 +13,7 @@ import plus.adaptive.sdk.core.providers.provideAPActionsManager
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreen
-import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.components.APGIFComponent
 import plus.adaptive.sdk.data.models.components.APImageComponent
@@ -66,21 +66,29 @@ internal class APSplashScreenViewController(
         }
     }
 
-    private fun showSplashScreenDialog(dataModel: APSplashScreenTemplate, hasDrafts: Boolean) {
+    private fun showSplashScreenDialog(
+        dataModel: APSplashScreenViewDataModel,
+        hasDrafts: Boolean
+    ) {
         getSplashScreenToShow(dataModel.splashScreens, hasDrafts)?.let { splashScreen ->
-            val apSplashScreenDialog = APSplashScreenDialog.newInstance(
-                splashScreen,
-                dataModel.options,
-                object: APSplashScreenViewControllerDelegateProtocol {
-                    override fun runActions(actions: List<APAction>) {
-                        actions.forEach {
-                            provideAPActionsManager(
-                                this@APSplashScreenViewController
-                            ).runAction(it)
+            val apSplashScreenDialog = APSplashScreenDialog
+                .newInstance(
+                    splashScreen = splashScreen,
+                    options = dataModel.options,
+                    apViewId = dataModel.id
+                ).apply {
+                    setViewControllerDelegate(
+                        object: APSplashScreenViewControllerDelegateProtocol {
+                            override fun runActions(actions: List<APAction>) {
+                                actions.forEach {
+                                    provideAPActionsManager(
+                                        this@APSplashScreenViewController
+                                    ).runAction(it)
+                                }
+                            }
                         }
-                    }
+                    )
                 }
-            )
             showDialog(apSplashScreenDialog)
         }
     }
@@ -88,8 +96,8 @@ internal class APSplashScreenViewController(
     private fun requestAPSplashScreenTemplate(hasDrafts: Boolean) {
         splashScreenRepository.requestAPSplashScreenTemplate(
             hasDrafts,
-            object: RequestResultCallback<APSplashScreenTemplate>() {
-                override fun success(response: APSplashScreenTemplate) {
+            object: RequestResultCallback<APSplashScreenViewDataModel>() {
+                override fun success(response: APSplashScreenViewDataModel) {
                     saveAPSplashScreenTemplateToCache(response)
                 }
 
@@ -98,13 +106,13 @@ internal class APSplashScreenViewController(
         )
     }
 
-    private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenTemplate) {
+    private fun saveAPSplashScreenTemplateToCache(dataModel: APSplashScreenViewDataModel) {
         cacheManager.saveAPSplashScreenTemplateToCache(dataModel) {
             preloadSplashScreenContent(dataModel)
         }
     }
 
-    private fun preloadSplashScreenContent(dataModel: APSplashScreenTemplate) {
+    private fun preloadSplashScreenContent(dataModel: APSplashScreenViewDataModel) {
         dataModel.splashScreens.forEach { splashScreen ->
             splashScreen.layers.forEach { apLayer ->
                 when (apLayer.component) {

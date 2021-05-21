@@ -4,10 +4,8 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.view.KeyEvent.KEYCODE_BACK
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -17,8 +15,10 @@ import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.*
 import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentCardView
 import kotlinx.android.synthetic.main.ap_fragment_splash_screen_dialog.apContentLayout
 import plus.adaptive.sdk.R
+import plus.adaptive.sdk.core.analytics.APAnalytics
+import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.APSplashScreen
-import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.ui.dialogs.APDialogFragment
@@ -31,30 +31,36 @@ import plus.adaptive.sdk.utils.safeRun
 internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
 
     companion object {
+        private const val DEFAULT_SHOW_TIME_IN_SECS = 3
+
         private const val EXTRA_SPLASH_SCREEN = "extra_splash_screen"
         private const val EXTRA_OPTIONS = "extra_options"
+        private const val EXTRA_AP_VIEW_ID = "extra_ap_view_id"
 
         @JvmStatic
         fun newInstance(
             splashScreen: APSplashScreen,
-            options: APSplashScreenTemplate.Options,
-            delegate: APSplashScreenViewControllerDelegateProtocol? = null
+            options: APSplashScreenViewDataModel.Options,
+            apViewId: String
         ) = APSplashScreenDialog().apply {
             arguments = bundleOf(
                 EXTRA_SPLASH_SCREEN to splashScreen,
-                EXTRA_OPTIONS to options
+                EXTRA_OPTIONS to options,
+                EXTRA_AP_VIEW_ID to apViewId
             )
-            this.viewControllerDelegate = delegate
         }
     }
 
 
     private lateinit var splashScreen: APSplashScreen
-    private lateinit var options: APSplashScreenTemplate.Options
+    private lateinit var options: APSplashScreenViewDataModel.Options
     private lateinit var viewModel: APSplashScreenDialogViewModel
+    private lateinit var apViewId: String
 
     private var viewControllerDelegate: APSplashScreenViewControllerDelegateProtocol? = null
     private var countDownTimer: CountDownTimer? = null
+    private var showTimeInMillis = 0L
+    private var millisUntilFinished = 0L
 
     private val onDismissListeners = mutableSetOf<APDialogFragment.OnDismissListener>()
 
@@ -66,9 +72,10 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
         (arguments?.getSerializable(EXTRA_SPLASH_SCREEN) as? APSplashScreen)?.let {
             this.splashScreen = it
         }
-        (arguments?.getSerializable(EXTRA_OPTIONS) as? APSplashScreenTemplate.Options)?.let {
+        (arguments?.getSerializable(EXTRA_OPTIONS) as? APSplashScreenViewDataModel.Options)?.let {
             this.options = it
         }
+        this.apViewId = arguments?.getString(EXTRA_AP_VIEW_ID) ?: ""
 
         if (!::splashScreen.isInitialized || !::options.isInitialized) {
             dismiss()
@@ -78,6 +85,17 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
         val viewModelFactory = APSplashScreenDialogViewModelFactory(context, splashScreen)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         viewModel = viewModelProvider.get(APSplashScreenDialogViewModel::class.java)
+
+        viewModel.increaseSplashScreenWatchedCount()
+
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "shown-splash-screen",
+                campaignId = splashScreen.campaignId,
+                apViewId = apViewId,
+                params = mapOf("splashScreenId" to splashScreen.id)
+            )
+        )
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -97,19 +115,37 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val showTime = splashScreen.showTime?.toInt() ?: 3
-        apSkipTextView.text = getString(R.string.ap_skip, showTime)
+        val showTimeInSeconds = splashScreen.showTime?.toInt() ?: DEFAULT_SHOW_TIME_IN_SECS
+        this.showTimeInMillis = showTimeInSeconds * 1000L
+        this.millisUntilFinished = showTimeInMillis
+
+        apSkipTextView.text = getString(R.string.ap_skip, showTimeInSeconds)
         apSkipBtnLayout.setOnClickListener {
-            dismiss()
+            skipSplashScreen()
         }
 
-        countDownTimer = object: CountDownTimer(showTime * 1000L, 100L) {
+        dialog?.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KEYCODE_BACK) {
+                if (event.action != KeyEvent.ACTION_DOWN) {
+                    skipSplashScreen()
+                    true
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        }
+
+        countDownTimer = object: CountDownTimer(showTimeInMillis, 100L) {
             override fun onTick(millisUntilFinished: Long) {
+                this@APSplashScreenDialog.millisUntilFinished = millisUntilFinished
                 val timeLeft = maxOf(((millisUntilFinished + 900) / 1000).toInt(), 1)
                 apSkipTextView?.text = getString(R.string.ap_skip, timeLeft)
             }
 
             override fun onFinish() {
+                this@APSplashScreenDialog.millisUntilFinished = 0L
                 dismiss()
             }
         }
@@ -186,6 +222,14 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
             splashScreen.actions?.let { actions ->
                 if (actions.isNotEmpty()) {
                     apContentCardView?.setOnClickListener {
+                        APAnalytics.logEvent(
+                            APAnalyticsEvent(
+                                name = "action-splash-screen",
+                                campaignId = splashScreen.campaignId,
+                                apViewId = apViewId,
+                                params = mapOf("splashScreenId" to splashScreen.id)
+                            )
+                        )
                         viewControllerDelegate?.runActions(actions)
                         dismiss()
                     }
@@ -195,10 +239,24 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
         }
     }
 
+    private fun skipSplashScreen() {
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "skipped-splash-screen",
+                campaignId = splashScreen.campaignId,
+                apViewId = apViewId,
+                params = mapOf(
+                    "splashScreenId" to splashScreen.id,
+                    "watchedTime" to (showTimeInMillis - millisUntilFinished) / 1000.0
+                )
+            )
+        )
+        dismiss()
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         countDownTimer?.cancel()
-        viewModel.increaseSplashScreenWatchedCount()
         onDismissListeners.forEach { it.onDismiss() }
     }
 
@@ -212,5 +270,9 @@ internal class APSplashScreenDialog : DialogFragment(), APDialogFragment {
 
     override fun clearAllOnDismissListeners() {
         this.onDismissListeners.clear()
+    }
+
+    fun setViewControllerDelegate(delegate: APSplashScreenViewControllerDelegateProtocol?) {
+        this.viewControllerDelegate = delegate
     }
 }

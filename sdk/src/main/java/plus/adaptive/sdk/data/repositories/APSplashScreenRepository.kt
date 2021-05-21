@@ -8,7 +8,7 @@ import plus.adaptive.sdk.core.managers.APAuthCredentialsManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.data.models.network.APSplashScreenTemplateRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.utils.checkAPSplashScreenTemplateProperties
@@ -24,7 +24,7 @@ internal class APSplashScreenRepository(
 
     fun requestAPSplashScreenTemplate(
         hasDrafts: Boolean,
-        callback: RequestResultCallback<APSplashScreenTemplate>
+        callback: RequestResultCallback<APSplashScreenViewDataModel>
     ) {
         val obj = APSplashScreenTemplateRequestBody(
             parserVersion = 1,
@@ -37,7 +37,7 @@ internal class APSplashScreenRepository(
             .post(body)
             .build()
 
-        executeRequest<APSplashScreenTemplate>(request,
+        executeRequest<APSplashScreenViewDataModel>(request,
             { response ->
                 try {
                     checkAPSplashScreenTemplateProperties(response)

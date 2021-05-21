@@ -1,7 +1,7 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
-import plus.adaptive.sdk.data.models.APSplashScreenTemplate
+import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.data.models.APViewDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.*
@@ -100,7 +100,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun loadAPSplashScreenMockTemplateFromAssets(
-        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
+        onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
             val inputStream: InputStream =
@@ -122,7 +122,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun loadAPSplashScreenTemplateFromCache(
-        onResult: (dataModel: APSplashScreenTemplate?) -> Unit
+        onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
@@ -147,7 +147,7 @@ internal class APCacheManagerImpl(
     }
 
     override fun saveAPSplashScreenTemplateToCache(
-        dataModel: APSplashScreenTemplate,
+        dataModel: APSplashScreenViewDataModel,
         onSuccess: (() -> Unit)?
     ) {
         try {

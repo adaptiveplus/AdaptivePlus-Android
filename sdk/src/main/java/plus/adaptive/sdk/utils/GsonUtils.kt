@@ -28,7 +28,7 @@ internal fun getSerializedProcessedAPViewDataModel(dataModel: APViewDataModel): 
     return getProcessedAPViewGson().toJson(dataModel)
 }
 
-internal fun getSerializedProcessedAPSplashScreenModel(dataModel: APSplashScreenTemplate): String? {
+internal fun getSerializedProcessedAPSplashScreenModel(dataModel: APSplashScreenViewDataModel): String? {
     return getProcessedAPSplashScreenGson().toJson(dataModel)
 }
 
@@ -44,9 +44,9 @@ internal fun getDeserializedProcessedAPViewDataModel(json: String): APViewDataMo
     }
 }
 
-internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplashScreenTemplate? {
+internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplashScreenViewDataModel? {
     return try {
-        val dataModel = getProcessedAPSplashScreenGson().fromJson(json, APSplashScreenTemplate::class.java)
+        val dataModel = getProcessedAPSplashScreenGson().fromJson(json, APSplashScreenViewDataModel::class.java)
         checkAPSplashScreenTemplateProperties(dataModel)
         dataModel
     } catch (e: Exception) {
@@ -64,7 +64,7 @@ internal fun getUnprocessedAPViewGson(): Gson {
 
 internal fun getUnprocessedAPSplashScreenGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APSplashScreenTemplate::class.java, apSplashScreenTemplateDeserializer)
+    gsonBuilder.registerTypeAdapter(APSplashScreenViewDataModel::class.java, apSplashScreenTemplateDeserializer)
     return gsonBuilder.create()
 }
 
@@ -80,10 +80,10 @@ internal fun getDeserializedUnprocessedAPViewDataModel(json: String): APViewData
     }
 }
 
-internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSplashScreenTemplate? {
+internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSplashScreenViewDataModel? {
     return try {
         val dataModel = getUnprocessedAPSplashScreenGson()
-            .fromJson(json, APSplashScreenTemplate::class.java)
+            .fromJson(json, APSplashScreenViewDataModel::class.java)
         checkAPSplashScreenTemplateProperties(dataModel)
         magnifyAPSplashScreenTemplate(dataModel)
     } catch (e: Exception) {
@@ -156,7 +156,7 @@ private val apSplashScreenTemplateDeserializer =
             val id = jsonObject.get("id").asString
             val options = Gson().fromJson(
                 jsonObject.get("options").toString(),
-                APSplashScreenTemplate.Options::class.java)
+                APSplashScreenViewDataModel.Options::class.java)
 
             val campaigns = jsonObject.get("campaigns").asJsonArray
             val splashScreens = campaigns.map { campaignJson ->
@@ -192,7 +192,7 @@ private val apSplashScreenTemplateDeserializer =
                 }
             }.toList()
 
-            APSplashScreenTemplate(
+            APSplashScreenViewDataModel(
                 id = id,
                 options = options,
                 splashScreens = splashScreens.filterNotNull()
@@ -549,7 +549,7 @@ internal fun checkAPViewDataModelProperties(dataModel: APViewDataModel) {
     }
 }
 
-internal fun checkAPSplashScreenTemplateProperties(dataModel: APSplashScreenTemplate) {
+internal fun checkAPSplashScreenTemplateProperties(dataModel: APSplashScreenViewDataModel) {
     dataModel.run {
         id
         options.run {
@@ -774,10 +774,10 @@ internal fun magnifyAPViewDataModel(dataModel: APViewDataModel) = dataModel.run 
     )
 }
 
-internal fun magnifyAPSplashScreenTemplate(dataModel: APSplashScreenTemplate) = dataModel.run {
-    APSplashScreenTemplate(
+internal fun magnifyAPSplashScreenTemplate(dataModel: APSplashScreenViewDataModel) = dataModel.run {
+    APSplashScreenViewDataModel(
         id = id,
-        options = APSplashScreenTemplate.Options(
+        options = APSplashScreenViewDataModel.Options(
             width = options.width * BASE_SIZE_MULTIPLIER,
             height = options.height * BASE_SIZE_MULTIPLIER,
             screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER
