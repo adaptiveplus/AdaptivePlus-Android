@@ -7,8 +7,8 @@ import plus.adaptive.sdk.data.repositories.APCrashlyticsRepository
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
-import plus.adaptive.sdk.utils.getUnprocessedAPSplashScreenGson
-import plus.adaptive.sdk.utils.getUnprocessedAPViewGson
+import plus.adaptive.sdk.utils.getUnprocessedAPSplashScreenViewGson
+import plus.adaptive.sdk.utils.getUnprocessedAPCarouselViewGson
 
 
 internal fun provideAPAnalyticsRepository(
@@ -47,7 +47,7 @@ internal fun provideAPViewRepository(
         provideNetworkServiceManager(context),
         provideAPAuthCredentialsManager(),
         provideAPUserRepository(context),
-        getUnprocessedAPViewGson()
+        getUnprocessedAPCarouselViewGson()
     )
 }
 
@@ -66,6 +66,6 @@ internal fun provideAPSplashScreenRepository(
         provideNetworkServiceManager(context),
         provideAPAuthCredentialsManager(),
         provideAPUserRepository(context),
-        getUnprocessedAPSplashScreenGson()
+        getUnprocessedAPSplashScreenViewGson()
     )
 }

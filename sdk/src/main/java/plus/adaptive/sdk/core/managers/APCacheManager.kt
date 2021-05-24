@@ -8,7 +8,7 @@ internal interface APCacheManager {
     @Deprecated(
         message = "Only for development purposes.",
         level = DeprecationLevel.WARNING)
-    fun loadAPViewMockDataModelFromAssets(
+    fun loadAPCarouselViewDataModelFromAssets(
         apViewId: String,
         onSuccess: (dataModel: APCarouselViewDataModel) -> Unit
     )
@@ -30,7 +30,7 @@ internal interface APCacheManager {
     @Deprecated(
         message = "Only for development purposes.",
         level = DeprecationLevel.WARNING)
-    fun loadAPSplashScreenMockTemplateFromAssets(
+    fun loadAPSplashScreenViewDataModelFromAssets(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     )
 

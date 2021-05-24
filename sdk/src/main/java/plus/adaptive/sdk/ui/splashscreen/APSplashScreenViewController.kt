@@ -57,7 +57,7 @@ internal class APSplashScreenViewController(
         level = DeprecationLevel.WARNING
     )
     fun showMock() {
-        cacheManager.loadAPSplashScreenMockTemplateFromAssets { dataModel ->
+        cacheManager.loadAPSplashScreenViewDataModelFromAssets { dataModel ->
             if (dataModel != null) {
                 showSplashScreenDialog(dataModel, hasDrafts = false)
             } else {

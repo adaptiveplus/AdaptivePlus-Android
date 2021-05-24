@@ -163,7 +163,7 @@ internal class APViewViewModel(
             message = "Not working. Only for testing purposes.",
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
-        cacheManager.loadAPViewMockDataModelFromAssets(apViewId) { dataModel ->
+        cacheManager.loadAPCarouselViewDataModelFromAssets(apViewId) { dataModel ->
             setAPCarouselViewDataModel(dataModel)
         }
     }

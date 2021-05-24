@@ -10,7 +10,7 @@ import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.components.*
 
 
-private fun getProcessedAPViewGson(): Gson {
+private fun getProcessedAPCarouselViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionSerializer)
     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
@@ -18,23 +18,30 @@ private fun getProcessedAPViewGson(): Gson {
     return gsonBuilder.create()
 }
 
-private fun getProcessedAPSplashScreenGson(): Gson {
+private fun getProcessedAPSplashScreenViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
     return gsonBuilder.create()
 }
 
-internal fun getSerializedProcessedAPCarouselViewDataModel(dataModel: APCarouselViewDataModel): String? {
-    return getProcessedAPViewGson().toJson(dataModel)
+internal fun getSerializedProcessedAPCarouselViewDataModel(
+    dataModel: APCarouselViewDataModel
+): String? {
+    return getProcessedAPCarouselViewGson().toJson(dataModel)
 }
 
-internal fun getSerializedProcessedAPSplashScreenModel(dataModel: APSplashScreenViewDataModel): String? {
-    return getProcessedAPSplashScreenGson().toJson(dataModel)
+internal fun getSerializedProcessedAPSplashScreenViewDataModel(
+    dataModel: APSplashScreenViewDataModel
+): String? {
+    return getProcessedAPSplashScreenViewGson().toJson(dataModel)
 }
 
-internal fun getDeserializedProcessedAPCarouselViewDataModel(json: String): APCarouselViewDataModel? {
+internal fun getDeserializedProcessedAPCarouselViewDataModel(
+    json: String
+): APCarouselViewDataModel? {
     return try {
-        val dataModel = getProcessedAPViewGson().fromJson(json, APCarouselViewDataModel::class.java)
+        val dataModel = getProcessedAPCarouselViewGson()
+            .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
         dataModel
     } catch (e: Exception) {
@@ -44,9 +51,12 @@ internal fun getDeserializedProcessedAPCarouselViewDataModel(json: String): APCa
     }
 }
 
-internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplashScreenViewDataModel? {
+internal fun getDeserializedProcessedAPSplashScreenViewDataModel(
+    json: String
+): APSplashScreenViewDataModel? {
     return try {
-        val dataModel = getProcessedAPSplashScreenGson().fromJson(json, APSplashScreenViewDataModel::class.java)
+        val dataModel = getProcessedAPSplashScreenViewGson()
+            .fromJson(json, APSplashScreenViewDataModel::class.java)
         checkAPSplashScreenViewDataModelProperties(dataModel)
         dataModel
     } catch (e: Exception) {
@@ -56,21 +66,28 @@ internal fun getDeserializedProcessedAPSplashScreenModel(json: String): APSplash
     }
 }
 
-internal fun getUnprocessedAPViewGson(): Gson {
+internal fun getUnprocessedAPCarouselViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APCarouselViewDataModel::class.java, apCarouselViewDataModelDeserializer)
+    gsonBuilder.registerTypeAdapter(
+        APCarouselViewDataModel::class.java,
+        apCarouselViewDataModelDeserializer)
     return gsonBuilder.create()
 }
 
-internal fun getUnprocessedAPSplashScreenGson(): Gson {
+internal fun getUnprocessedAPSplashScreenViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
-    gsonBuilder.registerTypeAdapter(APSplashScreenViewDataModel::class.java, apSplashScreenViewDataModelDeserializer)
+    gsonBuilder.registerTypeAdapter(
+        APSplashScreenViewDataModel::class.java,
+        apSplashScreenViewDataModelDeserializer)
     return gsonBuilder.create()
 }
 
-internal fun getDeserializedUnprocessedAPCarouselViewDataModel(json: String): APCarouselViewDataModel? {
+internal fun getDeserializedUnprocessedAPCarouselViewDataModel(
+    json: String
+): APCarouselViewDataModel? {
     return try {
-        val dataModel = getUnprocessedAPViewGson().fromJson(json, APCarouselViewDataModel::class.java)
+        val dataModel = getUnprocessedAPCarouselViewGson()
+            .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
         magnifyAPCarouselViewDataModel(dataModel)
     } catch (e: Exception) {
@@ -80,9 +97,11 @@ internal fun getDeserializedUnprocessedAPCarouselViewDataModel(json: String): AP
     }
 }
 
-internal fun getDeserializedUnprocessedAPSplashScreenModel(json: String): APSplashScreenViewDataModel? {
+internal fun getDeserializedUnprocessedAPSplashScreenViewDataModel(
+    json: String
+): APSplashScreenViewDataModel? {
     return try {
-        val dataModel = getUnprocessedAPSplashScreenGson()
+        val dataModel = getUnprocessedAPSplashScreenViewGson()
             .fromJson(json, APSplashScreenViewDataModel::class.java)
         checkAPSplashScreenViewDataModelProperties(dataModel)
         magnifyAPSplashScreenViewDataModel(dataModel)
@@ -144,6 +163,7 @@ private val apCarouselViewDataModelDeserializer =
                 entryPoints = entryPoints.filterNotNull()
             )
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -198,6 +218,7 @@ private val apSplashScreenViewDataModelDeserializer =
                 splashScreens = splashScreens.filterNotNull()
             )
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -236,6 +257,7 @@ private val apLayerDeserializer =
 
             APLayer(type, options, component)
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -256,6 +278,7 @@ private val apStoryDeserializer =
                 storyBodyJsonObject.toString(),
                 APStory::class.java)
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -294,6 +317,7 @@ private val apSnapDeserializer =
                 snapBodyJsonObject.toString(),
                 APSnap::class.java)
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -333,6 +357,7 @@ private val apSnapActionAreaDeserializer =
                 else -> null
             }
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -393,6 +418,7 @@ private val apActionDeserializer =
                 else -> null
             }
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }
@@ -477,6 +503,7 @@ private val apEntryPointActionDeserializer =
                 else -> null
             }
         } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
             e.printStackTrace()
             null
         }

@@ -12,10 +12,8 @@ internal class APCacheManagerImpl(
     private val context: Context,
     private val userRepository: APUserRepository
 ) : APCacheManager {
-    @Deprecated(
-        message = "Only for development purposes.",
-        level = DeprecationLevel.WARNING)
-    override fun loadAPViewMockDataModelFromAssets(
+
+    override fun loadAPCarouselViewDataModelFromAssets(
         apViewId: String,
         onSuccess: (dataModel: APCarouselViewDataModel) -> Unit
     ) {
@@ -45,7 +43,7 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -71,7 +69,7 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
             val json = getSerializedProcessedAPCarouselViewDataModel(dataModel)
@@ -92,14 +90,14 @@ internal class APCacheManagerImpl(
     ) {
         try {
             val userId = userRepository.getAPUser().apId ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_apview_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             dataModelFile.delete()
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
     }
 
-    override fun loadAPSplashScreenMockTemplateFromAssets(
+    override fun loadAPSplashScreenViewDataModelFromAssets(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
@@ -113,7 +111,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedUnprocessedAPSplashScreenModel(json)
+            val dataModel = getDeserializedUnprocessedAPSplashScreenViewDataModel(json)
             onResult.invoke(dataModel)
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -136,7 +134,7 @@ internal class APCacheManagerImpl(
 
             val json = String(buffer, Charsets.UTF_8)
 
-            val dataModel = getDeserializedProcessedAPSplashScreenModel(json)
+            val dataModel = getDeserializedProcessedAPSplashScreenViewDataModel(json)
             onResult(dataModel)
         } catch (ex: FileNotFoundException) {
             onResult(null)
@@ -155,7 +153,7 @@ internal class APCacheManagerImpl(
             val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
-            val json = getSerializedProcessedAPSplashScreenModel(dataModel)
+            val json = getSerializedProcessedAPSplashScreenViewDataModel(dataModel)
 
             if (json != null) {
                 outputStream.write(json.toByteArray())
