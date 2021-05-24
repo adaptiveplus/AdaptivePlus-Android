@@ -47,7 +47,7 @@ internal class APActionsManagerImpl(
     }
 
     private fun openWebView(action: APOpenWebLinkAction) {
-        if (action.url.startsWith("http")) {
+        if (action.isWebView == true) {
             apViewModelDelegate?.pauseAPStories()
 
             val webViewDialog = WebViewDialog.newInstance(action.url).apply {

@@ -372,7 +372,8 @@ private val apActionDeserializer =
             when (type) {
                 APAction.Type.OPEN_WEB_LINK -> {
                     val url = paramsJsonObject.get("url").asString
-                    APOpenWebLinkAction(url)
+                    val isWebView = paramsJsonObject.get("isWebView")?.asBoolean
+                    APOpenWebLinkAction(url, isWebView)
                 }
                 APAction.Type.CUSTOM -> {
                     val paramsType = object: TypeToken<HashMap<String, Any>?>(){}.type
@@ -455,7 +456,8 @@ private val apEntryPointActionDeserializer =
                 }
                 APAction.Type.OPEN_WEB_LINK -> {
                     val url = paramsJsonObject.get("url").asString
-                    APOpenWebLinkAction(url)
+                    val isWebView = paramsJsonObject.get("isWebView")?.asBoolean
+                    APOpenWebLinkAction(url, isWebView)
                 }
                 APAction.Type.CUSTOM -> {
                     val paramsType = object: TypeToken<HashMap<String, Any>?>(){}.type
@@ -703,6 +705,7 @@ private fun checkAPActionProperties(apAction: APAction) {
             }
             is APOpenWebLinkAction -> {
                 url
+                isWebView
             }
             is APCustomAction -> {
                 parameters

@@ -5,5 +5,6 @@ import java.io.Serializable
 
 @Keep
 internal data class APOpenWebLinkAction(
-    val url: String
+    val url: String,
+    val isWebView: Boolean?
 ) : APAction, Serializable
