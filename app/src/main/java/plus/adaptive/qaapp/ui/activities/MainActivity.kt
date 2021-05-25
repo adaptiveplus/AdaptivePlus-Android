@@ -2,6 +2,8 @@ package plus.adaptive.qaapp.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import plus.adaptive.qaapp.R
@@ -102,11 +104,13 @@ class MainActivity : AppCompatActivity() {
             .newInstance(this)
             .setSplashScreenListener {
                 try {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Launch Screen Finished",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -132,11 +136,13 @@ class MainActivity : AppCompatActivity() {
             .newInstance(this)
             .setSplashScreenListener {
                 try {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Launch Screen Finished",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

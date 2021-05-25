@@ -90,6 +90,8 @@ internal class APSplashScreenViewController(
                     )
                 }
             showDialog(apSplashScreenDialog)
+        } ?: run {
+            splashScreenListener?.onFinish()
         }
     }
 
