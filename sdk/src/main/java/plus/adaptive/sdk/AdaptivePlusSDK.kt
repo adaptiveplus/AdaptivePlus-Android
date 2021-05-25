@@ -63,12 +63,16 @@ interface AdaptivePlusSDK {
     fun setIsDebuggable(isDebuggable: Boolean) : AdaptivePlusSDK
 
     @MainThread
-    fun showSplashScreen(hasDrafts: Boolean = false) : AdaptivePlusSDK
+    fun showSplashScreen() : AdaptivePlusSDK
+
+    @MainThread
+    fun showSplashScreen(hasDrafts: Boolean) : AdaptivePlusSDK
 
     @Deprecated(
         message = "Only for testing purposes.",
         level = DeprecationLevel.WARNING
     )
+    @MainThread
     fun showMockSplashScreen() : AdaptivePlusSDK
 
     fun setSplashScreenListener(listener: APSplashScreenListener?) : AdaptivePlusSDK
