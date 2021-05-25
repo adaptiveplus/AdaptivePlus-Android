@@ -6,7 +6,7 @@ import java.io.Serializable
 
 internal data class APFont(
     val family: String,
-    val style: Style,
+    val style: Style?,
     val size: Double,
     val color: String,
     val align: Align,

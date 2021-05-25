@@ -65,7 +65,7 @@ private class CustomTagHandler: Html.TagHandler {
 internal fun requestFontDownload(
     context: Context,
     familyName: String,
-    fontStyle: APFont.Style,
+    fontStyle: APFont.Style?,
     onSuccess: (typeface: Typeface) -> Unit,
     onError: () -> Unit
 ) {
@@ -99,11 +99,11 @@ internal fun requestFontDownload(
 
 private class QueryBuilder(
     val familyName: String,
-    val fontStyle: APFont.Style
+    val fontStyle: APFont.Style?
 ) {
 
     fun build(): String {
-        if (fontStyle == APFont.Style.REGULAR) {
+        if (fontStyle == null || fontStyle == APFont.Style.REGULAR) {
             return familyName
         }
 
