@@ -20,7 +20,7 @@ internal class APViewViewModel(
     private val userRepository: APUserRepository,
     private val cacheManager: APCacheManager,
     private val preferences: APSharedPreferences
-) : ViewModel(), APViewModelDelegateProtocol, APEntryPointViewModelProvider {
+) : ViewModel(), APViewVMDelegateProtocol, APEntryPointViewModelProvider {
 
     val apCarouselViewDataModelLiveData: LiveData<APCarouselViewDataModel?>
         get() = _apCarouselViewDataModelLiveData
@@ -198,7 +198,7 @@ internal class APViewViewModel(
                     preferences = preferences,
                     userRepository = userRepository,
                     lifecycleListener = entryPointLifecycleListener,
-                    apViewModelDelegate = this
+                    apViewVMDelegate = this
                 )
         }
         return _entryPointViewModelMap[entryPoint.id]

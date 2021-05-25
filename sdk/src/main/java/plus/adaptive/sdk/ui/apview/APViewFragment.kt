@@ -28,7 +28,7 @@ import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModel
-import plus.adaptive.sdk.ui.apview.vm.APViewModelFactory
+import plus.adaptive.sdk.ui.apview.vm.APViewViewModelFactory
 import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPCarouselViewDataModelNullOrEmpty
 import plus.adaptive.sdk.utils.safeRun
@@ -86,7 +86,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         )
 
         activity?.let {
-            val viewModelFactory = APViewModelFactory(it)
+            val viewModelFactory = APViewViewModelFactory(it)
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewViewModel::class.java)
 
             apActionsManager = provideAPActionsManager(this, viewModel)

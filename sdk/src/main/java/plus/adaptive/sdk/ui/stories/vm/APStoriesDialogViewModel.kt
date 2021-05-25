@@ -5,14 +5,14 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import plus.adaptive.sdk.data.models.actions.APAction
-import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
+import plus.adaptive.sdk.ui.apview.vm.APViewVMDelegateProtocol
 
 
 internal class APStoriesDialogViewModel(
-    private val apViewModelDelegate: APViewModelDelegateProtocol
+    private val apViewVMDelegate: APViewVMDelegateProtocol
 ) : ViewModel(), APStoriesDialogViewModelDelegateProtocol {
 
-    private val _isStoriesExternallyPausedLiveData = apViewModelDelegate.isAPStoriesPausedLiveData()
+    private val _isStoriesExternallyPausedLiveData = apViewVMDelegate.isAPStoriesPausedLiveData()
     private val _isIdleStateLiveData = MutableLiveData<Boolean>().apply { value = true }
 
     private val _isStoriesPausedLiveData = MediatorLiveData<Boolean>().apply {
@@ -30,7 +30,7 @@ internal class APStoriesDialogViewModel(
     }
 
     override fun runActions(actions: List<APAction>) {
-        apViewModelDelegate.runActions(actions)
+        apViewVMDelegate.runActions(actions)
     }
 
     override fun isAPStoriesPausedLiveData(): LiveData<Boolean> {
@@ -38,6 +38,6 @@ internal class APStoriesDialogViewModel(
     }
 
     override fun getAPViewId(): String {
-        return apViewModelDelegate.getAPViewId()
+        return apViewVMDelegate.getAPViewId()
     }
 }

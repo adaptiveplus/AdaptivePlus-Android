@@ -13,14 +13,14 @@ import plus.adaptive.sdk.data.models.actions.APOpenWebLinkAction
 import plus.adaptive.sdk.data.models.actions.APSendSMSAction
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
-import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
+import plus.adaptive.sdk.ui.apview.vm.APViewVMDelegateProtocol
 import plus.adaptive.sdk.ui.dialogs.WebViewDialog
 import plus.adaptive.sdk.ui.stories.APStoriesDialog
 
 
 internal class APActionsManagerImpl(
     private val viewControllerDelegate: ViewControllerDelegateProtocol,
-    private val apViewModelDelegate: APViewModelDelegateProtocol?
+    private val apViewVMDelegate: APViewVMDelegateProtocol?
 ) : APActionsManager {
 
     private var apCustomActionListener: APCustomActionListener? = null
@@ -48,11 +48,11 @@ internal class APActionsManagerImpl(
 
     private fun openWebView(action: APOpenWebLinkAction) {
         if (action.isWebView == true) {
-            apViewModelDelegate?.pauseAPStories()
+            apViewVMDelegate?.pauseAPStories()
 
             val webViewDialog = WebViewDialog.newInstance(action.url).apply {
                 addOnDismissListener {
-                    apViewModelDelegate?.resumeAPStories()
+                    apViewVMDelegate?.resumeAPStories()
                 }
             }
             viewControllerDelegate.showDialog(webViewDialog)
@@ -77,10 +77,10 @@ internal class APActionsManagerImpl(
         apStories?.let { stories ->
             val storyIndex = stories.indexOfFirst { it.id == action.story.id }
 
-            if (storyIndex != -1 && apViewModelDelegate != null) {
+            if (storyIndex != -1 && apViewVMDelegate != null) {
                 try {
                     val apStoriesDialog = APStoriesDialog
-                        .newInstance(stories, storyIndex, apViewModelDelegate)
+                        .newInstance(stories, storyIndex, apViewVMDelegate)
                     viewControllerDelegate.showDialog(apStoriesDialog)
                 } catch (e: IllegalStateException) {
                     APCrashlytics.logCrash(e)

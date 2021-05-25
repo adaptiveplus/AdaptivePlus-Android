@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import plus.adaptive.sdk.data.models.actions.APAction
 
 
-internal interface APViewModelDelegateProtocol {
+internal interface APViewVMDelegateProtocol {
     /**
      * Method to run/execute adaptive plus actions
      *

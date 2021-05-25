@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.ext.setTransitionDuration
-import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
+import plus.adaptive.sdk.ui.apview.vm.APViewVMDelegateProtocol
 import plus.adaptive.sdk.ui.dialogs.APDialogFragment
 import plus.adaptive.sdk.ui.stories.vm.APStoriesDialogViewModel
 import plus.adaptive.sdk.ui.stories.vm.APStoriesDialogViewModelFactory
@@ -33,14 +33,14 @@ internal class APStoriesDialog :
         fun newInstance(
             stories: List<APStory>,
             startIndex: Int,
-            apViewModelDelegate: APViewModelDelegateProtocol
+            apViewVMDelegate: APViewVMDelegateProtocol
         ) = APStoriesDialog().apply {
             arguments = bundleOf(
                 EXTRA_STORIES to ArrayList(stories),
                 EXTRA_START_INDEX to startIndex
             )
 
-            this.apViewModelDelegate = apViewModelDelegate
+            this.apViewVMDelegate = apViewVMDelegate
         }
     }
 
@@ -48,7 +48,7 @@ internal class APStoriesDialog :
     private lateinit var stories: List<APStory>
 
     private lateinit var viewModel: APStoriesDialogViewModel
-    private lateinit var apViewModelDelegate: APViewModelDelegateProtocol
+    private lateinit var apViewVMDelegate: APViewVMDelegateProtocol
 
     private val onDismissListeners = mutableSetOf<APDialogFragment.OnDismissListener>()
 
@@ -66,7 +66,7 @@ internal class APStoriesDialog :
             return
         }
 
-        val viewModelFactory = APStoriesDialogViewModelFactory(apViewModelDelegate)
+        val viewModelFactory = APStoriesDialogViewModelFactory(apViewVMDelegate)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         viewModel = viewModelProvider.get(APStoriesDialogViewModel::class.java)
     }
@@ -131,7 +131,7 @@ internal class APStoriesDialog :
 
         val lastShownStory = stories.getOrNull(apStoriesViewPager?.currentItem ?: -1)
         val campaignId = lastShownStory?.campaignId
-        apViewModelDelegate.onAPStoriesFinished(campaignId)
+        apViewVMDelegate.onAPStoriesFinished(campaignId)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

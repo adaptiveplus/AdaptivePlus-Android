@@ -25,7 +25,7 @@ internal class APEntryPointViewModel(
     private val preferences: APSharedPreferences,
     private val userRepository: APUserRepository,
     private val lifecycleListener: APEntryPointLifecycleListener,
-    private val apViewModelDelegate: APViewModelDelegateProtocol
+    private val apViewVMDelegate: APViewVMDelegateProtocol
 ) : APComponentViewModelProvider, APComponentContainerViewModel {
 
     private val componentViewModelList: List<APComponentViewModel?> = entryPoint.layers.mapIndexed { index, apLayer ->
@@ -78,7 +78,7 @@ internal class APEntryPointViewModel(
                 isResumed = true
                 componentViewModelList.forEach { it?.resume() }
 
-                apViewModelDelegate.getAutoScrollPeriod()?.let { autoScrollPeriod ->
+                apViewVMDelegate.getAutoScrollPeriod()?.let { autoScrollPeriod ->
                     progressHandler?.postDelayed(progressCompleteTask, autoScrollPeriod)
                 }
 
@@ -86,7 +86,7 @@ internal class APEntryPointViewModel(
                     APAnalyticsEvent(
                         name = "shown-entryPoint",
                         campaignId = entryPoint.campaignId,
-                        apViewId = apViewModelDelegate.getAPViewId(),
+                        apViewId = apViewVMDelegate.getAPViewId(),
                         params = mapOf("entryPointId" to entryPoint.id)
                     )
                 )
@@ -118,12 +118,12 @@ internal class APEntryPointViewModel(
             APAnalyticsEvent(
                 name = "action-entryPoint",
                 campaignId = entryPoint.campaignId,
-                apViewId = apViewModelDelegate.getAPViewId(),
+                apViewId = apViewVMDelegate.getAPViewId(),
                 params = mapOf("entryPointId" to entryPoint.id)
             )
         )
 
-        apViewModelDelegate.runActions(actions)
+        apViewVMDelegate.runActions(actions)
     }
 
     override fun getAPComponentViewModel(index: Int) : APComponentViewModel? {
@@ -137,7 +137,7 @@ internal class APEntryPointViewModel(
     }
 
     override fun showBorder(): Boolean {
-        return apViewModelDelegate.showBorder()
+        return apViewVMDelegate.showBorder()
     }
 
     private fun isReady() : Boolean {

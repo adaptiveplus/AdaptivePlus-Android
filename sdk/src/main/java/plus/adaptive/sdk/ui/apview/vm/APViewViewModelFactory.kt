@@ -9,7 +9,7 @@ import plus.adaptive.sdk.core.providers.provideAPUserRepository
 import plus.adaptive.sdk.core.providers.provideAPViewRepository
 
 
-internal class APViewModelFactory(
+internal class APViewViewModelFactory(
     private val context: Context
 ) : ViewModelProvider.Factory {
 

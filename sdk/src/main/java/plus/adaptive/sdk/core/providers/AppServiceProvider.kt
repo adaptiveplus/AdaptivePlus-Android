@@ -14,7 +14,7 @@ import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.core.managers.NetworkServiceManagerImpl
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
-import plus.adaptive.sdk.ui.apview.vm.APViewModelDelegateProtocol
+import plus.adaptive.sdk.ui.apview.vm.APViewVMDelegateProtocol
 
 
 internal fun provideAdaptivePlusSDK(
@@ -53,9 +53,9 @@ internal fun provideNetworkServiceManager(
 
 internal fun provideAPActionsManager(
     viewControllerDelegate: ViewControllerDelegateProtocol,
-    apViewModelDelegate: APViewModelDelegateProtocol? = null
+    apViewVMDelegate: APViewVMDelegateProtocol? = null
 ) : APActionsManager {
-    return APActionsManagerImpl(viewControllerDelegate, apViewModelDelegate)
+    return APActionsManagerImpl(viewControllerDelegate, apViewVMDelegate)
 }
 
 internal fun provideAPCacheManager(
