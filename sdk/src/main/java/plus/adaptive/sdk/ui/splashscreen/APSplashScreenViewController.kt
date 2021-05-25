@@ -80,10 +80,15 @@ internal class APSplashScreenViewController(
                     setViewControllerDelegate(
                         object: APSplashScreenViewControllerDelegateProtocol {
                             override fun runActions(actions: List<APAction>) {
-                                actions.forEach {
+                                actions.forEach { action ->
                                     provideAPActionsManager(
                                         this@APSplashScreenViewController
-                                    ).runAction(it)
+                                    ).apply {
+                                        setAPCustomActionListener { params ->
+                                            splashScreenListener?.onRunAPCustomAction(params)
+                                        }
+                                        runAction(action)
+                                    }
                                 }
                             }
                         }

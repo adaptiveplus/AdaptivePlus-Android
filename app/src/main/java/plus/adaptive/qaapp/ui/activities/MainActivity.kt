@@ -14,8 +14,10 @@ import plus.adaptive.qaapp.ui.fragments.ApiFragment
 import plus.adaptive.qaapp.ui.fragments.MockFragment
 import plus.adaptive.qaapp.utils.getEnvByName
 import plus.adaptive.sdk.AdaptivePlusSDK
+import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APLocation
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
@@ -102,19 +104,30 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .setSplashScreenListener {
-                try {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Launch Screen Finished",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            .setSplashScreenListener(
+                object: APSplashScreenListener {
+                    override fun onFinish() {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Launch Screen Finished",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+
+                    override fun onRunAPCustomAction(params: HashMap<String, Any>) {
+                        val name = params["name"]?.toString()
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Custom action: $name",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
-            }
+            )
             .showSplashScreen(hasDrafts = true)
     }
 
@@ -134,19 +147,30 @@ class MainActivity : AppCompatActivity() {
 
         AdaptivePlusSDK
             .newInstance(this)
-            .setSplashScreenListener {
-                try {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Launch Screen Finished",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            .setSplashScreenListener(
+                object: APSplashScreenListener {
+                    override fun onFinish() {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Launch Screen Finished",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+
+                    override fun onRunAPCustomAction(params: HashMap<String, Any>) {
+                        val name = params["name"]?.toString()
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Custom action: $name",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
-            }
+            )
             .showMockSplashScreen()
     }
 
