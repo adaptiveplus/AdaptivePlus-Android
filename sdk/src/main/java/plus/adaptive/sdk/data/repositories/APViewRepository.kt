@@ -7,7 +7,7 @@ import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.network.APViewRequestBody
+import plus.adaptive.sdk.data.models.network.APViewDMRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.utils.checkAPCarouselViewDataModelProperties
 import plus.adaptive.sdk.utils.magnifyAPCarouselViewDataModel
@@ -35,7 +35,7 @@ internal class APViewRepository(
         hasDrafts: Boolean,
         callback: RequestResultCallback<APCarouselViewDataModel>
     ) {
-        val obj = APViewRequestBody(
+        val obj = APViewDMRequestBody(
             parserVersion = 1,
             hasDrafts = hasDrafts
         )

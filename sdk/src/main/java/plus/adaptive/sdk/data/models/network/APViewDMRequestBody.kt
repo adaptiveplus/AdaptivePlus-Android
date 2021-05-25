@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 
-internal data class APSplashScreenViewDataModelRequestBody(
+internal data class APViewDMRequestBody(
     val parserVersion: Int,
     @SerializedName("isDraftEnabled")
     val hasDrafts: Boolean

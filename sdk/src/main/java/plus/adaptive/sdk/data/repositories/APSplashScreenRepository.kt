@@ -9,7 +9,7 @@ import plus.adaptive.sdk.core.managers.NetworkServiceManager
 import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
-import plus.adaptive.sdk.data.models.network.APSplashScreenViewDataModelRequestBody
+import plus.adaptive.sdk.data.models.network.APSplashScreenViewDMRequestBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.utils.checkAPSplashScreenViewDataModelProperties
 import plus.adaptive.sdk.utils.magnifyAPSplashScreenViewDataModel
@@ -26,7 +26,7 @@ internal class APSplashScreenRepository(
         hasDrafts: Boolean,
         callback: RequestResultCallback<APSplashScreenViewDataModel>
     ) {
-        val obj = APSplashScreenViewDataModelRequestBody(
+        val obj = APSplashScreenViewDMRequestBody(
             parserVersion = 1,
             hasDrafts = hasDrafts
         )
