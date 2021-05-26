@@ -12,10 +12,8 @@ import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.OS_NAME
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
-import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APLocation
 import plus.adaptive.sdk.data.models.APUser
-import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.getAppVersion
 import plus.adaptive.sdk.utils.getDeviceId
@@ -75,11 +73,14 @@ internal class AdaptivePlusSDKImpl(
     override fun start() : AdaptivePlusSDK {
         init()
 
-        APAnalytics.logEvent(
-            APAnalyticsEvent(name = "launch-sdk")
-        )
+        if (sdkManager.isStartedLiveData().value != true) {
+            APAnalytics.logEvent(
+                APAnalyticsEvent(name = "launch-sdk")
+            )
 
-        sdkManager.start()
+            sdkManager.start()
+        }
+
         sdkManager.authorize(true)
 
         return this
@@ -128,19 +129,12 @@ internal class AdaptivePlusSDKImpl(
 
     @MainThread
     override fun showSplashScreen(hasDrafts: Boolean): AdaptivePlusSDK {
-        init()
+        start()
 
-        sdkManager.start()
-        sdkManager.authorize(true, object: RequestResultCallback<Any?>() {
-            override fun success(response: Any?) {
-                provideAPSplashScreenViewController(context).apply {
-                    setSplashScreenListener(splashScreenListener)
-                    show(hasDrafts)
-                }
-            }
-
-            override fun failure(error: APError?) {}
-        })
+        provideAPSplashScreenViewController(context).apply {
+            setSplashScreenListener(splashScreenListener)
+            show(hasDrafts)
+        }
 
         return this
     }
