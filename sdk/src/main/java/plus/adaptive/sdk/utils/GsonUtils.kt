@@ -20,7 +20,9 @@ private fun getProcessedAPCarouselViewGson(): Gson {
 
 private fun getProcessedAPSplashScreenViewGson(): Gson {
     val gsonBuilder = GsonBuilder()
+    gsonBuilder.registerTypeAdapter(APAction::class.java, apActionSerializer)
     gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+    gsonBuilder.registerTypeAdapter(APAction::class.java, apActionDeserializer)
     return gsonBuilder.create()
 }
 
