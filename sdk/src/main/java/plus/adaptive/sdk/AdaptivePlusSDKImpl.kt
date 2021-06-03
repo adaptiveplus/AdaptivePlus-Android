@@ -31,9 +31,11 @@ internal class AdaptivePlusSDKImpl(
     private val userRepository: APUserRepository
 ) : AdaptivePlusSDK {
 
-    private var externalUserId: String? = null
-    private var userProperties: Map<String, String>? = null
-    private var userLocation: APLocation? = null
+    companion object {
+        private var externalUserId: String? = null
+        private var userProperties: Map<String, String>? = null
+        private var userLocation: APLocation? = null
+    }
 
     private var splashScreenListener: APSplashScreenListener? = null
 
@@ -93,17 +95,17 @@ internal class AdaptivePlusSDKImpl(
     }
 
     override fun setUserId(userId: String?) : AdaptivePlusSDK {
-        this.externalUserId = userId
+        externalUserId = userId
         return this
     }
 
     override fun setUserProperties(userProperties: Map<String, String>?) : AdaptivePlusSDK {
-        this.userProperties = userProperties
+        AdaptivePlusSDKImpl.userProperties = userProperties
         return this
     }
 
     override fun setLocation(location: APLocation?) : AdaptivePlusSDK {
-        this.userLocation = location
+        userLocation = location
         return this
     }
 
