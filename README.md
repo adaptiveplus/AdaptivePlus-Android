@@ -1,16 +1,16 @@
+<img src="https://user-images.githubusercontent.com/79895718/120859295-d3493c80-c5a5-11eb-8975-91b92ccc4d27.png" width="72" height="72" alt="AdaptivePlus">
+
 # [AdaptivePlus Android SDK](https://adaptive.plus/)
 
 [**AdaptivePlus**](https://adaptive.plus/) is the control center for marketing campaigns in mobile applications
 
-### Requirements
+## Requirements
 - minSdkVersion 16
 
 *Examples provided in Kotlin programming language*
 
-## Guide for integration of AdaptivePlus SDK
-
-### Step 1
-Include AdaptivePlus SDK dependency into app module **build.gradle**:
+## Installation
+Add the following dependency to your app's `build.gradle` file:
 
 ```groovy
 dependencies {
@@ -18,9 +18,19 @@ dependencies {
 }
 ```
 
-Do not forget to sync project with gradle files afterwards
+### Maven central
+Add the following to your root build.gradle file
+```groovy
+allprojects {
+    repositories {
+      mavenCentral()
+    }
+}
+```
 
-### Step 2
+*Do not forget to sync project with gradle files afterwards*
+
+## Initialization
 Register an account in the admin panel of [AdaptivePlus](https://adaptive.plus/)
 
 Initialize AdaptivePlusSDK on app startup and pass the **API key** that you received upon account registration
@@ -37,7 +47,10 @@ class YourApp: Application() {
 }
 ```
 
-### Step 3
+### Initialization Exception
+SDK throws `APInitializationException` on `newInstance` method call if **adaptivePlusApiKey** is not provided beforehand via `init` method
+
+## Splash Screen
 Show AdaptivePlus Splash Screen on app startup or after user logs in (or at any suitable moment)
 
 ```kotlin
@@ -61,19 +74,7 @@ If you are not able to observe the created content - probable reasons are:
 - Check again the integration guide, maybe you missed something out
 - The SDK couldn't preload the contents on the previous `showSplashScreen` method calls due to network issues or internal sdk issues
 
-## More information on the features of AdaptivePlus SDK
-
-### SDK Permissions
-Be aware that AdaptivePlus SDK requires internet to work properly, therefore
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-```
-will be added to the manifest file during the app build process
-
-### Initialization Exception
-SDK throws `APInitializationException` on `newInstance` method call if **adaptivePlusApiKey** is not provided beforehand via `init` method
-
-### AdaptivePlus Personalized Experience
+### Personalized Experience
 In order to make SDK experience more personalized, you can provide following user data:
 ```kotlin
 AdaptivePlusSDK
@@ -88,7 +89,7 @@ AdaptivePlusSDK
 ```kotlin
 val userProperties = mapOf("age" to "25", "gender" to "male")
 ```
-`userLocation: APLocation` - user location (latitude & longitude). Required to display geo-oriented content to the user
+`userLocation: APLocation` - user location (latitude & longitude). Required if you want to display geo-oriented content to the user
 ```kotlin
 data class APLocation(
     val latitude: Double,
@@ -129,7 +130,7 @@ AdaptivePlusSDK
     .showSplashScreen()
 ```
 
-### AdaptivePlus Debug Mode
+## AdaptivePlus Debug Mode
 To observe network logs of the SDK - pass `true` to `setIsDebuggable` method:
 ```kotlin
 AdaptivePlusSDK
@@ -138,10 +139,39 @@ AdaptivePlusSDK
 ```
 Do not forget to switch *Debug Mode* off for the release build of your app.
 
-##  Android SDK version - 2.1.0
-1) Shows SDK generated Splash Screen with countdown timer: able to display Images & GIFs & Texts, execute simplest set of actions on click
-2) Action list contains:\
-(1) *Web URL Opening in WebView dialog window*,\
-(2) *DeepLink call to Android Operating System*,\
-(3) *Send SMS & Call Phone*,\
-(4) *Custom Action (you should implement it, nothing will happen otherwise)*
+## Permissions
+We include the [INTERNET](http://developer.android.com/reference/android/Manifest.permission.html#INTERNET) permission by default as we need it to make network requests:
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+will be added to the manifest file during the app build process
+
+## Dependency graph
+
+Here is our complete dependency graph:
+```
+# Transitive (shared with your app)
+org.jetbrains.kotlin:kotlin-stdlib:1.4.31
+
+androidx.core:core-ktx:1.3.2
+androidx.appcompat:appcompat:1.2.0
+androidx.lifecycle:lifecycle-extensions:2.2.0
+androidx.recyclerview:recyclerview:1.2.0
+androidx.constraintlayout:constraintlayout:2.1.0-beta01
+androidx.cardview:cardview:1.0.0
+
+com.google.android.material:material:1.3.0
+com.google.code.gson:gson:2.8.6
+
+com.squareup.okhttp3:okhttp:4.9.1
+com.squareup.okhttp3:logging-interceptor:4.9.1
+
+com.github.bumptech.glide:glide:4.12.0
+com.github.bumptech.glide:okhttp3-integration:4.12.0
+com.github.bumptech.glide:compiler:4.12.0
+```
+
+### Transitive Dependencies
+AdaptivePlus Android SDK transitively depends on the above libraries. If your app is using any one of these libraries, they should at least be on the same major version that AdaptivePlus SDK is using.
+When there are two versions of a library at build time, Gradle automatically picks the newer version. 
+This means if you are currently using say Glide 3.x, your app would automatically get Glide 4.x after including AdaptivePlus.
