@@ -62,6 +62,8 @@ private class CustomTagHandler: Html.TagHandler {
     }
 }
 
+private val apFontMap = mutableMapOf<String, Typeface>()
+
 internal fun requestFontDownload(
     context: Context,
     familyName: String,
@@ -69,6 +71,13 @@ internal fun requestFontDownload(
     onSuccess: (typeface: Typeface) -> Unit,
     onError: () -> Unit
 ) {
+    val fontMapKey = "${familyName}:${fontStyle}"
+
+    apFontMap[fontMapKey]?.let {
+        onSuccess.invoke(it)
+        return@requestFontDownload
+    }
+
     val queryBuilder = QueryBuilder(familyName, fontStyle)
     val query = queryBuilder.build()
 
@@ -81,6 +90,7 @@ internal fun requestFontDownload(
     val callback = object : FontsContractCompat.FontRequestCallback() {
 
         override fun onTypefaceRetrieved(typeface: Typeface) {
+            apFontMap[fontMapKey] = typeface
             onSuccess.invoke(typeface)
         }
 
