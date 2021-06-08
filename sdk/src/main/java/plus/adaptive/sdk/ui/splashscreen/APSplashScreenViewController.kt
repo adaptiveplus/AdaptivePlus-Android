@@ -26,6 +26,7 @@ import plus.adaptive.sdk.ui.dialogs.APDialogFragment
 import plus.adaptive.sdk.utils.preloadAPFont
 import plus.adaptive.sdk.utils.preloadGIF
 import plus.adaptive.sdk.utils.preloadImage
+import plus.adaptive.sdk.utils.runOnMainThread
 
 
 internal class APSplashScreenViewController(
@@ -69,33 +70,43 @@ internal class APSplashScreenViewController(
         dataModel: APSplashScreenViewDataModel,
         hasDrafts: Boolean
     ) {
-        getSplashScreenToShow(dataModel.splashScreens, hasDrafts)?.let { splashScreen ->
-            val apSplashScreenDialog = APSplashScreenDialog
-                .newInstance(
-                    splashScreen = splashScreen,
-                    options = dataModel.options,
-                    apViewId = dataModel.id
-                ).apply {
-                    setViewControllerDelegate(
-                        object: APSplashScreenViewControllerDelegateProtocol {
-                            override fun runActions(actions: List<APAction>) {
-                                provideAPActionsManager(
-                                    this@APSplashScreenViewController
-                                ).apply {
-                                    setAPCustomActionListener { params ->
-                                        splashScreenListener?.onRunAPCustomAction(params)
+        runOnMainThread {
+            getSplashScreenToShow(dataModel.splashScreens, hasDrafts)?.let { splashScreen ->
+                preloadSplashScreen(
+                    splashScreen,
+                    onReady = {
+                        val apSplashScreenDialog = APSplashScreenDialog
+                            .newInstance(
+                                splashScreen = splashScreen,
+                                options = dataModel.options,
+                                apViewId = dataModel.id
+                            ).apply {
+                                setViewControllerDelegate(
+                                    object : APSplashScreenViewControllerDelegateProtocol {
+                                        override fun runActions(actions: List<APAction>) {
+                                            provideAPActionsManager(
+                                                this@APSplashScreenViewController
+                                            ).apply {
+                                                setAPCustomActionListener { params ->
+                                                    splashScreenListener?.onRunAPCustomAction(params)
+                                                }
+                                                actions.forEach { action ->
+                                                    runAction(action)
+                                                }
+                                            }
+                                        }
                                     }
-                                    actions.forEach { action ->
-                                        runAction(action)
-                                    }
-                                }
+                                )
                             }
-                        }
-                    )
-                }
-            showDialog(apSplashScreenDialog)
-        } ?: run {
-            splashScreenListener?.onFinish()
+                        showDialog(apSplashScreenDialog)
+                    },
+                    onFail = {
+                        splashScreenListener?.onFinish()
+                    }
+                )
+            } ?: run {
+                splashScreenListener?.onFinish()
+            }
         }
     }
 
@@ -125,24 +136,75 @@ internal class APSplashScreenViewController(
 
     private fun saveAPSplashScreenViewDataModelToCache(dataModel: APSplashScreenViewDataModel) {
         cacheManager.saveAPSplashScreenViewDataModelToCache(dataModel) {
-            preloadSplashScreenContent(dataModel)
+            preloadSplashScreenViewContent(dataModel)
         }
     }
 
-    private fun preloadSplashScreenContent(dataModel: APSplashScreenViewDataModel) {
-        dataModel.splashScreens.forEach { splashScreen ->
-            splashScreen.layers.forEach { apLayer ->
-                when (apLayer.component) {
-                    is APImageComponent -> {
-                        apLayer.component.url.let { preloadImage(context, it) }
-                    }
-                    is APGIFComponent -> {
-                        apLayer.component.url.let { preloadGIF(context, it) }
-                    }
-                    is APTextComponent -> {
-                        apLayer.component.font?.let { preloadAPFont(context, it) }
+    private fun preloadSplashScreenViewContent(dataModel: APSplashScreenViewDataModel) {
+        dataModel.splashScreens.forEach { preloadSplashScreen(it) }
+    }
+
+    private fun preloadSplashScreen(
+        splashScreen: APSplashScreen,
+        onReady: (() -> Unit)? = null,
+        onFail: (() -> Unit)? = null
+    ) {
+        var readyLayersCount = 0
+        val incrementAndCheckIfAllReady = {
+            readyLayersCount++
+
+            if (readyLayersCount == splashScreen.layers.size) {
+                onReady?.invoke()
+            }
+        }
+
+        var isFailed = false
+        val failOnce = {
+            if (!isFailed) {
+                isFailed = true
+                onFail?.invoke()
+            }
+        }
+
+        splashScreen.layers.forEach { apLayer ->
+            when (apLayer.component) {
+                is APImageComponent -> {
+                    apLayer.component.url.let {
+                        preloadImage(context, it,
+                            onResourceReady = {
+                                incrementAndCheckIfAllReady()
+                            },
+                            onLoadFailed = {
+                                failOnce()
+                            }
+                        )
                     }
                 }
+                is APGIFComponent -> {
+                    apLayer.component.url.let {
+                        preloadGIF(context, it,
+                            onResourceReady = {
+                                incrementAndCheckIfAllReady()
+                            },
+                            onLoadFailed = {
+                                failOnce()
+                            }
+                        )
+                    }
+                }
+                is APTextComponent -> {
+                    apLayer.component.font?.let {
+                        preloadAPFont(context, it,
+                            onResourceReady = {
+                                incrementAndCheckIfAllReady()
+                            },
+                            onLoadFailed = {
+                                failOnce()
+                            }
+                        )
+                    }
+                }
+                else -> incrementAndCheckIfAllReady()
             }
         }
     }
