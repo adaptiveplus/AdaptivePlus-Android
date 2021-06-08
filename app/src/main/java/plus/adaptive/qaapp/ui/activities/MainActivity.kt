@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         AdaptivePlusSDK.init(env.apiKey)
         AdaptivePlusSDK.setCustomIP(this, customIP)
 
-        AdaptivePlusSDK
+        val sdk = AdaptivePlusSDK
             .newInstance(this)
             .setUserId(userId)
             .setUserProperties(userProperties)
@@ -85,13 +85,13 @@ class MainActivity : AppCompatActivity() {
             .start()
 
         if (envName == Environment.MOCK.value) {
-            showMockFragment()
+            showMockFragment(sdk)
         } else {
-            showApiFragment(env)
+            showApiFragment(sdk, env)
         }
     }
 
-    private fun showApiFragment(env: APSdkEnvironment) {
+    private fun showApiFragment(sdk: AdaptivePlusSDK, env: APSdkEnvironment) {
         supportFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -102,36 +102,34 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.content, ApiFragment.newInstance(env.name))
             .commit()
 
-        AdaptivePlusSDK
-            .newInstance(this)
-            .setSplashScreenListener(
-                object: APSplashScreenListener {
-                    override fun onFinish() {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Launch Screen Finished",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-                    override fun onRunAPCustomAction(params: HashMap<String, Any>) {
-                        val name = params["name"]?.toString()
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Custom action: $name",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+        sdk.setSplashScreenListener(
+            object: APSplashScreenListener {
+                override fun onFinish() {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-            )
-            .showSplashScreen(hasDrafts = true)
+
+                override fun onRunAPCustomAction(params: HashMap<String, Any>) {
+                    val name = params["name"]?.toString()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Custom action: $name",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        )
+        .showSplashScreen(hasDrafts = true)
     }
 
-    private fun showMockFragment() {
+    private fun showMockFragment(sdk: AdaptivePlusSDK) {
         supportFragmentManager.popBackStack(
             null,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
@@ -145,33 +143,31 @@ class MainActivity : AppCompatActivity() {
             )
             .commit()
 
-        AdaptivePlusSDK
-            .newInstance(this)
-            .setSplashScreenListener(
-                object: APSplashScreenListener {
-                    override fun onFinish() {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Launch Screen Finished",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-                    override fun onRunAPCustomAction(params: HashMap<String, Any>) {
-                        val name = params["name"]?.toString()
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Custom action: $name",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+        sdk.setSplashScreenListener(
+            object: APSplashScreenListener {
+                override fun onFinish() {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Launch Screen Finished",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-            )
-            .showMockSplashScreen()
+
+                override fun onRunAPCustomAction(params: HashMap<String, Any>) {
+                    val name = params["name"]?.toString()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Custom action: $name",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        )
+        .showMockSplashScreen()
     }
 
     override fun onDestroy() {
