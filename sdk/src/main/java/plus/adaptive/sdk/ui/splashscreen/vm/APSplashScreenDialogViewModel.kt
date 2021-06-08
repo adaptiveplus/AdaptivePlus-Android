@@ -34,7 +34,7 @@ internal class APSplashScreenDialogViewModel(
             val componentLifecycleListener = object: APComponentLifecycleListener {
                 override fun onReady(isReady: Boolean) { onComponentReady(index, isReady) }
                 override fun onComplete() { }
-                override fun onError() { }
+                override fun onError() { onComponentError(index) }
                 override fun onPreparationProgressUpdate(progress: Float) { }
             }
 
@@ -62,6 +62,16 @@ internal class APSplashScreenDialogViewModel(
 
             val isSplashScreenReady = componentReadinessList.all { it }
             _isSplashScreenReadyLiveData.value = isSplashScreenReady
+        }
+    }
+
+    private fun onComponentError(index: Int) {
+        val viewModel = componentViewModelList[index]
+
+        if (viewModel !is APImageComponentViewModel &&
+            viewModel !is APGIFComponentViewModel
+        ) {
+            onComponentReady(index, true)
         }
     }
 
