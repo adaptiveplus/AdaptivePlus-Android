@@ -199,7 +199,7 @@ internal class APSplashScreenViewController(
                                 incrementAndCheckIfAllReady()
                             },
                             onLoadFailed = {
-                                failOnce()
+                                incrementAndCheckIfAllReady()
                             }
                         )
                     }
