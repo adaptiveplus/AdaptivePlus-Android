@@ -49,7 +49,6 @@ fun getCustomIPs(context: Context): List<AdaptiveCustomIP> {
     val ips = try {
         Gson().fromJson(ipsWrapperStr, CustomIPsWrapper::class.java).ips
     } catch (e: Exception) {
-        e.printStackTrace()
         listOf()
     }.toMutableList()
 
@@ -132,7 +131,6 @@ fun getEnvs(context: Context): List<APSdkEnvironment> {
     val envs = try {
         Gson().fromJson(envsWrapperStr, EnvsWrapper::class.java).envs
     } catch (e: Exception) {
-        e.printStackTrace()
         listOf()
     }.toMutableList()
 
