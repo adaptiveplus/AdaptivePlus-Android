@@ -42,7 +42,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APCarouselViewDataModel?) -> Unit
     ) {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
@@ -68,7 +68,7 @@ internal class APCacheManagerImpl(
         dataModel: APCarouselViewDataModel
     ) {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
@@ -89,7 +89,7 @@ internal class APCacheManagerImpl(
         apViewId: String
     ) {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
             dataModelFile.delete()
         } catch (ex: IOException) {
@@ -123,7 +123,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
@@ -149,7 +149,7 @@ internal class APCacheManagerImpl(
         onSuccess: (() -> Unit)?
     ) {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
@@ -169,7 +169,7 @@ internal class APCacheManagerImpl(
 
     override fun removeAPSplashScreenViewDataModelFromCache() {
         try {
-            val userId = userRepository.getAPUser().apId ?: ""
+            val userId = userRepository.getAPUserId() ?: ""
             val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
             dataModelFile.delete()
         } catch (ex: IOException) {

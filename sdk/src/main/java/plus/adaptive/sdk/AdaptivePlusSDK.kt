@@ -3,7 +3,9 @@ package plus.adaptive.sdk
 import android.content.Context
 import androidx.annotation.MainThread
 import plus.adaptive.sdk.core.providers.provideAPAuthCredentialsManager
+import plus.adaptive.sdk.core.providers.provideAPUserRepository
 import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
+import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
 import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
@@ -18,6 +20,8 @@ interface AdaptivePlusSDK {
         @JvmStatic
         fun init(apiKey: String) {
             provideAPAuthCredentialsManager().setApiKey(apiKey)
+            provideAPUserRepository(null).setAPUserId(null)
+            provideNetworkServiceManager().updateToken(null, null)
         }
 
         @JvmStatic

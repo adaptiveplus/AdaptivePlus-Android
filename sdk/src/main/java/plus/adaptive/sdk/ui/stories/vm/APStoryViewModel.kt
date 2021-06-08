@@ -71,7 +71,7 @@ internal class APStoryViewModel(
     }
 
     fun setStoryCampaignWatched() {
-        val userId = userRepository.getAPUser().apId ?: ""
+        val userId = userRepository.getAPUserId() ?: ""
         val prefKey = "${userId}_${story.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         preferences.saveBoolean(prefKey, true)
     }

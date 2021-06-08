@@ -131,7 +131,7 @@ internal class APEntryPointViewModel(
     }
 
     override fun isActive() : Boolean {
-        val userId = userRepository.getAPUser().apId ?: ""
+        val userId = userRepository.getAPUserId() ?: ""
         val prefKey = "${userId}_${entryPoint.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
         return !preferences.getBoolean(prefKey)
     }
