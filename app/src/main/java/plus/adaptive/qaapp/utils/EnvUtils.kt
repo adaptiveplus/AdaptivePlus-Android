@@ -167,6 +167,12 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
             apiKey = "",
             apViews = listOf()
         )
+        Environment.ALEXEY_DEV.value -> APSdkEnvironment(
+            name = Environment.ALEXEY_DEV.value,
+            appId = "plus.adaptive.qaapp",
+            apiKey = "mljEZExo9cr98j4L",
+            apViews = listOf()
+        )
         else -> null
     }
 }
