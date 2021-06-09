@@ -14,7 +14,7 @@ Add the following dependency to your app's `build.gradle` file:
 
 ```groovy
 dependencies {
-    implementation 'plus.adaptive:android-sdk:2.1.1'
+    implementation 'plus.adaptive:android-sdk:2.1.2'
 }
 ```
 
@@ -132,6 +132,11 @@ AdaptivePlusSDK
 
 ## AdaptivePlus Debug Mode
 To observe network logs of the SDK - pass `true` to `setIsDebuggable` method:
+```kotlin
+AdaptivePlusSDK
+    .setIsDebuggable(true)
+```
+OR
 ```kotlin
 AdaptivePlusSDK
     .newInstance(context)
