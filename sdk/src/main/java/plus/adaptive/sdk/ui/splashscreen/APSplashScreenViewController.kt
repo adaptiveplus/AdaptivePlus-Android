@@ -213,7 +213,7 @@ internal class APSplashScreenViewController(
         splashScreens: List<APSplashScreen>,
         hasDrafts: Boolean
     ) : APSplashScreen? {
-        var resIndex = 0
+        var resIndex = -1
 
         userRepository.getAPUserId()?.let { userId ->
             var minWatchedCount = -1
