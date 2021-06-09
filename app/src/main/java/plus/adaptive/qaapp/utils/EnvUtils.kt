@@ -157,7 +157,7 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
             name = Environment.ALEXEY_GMAIL_DEV.value,
             appId = "plus.adaptive.qaapp",
             apiKey = "5e3kh12NDXYJogRX",
-            apViews = defaultListOfAPViews
+            apViews = listOf()
         )
         Environment.MOCK.value -> APSdkEnvironment(
             name = Environment.MOCK.value,
