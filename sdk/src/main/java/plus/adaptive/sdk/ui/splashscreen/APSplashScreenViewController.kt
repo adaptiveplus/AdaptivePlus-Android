@@ -70,44 +70,38 @@ internal class APSplashScreenViewController(
         dataModel: APSplashScreenViewDataModel,
         hasDrafts: Boolean
     ) {
-        runOnMainThread {
-            getSplashScreenToShow(dataModel.splashScreens, hasDrafts)?.let { splashScreen ->
-                preloadSplashScreen(
-                    splashScreen,
-                    onReady = {
-                        val apSplashScreenDialog = APSplashScreenDialog
-                            .newInstance(
-                                splashScreen = splashScreen,
-                                options = dataModel.options,
-                                apViewId = dataModel.id
-                            ).apply {
-                                setViewControllerDelegate(
-                                    object : APSplashScreenViewControllerDelegateProtocol {
-                                        override fun runActions(actions: List<APAction>) {
-                                            provideAPActionsManager(
-                                                this@APSplashScreenViewController
-                                            ).apply {
-                                                setAPCustomActionListener { params ->
-                                                    splashScreenListener?.onRunAPCustomAction(params)
-                                                }
-                                                actions.forEach { action ->
-                                                    runAction(action)
-                                                }
-                                            }
+        getFirstWorkingSplashScreenOnReadiness(
+            getFilteredAndSortedSplashScreens(dataModel.splashScreens, hasDrafts),
+            onReady = { splashScreen ->
+                val apSplashScreenDialog = APSplashScreenDialog
+                    .newInstance(
+                        splashScreen = splashScreen,
+                        options = dataModel.options,
+                        apViewId = dataModel.id
+                    ).apply {
+                        setViewControllerDelegate(
+                            object : APSplashScreenViewControllerDelegateProtocol {
+                                override fun runActions(actions: List<APAction>) {
+                                    provideAPActionsManager(
+                                        this@APSplashScreenViewController
+                                    ).apply {
+                                        setAPCustomActionListener { params ->
+                                            splashScreenListener?.onRunAPCustomAction(params)
+                                        }
+                                        actions.forEach { action ->
+                                            runAction(action)
                                         }
                                     }
-                                )
+                                }
                             }
-                        showDialog(apSplashScreenDialog)
-                    },
-                    onFail = {
-                        splashScreenListener?.onFinish()
+                        )
                     }
-                )
-            } ?: run {
+                showDialog(apSplashScreenDialog)
+            },
+            onFail = {
                 splashScreenListener?.onFinish()
             }
-        }
+        )
     }
 
     private fun requestAPSplashScreenViewDataModel(
@@ -150,15 +144,16 @@ internal class APSplashScreenViewController(
         onFail: (() -> Unit)? = null
     ) {
         var readyLayersCount = 0
+        var isFailed = false
+
         val incrementAndCheckIfAllReady = {
             readyLayersCount++
 
-            if (readyLayersCount == splashScreen.layers.size) {
+            if (!isFailed && readyLayersCount == splashScreen.layers.size) {
                 onReady?.invoke()
             }
         }
 
-        var isFailed = false
         val failOnce = {
             if (!isFailed) {
                 isFailed = true
@@ -209,30 +204,51 @@ internal class APSplashScreenViewController(
         }
     }
 
-    private fun getSplashScreenToShow(
+    private fun getFilteredAndSortedSplashScreens(
         splashScreens: List<APSplashScreen>,
         hasDrafts: Boolean
-    ) : APSplashScreen? {
-        var resIndex = -1
-
-        userRepository.getAPUserId()?.let { userId ->
-            var minWatchedCount = -1
-
-            splashScreens.forEachIndexed { index, splashScreen ->
+    ) : List<APSplashScreen> {
+        return userRepository.getAPUserId()?.let { userId ->
+            splashScreens.filter { splashScreen ->
                 val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
                 val watchedCount = maxOf(0, preferences.getInt(prefKey))
 
-                if ((hasDrafts || splashScreen.status == APSplashScreen.Status.ACTIVE) &&
-                    (splashScreen.showCount == null || watchedCount < splashScreen.showCount) &&
-                    (minWatchedCount == -1 || watchedCount < minWatchedCount)
-                ) {
-                    minWatchedCount = watchedCount
-                    resIndex = index
-                }
+                (hasDrafts || splashScreen.status == APSplashScreen.Status.ACTIVE) &&
+                    (splashScreen.showCount == null || watchedCount < splashScreen.showCount)
+            }.sortedBy { splashScreen ->
+                val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
+                val watchedCount = maxOf(0, preferences.getInt(prefKey))
+                watchedCount
             }
-        }
+        } ?: listOf()
+    }
 
-        return splashScreens.getOrNull(resIndex)
+    private fun getFirstWorkingSplashScreenOnReadiness(
+        splashScreens: List<APSplashScreen>,
+        startIndex: Int = 0,
+        onReady: (splashScreen: APSplashScreen) -> Unit,
+        onFail: () -> Unit
+    ) {
+        splashScreens.getOrNull(startIndex)?.let { splashScreen ->
+            runOnMainThread {
+                preloadSplashScreen(
+                    splashScreen,
+                    onReady = {
+                        onReady.invoke(splashScreen)
+                    },
+                    onFail = {
+                        getFirstWorkingSplashScreenOnReadiness(
+                            splashScreens,
+                            startIndex + 1,
+                            onReady,
+                            onFail
+                        )
+                    }
+                )
+            }
+        } ?: run {
+            onFail.invoke()
+        }
     }
 
     fun setSplashScreenListener(listener: APSplashScreenListener?) {
