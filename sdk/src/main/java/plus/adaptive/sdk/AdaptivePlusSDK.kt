@@ -7,6 +7,8 @@ import plus.adaptive.sdk.core.providers.provideAPUserRepository
 import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
 import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
+import plus.adaptive.sdk.data.IS_DEBUGGABLE
+import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.exceptions.APInitializationException
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APLocation
@@ -31,6 +33,16 @@ interface AdaptivePlusSDK {
                 ?: throw APInitializationException()
 
             return provideAdaptivePlusSDK(context)
+        }
+
+        @JvmStatic
+        fun setLocale(locale: Locale?) {
+            locale?.let { LOCALE = it }
+        }
+
+        @JvmStatic
+        fun setIsDebuggable(isDebuggable: Boolean) {
+            IS_DEBUGGABLE = isDebuggable
         }
 
         @Deprecated(

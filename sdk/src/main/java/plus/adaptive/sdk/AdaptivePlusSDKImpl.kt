@@ -7,7 +7,6 @@ import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APSDKManager
 import plus.adaptive.sdk.core.providers.provideAPAnalyticsRepository
 import plus.adaptive.sdk.core.providers.provideAPSplashScreenViewController
-import plus.adaptive.sdk.data.IS_DEBUGGABLE
 import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.OS_NAME
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
@@ -110,17 +109,12 @@ internal class AdaptivePlusSDKImpl(
     }
 
     override fun setLocale(locale: Locale?) : AdaptivePlusSDK {
-        LOCALE = locale ?:
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                context.resources.configuration.locales.get(0)
-            } else {
-                context.resources.configuration.locale
-            }
+        AdaptivePlusSDK.setLocale(locale)
         return this
     }
 
     override fun setIsDebuggable(isDebuggable: Boolean) : AdaptivePlusSDK {
-        IS_DEBUGGABLE = isDebuggable
+        AdaptivePlusSDK.setIsDebuggable(isDebuggable)
         return this
     }
 
