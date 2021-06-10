@@ -1,7 +1,8 @@
-package plus.adaptive.sdk.ui.components.vm
+package plus.adaptive.sdk.ui.components.background
 
-import plus.adaptive.sdk.ui.components.APComponentContainerViewModel
-import plus.adaptive.sdk.ui.components.APComponentLifecycleListener
+import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
+import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
+import plus.adaptive.sdk.ui.components.core.vm.APBaseComponentViewModel
 
 
 internal class APBackgroundComponentViewModel(

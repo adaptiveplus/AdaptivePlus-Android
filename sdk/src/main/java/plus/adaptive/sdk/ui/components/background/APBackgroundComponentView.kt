@@ -1,11 +1,12 @@
-package plus.adaptive.sdk.ui.components
+package plus.adaptive.sdk.ui.components.background
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.models.components.APBackgroundComponent
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
+import plus.adaptive.sdk.ui.components.core.APBaseComponentView
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.utils.getColorFromHex
 import kotlinx.android.synthetic.main.ap_component_background.view.*
 

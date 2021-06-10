@@ -1,11 +1,11 @@
-package plus.adaptive.sdk.ui.components
+package plus.adaptive.sdk.ui.components.core
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import plus.adaptive.sdk.data.models.components.APComponent
-import plus.adaptive.sdk.ui.components.vm.APBaseComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
+import plus.adaptive.sdk.ui.components.core.vm.APBaseComponentViewModel
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 
 
 internal abstract class APBaseComponentView : LinearLayout, APComponentViewController {

@@ -1,4 +1,4 @@
-package plus.adaptive.sdk.ui.components
+package plus.adaptive.sdk.ui.components.image
 
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
@@ -6,50 +6,50 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
 import plus.adaptive.sdk.R
-import plus.adaptive.sdk.data.models.components.APGIFComponent
-import plus.adaptive.sdk.ext.loadGIF
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APGIFComponentViewModel
-import plus.adaptive.sdk.utils.getColorFromHex
-import kotlinx.android.synthetic.main.ap_component_gif.view.*
+import plus.adaptive.sdk.data.models.components.APImageComponent
+import plus.adaptive.sdk.ext.loadImage
+import plus.adaptive.sdk.ui.components.core.APBaseComponentView
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.utils.createDrawableFromColor
+import plus.adaptive.sdk.utils.getColorFromHex
+import kotlinx.android.synthetic.main.ap_component_image.view.*
 
 
-internal class APGIFComponentView : APBaseComponentView {
+internal class APImageComponentView : APBaseComponentView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(
         context: Context,
-        component: APGIFComponent,
+        component: APImageComponent,
         componentViewModel: APComponentViewModel?
     ) : super(context, component, componentViewModel)
 
 
     override fun initElement() {
-        View.inflate(context, R.layout.ap_component_gif, this)
+        View.inflate(context, R.layout.ap_component_image, this)
         prepare()
     }
 
     override fun prepare() {
-        (component as? APGIFComponent)?.run {
+        (component as? APImageComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(loadingColor),
                 cornerRadius = cornerRadius?.toInt()
             )
-            apComponentImageView.loadGIF(
+            apComponentImageView.loadImage(
                 url,
                 defaultDrawable = defaultDrawable,
                 cornerRadius = cornerRadius?.toInt(),
                 onResourceReady = {
-                    (componentViewModel as? APGIFComponentViewModel)?.onImageResourceReady()
+                    (componentViewModel as? APImageComponentViewModel)?.onImageResourceReady()
                 },
                 onLoadFailed = {
-                    (componentViewModel as? APGIFComponentViewModel)?.onImageLoadFailed()
+                    (componentViewModel as? APImageComponentViewModel)?.onImageLoadFailed()
                 },
                 onLoadProgressUpdate = {
-                    (componentViewModel as? APGIFComponentViewModel)?.onImageLoadProgressUpdate(it)
+                    (componentViewModel as? APImageComponentViewModel)?.onImageLoadProgressUpdate(it)
                 }
             )
 
@@ -66,11 +66,11 @@ internal class APGIFComponentView : APBaseComponentView {
     }
 
     private fun updateImageBorder() {
-        (component as? APGIFComponent)?.run {
+        (component as? APImageComponent)?.run {
             border?.let {
-                if ((componentViewModel as? APGIFComponentViewModel)?.showBorder() == true) {
+                if ((componentViewModel as? APImageComponentViewModel)?.showBorder() == true) {
                     val borderState =
-                        if ((componentViewModel as? APGIFComponentViewModel)?.isActive() == false) {
+                        if ((componentViewModel as? APImageComponentViewModel)?.isActive() == false) {
                             it.inactive
                         } else {
                             it.active

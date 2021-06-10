@@ -14,12 +14,12 @@ import plus.adaptive.sdk.data.models.components.APBackgroundComponent
 import plus.adaptive.sdk.data.models.components.APGIFComponent
 import plus.adaptive.sdk.data.models.components.APImageComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
-import plus.adaptive.sdk.ui.components.APBackgroundComponentView
-import plus.adaptive.sdk.ui.components.APGIFComponentView
-import plus.adaptive.sdk.ui.components.APImageComponentView
-import plus.adaptive.sdk.ui.components.APTextComponentView
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModelProvider
+import plus.adaptive.sdk.ui.components.background.APBackgroundComponentView
+import plus.adaptive.sdk.ui.components.gif.APGIFComponentView
+import plus.adaptive.sdk.ui.components.image.APImageComponentView
+import plus.adaptive.sdk.ui.components.text.APTextComponentView
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
 

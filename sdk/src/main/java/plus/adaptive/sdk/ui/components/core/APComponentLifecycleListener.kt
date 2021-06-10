@@ -1,4 +1,4 @@
-package plus.adaptive.sdk.ui.components
+package plus.adaptive.sdk.ui.components.core
 
 
 internal interface APComponentLifecycleListener {

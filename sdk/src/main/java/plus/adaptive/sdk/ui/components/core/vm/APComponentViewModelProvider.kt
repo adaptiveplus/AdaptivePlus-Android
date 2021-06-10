@@ -1,4 +1,4 @@
-package plus.adaptive.sdk.ui.components.vm
+package plus.adaptive.sdk.ui.components.core.vm
 
 
 internal interface APComponentViewModelProvider {

@@ -10,14 +10,14 @@ import plus.adaptive.sdk.data.models.APEntryPoint
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.ui.apview.APEntryPointLifecycleListener
-import plus.adaptive.sdk.ui.components.APComponentContainerViewModel
-import plus.adaptive.sdk.ui.components.APComponentLifecycleListener
-import plus.adaptive.sdk.ui.components.vm.APBackgroundComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APComponentViewModelProvider
-import plus.adaptive.sdk.ui.components.vm.APGIFComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APImageComponentViewModel
-import plus.adaptive.sdk.ui.components.vm.APTextComponentViewModel
+import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
+import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
+import plus.adaptive.sdk.ui.components.background.APBackgroundComponentViewModel
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
+import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
+import plus.adaptive.sdk.ui.components.gif.APGIFComponentViewModel
+import plus.adaptive.sdk.ui.components.image.APImageComponentViewModel
+import plus.adaptive.sdk.ui.components.text.APTextComponentViewModel
 
 
 internal class APEntryPointViewModel(
