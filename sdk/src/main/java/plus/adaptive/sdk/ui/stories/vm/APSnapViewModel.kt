@@ -15,6 +15,7 @@ import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
 import plus.adaptive.sdk.ui.components.gif.APGIFComponentViewModel
 import plus.adaptive.sdk.ui.components.image.APImageComponentViewModel
+import plus.adaptive.sdk.ui.components.poll.APPollComponentViewModel
 import plus.adaptive.sdk.ui.components.text.APTextComponentViewModel
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
 import plus.adaptive.sdk.ui.stories.data.APSnapEvent
@@ -57,6 +58,7 @@ internal class APSnapViewModel(
                 APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
                 APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
                 APLayer.Type.GIF -> APGIFComponentViewModel(this, componentLifecycleListener)
+                APLayer.Type.POLL -> APPollComponentViewModel(this, componentLifecycleListener)
                 else -> null
             }
         }

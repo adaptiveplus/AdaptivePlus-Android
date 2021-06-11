@@ -4,6 +4,7 @@ import android.content.Context
 import plus.adaptive.sdk.data.repositories.APAnalyticsRepository
 import plus.adaptive.sdk.data.repositories.APAuthRepository
 import plus.adaptive.sdk.data.repositories.APCrashlyticsRepository
+import plus.adaptive.sdk.data.repositories.APPollRepository
 import plus.adaptive.sdk.data.repositories.APSplashScreenRepository
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
@@ -67,5 +68,13 @@ internal fun provideAPSplashScreenRepository(
         provideAPAuthCredentialsManager(),
         provideAPUserRepository(context),
         getUnprocessedAPSplashScreenViewGson()
+    )
+}
+
+internal fun provideAPPollRepository() : APPollRepository {
+    return APPollRepository(
+        provideNetworkServiceManager(null),
+        provideAPAuthCredentialsManager(),
+        provideAPUserRepository(null)
     )
 }

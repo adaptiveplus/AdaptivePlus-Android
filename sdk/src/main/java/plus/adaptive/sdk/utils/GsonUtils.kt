@@ -253,6 +253,8 @@ private val apLayerDeserializer =
                     componentGson.fromJson(componentString, APButtonComponent::class.java)
                 APLayer.Type.GIF ->
                     componentGson.fromJson(componentString, APGIFComponent::class.java)
+                APLayer.Type.POLL ->
+                    componentGson.fromJson(componentString, APPollComponent::class.java)
                 else ->
                     null
             }

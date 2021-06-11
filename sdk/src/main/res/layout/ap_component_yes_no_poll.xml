@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="true"
+    app:cardCornerRadius="16px"
+    app:cardElevation="0px"
+    app:cardBackgroundColor="#99FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/ap_bg_yes_no_poll">
+
+        <TextView
+            android:id="@+id/apQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12px"
+            android:layout_marginStart="12px"
+            android:layout_marginEnd="12px"
+            android:gravity="center"
+            android:fontFamily="@font/ap_circular_std_medium"
+            android:textSize="18px"
+            android:textColor="@color/apBlack"
+            tools:text="Question"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16px"
+            android:layout_marginStart="12px"
+            android:layout_marginEnd="12px"
+            android:layout_marginBottom="12px"
+            android:clipToPadding="true"
+            app:cardCornerRadius="8px"
+            app:cardElevation="8px"
+            app:cardBackgroundColor="@color/apWhite">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/apAnswersConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ap_bg_yes_no_poll_answers">
+
+                <View
+                    android:id="@+id/apLeftAnswerLayer"
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:background="@drawable/ap_bg_yes_no_poll_left_answer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/apAnswerDivider"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <View
+                    android:id="@+id/apRightAnswerLayer"
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:background="@drawable/ap_bg_yes_no_poll_right_answer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/apAnswerDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <View
+                    android:id="@+id/apAnswerDivider"
+                    android:layout_width="1px"
+                    android:layout_height="0px"
+                    android:layout_marginStart="28px"
+                    android:layout_marginEnd="28px"
+                    android:background="#4DAABBCC"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    />
+
+                <TextView
+                    android:id="@+id/apLeftAnswerTextView"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4px"
+                    android:layout_marginEnd="4px"
+                    android:gravity="center"
+                    android:fontFamily="@font/ap_circular_std_regular"
+                    android:textColor="#0FBC49"
+                    android:textSize="16px"
+                    android:maxLines="2"
+                    tools:text="Performance measurement"
+                    app:layout_constraintTop_toTopOf="@id/apTopGuideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/apLeftAnswerRatioTextView"
+                    app:layout_constraintEnd_toStartOf="@id/apAnswersDividerGuideline"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    />
+
+                <TextView
+                    android:id="@+id/apLeftAnswerRatioTextView"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2px"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:fontFamily="@font/ap_circular_std_medium"
+                    android:textSize="20px"
+                    android:textColor="#343B4C"
+                    tools:text="40%"
+                    tools:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/apLeftAnswerTextView"
+                    app:layout_constraintStart_toStartOf="@id/apLeftAnswerTextView"
+                    app:layout_constraintEnd_toEndOf="@id/apLeftAnswerTextView"
+                    app:layout_constraintBottom_toBottomOf="@id/apBottomGuideline"
+                    />
+
+                <TextView
+                    android:id="@+id/apRightAnswerTextView"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4px"
+                    android:layout_marginEnd="4px"
+                    android:gravity="center"
+                    android:fontFamily="@font/ap_circular_std_regular"
+                    android:textColor="#FF5263"
+                    android:textSize="16px"
+                    android:maxLines="2"
+                    tools:text="International system very long answer"
+                    app:layout_constraintTop_toTopOf="@id/apTopGuideline"
+                    app:layout_constraintStart_toEndOf="@id/apAnswersDividerGuideline"
+                    app:layout_constraintBottom_toTopOf="@id/apRightAnswerRatioTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    />
+
+                <TextView
+                    android:id="@+id/apRightAnswerRatioTextView"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2px"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:fontFamily="@font/ap_circular_std_medium"
+                    android:textSize="20px"
+                    android:textColor="#343B4C"
+                    tools:text="60%"
+                    tools:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/apRightAnswerTextView"
+                    app:layout_constraintStart_toStartOf="@id/apRightAnswerTextView"
+                    app:layout_constraintEnd_toEndOf="@id/apRightAnswerTextView"
+                    app:layout_constraintBottom_toBottomOf="@id/apBottomGuideline"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/apTopGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="4px"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/apBottomGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_end="4px"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/apAnswersDividerGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

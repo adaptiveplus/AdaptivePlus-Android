@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="true"
+    app:cardCornerRadius="16px"
+    app:cardElevation="0px"
+    app:cardBackgroundColor="#99FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ap_bg_multi_choice_poll"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="12px">
+
+        <TextView
+            android:id="@+id/apQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8px"
+            android:fontFamily="@font/ap_circular_std_medium"
+            android:textSize="18px"
+            android:textColor="@color/apBlack"
+            tools:text="What is yout favorite color?"
+            />
+
+        <LinearLayout
+            android:id="@+id/apAnswersLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -22,7 +22,9 @@ internal data class APLayer(
         @SerializedName("BUTTON")
         BUTTON,
         @SerializedName("GIF")
-        GIF
+        GIF,
+        @SerializedName("POLL")
+        POLL
     }
 
     data class Options(
