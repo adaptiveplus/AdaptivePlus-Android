@@ -4,10 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import plus.adaptive.sdk.core.analytics.APAnalytics
+import plus.adaptive.sdk.core.providers.provideAPPollRepository
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.actions.APAction
-import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APSnap
+import plus.adaptive.sdk.data.models.components.APBackgroundComponent
+import plus.adaptive.sdk.data.models.components.APGIFComponent
+import plus.adaptive.sdk.data.models.components.APImageComponent
+import plus.adaptive.sdk.data.models.components.APPollComponent
+import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
 import plus.adaptive.sdk.ui.components.background.APBackgroundComponentViewModel
@@ -53,12 +58,13 @@ internal class APSnapViewModel(
                 }
             }
 
-            when (apLayer.type) {
-                APLayer.Type.BACKGROUND -> APBackgroundComponentViewModel(this, componentLifecycleListener)
-                APLayer.Type.IMAGE -> APImageComponentViewModel(this, componentLifecycleListener)
-                APLayer.Type.TEXT -> APTextComponentViewModel(this, componentLifecycleListener)
-                APLayer.Type.GIF -> APGIFComponentViewModel(this, componentLifecycleListener)
-                APLayer.Type.POLL -> APPollComponentViewModel(this, componentLifecycleListener)
+            when (apLayer.component) {
+                is APBackgroundComponent -> APBackgroundComponentViewModel(this, componentLifecycleListener)
+                is APImageComponent -> APImageComponentViewModel(this, componentLifecycleListener)
+                is APTextComponent -> APTextComponentViewModel(this, componentLifecycleListener)
+                is APGIFComponent -> APGIFComponentViewModel(this, componentLifecycleListener)
+                is APPollComponent -> APPollComponentViewModel(
+                    this, componentLifecycleListener, apLayer.component, provideAPPollRepository())
                 else -> null
             }
         }

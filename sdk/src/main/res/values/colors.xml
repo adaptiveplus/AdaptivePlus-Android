@@ -6,6 +6,8 @@
     <color name="apTransparent">#0000</color>
     <color name="apWhite">#FFFFFF</color>
     <color name="apWhite50">#80FFFFFF</color>
+    <color name="apPrimaryCarbon">#343B4C</color>
+    <color name="apSecondaryGray">#6D7885</color>
 
     <color name="apSnapLoadingBg">#343B4C</color>
 </resources>

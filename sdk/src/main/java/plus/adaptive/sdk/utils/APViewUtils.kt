@@ -13,6 +13,7 @@ import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.APBackgroundComponent
 import plus.adaptive.sdk.data.models.components.APGIFComponent
 import plus.adaptive.sdk.data.models.components.APImageComponent
+import plus.adaptive.sdk.data.models.components.APPollComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.ui.components.background.APBackgroundComponentView
 import plus.adaptive.sdk.ui.components.gif.APGIFComponentView
@@ -20,6 +21,7 @@ import plus.adaptive.sdk.ui.components.image.APImageComponentView
 import plus.adaptive.sdk.ui.components.text.APTextComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
+import plus.adaptive.sdk.ui.components.poll.APPollComponentView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
 
@@ -34,6 +36,7 @@ internal fun buildComponentView(
         is APImageComponent -> APImageComponentView(context, layer.component, viewModel)
         is APTextComponent -> APTextComponentView(context, layer.component, viewModel)
         is APGIFComponent -> APGIFComponentView(context, layer.component, viewModel)
+        is APPollComponent -> APPollComponentView(context, layer.component, viewModel)
         else -> null
     }
 }

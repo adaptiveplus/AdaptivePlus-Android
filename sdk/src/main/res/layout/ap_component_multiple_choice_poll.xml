@@ -22,7 +22,6 @@
             android:id="@+id/apQuestionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8px"
             android:fontFamily="@font/ap_circular_std_medium"
             android:textSize="18px"
             android:textColor="@color/apBlack"
@@ -33,6 +32,7 @@
             android:id="@+id/apAnswersLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
             android:orientation="vertical"
             />
 
