@@ -16,6 +16,7 @@ internal class APSharedPreferences(context: Context) {
         const val IS_EVENT_TRACKING_DISABLED = "is_event_tracking_disabled"
         const val CAMPAIGN_WATCHED_COUNT = "campaign_watched_count"
         const val POLL_CHOSEN_ANSWER_ID = "poll_chosen_answer_id"
+        const val POLL_DATA = "poll_data"
     }
 
 

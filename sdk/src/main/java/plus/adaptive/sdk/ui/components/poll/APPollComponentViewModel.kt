@@ -1,7 +1,9 @@
 package plus.adaptive.sdk.ui.components.poll
 
+import com.google.gson.Gson
 import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.POLL_CHOSEN_ANSWER_ID
+import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.POLL_DATA
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APPollData
 import plus.adaptive.sdk.data.models.components.APPollComponent
@@ -30,19 +32,34 @@ internal class APPollComponentViewModel(
         lifecycleListener.onReady(false)
         mComponentViewController?.prepare()
 
-        pollRepository.requestPollData(
-            pollId = component.id,
-            object: RequestResultCallback<APPollData>() {
-                override fun success(response: APPollData) {
-                    pollData = response
-                    reset()
-                }
+        pollData = getCachedPollData()
 
-                override fun failure(error: APError?) {
-                    reset()
+        if (pollData == null) {
+            pollRepository.requestPollData(
+                pollId = component.id,
+                object : RequestResultCallback<APPollData>() {
+                    override fun success(response: APPollData) {
+                        savePollData(response)
+                        pollData = response
+                        reset()
+                    }
+
+                    override fun failure(error: APError?) { }
                 }
-            }
-        )
+            )
+        } else {
+            reset()
+            pollRepository.requestPollData(
+                pollId = component.id,
+                object : RequestResultCallback<APPollData>() {
+                    override fun success(response: APPollData) {
+                        savePollData(response)
+                    }
+
+                    override fun failure(error: APError?) { }
+                }
+            )
+        }
     }
 
     override fun resume() {}
@@ -90,6 +107,27 @@ internal class APPollComponentViewModel(
         return userRepository?.getAPUserId()?.let { userId ->
             val prefKey = "${userId}_${component.id}_${POLL_CHOSEN_ANSWER_ID}"
             preferences?.getString(prefKey)
+        }
+    }
+
+    private fun savePollData(pollData: APPollData) {
+        userRepository?.getAPUserId()?.let { userId ->
+            val prefKey = "${userId}_${component.id}_${POLL_DATA}"
+            val serializedPollData = Gson().toJson(pollData)
+            preferences?.saveString(prefKey, serializedPollData)
+        }
+    }
+
+    private fun getCachedPollData() : APPollData? {
+        return userRepository?.getAPUserId()?.let { userId ->
+            val prefKey = "${userId}_${component.id}_${POLL_DATA}"
+            val serializedPollData = preferences?.getString(prefKey)
+            try {
+                Gson().fromJson(serializedPollData, APPollData::class.java)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 }
