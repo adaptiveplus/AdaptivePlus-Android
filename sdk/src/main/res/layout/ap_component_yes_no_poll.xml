@@ -14,18 +14,18 @@
     app:cardBackgroundColor="#99FFFFFF">
 
     <LinearLayout
+        android:id="@+id/apPollLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/ap_bg_yes_no_poll">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/apQuestionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12px"
-            android:layout_marginStart="12px"
-            android:layout_marginEnd="12px"
+            tools:layout_marginTop="12px"
+            tools:layout_marginStart="12px"
+            tools:layout_marginEnd="12px"
             android:gravity="center"
             android:fontFamily="@font/ap_circular_std_medium"
             android:textSize="18px"
@@ -34,12 +34,13 @@
             />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/apAnswersCardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16px"
-            android:layout_marginStart="12px"
-            android:layout_marginEnd="12px"
-            android:layout_marginBottom="12px"
+            tools:layout_marginTop="16px"
+            tools:layout_marginStart="12px"
+            tools:layout_marginEnd="12px"
+            tools:layout_marginBottom="12px"
             android:clipToPadding="true"
             app:cardCornerRadius="8px"
             app:cardElevation="8px"
@@ -48,14 +49,12 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/apAnswersConstraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ap_bg_yes_no_poll_answers">
+                android:layout_height="match_parent">
 
                 <View
                     android:id="@+id/apLeftAnswerLayer"
                     android:layout_width="0px"
                     android:layout_height="0px"
-                    android:background="@drawable/ap_bg_yes_no_poll_left_answer"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/apAnswerDivider"
@@ -66,7 +65,6 @@
                     android:id="@+id/apRightAnswerLayer"
                     android:layout_width="0px"
                     android:layout_height="0px"
-                    android:background="@drawable/ap_bg_yes_no_poll_right_answer"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toEndOf="@id/apAnswerDivider"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,8 +75,6 @@
                     android:id="@+id/apAnswerDivider"
                     android:layout_width="1px"
                     android:layout_height="0px"
-                    android:layout_marginStart="28px"
-                    android:layout_marginEnd="28px"
                     android:background="#4DAABBCC"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
