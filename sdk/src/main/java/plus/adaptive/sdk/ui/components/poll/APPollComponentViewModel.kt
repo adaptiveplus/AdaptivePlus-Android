@@ -8,6 +8,7 @@ import plus.adaptive.sdk.data.repositories.APPollRepository
 import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
 import plus.adaptive.sdk.ui.components.core.vm.APBaseComponentViewModel
+import plus.adaptive.sdk.utils.runOnMainThread
 
 
 internal class APPollComponentViewModel(
@@ -44,7 +45,9 @@ internal class APPollComponentViewModel(
     override fun pause() {}
 
     override fun reset() {
-        mComponentViewController?.reset()
+        runOnMainThread {
+            mComponentViewController?.reset()
+        }
     }
 
     fun getPollData(): APPollData? = pollData

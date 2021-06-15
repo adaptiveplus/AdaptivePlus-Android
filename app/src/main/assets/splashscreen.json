@@ -81,10 +81,10 @@
                 "type": "POLL",
                 "options": {
                   "position": {
-                    "x": 50,
+                    "x": 16,
                     "y": 100,
-                    "width": 180,
-                    "height": 60,
+                    "width": 343,
+                    "height": 138,
                     "angle": 0
                   },
                   "opacity": 1

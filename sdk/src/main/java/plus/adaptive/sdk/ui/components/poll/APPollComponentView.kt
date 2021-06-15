@@ -60,6 +60,7 @@ internal class APPollComponentView : APBaseComponentView {
         val pollData = viewModel?.getPollData()
 
         if (context == null || pollType == null || pollData == null) {
+            hide()
             viewModel?.onPollBuildFail()
             return
         }
@@ -126,6 +127,7 @@ internal class APPollComponentView : APBaseComponentView {
             viewModel.onPollBuildSuccess()
         }
         else {
+            hide()
             viewModel.onPollBuildFail()
         }
     }
