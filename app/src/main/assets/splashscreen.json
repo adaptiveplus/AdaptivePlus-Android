@@ -7,6 +7,99 @@
   },
   "campaigns": [
     {
+      "id": "campaign73",
+      "updatedAt": "datetime",
+      "status": "DRAFT",
+      "showCount": 500,
+      "body": {
+        "splashScreen": {
+          "id": "splashScreen73",
+          "type": "SPLASH_SCREEN",
+          "body": {
+            "showTime": 7.0,
+            "layers": [
+              {
+                "type": "BACKGROUND",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 375,
+                    "height": 667,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "color": "#FF5263"
+                }
+              },
+              {
+                "type": "IMAGE",
+                "options": {
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 375,
+                    "height": 400,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "url": "https://i.pinimg.com/originals/56/97/29/569729738304dfb78c2efb2703eb0ede.png",
+                  "border": null,
+                  "cornerRadius": null,
+                  "loadingColor": "#9090FF"
+                }
+              },
+              {
+                "type": "TEXT",
+                "options": {
+                  "position": {
+                    "x": 100,
+                    "y": 500,
+                    "width": 180,
+                    "height": 60,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "value": "Splash Screen #3",
+                  "font": {
+                    "family": "Roboto",
+                    "style": "600italic",
+                    "size": 20,
+                    "color": "#FFFFFFFF",
+                    "align": "center",
+                    "letterSpacing": 0
+                  }
+                }
+              },
+              {
+                "type": "POLL",
+                "options": {
+                  "position": {
+                    "x": 50,
+                    "y": 100,
+                    "width": 180,
+                    "height": 60,
+                    "angle": 0
+                  },
+                  "opacity": 1
+                },
+                "component": {
+                  "id": "mockPoll73",
+                  "type": "YES_NO_POLL"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
       "id": "campaign71",
       "updatedAt": "datetime",
       "status": "ACTIVE",

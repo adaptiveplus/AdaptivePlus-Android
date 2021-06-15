@@ -59,7 +59,7 @@ internal class APSplashScreenViewController(
     fun showMock() {
         cacheManager.loadAPSplashScreenViewDataModelFromAssets { dataModel ->
             if (dataModel != null) {
-                showSplashScreenDialog(dataModel, hasDrafts = false)
+                showSplashScreenDialog(dataModel, hasDrafts = true, isMock = true)
             } else {
                 splashScreenListener?.onFinish()
             }
@@ -68,10 +68,11 @@ internal class APSplashScreenViewController(
 
     private fun showSplashScreenDialog(
         dataModel: APSplashScreenViewDataModel,
-        hasDrafts: Boolean
+        hasDrafts: Boolean,
+        isMock: Boolean = false
     ) {
         getFirstWorkingSplashScreenOnReadiness(
-            getFilteredAndSortedSplashScreens(dataModel.splashScreens, hasDrafts),
+            getFilteredAndSortedSplashScreens(dataModel.splashScreens, hasDrafts, isMock),
             onReady = { splashScreen ->
                 val apSplashScreenDialog = APSplashScreenDialog
                     .newInstance(
@@ -206,8 +207,11 @@ internal class APSplashScreenViewController(
 
     private fun getFilteredAndSortedSplashScreens(
         splashScreens: List<APSplashScreen>,
-        hasDrafts: Boolean
+        hasDrafts: Boolean,
+        isMock: Boolean = false
     ) : List<APSplashScreen> {
+        if (isMock) return splashScreens
+
         return userRepository.getAPUserId()?.let { userId ->
             splashScreens.filter { splashScreen ->
                 val prefKey = "${userId}_${splashScreen.campaignId}_${CAMPAIGN_WATCHED_COUNT}"
