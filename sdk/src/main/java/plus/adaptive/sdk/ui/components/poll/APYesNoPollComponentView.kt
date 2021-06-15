@@ -42,7 +42,7 @@ internal class APYesNoPollComponentView : APBaseComponentView {
     override fun prepare() {
         apPollCardView?.radius = 16f * BASE_SIZE_MULTIPLIER
         apPollLinearLayout?.background = createDrawableFromColor(
-            color = getColorFromHex("#0000"),
+            color = getColorFromHex("#00000000"),
             cornerRadius = 16 * BASE_SIZE_MULTIPLIER,
             strokeWidth = 1 * BASE_SIZE_MULTIPLIER,
             strokeColor = getColorFromHex("#DFE2E7")
@@ -65,7 +65,7 @@ internal class APYesNoPollComponentView : APBaseComponentView {
         }
         apAnswersConstraintLayout?.run {
             background = createDrawableFromColor(
-                color = getColorFromHex("#0000"),
+                color = getColorFromHex("#00000000"),
                 cornerRadius = 8 * BASE_SIZE_MULTIPLIER,
                 strokeWidth = 1 * BASE_SIZE_MULTIPLIER,
                 strokeColor = getColorFromHex("#DFE2E7")
