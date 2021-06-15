@@ -21,7 +21,8 @@ import plus.adaptive.sdk.ui.components.image.APImageComponentView
 import plus.adaptive.sdk.ui.components.text.APTextComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
-import plus.adaptive.sdk.ui.components.poll.APPollComponentView
+import plus.adaptive.sdk.ui.components.poll.APMultipleChoicePollComponentView
+import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
 
@@ -36,7 +37,14 @@ internal fun buildComponentView(
         is APImageComponent -> APImageComponentView(context, layer.component, viewModel)
         is APTextComponent -> APTextComponentView(context, layer.component, viewModel)
         is APGIFComponent -> APGIFComponentView(context, layer.component, viewModel)
-        is APPollComponent -> APPollComponentView(context, layer.component, viewModel)
+        is APPollComponent -> {
+            when (layer.component.type) {
+                APPollComponent.Type.YES_NO_POLL ->
+                    APYesNoPollComponentView(context, layer.component, viewModel)
+                APPollComponent.Type.MULTIPLE_CHOICE_POLL ->
+                    APMultipleChoicePollComponentView(context, layer.component, viewModel)
+            }
+        }
         else -> null
     }
 }

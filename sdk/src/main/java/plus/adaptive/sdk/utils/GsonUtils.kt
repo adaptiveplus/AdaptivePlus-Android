@@ -703,6 +703,10 @@ private fun checkAPComponentProperties(apComponent: APComponent) {
                 cornerRadius
                 backgroundColor
             }
+            is APPollComponent -> {
+                id
+                type
+            }
             else -> { }
         }
     }
@@ -923,6 +927,12 @@ private fun magnifyAPComponent(component: APComponent) = when (component) {
         APTextComponent(
             value = value,
             font = font?.let { magnifyAPFont(it) }
+        )
+    }
+    is APPollComponent -> component.run {
+        APPollComponent(
+            id = id,
+            type = type
         )
     }
     else -> component

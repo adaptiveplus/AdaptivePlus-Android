@@ -3,16 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/apPollCardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:clipToPadding="true"
+    tools:layout_width="343px"
+    tools:layout_height="207px"
     app:cardCornerRadius="16px"
     app:cardElevation="0px"
     app:cardBackgroundColor="#99FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/ap_bg_multi_choice_poll"
         android:orientation="vertical"
         android:gravity="center_horizontal"
