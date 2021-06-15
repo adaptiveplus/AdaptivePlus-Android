@@ -28,10 +28,9 @@
         android:background="@drawable/ap_bg_multi_choice_poll_answer_ratio_bar"
         android:visibility="gone"
         tools:visibility="visible"
-        tools:layout_width="100px"
         app:layout_constraintTop_toTopOf="@id/apAnswerBarView"
         app:layout_constraintStart_toStartOf="@id/apAnswerBarView"
-        app:layout_constraintEnd_toEndOf="@id/apAnswerBarView"
+        app:layout_constraintEnd_toEndOf="@id/apAnswerRatioGuideline"
         app:layout_constraintBottom_toBottomOf="@id/apAnswerBarView"
         app:layout_constraintHorizontal_bias="0"
         />
@@ -69,6 +68,17 @@
         app:layout_constraintStart_toEndOf="@id/apAnswerBarView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/apAnswerBarView"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/apAnswerRatioGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_constraintGuide_percent="0.5"
+        app:layout_constraintGuide_percent="0.0"
+        app:layout_constraintStart_toStartOf="@id/apAnswerBarView"
+        app:layout_constraintEnd_toEndOf="@id/apAnswerBarView"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

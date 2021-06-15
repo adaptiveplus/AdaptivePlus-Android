@@ -24,16 +24,19 @@ internal class APPollComponentViewModel(
         lifecycleListener.onReady(false)
         mComponentViewController?.prepare()
 
-        repository.requestPollData(component.id, object: RequestResultCallback<APPollData>() {
-            override fun success(response: APPollData) {
-                pollData = response
-                reset()
-            }
+        repository.requestPollData(
+            pollId = component.id,
+            object: RequestResultCallback<APPollData>() {
+                override fun success(response: APPollData) {
+                    pollData = response
+                    reset()
+                }
 
-            override fun failure(error: APError?) {
-                reset()
+                override fun failure(error: APError?) {
+                    reset()
+                }
             }
-        })
+        )
     }
 
     override fun resume() {}
@@ -52,5 +55,19 @@ internal class APPollComponentViewModel(
 
     fun onPollBuildFail() {
         lifecycleListener.onError()
+    }
+
+    fun onAnswerChosen(answerId: String) {
+        repository.submitChosenAnswer(
+            pollId = component.id,
+            answerId = answerId,
+            object: RequestResultCallback<Any?>() {
+                override fun success(response: Any?) {
+                    // TODO: cache the result
+                }
+
+                override fun failure(error: APError?) {}
+            }
+        )
     }
 }
