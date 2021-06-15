@@ -48,7 +48,8 @@ internal class APEntryPointViewModel(
             is APTextComponent -> APTextComponentViewModel(this, componentLifecycleListener)
             is APGIFComponent -> APGIFComponentViewModel(this, componentLifecycleListener)
             is APPollComponent -> APPollComponentViewModel(
-                this, componentLifecycleListener, apLayer.component, provideAPPollRepository())
+                this, componentLifecycleListener, apLayer.component,
+                provideAPPollRepository(), userRepository, preferences)
             else -> null
         }
     }

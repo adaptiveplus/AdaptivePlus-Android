@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import plus.adaptive.sdk.core.analytics.APAnalytics
+import plus.adaptive.sdk.core.managers.APSharedPreferences
 import plus.adaptive.sdk.core.providers.provideAPPollRepository
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.actions.APAction
@@ -13,6 +14,7 @@ import plus.adaptive.sdk.data.models.components.APGIFComponent
 import plus.adaptive.sdk.data.models.components.APImageComponent
 import plus.adaptive.sdk.data.models.components.APPollComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
+import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
 import plus.adaptive.sdk.ui.components.background.APBackgroundComponentViewModel
@@ -29,7 +31,9 @@ import plus.adaptive.sdk.ui.stories.data.APSnapEventInfo
 
 internal class APSnapViewModel(
     private val snap: APSnap,
-    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol?
+    private val storyViewModelDelegate: APStoryViewModelDelegateProtocol?,
+    private val preferences: APSharedPreferences?,
+    private val userRepository: APUserRepository?
 ) : ViewModel(), APComponentViewModelProvider, APActionAreaListener, APComponentContainerViewModel {
 
     val snapLoadingProgressLiveData: LiveData<Float>
@@ -64,7 +68,8 @@ internal class APSnapViewModel(
                 is APTextComponent -> APTextComponentViewModel(this, componentLifecycleListener)
                 is APGIFComponent -> APGIFComponentViewModel(this, componentLifecycleListener)
                 is APPollComponent -> APPollComponentViewModel(
-                    this, componentLifecycleListener, apLayer.component, provideAPPollRepository())
+                    this, componentLifecycleListener, apLayer.component,
+                    provideAPPollRepository(), userRepository, preferences)
                 else -> null
             }
         }

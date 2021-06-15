@@ -137,6 +137,13 @@ internal class APMultipleChoicePollComponentView : APBaseComponentView {
             }
 
             viewModel.onPollBuildSuccess()
+
+            val chosenAnswerId = viewModel.getChosenAnswerId()
+            if (chosenAnswerId != null &&
+                pollData.answers.find { it.id == chosenAnswerId } != null
+            ) {
+                showChosenAnswer(chosenAnswerId, pollData)
+            }
         }
         else {
             hide()

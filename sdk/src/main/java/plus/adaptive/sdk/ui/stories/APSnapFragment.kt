@@ -69,7 +69,7 @@ internal class APSnapFragment :
             return
         }
 
-        val snapViewModelFactory = APSnapViewModelFactory(snap, storyViewModelDelegate)
+        val snapViewModelFactory = APSnapViewModelFactory(snap, storyViewModelDelegate, context)
         viewModel = ViewModelProvider(this, snapViewModelFactory).get(APSnapViewModel::class.java)
 
         scaleFactor = arguments?.getFloat(EXTRA_SCALE_FACTOR, 1f) ?: 1f

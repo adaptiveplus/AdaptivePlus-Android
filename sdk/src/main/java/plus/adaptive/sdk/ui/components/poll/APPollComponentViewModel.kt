@@ -1,10 +1,13 @@
 package plus.adaptive.sdk.ui.components.poll
 
+import plus.adaptive.sdk.core.managers.APSharedPreferences
+import plus.adaptive.sdk.core.managers.APSharedPreferences.Companion.POLL_CHOSEN_ANSWER_ID
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APPollData
 import plus.adaptive.sdk.data.models.components.APPollComponent
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.repositories.APPollRepository
+import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.ui.components.core.APComponentContainerViewModel
 import plus.adaptive.sdk.ui.components.core.APComponentLifecycleListener
 import plus.adaptive.sdk.ui.components.core.vm.APBaseComponentViewModel
@@ -15,7 +18,9 @@ internal class APPollComponentViewModel(
     containerViewModel: APComponentContainerViewModel,
     lifecycleListener: APComponentLifecycleListener,
     private val component: APPollComponent,
-    private val repository: APPollRepository
+    private val pollRepository: APPollRepository,
+    private val userRepository: APUserRepository?,
+    private val preferences: APSharedPreferences?
 ) : APBaseComponentViewModel(containerViewModel, lifecycleListener) {
 
     private var pollData: APPollData? = null
@@ -25,7 +30,7 @@ internal class APPollComponentViewModel(
         lifecycleListener.onReady(false)
         mComponentViewController?.prepare()
 
-        repository.requestPollData(
+        pollRepository.requestPollData(
             pollId = component.id,
             object: RequestResultCallback<APPollData>() {
                 override fun success(response: APPollData) {
@@ -61,16 +66,30 @@ internal class APPollComponentViewModel(
     }
 
     fun onAnswerChosen(answerId: String) {
-        repository.submitChosenAnswer(
+        pollRepository.submitChosenAnswer(
             pollId = component.id,
             answerId = answerId,
             object: RequestResultCallback<Any?>() {
                 override fun success(response: Any?) {
-                    // TODO: cache the result
+                    saveChosenAnswerId(answerId)
                 }
 
                 override fun failure(error: APError?) {}
             }
         )
+    }
+
+    private fun saveChosenAnswerId(answerId: String) {
+        userRepository?.getAPUserId()?.let { userId ->
+            val prefKey = "${userId}_${component.id}_${POLL_CHOSEN_ANSWER_ID}"
+            preferences?.saveString(prefKey, answerId)
+        }
+    }
+
+    fun getChosenAnswerId() : String? {
+        return userRepository?.getAPUserId()?.let { userId ->
+            val prefKey = "${userId}_${component.id}_${POLL_CHOSEN_ANSWER_ID}"
+            preferences?.getString(prefKey)
+        }
     }
 }
