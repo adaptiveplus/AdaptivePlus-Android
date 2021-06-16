@@ -78,8 +78,15 @@ internal fun drawAPLayersOnLayout(
             )
             componentConstraintSet.constrainWidth(
                 componentView.id, layer.options.position.width.toInt())
-            componentConstraintSet.constrainHeight(
-                componentView.id, layer.options.position.height.toInt())
+
+            if (layer.type == APLayer.Type.POLL) {
+                componentConstraintSet.constrainHeight(
+                    componentView.id, ConstraintSet.WRAP_CONTENT)
+            } else {
+                componentConstraintSet.constrainHeight(
+                    componentView.id, layer.options.position.height.toInt())
+            }
+
             componentConstraintSet.setAlpha(
                 componentView.id, layer.options.opacity.toFloat())
             componentConstraintSet.setRotation(

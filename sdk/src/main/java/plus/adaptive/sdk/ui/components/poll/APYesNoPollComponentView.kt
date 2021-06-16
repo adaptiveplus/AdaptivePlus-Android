@@ -58,6 +58,7 @@ internal class APYesNoPollComponentView : APBaseComponentView {
             radius = 8f * BASE_SIZE_MULTIPLIER
             cardElevation = 8f * BASE_SIZE_MULTIPLIER
             (layoutParams as LayoutParams).apply {
+                height = 75 * BASE_SIZE_MULTIPLIER
                 val marginTop = 16 * BASE_SIZE_MULTIPLIER
                 val margin = 12 * BASE_SIZE_MULTIPLIER
                 setMargins(margin, marginTop, margin, margin)

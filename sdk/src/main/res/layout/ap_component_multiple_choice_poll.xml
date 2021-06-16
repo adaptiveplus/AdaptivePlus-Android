@@ -5,18 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/apPollCardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clipToPadding="true"
     tools:layout_width="343px"
     tools:layout_height="207px"
     app:cardCornerRadius="16px"
     app:cardElevation="0px"
-    app:cardBackgroundColor="#99FFFFFF">
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:id="@+id/apPollLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         tools:padding="12px">
