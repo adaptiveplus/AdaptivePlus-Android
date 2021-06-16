@@ -22,7 +22,7 @@ internal class APPollRepository(
         callback: RequestResultCallback<APPollData>
     ) {
         val request = Request.Builder()
-            .url("$SDK_API_URL/surveys/$pollId/sdk")
+            .url("$SDK_API_URL/surveys/sdk/$pollId")
             .build()
 
         executeRequest<APPollData>(request,
