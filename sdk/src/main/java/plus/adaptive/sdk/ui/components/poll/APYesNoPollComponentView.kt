@@ -16,6 +16,7 @@ import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
 import plus.adaptive.sdk.data.models.APPollData
 import plus.adaptive.sdk.data.models.components.APPollComponent
 import plus.adaptive.sdk.ext.hide
+import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.ui.components.core.APBaseComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.utils.createDrawableFromColor
@@ -180,6 +181,8 @@ internal class APYesNoPollComponentView : APBaseComponentView {
             ) {
                 showChosenAnswer(chosenAnswerId, pollData)
             }
+
+            show()
         }
         else {
             hide()

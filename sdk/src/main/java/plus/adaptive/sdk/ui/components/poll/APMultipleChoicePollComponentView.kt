@@ -144,6 +144,8 @@ internal class APMultipleChoicePollComponentView : APBaseComponentView {
             ) {
                 showChosenAnswer(chosenAnswerId, pollData)
             }
+
+            show()
         }
         else {
             hide()
