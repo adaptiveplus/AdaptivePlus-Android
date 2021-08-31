@@ -5,6 +5,12 @@ import java.io.Serializable
 
 
 internal data class APTextComponent(
-    val value: String,
+    val value: APLocale,
     val font: APFont?
-) : APComponent, Serializable
+) : APComponent, Serializable {
+    internal data class APLocale(
+        val EN: String,
+        val RU: String,
+        val KZ: String,
+    )
+}

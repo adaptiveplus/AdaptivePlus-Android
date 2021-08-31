@@ -8,7 +8,6 @@ import java.io.Serializable
 internal data class APCarouselViewDataModel(
     val id: String,
     val options: Options,
-    @SerializedName("entryPoints")
     var entryPoints: List<APEntryPoint>
 ) : Serializable {
 

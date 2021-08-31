@@ -31,7 +31,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "SDK_API_URL", "\"http://test.adaptive.plus:3000/v1\""
+            buildConfigField "String", "SDK_API_URL", "\"https://test-adaptive-api2.homebank.kz/v1\""
         }
         release {
             minifyEnabled false

@@ -42,7 +42,7 @@ internal class APViewRepository(
         val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
 
         val request = Request.Builder()
-            .url("$SDK_API_URL/ap-view-templates/$apViewId")
+            .url("$SDK_API_URL/ap-view-templates/by-key/$apViewId")
             .post(body)
             .build()
 

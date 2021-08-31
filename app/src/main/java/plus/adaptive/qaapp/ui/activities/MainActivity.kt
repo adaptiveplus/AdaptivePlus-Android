@@ -143,31 +143,31 @@ class MainActivity : AppCompatActivity() {
             )
             .commit()
 
-        sdk.setSplashScreenListener(
-            object: APSplashScreenListener {
-                override fun onFinish() {
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Launch Screen Finished",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onRunAPCustomAction(params: HashMap<String, Any>) {
-                    val name = params["name"]?.toString()
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Custom action: $name",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        )
-        .showMockSplashScreen()
+//        sdk.setSplashScreenListener(
+//            object: APSplashScreenListener {
+//                override fun onFinish() {
+//                    Handler(Looper.getMainLooper()).post {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            "Launch Screen Finished",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//
+//                override fun onRunAPCustomAction(params: HashMap<String, Any>) {
+//                    val name = params["name"]?.toString()
+//                    Handler(Looper.getMainLooper()).post {
+//                        Toast.makeText(
+//                            this@MainActivity,
+//                            "Custom action: $name",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//            }
+//        )
+//        .showMockSplashScreen()
     }
 
     override fun onDestroy() {

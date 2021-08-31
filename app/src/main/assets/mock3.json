@@ -22,7 +22,7 @@
       "updatedAt": "datetime",
       "body": {
         "showOnce": false,
-        "entryPoint": {
+        "banner": {
           "id": "this31",
           "type": "ENTRY_POINT",
           "body": {
@@ -484,7 +484,7 @@
       "updatedAt": "datetime",
       "body": {
         "showOnce": true,
-        "entryPoint": {
+        "banner": {
           "id": "this32",
           "type": "ENTRY_POINT",
           "body": {
@@ -889,7 +889,7 @@
       "updatedAt": "datetime",
       "body": {
         "showOnce": false,
-        "entryPoint": {
+        "banner": {
           "id": "this33",
           "type": "ENTRY_POINT",
           "body": {
@@ -1294,7 +1294,7 @@
       "updatedAt": "datetime",
       "body": {
         "showOnce": false,
-        "entryPoint": {
+        "banner": {
           "id": "this34",
           "type": "ENTRY_POINT",
           "body": {

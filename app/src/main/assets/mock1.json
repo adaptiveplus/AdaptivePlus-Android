@@ -22,7 +22,7 @@
       "status": "DRAFT",
       "body": {
         "showOnce": false,
-        "entryPoint": {
+        "banner": {
           "id": "this1",
           "type": "ENTRY_POINT",
           "body": {

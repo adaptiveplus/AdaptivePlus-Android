@@ -34,11 +34,11 @@ internal class APTextComponentView : APBaseComponentView {
                 apComponentTextView.applyAPFont(
                     apFont = it,
                     onSuccess = {
-                        apComponentTextView.text = value
+                        apComponentTextView.text = value.RU
                         (componentViewModel as? APTextComponentViewModel)?.onTextResourceReady()
                     },
                     onError = {
-                        apComponentTextView.text = value
+                        apComponentTextView.text = value.RU
                         (componentViewModel as? APTextComponentViewModel)?.onError()
                     }
                 )

@@ -1,5 +1,6 @@
 package plus.adaptive.sdk.utils
 
+import android.util.Log
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
@@ -41,16 +42,16 @@ internal fun getSerializedProcessedAPSplashScreenViewDataModel(
 internal fun getDeserializedProcessedAPCarouselViewDataModel(
     json: String
 ): APCarouselViewDataModel? {
-    return try {
+//    return try {
         val dataModel = getProcessedAPCarouselViewGson()
             .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
-        dataModel
-    } catch (e: Exception) {
-        APCrashlytics.logCrash(e)
-        e.printStackTrace()
-        null
-    }
+    return dataModel
+//    } catch (e: Exception) {
+//        APCrashlytics.logCrash(e)
+//        e.printStackTrace()
+//        null
+//    }
 }
 
 internal fun getDeserializedProcessedAPSplashScreenViewDataModel(
@@ -87,16 +88,16 @@ internal fun getUnprocessedAPSplashScreenViewGson(): Gson {
 internal fun getDeserializedUnprocessedAPCarouselViewDataModel(
     json: String
 ): APCarouselViewDataModel? {
-    return try {
+//    try {
         val dataModel = getUnprocessedAPCarouselViewGson()
             .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
-        magnifyAPCarouselViewDataModel(dataModel)
-    } catch (e: Exception) {
-        APCrashlytics.logCrash(e)
-        e.printStackTrace()
-        null
-    }
+    return  magnifyAPCarouselViewDataModel(dataModel)
+//    } catch (e: Exception) {
+//        APCrashlytics.logCrash(e)
+//        e.printStackTrace()
+//        null
+//    }
 }
 
 internal fun getDeserializedUnprocessedAPSplashScreenViewDataModel(
@@ -132,26 +133,45 @@ private val apCarouselViewDataModelDeserializer =
                     val status = campaignJsonObject.get("status")?.asString
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
                     val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
-                    val entryPointJsonObject = campaignBodyJsonObject.get("entryPoint").asJsonObject
-                    val entryPointId = entryPointJsonObject.get("id").asString
-                    val entryPointBodyJsonObject = entryPointJsonObject.get("body").asJsonObject
-                    entryPointBodyJsonObject.addProperty("id", entryPointId)
-                    entryPointBodyJsonObject.addProperty("updatedAt", updatedAt)
-                    entryPointBodyJsonObject.addProperty("campaignId", campaignId)
-                    entryPointBodyJsonObject.addProperty("status", status)
-                    entryPointBodyJsonObject.addProperty("showOnce", showOnce)
+                    if(campaignBodyJsonObject.has("story")){
+                        val storyJsonObject = campaignBodyJsonObject.get("story").asJsonObject
+                        val storyId = storyJsonObject.get("id").asString
+                        val storyBodyJsonObject = storyJsonObject.get("body").asJsonObject
+                        storyBodyJsonObject.addProperty("id", storyId)
+                        storyBodyJsonObject.addProperty("updatedAt", updatedAt)
+                        storyBodyJsonObject.addProperty("campaignId", campaignId)
+                        storyBodyJsonObject.addProperty("status", status)
+                        storyBodyJsonObject.addProperty("showOnce", showOnce)
+                        val gsonBuilder = GsonBuilder()
+//                        gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerFromSnapDeserializer)
+                        val apEntryPointGson = gsonBuilder.create()
+                        val apEntryPoint = apEntryPointGson.fromJson(
+                            storyBodyJsonObject.toString(),
+                            APEntryPoint::class.java)
+                        apEntryPoint
+                    }
+                    if(campaignBodyJsonObject.has("banner")){
+                        val bannerJsonObject = campaignBodyJsonObject.get("banner").asJsonObject
+                        val bannerId = bannerJsonObject.get("id").asString
+                        val bannerBodyJsonObject = bannerJsonObject.get("body").asJsonObject
+                        bannerBodyJsonObject.addProperty("id", bannerId)
+                        bannerBodyJsonObject.addProperty("updatedAt", updatedAt)
+                        bannerBodyJsonObject.addProperty("campaignId", campaignId)
+                        bannerBodyJsonObject.addProperty("status", status)
+                        bannerBodyJsonObject.addProperty("showOnce", showOnce)
 
-                    val gsonBuilder = GsonBuilder()
-                    gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
-                    gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
-                    val apEntryPointGson = gsonBuilder.create()
-                    val apEntryPoint = apEntryPointGson.fromJson(
-                        entryPointBodyJsonObject.toString(),
-                        APEntryPoint::class.java)
-
-                    checkAPEntryPointProperties(apEntryPoint)
-
-                    apEntryPoint
+                        val gsonBuilder = GsonBuilder()
+                        gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
+                        gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
+                        val apEntryPointGson = gsonBuilder.create()
+                        val apEntryPoint = apEntryPointGson.fromJson(
+                            bannerBodyJsonObject.toString(),
+                            APEntryPoint::class.java)
+                        checkAPEntryPointProperties(apEntryPoint)
+                        apEntryPoint
+                    } else {
+                        null
+                    }
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)
                     e.printStackTrace()
@@ -228,7 +248,7 @@ private val apSplashScreenViewDataModelDeserializer =
 
 private val apLayerDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString,
@@ -260,16 +280,16 @@ private val apLayerDeserializer =
             }
 
             APLayer(type, options, component)
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apStoryDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val storyBodyJsonObject = jsonObject.get("body").asJsonObject
@@ -281,11 +301,11 @@ private val apStoryDeserializer =
             apStoryGson.fromJson(
                 storyBodyJsonObject.toString(),
                 APStory::class.java)
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apStorySerializer =
@@ -305,7 +325,7 @@ private val apStorySerializer =
 
 private val apSnapDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val snapBodyJsonObject = jsonObject.get("body").asJsonObject
@@ -320,11 +340,11 @@ private val apSnapDeserializer =
             apSnapGson.fromJson(
                 snapBodyJsonObject.toString(),
                 APSnap::class.java)
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apSnapSerializer =
@@ -345,7 +365,7 @@ private val apSnapSerializer =
 
 private val apSnapActionAreaDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APSnap.ActionArea.Type::class.java)
@@ -360,11 +380,11 @@ private val apSnapActionAreaDeserializer =
                     actionAreaGson.fromJson(bodyJson, APSnap.ButtonActionArea::class.java)
                 else -> null
             }
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apSnapActionAreaSerializer =
@@ -392,7 +412,7 @@ private val apSnapActionAreaSerializer =
 
 private val apActionDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APAction.Type::class.java)
@@ -421,11 +441,11 @@ private val apActionDeserializer =
                 }
                 else -> null
             }
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apActionSerializer =
@@ -469,7 +489,7 @@ private val apActionSerializer =
 
 private val apEntryPointActionDeserializer =
     JsonDeserializer { json, _, _ ->
-        try {
+//        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APAction.Type::class.java)
@@ -506,11 +526,11 @@ private val apEntryPointActionDeserializer =
                 }
                 else -> null
             }
-        } catch (e: JsonSyntaxException) {
-            APCrashlytics.logCrash(e)
-            e.printStackTrace()
-            null
-        }
+//        } catch (e: JsonSyntaxException) {
+//            APCrashlytics.logCrash(e)
+//            e.printStackTrace()
+//            null
+//        }
     }
 
 private val apEntryPointActionSerializer =
@@ -609,9 +629,8 @@ private fun checkAPEntryPointProperties(entryPoint: APEntryPoint) {
         updatedAt
         campaignId
         status
-        showOnce
-        layers.forEach { checkAPLayerProperties(it) }
-        actions.forEach { checkAPActionProperties(it) }
+        layers
+        actions
     }
 }
 

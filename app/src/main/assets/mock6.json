@@ -22,7 +22,7 @@
       "updatedAt": "Demo DateTime",
       "body": {
         "showOnce": false,
-        "entryPoint": {
+        "banner": {
           "id": "Demo EntryPoint ID",
           "type": "ENTRY_POINT",
           "body": {

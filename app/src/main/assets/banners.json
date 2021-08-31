@@ -1,0 +1,72 @@
+{
+  "id": "baca3c45-b111-440d-8c5f-377b1a333391",
+  "updatedAt": "2021-08-25T05:05:21.397983Z",
+  "status": "ACTIVE",
+  "body": {
+    "banner": {
+      "id": "663a7826-47c4-459e-ad1e-d0e415f41eb8",
+      "body": {
+        "layers": [
+          {
+            "type": "BACKGROUND",
+            "options": {
+              "opacity": 1,
+              "position": {
+                "x": 0,
+                "y": 0,
+                "angle": 0,
+                "width": 1000,
+                "height": 1000
+              }
+            },
+            "component": {
+              "color": "#008060"
+            }
+          },
+          {
+            "type": "TEXT",
+            "options": {
+              "opacity": 1,
+              "position": {
+                "x": 36.360000000000014,
+                "y": 20.805000000000042,
+                "angle": 0,
+                "width": 291.62,
+                "height": 39.05
+              }
+            },
+            "component": {
+              "font": {
+                "size": 16,
+                "align": "center",
+                "color": "#ffffff",
+                "style": "700",
+                "family": "Roboto",
+                "letterSpacing": 0
+              },
+              "value": {
+                "EN": "🎁📱 Каждую неделю дарим iPhone 12\nза переводы по номеру телефона",
+                "KZ": "🎁📱 Каждую неделю дарим iPhone 12\nза переводы по номеру телефона",
+                "RU": "🎁📱 Каждую неделю дарим iPhone 12\nза переводы по номеру телефона"
+              }
+            }
+          }
+        ],
+        "actions": [
+          {
+            "name": "showTransfers",
+            "type": "CUSTOM",
+            "parameters": {
+              "type": "cardToMobile",
+              "description": "Перевод по мобильному номеру клиентам Halyk Bank"
+            }
+          }
+        ],
+        "showTime": 5
+      },
+      "type": "BANNER",
+      "preview_url": "https://adaptive-cdn.homebank.kz/adaptive/964880a0-b7f2-4ced-9c0a-621602978e8e/20210818_zYMLjHpNwmaAYVMc.png"
+    }
+  },
+  "showCount": 1000
+}
