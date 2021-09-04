@@ -133,23 +133,23 @@ private val apCarouselViewDataModelDeserializer =
                     val status = campaignJsonObject.get("status")?.asString
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
                     val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
-                    if(campaignBodyJsonObject.has("story")){
-                        val storyJsonObject = campaignBodyJsonObject.get("story").asJsonObject
-                        val storyId = storyJsonObject.get("id").asString
-                        val storyBodyJsonObject = storyJsonObject.get("body").asJsonObject
-                        storyBodyJsonObject.addProperty("id", storyId)
-                        storyBodyJsonObject.addProperty("updatedAt", updatedAt)
-                        storyBodyJsonObject.addProperty("campaignId", campaignId)
-                        storyBodyJsonObject.addProperty("status", status)
-                        storyBodyJsonObject.addProperty("showOnce", showOnce)
-                        val gsonBuilder = GsonBuilder()
-//                        gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerFromSnapDeserializer)
-                        val apEntryPointGson = gsonBuilder.create()
-                        val apEntryPoint = apEntryPointGson.fromJson(
-                            storyBodyJsonObject.toString(),
-                            APEntryPoint::class.java)
-                        apEntryPoint
-                    }
+//                    if(campaignBodyJsonObject.has("story")){
+//                        val storyJsonObject = campaignBodyJsonObject.get("story").asJsonObject
+//                        val storyId = storyJsonObject.get("id").asString
+//                        val storyBodyJsonObject = storyJsonObject.get("body").asJsonObject
+//                        storyBodyJsonObject.addProperty("id", storyId)
+//                        storyBodyJsonObject.addProperty("updatedAt", updatedAt)
+//                        storyBodyJsonObject.addProperty("campaignId", campaignId)
+//                        storyBodyJsonObject.addProperty("status", status)
+//                        storyBodyJsonObject.addProperty("showOnce", showOnce)
+//                        val gsonBuilder = GsonBuilder()
+////                        gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerFromSnapDeserializer)
+//                        val apEntryPointGson = gsonBuilder.create()
+//                        val apEntryPoint = apEntryPointGson.fromJson(
+//                            storyBodyJsonObject.toString(),
+//                            APEntryPoint::class.java)
+//                        apEntryPoint
+//                    }
                     if(campaignBodyJsonObject.has("banner")){
                         val bannerJsonObject = campaignBodyJsonObject.get("banner").asJsonObject
                         val bannerId = bannerJsonObject.get("id").asString
@@ -887,7 +887,7 @@ private fun magnifyAPLayer(layer: APLayer) = layer.run {
 private fun magnifyAPComponent(component: APComponent) = when (component) {
     is APButtonComponent -> component.run {
         APButtonComponent(
-            text = APButtonComponent.Text(
+            text = APSnap.ButtonActionArea.Text(
                 value = text.value,
                 font = text.font?.let { magnifyAPFont(it) }
             ),

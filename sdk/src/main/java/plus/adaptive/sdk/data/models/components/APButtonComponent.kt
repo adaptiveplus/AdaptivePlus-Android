@@ -2,18 +2,13 @@ package plus.adaptive.sdk.data.models.components
 
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.APFont
+import plus.adaptive.sdk.data.models.APSnap
 import java.io.Serializable
 
 
 internal data class APButtonComponent(
-    val text: Text,
+    val text: APSnap.ButtonActionArea.Text,
     val actions: List<APAction>,
     val cornerRadius: Double,
     val backgroundColor: String
-) : APComponent, Serializable {
-
-    data class Text(
-        val value: String,
-        val font: APFont?
-    ) : Serializable
-}
+) : APComponent, Serializable

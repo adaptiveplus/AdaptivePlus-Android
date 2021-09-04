@@ -29,12 +29,14 @@ import plus.adaptive.sdk.ext.show
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModel
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModelFactory
+import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
+import plus.adaptive.sdk.utils.*
 import plus.adaptive.sdk.utils.getAPStoriesList
 import plus.adaptive.sdk.utils.isAPCarouselViewDataModelNullOrEmpty
-import plus.adaptive.sdk.utils.safeRun
-import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
-import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.utils.isQAApp
+import plus.adaptive.sdk.utils.safeRun
 
 
 internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
@@ -62,6 +64,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
     private lateinit var apViewId: String
     private var apHasDrafts: Boolean? = null
     private lateinit var entryPointsAdapter: APEntryPointsAdapter
+    private lateinit var storiesAdapter: StoriesAdapter
 
     private var apActionsManager: APActionsManager? = null
     private var customActionListener: APCustomActionListener? = null
@@ -110,6 +113,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         updateAPViewFragmentVisibility()
 
         entryPointsAdapter = APEntryPointsAdapter(listOf(), viewModel)
+        storiesAdapter = StoriesAdapter(listOf(), viewModel)
         setupAPEntryPointsRecyclerView()
 
         apViewFragmentLayout.addOnLayoutChangeListener(apViewFragmentLayoutChangeListener)
@@ -131,7 +135,6 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         val layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.HORIZONTAL, false)
         apEntryPointsRecyclerView.layoutManager = layoutManager
-        apEntryPointsRecyclerView.adapter = entryPointsAdapter
         apEntryPointsRecyclerView.addOnScrollListener(
             object: RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -156,6 +159,7 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
             provideAPSDKManager().isStartedLiveData().observe(viewLifecycleOwner, isSdkStartedObserver)
             viewModel.apCarouselViewDataModelLiveData.observe(viewLifecycleOwner, apCarouselViewDataModelObserver)
+            viewModel.storyDataModelLiveData.observe(viewLifecycleOwner, storyDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
             viewModel.magnetizeEntryPointEventLiveData.observe(viewLifecycleOwner, magnetizeEntryPointEventObserver)
         }
@@ -174,9 +178,18 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
     private val apCarouselViewDataModelObserver = Observer<APCarouselViewDataModel?> { dataModel ->
         updateAPViewFragmentVisibility()
         apActionsManager?.setAPStories(getAPStoriesList(dataModel))
-
+        apEntryPointsRecyclerView.adapter = entryPointsAdapter
         if (!isAPCarouselViewDataModelNullOrEmpty(dataModel)) {
             drawAPView(dataModel!!)
+        }
+    }
+
+    private val storyDataModelObserver = Observer<APTemplateDataModel?> { dataModel ->
+        updateStoriesVisibility()
+        apActionsManager?.setAPStories(getAPStoriesList(dataModel))
+        apEntryPointsRecyclerView.adapter = storiesAdapter
+        if (!isStoriesDataModelNullOrEmpty(dataModel)) {
+            drawStoriesView(dataModel)
         }
     }
 
@@ -186,12 +199,24 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
     private val magnetizeEntryPointEventObserver =
         EventObserver<String> {
-            val adapterPosition = entryPointsAdapter.positionOfEntryPoint(it)
+            var adapterPosition = entryPointsAdapter.positionOfEntryPoint(it)
+            magnetizeToPosition(maxOf(adapterPosition, 0))
+            adapterPosition = storiesAdapter.positionOfEntryPoint(it)
             magnetizeToPosition(maxOf(adapterPosition, 0))
         }
 
     private fun autoMagnetize() {
         if (viewModel.apCarouselViewDataModelLiveData.value?.options?.magnetize == true) {
+            (apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager)?.run {
+                val firstVisiblePos = findFirstVisibleItemPosition()
+                val firstCompletelyVisiblePos = findFirstCompletelyVisibleItemPosition()
+
+                if (firstVisiblePos != firstCompletelyVisiblePos) {
+                    magnetizeToPosition(firstVisiblePos)
+                }
+            }
+        }
+        if (viewModel.storyDataModelLiveData.value?.options?.magnetize == true) {
             (apEntryPointsRecyclerView?.layoutManager as? LinearLayoutManager)?.run {
                 val firstVisiblePos = findFirstVisibleItemPosition()
                 val firstCompletelyVisiblePos = findFirstCompletelyVisibleItemPosition()
@@ -256,6 +281,10 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
             viewModel.loadAPCarouselViewDataModelFromCache(apViewId)
         }
 
+        if (viewModel.storyDataModelLiveData.value == null) {
+            viewModel.loadAPTemplateViewDataModelFromCache(apViewId)
+        }
+
         val networkManager = provideNetworkServiceManager(context)
         val tokenLiveData = networkManager.getTokenLiveData()
 
@@ -294,12 +323,20 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         updateEntriesViewOptions()
     }
 
+    private fun drawStoriesView(apTemplateDataModel: APTemplateDataModel) {
+        if (context == null || view == null) return
+        storiesAdapter.updateDataSet(apTemplateDataModel.campaigns,
+            apTemplateDataModel.options.showBorder?:false)
+        updateStoriesViewOptions()
+    }
+
     private val apViewFragmentLayoutChangeListener = View.OnLayoutChangeListener {
         v, _, _, _, _, oldLeft, _, oldRight, _ ->
 
         val oldWidth = oldRight - oldLeft
         if (v.width != oldWidth) {
             updateEntriesViewOptions()
+            updateStoriesViewOptions()
             magnetizeToPosition(0, isSmoothly = false)
         }
     }
@@ -334,9 +371,50 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
         }
     }
 
+    private fun updateStoriesViewOptions() {
+        viewModel.storyDataModelLiveData.value?.let { template ->
+            val baseScreenWidth = maxOf(template.options.screenWidth, 0.001)
+            val scaleFactor = (apViewFragmentLayout.width / baseScreenWidth).toFloat()
+
+            template.options.padding.run {
+                apEntryPointsRecyclerView.setPadding(
+                    (left * scaleFactor).toInt(),
+                    (top * scaleFactor).toInt(),
+                    (right * scaleFactor).toInt(),
+                    (bottom * scaleFactor).toInt())
+            }
+
+            while (apEntryPointsRecyclerView.itemDecorationCount > 0) {
+                apEntryPointsRecyclerView.removeItemDecorationAt(0)
+            }
+            apEntryPointsRecyclerView.addItemDecoration(
+                APEntryPointSpaceDecoration((template.options.spacing * scaleFactor).toInt()))
+            template.campaigns[0].body.story?.body?.outerStyles?.run {
+                storiesAdapter.updateEntryOptions(
+                    options = StoriesAdapter.StoriesOptions(
+                        width = width,
+                        height = height,
+                        cornerRadius = cornerRadius
+                    ),
+                    scaleFactor = scaleFactor
+                )
+            }
+        }
+    }
+
     private fun updateAPViewFragmentVisibility() {
         if (provideAPSDKManager().isStartedLiveData().value == true &&
             !isAPCarouselViewDataModelNullOrEmpty(viewModel.apCarouselViewDataModelLiveData.value)
+        ) {
+            apViewFragmentLayout?.show()
+        } else {
+            apViewFragmentLayout?.hide()
+        }
+    }
+
+    private fun updateStoriesVisibility() {
+        if (provideAPSDKManager().isStartedLiveData().value == true &&
+            !isStoriesDataModelNullOrEmpty(viewModel.storyDataModelLiveData.value)
         ) {
             apViewFragmentLayout?.show()
         } else {

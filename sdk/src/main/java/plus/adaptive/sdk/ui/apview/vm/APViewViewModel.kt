@@ -9,9 +9,12 @@ import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.Event
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.data.models.story.Campaign
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
 import plus.adaptive.sdk.ui.apview.APEntryPointLifecycleListener
+import plus.adaptive.sdk.ui.apview.newVm.CampaignViewModel
 import plus.adaptive.sdk.utils.*
 
 
@@ -24,12 +27,15 @@ internal class APViewViewModel(
 
     val apCarouselViewDataModelLiveData: LiveData<APCarouselViewDataModel?>
         get() = _apCarouselViewDataModelLiveData
+    val storyDataModelLiveData: LiveData<APTemplateDataModel?>
+        get() = _storyDataModelLiveData
     val actionEventLiveData: LiveData<Event<APAction>>
         get() = _actionEventLiveData
     val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
         get() = _magnetizeEntryPointEventLiveData
 
     private val _apCarouselViewDataModelLiveData = MutableLiveData<APCarouselViewDataModel?>()
+    private val _storyDataModelLiveData = MutableLiveData<APTemplateDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<APAction>>()
     private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
@@ -37,27 +43,38 @@ internal class APViewViewModel(
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
     private val _entryPointViewModelMap = mutableMapOf<String, APEntryPointViewModel>()
+    private val _storyViewModelMap = mutableMapOf<String, CampaignViewModel>()
     private var _resumedEntryPointId: String? = null
     private var _visibleEntryPointsPositionRange: IntRange = 0..0
-
 
     private fun setAPCarouselViewDataModel(
         dataModel: APCarouselViewDataModel,
         isCached: Boolean = false,
-        isEmptyViewId: Boolean = false
+        appViewId: String
     ) {
         if (!isCached || _apCarouselViewDataModelLiveData.value == null) {
             sortAndFilterCampaigns(dataModel)
 
             if (!isCached) {
-                saveAPCarouselViewDataModelToCache(dataModel.id, dataModel)
-
-                if (isEmptyViewId) {
-                    saveAPCarouselViewDataModelToCache("", dataModel)
-                }
+                saveAPCarouselViewDataModelToCache(appViewId, dataModel)
             }
 
             _apCarouselViewDataModelLiveData.value = dataModel
+        }
+    }
+
+    private fun setStoriesDataModel(
+        dataModel: APTemplateDataModel,
+        isCached: Boolean = false,
+        appViewId: String,
+        isEmptyViewId: Boolean = false
+    ) {
+        if (!isCached || _storyDataModelLiveData.value == null) {
+            sortAndFilterCampaigns(dataModel)
+            if (!isCached) {
+                saveAPTemplateViewDataModelToCache(appViewId, dataModel)
+            }
+            _storyDataModelLiveData.value = dataModel
         }
     }
 
@@ -82,15 +99,40 @@ internal class APViewViewModel(
         dataModel.entryPoints = newEntryList
     }
 
+    private fun sortAndFilterCampaigns(dataModel: APTemplateDataModel) {
+        val activeEntries = mutableListOf<Campaign>()
+        val inactiveEntries = mutableListOf<Campaign>()
+
+        dataModel.campaigns.forEach {
+            if (getStoriesViewModel(it)?.isActive() == true) {
+                activeEntries.add(it)
+            } else {
+                if (it.showCount!=1) {
+                    inactiveEntries.add(it)
+                }
+            }
+        }
+
+        val newStoryCampaign = mutableListOf<Campaign>().apply {
+            addAll(activeEntries)
+            addAll(inactiveEntries)
+        }
+        dataModel.campaigns = newStoryCampaign
+    }
+
     fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {
         apViewRepository.requestAPView(
             apViewId, hasDrafts, object: RequestResultCallback<APCarouselViewDataModel>() {
                 override fun success(response: APCarouselViewDataModel) {
-                    runOnMainThread {
-                        setAPCarouselViewDataModel(
-                            dataModel = response,
-                            isEmptyViewId = apViewId.isEmpty()
-                        )
+                    if(response.entryPoints.isNullOrEmpty()){
+                        requestTemplate(apViewId, hasDrafts)
+                    } else {
+                        runOnMainThread {
+                            setAPCarouselViewDataModel(
+                                dataModel = response,
+                                appViewId = apViewId
+                            )
+                        }
                     }
                 }
 
@@ -99,7 +141,7 @@ internal class APViewViewModel(
                         _apCarouselViewDataModelLiveData.value?.let {
                             setAPCarouselViewDataModel(
                                 dataModel = it,
-                                isEmptyViewId = apViewId.isEmpty()
+                                appViewId = apViewId
                             )
                         }
                     }
@@ -108,9 +150,38 @@ internal class APViewViewModel(
         )
     }
 
-    override fun runActions(actions: List<APAction>) {
+    fun requestTemplate(apViewId: String, hasDrafts: Boolean) {
+            apViewRepository.requestTemplate(
+                apViewId, hasDrafts, object: RequestResultCallback<APTemplateDataModel>() {
+                    override fun success(response: APTemplateDataModel) {
+                        runOnMainThread {
+                            setStoriesDataModel(
+                                dataModel = response,
+                                isEmptyViewId = apViewId.isEmpty(),
+                                appViewId = apViewId
+                            )
+                        }
+                    }
+
+                    override fun failure(error: APError?) {
+                        runOnMainThread {
+                            _storyDataModelLiveData.value?.let {
+                                setStoriesDataModel(
+                                    dataModel = it,
+                                    appViewId = apViewId
+                                )
+                            }
+                        }
+                    }
+                }
+            )
+    }
+
+    override fun runActions(actions: List<APAction?>) {
         for (action in actions) {
-            runAction(action)
+            action?.let {
+                runAction(it)
+            }
         }
     }
 
@@ -141,6 +212,16 @@ internal class APViewViewModel(
         _entryPointViewModelMap.forEach { (_, entryPointViewModel) ->
             entryPointViewModel.reset()
         }
+        _storyDataModelLiveData.value?.let { dataModel ->
+            dataModel.campaigns.firstOrNull {
+                it.id == campaignId
+            }?.let { entryPoint ->
+                _magnetizeEntryPointEventLiveData.value = Event(entryPoint.id)
+            }
+        }
+        _storyViewModelMap.forEach { (_, entryPointViewModel) ->
+            entryPointViewModel.reset()
+        }
     }
 
     override fun getAutoScrollPeriod(): Long? {
@@ -152,7 +233,7 @@ internal class APViewViewModel(
     }
 
     override fun showBorder(): Boolean {
-        return _apCarouselViewDataModelLiveData.value?.options?.showBorder == true
+        return  _storyDataModelLiveData.value?.options?.showBorder == true
     }
 
     override fun getAPViewId(): String {
@@ -164,7 +245,8 @@ internal class APViewViewModel(
             level = DeprecationLevel.WARNING)
     fun loadAPViewMockDataModelFromAssets(apViewId: String) {
         cacheManager.loadAPCarouselViewDataModelFromAssets(apViewId) { dataModel ->
-            setAPCarouselViewDataModel(dataModel)
+            setAPCarouselViewDataModel(
+                dataModel, appViewId = "")
         }
     }
 
@@ -174,7 +256,19 @@ internal class APViewViewModel(
                 setAPCarouselViewDataModel(
                     dataModel = dataModel,
                     isCached = true,
-                    isEmptyViewId = apViewId.isEmpty()
+                    appViewId = apViewId
+                )
+            }
+        }
+    }
+
+    fun loadAPTemplateViewDataModelFromCache(apViewId: String) {
+        cacheManager.loadAPTemplateViewDataModelFromCache(apViewId) { dataModel ->
+            if (dataModel != null) {
+                setStoriesDataModel(
+                    dataModel = dataModel,
+                    isCached = true,
+                    appViewId = apViewId
                 )
             }
         }
@@ -182,6 +276,10 @@ internal class APViewViewModel(
 
     private fun saveAPCarouselViewDataModelToCache(apViewId: String, dataModel: APCarouselViewDataModel) {
         cacheManager.saveAPCarouselViewDataModelToCache(apViewId, dataModel)
+    }
+
+    private fun saveAPTemplateViewDataModelToCache(appViewId: String, dataModel: APTemplateDataModel) {
+        cacheManager.saveAPTemplateViewDataModelToCache(appViewId, dataModel)
     }
 
     override fun getAPEntryPointViewModel(entryPoint: APEntryPoint): APEntryPointViewModel? {
@@ -204,10 +302,41 @@ internal class APViewViewModel(
         return _entryPointViewModelMap[entryPoint.id]
     }
 
+    override fun getStoriesViewModel(campaign: Campaign): CampaignViewModel? {
+        if (!_storyViewModelMap.contains(campaign.id)) {
+            val campaignLifecycleListener = object: APEntryPointLifecycleListener {
+                override fun onReady(isReady: Boolean) { onEntryPointReady(campaign.id, isReady) }
+                override fun onComplete() { onEntryPointComplete(campaign.id) }
+                override fun onError() {  }
+            }
+
+            _storyViewModelMap[campaign.id] =
+                CampaignViewModel(
+                    campaign = campaign,
+                    preferences = preferences,
+                    userRepository = userRepository,
+                    lifecycleListener = campaignLifecycleListener,
+                    apViewVMDelegate = this
+                )
+        }
+        return _storyViewModelMap[campaign.id]
+    }
+
     private fun onEntryPointReady(id: String, isReady: Boolean) {
         _apCarouselViewDataModelLiveData.value?.let { dataModel ->
             val firstVisibleEntryPoint =
                 dataModel.entryPoints.getOrNull(_visibleEntryPointsPositionRange.first)
+
+            if (getAutoScrollPeriod() != null && isReady &&
+                id == firstVisibleEntryPoint?.id && _resumedEntryPointId == null
+            ) {
+                resumeEntryPoint(id)
+            }
+        }
+
+        _storyDataModelLiveData.value?.let { dataModel ->
+            val firstVisibleEntryPoint =
+                dataModel.campaigns.getOrNull(_visibleEntryPointsPositionRange.first)
 
             if (getAutoScrollPeriod() != null && isReady &&
                 id == firstVisibleEntryPoint?.id && _resumedEntryPointId == null
@@ -234,6 +363,20 @@ internal class APViewViewModel(
                     resumeEntryPoint(entryPointToResume.id)
                 }
             }
+
+            _storyDataModelLiveData.value?.let { dataModel ->
+                if (getAutoScrollPeriod() != null) {
+                    val resumedEntryPointPosition =
+                        dataModel.campaigns.indexOfFirst {
+                            it.id == id
+                        }
+                    val entryPointToResumePosition =
+                        (resumedEntryPointPosition + 1) % dataModel.campaigns.size
+                    val entryPointToResume = dataModel.campaigns[entryPointToResumePosition]
+
+                    resumeEntryPoint(entryPointToResume.id)
+                }
+            }
         }
     }
 
@@ -248,6 +391,16 @@ internal class APViewViewModel(
                 }
             }
         }
+        _storyDataModelLiveData.value?.let { dataModel ->
+            dataModel.campaigns.find { it.id == id }?.let { entryPoint ->
+                getStoriesViewModel(entryPoint)?.run {
+                    if (id == _resumedEntryPointId) {
+                        _resumedEntryPointId = null
+                    }
+                    pause()
+                }
+            }
+        }
     }
 
     private fun resumeEntryPoint(id: String) {
@@ -255,6 +408,15 @@ internal class APViewViewModel(
             dataModel.entryPoints.find { it.id == id }?.let { entryPoint ->
                 _magnetizeEntryPointEventLiveData.value = Event(id)
                 getAPEntryPointViewModel(entryPoint)?.run {
+                    _resumedEntryPointId = id
+                    resume()
+                }
+            }
+        }
+        _storyDataModelLiveData.value?.let { dataModel ->
+            dataModel.campaigns.find { it.id == id }?.let { entryPoint ->
+                _magnetizeEntryPointEventLiveData.value = Event(id)
+                getStoriesViewModel(entryPoint)?.run {
                     _resumedEntryPointId = id
                     resume()
                 }
@@ -286,6 +448,20 @@ internal class APViewViewModel(
                 if (resumedEntryPointPosition !in range) {
                     _resumedEntryPointId?.let { pauseEntryPoint(it) }
                     dataModel.entryPoints.getOrNull(range.first)?.id?.let { resumeEntryPoint(it) }
+                }
+            }
+        }
+        _storyDataModelLiveData.value?.let { dataModel ->
+            if (getAutoScrollPeriod() != null) {
+                val range = _visibleEntryPointsPositionRange
+                val resumedEntryPointPosition =
+                    dataModel.campaigns.indexOfFirst {
+                        it.id == _resumedEntryPointId
+                    }
+
+                if (resumedEntryPointPosition !in range) {
+                    _resumedEntryPointId?.let { pauseEntryPoint(it) }
+                    dataModel.campaigns.getOrNull(range.first)?.id?.let { resumeEntryPoint(it) }
                 }
             }
         }

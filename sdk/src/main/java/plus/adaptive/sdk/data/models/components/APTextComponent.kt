@@ -12,5 +12,7 @@ internal data class APTextComponent(
         val EN: String,
         val RU: String,
         val KZ: String,
-    )
+    ): Serializable{
+        var locale: String? = null
+    }
 }

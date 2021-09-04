@@ -1,8 +1,11 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
-import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
+import com.google.gson.GsonBuilder
+import okio.utf8Size
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
+import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.utils.*
 import java.io.*
@@ -63,6 +66,36 @@ internal class APCacheManagerImpl(
         }
     }
 
+    override fun loadAPTemplateViewDataModelFromCache(
+        apViewId: String,
+        onResult: (dataModel: APTemplateDataModel?) -> Unit
+    ) {
+        try {
+            val userId = userRepository.getAPUserId() ?: ""
+            val dataModelFile = File(context.cacheDir, "${userId}_template_$apViewId.json")
+            val inputStream: InputStream = dataModelFile.inputStream()
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+
+            inputStream.read(buffer)
+            inputStream.close()
+
+            val json = String(buffer, Charsets.UTF_8)
+
+            val gsonBuilder = GsonBuilder()
+            val templateGson = gsonBuilder.create()
+            val dataModel = templateGson.fromJson(
+                json,
+                APTemplateDataModel::class.java)
+            onResult(dataModel)
+        } catch (ex: FileNotFoundException) {
+            onResult(null)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            onResult(null)
+        }
+    }
+
     override fun saveAPCarouselViewDataModelToCache(
         apViewId: String,
         dataModel: APCarouselViewDataModel
@@ -83,6 +116,29 @@ internal class APCacheManagerImpl(
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
+    }
+
+    override fun saveAPTemplateViewDataModelToCache(
+        apViewId: String,
+        dataModel: APTemplateDataModel
+    ) {
+//        try {
+            val userId = userRepository.getAPUserId() ?: ""
+            val dataModelFile = File(context.cacheDir, "${userId}_template_$apViewId.json")
+            dataModelFile.createNewFile()
+            val outputStream: OutputStream = dataModelFile.outputStream()
+            val gsonBuilder = GsonBuilder()
+            val apTemplateGson = gsonBuilder.create()
+            val json = apTemplateGson.toJson(dataModel)
+            if (json != null) {
+                outputStream.write(json.toByteArray())
+            }
+
+            outputStream.flush()
+            outputStream.close()
+//        } catch (ex: IOException) {
+//            ex.printStackTrace()
+//        }
     }
 
     override fun removeAPCarouselViewDataModelFromCache(

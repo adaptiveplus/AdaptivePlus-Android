@@ -13,6 +13,7 @@ import plus.adaptive.sdk.utils.checkAPCarouselViewDataModelProperties
 import plus.adaptive.sdk.utils.magnifyAPCarouselViewDataModel
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 
 
 internal class APViewRepository(
@@ -52,6 +53,45 @@ internal class APViewRepository(
                     checkAPCarouselViewDataModelProperties(response)
                     val dataModel = magnifyAPCarouselViewDataModel(response)
                     callback.success(dataModel)
+                } catch (e: Exception) {
+                    APCrashlytics.logCrash(e)
+                    e.printStackTrace()
+                    callback.failure(
+                        APError(
+                            code = -1,
+                            message = e.message
+                        )
+                    )
+                }
+            },
+            { error ->
+                callback.failure(error)
+            },
+            isReauthorizationOn = true
+        )
+    }
+
+
+    fun requestTemplate(
+        apViewId: String,
+        hasDrafts: Boolean,
+        callback: RequestResultCallback<APTemplateDataModel>
+    ) {
+        val obj = APViewDMRequestBody(
+            parserVersion = 1,
+            hasDrafts = hasDrafts
+        )
+        val body = Gson().toJson(obj).toRequestBody(JSON_MEDIA_TYPE)
+
+        val request = Request.Builder()
+            .url("$SDK_API_URL/ap-view-templates/by-key/$apViewId")
+            .post(body)
+            .build()
+
+        executeRequest<APTemplateDataModel>(request,
+            { response ->
+                try {
+                    callback.success(response)
                 } catch (e: Exception) {
                     APCrashlytics.logCrash(e)
                     e.printStackTrace()

@@ -25,6 +25,8 @@ internal fun TextView.applyAPFont(
         APFont.Align.LEFT -> Gravity.START
         APFont.Align.CENTER -> Gravity.CENTER
         APFont.Align.RIGHT -> Gravity.END
+        APFont.Align.TOP -> Gravity.TOP
+        APFont.Align.BOTTOM -> Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
     }
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {

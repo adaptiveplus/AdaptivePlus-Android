@@ -78,14 +78,9 @@ internal class APActionsManagerImpl(
             val storyIndex = stories.indexOfFirst { it.id == action.story.id }
 
             if (storyIndex != -1 && apViewVMDelegate != null) {
-                try {
                     val apStoriesDialog = APStoriesDialog
                         .newInstance(stories, storyIndex, apViewVMDelegate)
                     viewControllerDelegate.showDialog(apStoriesDialog)
-                } catch (e: IllegalStateException) {
-                    APCrashlytics.logCrash(e)
-                    e.printStackTrace()
-                }
             }
         }
     }

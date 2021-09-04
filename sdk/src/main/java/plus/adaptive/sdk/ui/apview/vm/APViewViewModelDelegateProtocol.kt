@@ -11,7 +11,7 @@ internal interface APViewVMDelegateProtocol {
      * @param actions - list of adaptive plus actions to execute
      * @see APAction
      */
-    fun runActions(actions: List<APAction>)
+    fun runActions(actions: List<APAction?>)
 
     /**
      * Getter of stories paused state live data

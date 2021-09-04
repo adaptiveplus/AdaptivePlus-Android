@@ -20,7 +20,11 @@ internal data class APFont(
         @SerializedName("center")
         CENTER,
         @SerializedName("right")
-        RIGHT
+        RIGHT,
+        @SerializedName("bottom")
+        BOTTOM,
+        @SerializedName("top")
+        TOP
     }
 
     enum class Style {

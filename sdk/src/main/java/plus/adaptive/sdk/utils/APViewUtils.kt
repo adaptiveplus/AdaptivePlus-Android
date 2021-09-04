@@ -4,25 +4,28 @@ import android.content.Context
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT
 import androidx.core.view.ViewCompat
+import plus.adaptive.sdk.data.models.*
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
+import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APSnap
 import plus.adaptive.sdk.data.models.APStory
-import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
-import plus.adaptive.sdk.data.models.components.APBackgroundComponent
-import plus.adaptive.sdk.data.models.components.APGIFComponent
-import plus.adaptive.sdk.data.models.components.APImageComponent
-import plus.adaptive.sdk.data.models.components.APPollComponent
-import plus.adaptive.sdk.data.models.components.APTextComponent
+import plus.adaptive.sdk.data.models.components.*
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.ui.apview.StoriesAdapter
+import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModel
 import plus.adaptive.sdk.ui.components.background.APBackgroundComponentView
-import plus.adaptive.sdk.ui.components.gif.APGIFComponentView
-import plus.adaptive.sdk.ui.components.image.APImageComponentView
-import plus.adaptive.sdk.ui.components.text.APTextComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
+import plus.adaptive.sdk.ui.components.gif.APGIFComponentView
+import plus.adaptive.sdk.ui.components.image.APImageComponentView
 import plus.adaptive.sdk.ui.components.poll.APMultipleChoicePollComponentView
 import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
+import plus.adaptive.sdk.ui.components.story.StoryComponentView
+import plus.adaptive.sdk.ui.components.text.APTextComponentView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
 
@@ -49,6 +52,58 @@ internal fun buildComponentView(
     }
 }
 
+internal fun drawStoryOnLayout(
+    layout: ConstraintLayout,
+    component: StoriesAdapter.StoryComponent,
+    componentViewModelProvider: APComponentViewModelProvider?
+){
+    layout.removeAllViews()
+    component.let {
+        val viewModel = componentViewModelProvider?.getAPComponentViewModel(0)
+        StoryComponentView(layout.context, component, viewModel)?.let { componentView ->
+            componentView.id = ViewCompat.generateViewId()
+            layout.addView(componentView)
+            val componentConstraintSet = ConstraintSet()
+            componentConstraintSet.clone(layout)
+            componentConstraintSet.constrainWidth(
+                componentView.id, component.outerStyles.width.toInt())
+            componentConstraintSet.constrainHeight(
+                componentView.id, component.outerStyles.height.toInt())
+            componentConstraintSet.applyTo(layout)
+        }
+//        val font = APFont(
+//                family="Roboto",
+//                style = APFont.Style.BOLD,
+//                size=9.0,
+//                color="#ffffff",
+//                align= APFont.Align.CENTER,
+//                letterSpacing=0.0,
+//                lineHeight=null)
+//        val tComponent = APTextComponent(font = font, value =  component.outerText)
+//        APTextComponentView(layout.context, tComponent, viewModel)?.let {componentView ->
+//            componentView.id = ViewCompat.generateViewId()
+//            layout.addView(componentView)
+//            val componentConstraintSet = ConstraintSet()
+//            componentConstraintSet.clone(layout)
+//            componentConstraintSet.constrainWidth(
+//                componentView.id, 0)
+//            componentConstraintSet.connect(
+//                componentView.id, ConstraintSet.BOTTOM,
+//                layout.id, ConstraintSet.BOTTOM,6
+//            )
+//            componentConstraintSet.connect(
+//                componentView.id, ConstraintSet.START,
+//                layout.id, ConstraintSet.START, 6
+//            )
+//            componentConstraintSet.connect(
+//                componentView.id, ConstraintSet.END,
+//                layout.id, ConstraintSet.END,6
+//            )
+//            componentConstraintSet.applyTo(layout)
+//        }
+    }
+}
+
 internal fun drawAPLayersOnLayout(
     layout: ConstraintLayout,
     layers: List<APLayer>,
@@ -58,7 +113,10 @@ internal fun drawAPLayersOnLayout(
 
     layers.forEachIndexed { index, layer ->
         val componentViewModel = componentViewModelProvider?.getAPComponentViewModel(index)
-
+//        val language = (componentViewModelProvider as APEntryPointViewModel).getLang()
+//        if(layer.component is APTextComponent){
+//            layer.component.value.locale = language
+//        }
         buildComponentView(layout.context, layer, componentViewModel)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
 
@@ -81,7 +139,7 @@ internal fun drawAPLayersOnLayout(
 
             if (layer.type == APLayer.Type.POLL) {
                 componentConstraintSet.constrainHeight(
-                    componentView.id, ConstraintSet.WRAP_CONTENT)
+                    componentView.id, WRAP_CONTENT)
             } else {
                 componentConstraintSet.constrainHeight(
                     componentView.id, layer.options.position.height.toInt())
@@ -100,6 +158,10 @@ internal fun isAPCarouselViewDataModelNullOrEmpty(dataModel: APCarouselViewDataM
     return dataModel?.entryPoints.isNullOrEmpty()
 }
 
+internal fun isStoriesDataModelNullOrEmpty(dataModel: APTemplateDataModel?): Boolean {
+    return dataModel?.campaigns.isNullOrEmpty()
+}
+
 internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStory>? {
     return dataModel?.run {
         val stories = mutableListOf<APStory>()
@@ -109,6 +171,26 @@ internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStor
                 if (action is APShowStoryAction) {
                     stories.add(action.story)
                 }
+            }
+        }
+
+        stories
+    }
+}
+
+internal fun getAPStoriesList(dataModel: APTemplateDataModel?) : List<APStory>? {
+    return dataModel?.run {
+        val stories = mutableListOf<APStory>()
+
+        campaigns.forEach { campaign ->
+            campaign.body.story?.let {
+                stories.add(
+                    APStory(
+                        id = it.id,
+                        campaignId = campaign.id,
+                        getAPSnapFromSnap(it.body.snaps)
+                    )
+                )
             }
         }
 

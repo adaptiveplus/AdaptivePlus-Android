@@ -9,6 +9,7 @@ import plus.adaptive.sdk.ext.applyAPFont
 import plus.adaptive.sdk.ui.components.core.APBaseComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import kotlinx.android.synthetic.main.ap_component_text.view.*
+import plus.adaptive.sdk.ui.components.story.StoryComponentViewModel
 
 
 internal class APTextComponentView : APBaseComponentView {
@@ -29,21 +30,32 @@ internal class APTextComponentView : APBaseComponentView {
     }
 
     override fun prepare() {
-        (component as? APTextComponent)?.run {
-            font?.let {
-                apComponentTextView.applyAPFont(
-                    apFont = it,
-                    onSuccess = {
-                        apComponentTextView.text = value.RU
-                        (componentViewModel as? APTextComponentViewModel)?.onTextResourceReady()
-                    },
-                    onError = {
-                        apComponentTextView.text = value.RU
-                        (componentViewModel as? APTextComponentViewModel)?.onError()
-                    }
-                )
+        if(component is APTextComponent)
+            (component as? APTextComponent)?.run {
+                font?.let {
+                    apComponentTextView.applyAPFont(
+                        apFont = it,
+                        onSuccess = {
+                            var text = value.RU
+                            value.locale?.let {
+                                text = when(it){
+                                    "ru" -> value.RU
+                                    "kk" -> value.KZ
+                                    else -> value.EN
+                                }
+                            }
+                            apComponentTextView.text = text
+                            (componentViewModel as? APTextComponentViewModel)?.onTextResourceReady()
+                            (componentViewModel as? StoryComponentViewModel)?.onTextResourceReady()
+                        },
+                        onError = {
+                            apComponentTextView.text = value.RU
+                            (componentViewModel as? APTextComponentViewModel)?.onError()
+                            (componentViewModel as? StoryComponentViewModel)?.onError()
+                        }
+                    )
+                }
             }
-        }
     }
 
     override fun resume() {}

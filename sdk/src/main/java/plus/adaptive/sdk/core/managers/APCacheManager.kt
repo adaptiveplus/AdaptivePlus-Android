@@ -2,6 +2,7 @@ package plus.adaptive.sdk.core.managers
 
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 
 
 internal interface APCacheManager {
@@ -18,9 +19,19 @@ internal interface APCacheManager {
         onResult: (dataModel: APCarouselViewDataModel?) -> Unit
     )
 
+    fun loadAPTemplateViewDataModelFromCache(
+        apViewId: String,
+        onResult: (dataModel: APTemplateDataModel?) -> Unit
+    )
+
     fun saveAPCarouselViewDataModelToCache(
         apViewId: String,
         dataModel: APCarouselViewDataModel
+    )
+
+    fun saveAPTemplateViewDataModelToCache(
+        apViewId: String,
+        dataModel: APTemplateDataModel
     )
 
     fun removeAPCarouselViewDataModelFromCache(
