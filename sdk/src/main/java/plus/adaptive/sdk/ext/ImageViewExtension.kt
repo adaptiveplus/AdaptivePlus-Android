@@ -189,3 +189,81 @@ internal fun ImageView.loadGIF(
         .apply(requestOptions)
         .into(target)
 }
+
+
+
+
+internal fun ImageView.loadCircleImage(
+    url: String,
+    defaultDrawable: Drawable? = null,
+    onResourceReady: (() -> Unit)? = null,
+    onLoadFailed: (() -> Unit)? = null,
+    onLoadProgressUpdate: ((progress: Float) -> Unit)? = null
+) {
+    val imageViewTarget = object: ImageViewTarget<Bitmap>(this) {
+        override fun setResource(resource: Bitmap?) {
+            loadCircleImg(
+                url = url,
+                defaultDrawable = defaultDrawable,
+                onResourceReady = onResourceReady,
+                onLoadFailed = onLoadFailed
+            )
+        }
+    }
+    val target = object: GlideProgressTarget<String, Bitmap>(url, imageViewTarget) {
+        override fun onDownloading(bytesRead: Long, expectedLength: Long) {
+            super.onDownloading(bytesRead, expectedLength)
+            val progress = bytesRead.toFloat() / expectedLength
+            onLoadProgressUpdate?.invoke(progress)
+        }
+
+        override fun getGranularityPercentage(): Float = 1f
+    }
+
+    Glide
+        .with(context)
+        .asBitmap()
+        .load(url)
+        .timeout(GLIDE_TIMEOUT)
+        .circleCrop()
+        .placeholder(defaultDrawable)
+        .into(target)
+}
+
+internal fun ImageView.loadCircleImg(
+    url: String,
+    defaultDrawable: Drawable? = null,
+    onResourceReady: (() -> Unit)? = null,
+    onLoadFailed: (() -> Unit)? = null
+) {
+    Glide
+        .with(context)
+        .asBitmap()
+        .load(url)
+        .timeout(GLIDE_TIMEOUT)
+        .circleCrop()
+        .placeholder(defaultDrawable)
+        .listener(object: RequestListener<Bitmap> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Bitmap>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                onLoadFailed?.invoke()
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Bitmap?,
+                model: Any?,
+                target: Target<Bitmap>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                onResourceReady?.invoke()
+                return false
+            }
+        })
+        .into(this)
+}

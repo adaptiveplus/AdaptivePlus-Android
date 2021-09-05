@@ -1,6 +1,7 @@
 package plus.adaptive.sdk.utils
 
 import android.content.Context
+import android.os.Build
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -14,6 +15,7 @@ import plus.adaptive.sdk.data.models.APSnap
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.*
+import plus.adaptive.sdk.data.models.story.APOuterStyles
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.apview.StoriesAdapter
 import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModel
@@ -24,7 +26,9 @@ import plus.adaptive.sdk.ui.components.gif.APGIFComponentView
 import plus.adaptive.sdk.ui.components.image.APImageComponentView
 import plus.adaptive.sdk.ui.components.poll.APMultipleChoicePollComponentView
 import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
+import plus.adaptive.sdk.ui.components.story.StoryCircleComponentView
 import plus.adaptive.sdk.ui.components.story.StoryComponentView
+import plus.adaptive.sdk.ui.components.story.StorySquereComponentView
 import plus.adaptive.sdk.ui.components.text.APTextComponentView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
@@ -55,13 +59,52 @@ internal fun buildComponentView(
 internal fun drawStoryOnLayout(
     layout: ConstraintLayout,
     component: StoriesAdapter.StoryComponent,
+    componentViewModelProvider: APComponentViewModelProvider?,
+    isSquere: Boolean = false
+){
+    layout.removeAllViews()
+    component.let {
+        val viewModel = componentViewModelProvider?.getAPComponentViewModel(0)
+        if(isSquere){
+            StorySquereComponentView(layout.context, component, viewModel)?.let { componentView ->
+                componentView.id = ViewCompat.generateViewId()
+                layout.addView(componentView)
+                val componentConstraintSet = ConstraintSet()
+                componentConstraintSet.clone(layout)
+                componentConstraintSet.constrainWidth(
+                    componentView.id, component.outerStyles.width.toInt())
+                componentConstraintSet.constrainHeight(
+                    componentView.id, component.outerStyles.height.toInt())
+                componentConstraintSet.applyTo(layout)
+            }
+        } else {
+            StoryComponentView(layout.context, component, viewModel)?.let { componentView ->
+                componentView.id = ViewCompat.generateViewId()
+                layout.addView(componentView)
+                val componentConstraintSet = ConstraintSet()
+                componentConstraintSet.clone(layout)
+                componentConstraintSet.constrainWidth(
+                    componentView.id, component.outerStyles.width.toInt())
+                componentConstraintSet.constrainHeight(
+                    componentView.id, component.outerStyles.height.toInt())
+                componentConstraintSet.applyTo(layout)
+            }
+        }
+    }
+}
+
+internal fun drawCircleStoryOnLayout(
+    layout: ConstraintLayout,
+    component: StoriesAdapter.StoryComponent,
     componentViewModelProvider: APComponentViewModelProvider?
 ){
     layout.removeAllViews()
     component.let {
         val viewModel = componentViewModelProvider?.getAPComponentViewModel(0)
-        StoryComponentView(layout.context, component, viewModel)?.let { componentView ->
+        var imgViewId = 0
+        StoryCircleComponentView(layout.context, component, viewModel)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
+            imgViewId = componentView.id
             layout.addView(componentView)
             val componentConstraintSet = ConstraintSet()
             componentConstraintSet.clone(layout)
@@ -70,6 +113,42 @@ internal fun drawStoryOnLayout(
             componentConstraintSet.constrainHeight(
                 componentView.id, component.outerStyles.height.toInt())
             componentConstraintSet.applyTo(layout)
+        }
+        val textSize = when(component.outerStyles.outerSize){
+            APOuterStyles.OuterSize.S -> StorySizeConst.TEXT_SIZE_S
+            APOuterStyles.OuterSize.M -> StorySizeConst.TEXT_SIZE_M
+            APOuterStyles.OuterSize.L -> StorySizeConst.TEXT_SIZE_L
+        }
+        val storyTextComponent = APTextComponent(
+            font = APFont(
+                family = "Roboto",
+                style = APFont.Style.BOLD,
+                size = textSize.toDouble(),
+                color = "#000000",
+                align = APFont.Align.CENTER,
+                letterSpacing = 0.0,
+                lineHeight = null),
+            value = component.outerText
+        )
+        val margin = when(component.outerStyles.outerSize){
+            APOuterStyles.OuterSize.S -> StorySizeConst.STORY_PADDING_TEXT_S
+            APOuterStyles.OuterSize.M -> StorySizeConst.STORY_PADDING_TEXT_M
+            APOuterStyles.OuterSize.L -> StorySizeConst.STORY_PADDING_TEXT_L
+        }
+        APTextComponentView(layout.context, storyTextComponent, viewModel)?.let { componentTextView ->
+            componentTextView.id = ViewCompat.generateViewId()
+            layout.addView(componentTextView)
+            val textComponentConstraintSet = ConstraintSet()
+            textComponentConstraintSet.clone(layout)
+            textComponentConstraintSet.constrainWidth(
+                componentTextView.id, component.outerStyles.width.toInt())
+            textComponentConstraintSet.constrainHeight(
+                componentTextView.id, component.outerStyles.height.toInt())
+            textComponentConstraintSet.connect(
+                componentTextView.id, ConstraintSet.BOTTOM,
+                imgViewId, ConstraintSet.BOTTOM,margin
+            )
+            textComponentConstraintSet.applyTo(layout)
         }
     }
 }

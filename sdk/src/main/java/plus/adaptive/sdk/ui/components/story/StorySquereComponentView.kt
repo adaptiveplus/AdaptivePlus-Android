@@ -24,7 +24,7 @@ import plus.adaptive.sdk.utils.createDrawableFromColor
 import plus.adaptive.sdk.utils.getColorFromHex
 
 
-internal class StoryComponentView : APBaseComponentView {
+internal class StorySquereComponentView : APBaseComponentView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -37,7 +37,7 @@ internal class StoryComponentView : APBaseComponentView {
 
 
     override fun initElement() {
-        View.inflate(context, R.layout.ap_component_rectangle_story, this)
+        View.inflate(context, R.layout.ap_component_squere_story, this)
         prepare()
     }
 

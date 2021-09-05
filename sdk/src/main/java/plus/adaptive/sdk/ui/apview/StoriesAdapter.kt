@@ -19,10 +19,15 @@ import plus.adaptive.sdk.data.models.story.APOuterStyles
 import plus.adaptive.sdk.data.models.story.Campaign
 import plus.adaptive.sdk.ext.hide
 import plus.adaptive.sdk.ext.show
+import plus.adaptive.sdk.utils.StorySizeConst.CIRCLE_STORY_L
+import plus.adaptive.sdk.utils.StorySizeConst.CIRCLE_STORY_M
+import plus.adaptive.sdk.utils.StorySizeConst.CIRCLE_STORY_S
 import plus.adaptive.sdk.utils.createStoryAction
+import plus.adaptive.sdk.utils.drawCircleStoryOnLayout
 import plus.adaptive.sdk.utils.drawStoryOnLayout
 import plus.adaptive.sdk.utils.safeRun
 import java.io.Serializable
+import kotlin.math.roundToInt
 
 
 internal class StoriesAdapter(
@@ -82,25 +87,37 @@ internal class StoriesAdapter(
 
         fun bind(campaign: Campaign) = with(itemView) {
             val viewModel = apEntryPointViewModelProvider.getStoriesViewModel(campaign)
+            val isCircle = (options.height.toDouble()/options.cornerRadius).roundToInt() == 2
             viewModel?.prepare()
-
-            apEntryCardView.setOnClickListener {
+            val actionsList = listOf(createStoryAction(campaign))
+            itemView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {
                     lastTimeClicked = SystemClock.elapsedRealtime()
-                    viewModel?.runActions(listOf(createStoryAction(campaign)))
+                    viewModel?.runActions(actionsList)
                 }
             }
 
+            val heightPadding = if(isCircle){
+                when(campaign.body.story?.body?.outerStyles?.outerSize){
+                    APOuterStyles.OuterSize.S -> CIRCLE_STORY_S
+                    APOuterStyles.OuterSize.M -> CIRCLE_STORY_M
+                    APOuterStyles.OuterSize.L -> CIRCLE_STORY_L
+                    else -> 0
+                }
+            } else {
+                0
+            }
             apEntryCardView.layoutParams = LinearLayout.LayoutParams(
                 (options.width * scaleFactor).toInt(),
-                (options.height * scaleFactor).toInt()
+                ((options.height + heightPadding) * scaleFactor).toInt()
             )
-            apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
+            if(!isCircle)
+                apEntryCardView.radius = (options.cornerRadius * scaleFactor).toFloat()
 
             val apEntryLayoutConstraintSet = ConstraintSet()
             apEntryLayoutConstraintSet.clone(apEntryLayout)
             apEntryLayoutConstraintSet.constrainWidth(apEntryLayersLayout.id, options.width.toInt())
-            apEntryLayoutConstraintSet.constrainHeight(apEntryLayersLayout.id, options.height.toInt())
+            apEntryLayoutConstraintSet.constrainHeight(apEntryLayersLayout.id, options.height.toInt() + heightPadding)
             apEntryLayoutConstraintSet.setScaleX(apEntryLayersLayout.id, scaleFactor)
             apEntryLayoutConstraintSet.setScaleY(apEntryLayersLayout.id, scaleFactor)
             apEntryLayoutConstraintSet.applyTo(apEntryLayout)
@@ -110,10 +127,18 @@ internal class StoriesAdapter(
                     outerBorderColor = it.outerBorderColor,
                     outerStyles = it.outerStyles!!,
                     outerImageUrl = it.outerImageUrl,
-                    showBorder = showCampaignBorder
+                    showBorder = showCampaignBorder,
                 )
                 safeRun {
-                    drawStoryOnLayout(apEntryLayersLayout, component, viewModel)
+                    if(options.height == options.width){
+                        if(isCircle){
+                            drawCircleStoryOnLayout(apEntryLayersLayout, component, viewModel)
+                        } else {
+                            drawStoryOnLayout(apEntryLayersLayout, component, viewModel, true)
+                        }
+                    } else {
+                        drawStoryOnLayout(apEntryLayersLayout, component, viewModel)
+                    }
                 }
             }
 
