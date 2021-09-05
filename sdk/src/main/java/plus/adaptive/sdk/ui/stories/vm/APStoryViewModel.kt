@@ -70,17 +70,15 @@ internal class APStoryViewModel(
         _snapEventInfoLiveData.value = eventInfo
     }
 
-    fun setStoryCampaignWatched() {
-        val userId = userRepository.getAPUserId() ?: ""
-        val prefKey = "${userId}_${story.campaignId}_${APSharedPreferences.IS_CAMPAIGN_WATCHED}"
-        preferences.saveBoolean(prefKey, true)
-    }
-
     override fun getAPViewId(): String {
         return storiesDialogViewModelDelegate.getAPViewId()
     }
 
     override fun getCampaignId(): String {
         return story.campaignId
+    }
+
+    fun saveWatchedStoryId(id: String) {
+        preferences.saveWatchedStoryId(id)
     }
 }

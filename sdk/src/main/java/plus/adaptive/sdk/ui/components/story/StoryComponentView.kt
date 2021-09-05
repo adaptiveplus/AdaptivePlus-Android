@@ -106,17 +106,17 @@ internal class StoryComponentView : APBaseComponentView {
 
     private fun updateImageBorder() {
         (component as? StoriesAdapter.StoryComponent)?.run {
-            if ((componentViewModel as? StoryComponentViewModel)?.showBorder() == true) {
+            if ((componentViewModel as? StoryComponentViewModel)?.showBorder() != false) {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.START, 4)
+                    apComponentImageView.id, ConstraintSet.START, 5)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.END, 4)
+                    apComponentImageView.id, ConstraintSet.END, 5)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.TOP, 4)
+                    apComponentImageView.id, ConstraintSet.TOP, 5)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.BOTTOM, 4)
+                    apComponentImageView.id, ConstraintSet.BOTTOM, 5)
 
                 constraintSet.applyTo(apComponentLayout)
                 val borderDrawable =

@@ -17,6 +17,7 @@ internal class APSharedPreferences(context: Context) {
         const val CAMPAIGN_WATCHED_COUNT = "campaign_watched_count"
         const val POLL_CHOSEN_ANSWER_ID = "poll_chosen_answer_id"
         const val POLL_DATA = "poll_data"
+        const val STORY_LIST = "story_list"
     }
 
 
@@ -61,5 +62,13 @@ internal class APSharedPreferences(context: Context) {
     fun remove(key: String) = with (preferences.edit()) {
         remove(key)
         commit()
+    }
+
+    fun getWatchedStoryIds(): MutableSet<String>? = preferences.getStringSet(STORY_LIST, null)
+
+    fun saveWatchedStoryId(value: String) {
+        val watchedSet = getWatchedStoryIds() ?: HashSet<String>()
+        (watchedSet as HashSet<String>).add(value)
+        preferences.edit().putStringSet(STORY_LIST, watchedSet).apply()
     }
 }

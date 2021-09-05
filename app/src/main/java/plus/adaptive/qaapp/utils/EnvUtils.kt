@@ -153,22 +153,16 @@ fun getEnvByName(context: Context, envName: String) : APSdkEnvironment? {
 
 private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     return when (envName) {
-        Environment.ALEXEY_GMAIL_DEV.value -> APSdkEnvironment(
-            name = Environment.ALEXEY_GMAIL_DEV.value,
-            appId = "plus.adaptive.qaapp",
-            apiKey = "5e3kh12NDXYJogRX",
+        Environment.HB_TEST.value -> APSdkEnvironment(
+            name = Environment.HB_TEST.value,
+            appId = "plus.adaptive",
+            apiKey = "0JaeeLZzONqXsVLg",
             apViews = listOf()
         )
         Environment.MOCK.value -> APSdkEnvironment(
             name = Environment.MOCK.value,
             appId = "plus.adaptive.qaapp",
-            apiKey = "",
-            apViews = listOf()
-        )
-        Environment.ALEXEY_DEV.value -> APSdkEnvironment(
-            name = Environment.ALEXEY_DEV.value,
-            appId = "plus.adaptive.qaapp",
-            apiKey = "PZoXYpVlvm2v7dKy",
+            apiKey = "0JaeeLZzONqXsVLg",
             apViews = listOf()
         )
         else -> null

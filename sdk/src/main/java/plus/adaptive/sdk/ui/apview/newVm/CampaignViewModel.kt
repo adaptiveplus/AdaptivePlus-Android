@@ -17,7 +17,7 @@ import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModelProvider
 import plus.adaptive.sdk.ui.components.story.StoryComponentViewModel
 
 internal class CampaignViewModel(
-    private val campaign: Campaign,
+    private var campaign: Campaign,
     private val preferences: APSharedPreferences,
     private val userRepository: APUserRepository,
     private val lifecycleListener: APEntryPointLifecycleListener,
@@ -80,7 +80,12 @@ internal class CampaignViewModel(
     }
 
     override fun showBorder(): Boolean {
-        return apViewVMDelegate.showBorder()
+        return campaign.body.story?.showBorder ?: true
+    }
+
+    fun updateStoryShowBorderAndReset(showBorder: Boolean?){
+        campaign.body.story?.showBorder = showBorder
+        reset()
     }
 
     fun reset() {

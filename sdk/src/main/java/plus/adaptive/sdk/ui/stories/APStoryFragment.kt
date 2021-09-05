@@ -273,7 +273,7 @@ internal class APStoryFragment :
             viewModel.updateSnapProgressState(snapId = snapId, state = APSnapState.RESUMED)
 
             if (snapIndex == story.snaps.lastIndex) {
-                viewModel.setStoryCampaignWatched()
+                viewModel.saveWatchedStoryId(story.id)
             }
         }
         else {

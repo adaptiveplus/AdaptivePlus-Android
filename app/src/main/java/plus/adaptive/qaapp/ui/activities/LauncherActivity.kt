@@ -1,19 +1,19 @@
 package plus.adaptive.qaapp.ui.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import plus.adaptive.sdk.data.models.APLocation
+import kotlinx.android.synthetic.main.activity_launcher.*
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.data.Language
 import plus.adaptive.qaapp.ui.dialogs.AddCustomIPDialog
 import plus.adaptive.qaapp.ui.dialogs.AddEnvDialog
 import plus.adaptive.qaapp.utils.*
-import kotlinx.android.synthetic.main.activity_launcher.*
+import plus.adaptive.sdk.data.models.APLocation
 
 
 class LauncherActivity : AppCompatActivity() {
@@ -126,7 +126,7 @@ class LauncherActivity : AppCompatActivity() {
         val envsNames = getEnvs(this).map { it.name }
 
         envSpinner.adapter = ArrayAdapter(
-            this, android.R.layout.simple_spinner_dropdown_item, envsNames)
+            this, android.R.layout.simple_spinner_dropdown_item, envsNames.reversed())
     }
 
     private fun updateIPsAdapter() {

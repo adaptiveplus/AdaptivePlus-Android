@@ -71,36 +71,6 @@ internal fun drawStoryOnLayout(
                 componentView.id, component.outerStyles.height.toInt())
             componentConstraintSet.applyTo(layout)
         }
-//        val font = APFont(
-//                family="Roboto",
-//                style = APFont.Style.BOLD,
-//                size=9.0,
-//                color="#ffffff",
-//                align= APFont.Align.CENTER,
-//                letterSpacing=0.0,
-//                lineHeight=null)
-//        val tComponent = APTextComponent(font = font, value =  component.outerText)
-//        APTextComponentView(layout.context, tComponent, viewModel)?.let {componentView ->
-//            componentView.id = ViewCompat.generateViewId()
-//            layout.addView(componentView)
-//            val componentConstraintSet = ConstraintSet()
-//            componentConstraintSet.clone(layout)
-//            componentConstraintSet.constrainWidth(
-//                componentView.id, 0)
-//            componentConstraintSet.connect(
-//                componentView.id, ConstraintSet.BOTTOM,
-//                layout.id, ConstraintSet.BOTTOM,6
-//            )
-//            componentConstraintSet.connect(
-//                componentView.id, ConstraintSet.START,
-//                layout.id, ConstraintSet.START, 6
-//            )
-//            componentConstraintSet.connect(
-//                componentView.id, ConstraintSet.END,
-//                layout.id, ConstraintSet.END,6
-//            )
-//            componentConstraintSet.applyTo(layout)
-//        }
     }
 }
 

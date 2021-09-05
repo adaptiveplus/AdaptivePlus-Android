@@ -3,11 +3,11 @@ package plus.adaptive.sdk.ui.apview.vm
 import androidx.lifecycle.*
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
-import plus.adaptive.sdk.data.models.actions.APAction
+import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APEntryPoint
 import plus.adaptive.sdk.data.models.APError
-import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.Event
+import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.data.models.story.Campaign
@@ -16,6 +16,7 @@ import plus.adaptive.sdk.data.repositories.APViewRepository
 import plus.adaptive.sdk.ui.apview.APEntryPointLifecycleListener
 import plus.adaptive.sdk.ui.apview.newVm.CampaignViewModel
 import plus.adaptive.sdk.utils.*
+import java.util.*
 
 
 internal class APViewViewModel(
@@ -33,12 +34,15 @@ internal class APViewViewModel(
         get() = _actionEventLiveData
     val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
         get() = _magnetizeEntryPointEventLiveData
+    val swapItems: SingleEventLiveData<Int>
+        get() = _swapItems
 
     private val _apCarouselViewDataModelLiveData = MutableLiveData<APCarouselViewDataModel?>()
     private val _storyDataModelLiveData = MutableLiveData<APTemplateDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<APAction>>()
     private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
+    private val _swapItems = SingleEventLiveData<Int>()
     private val _isAPStoriesPausedLiveData =
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
@@ -99,23 +103,30 @@ internal class APViewViewModel(
         dataModel.entryPoints = newEntryList
     }
 
-    private fun sortAndFilterCampaigns(dataModel: APTemplateDataModel) {
-        val activeEntries = mutableListOf<Campaign>()
-        val inactiveEntries = mutableListOf<Campaign>()
-
-        dataModel.campaigns.forEach {
-            if (getStoriesViewModel(it)?.isActive() == true) {
-                activeEntries.add(it)
-            } else {
-                if (it.showCount!=1) {
-                    inactiveEntries.add(it)
+    private fun sortAndFilterCampaigns(dataModel: APTemplateDataModel, swapInAdapter: Boolean = false) {
+        val notWatched = mutableListOf<Campaign>()
+        val watched = mutableListOf<Campaign>()
+        dataModel.campaigns.forEachIndexed { index, campaign ->
+            campaign.body.story?.let { story ->
+                var isWatched = false
+                getWatchedStorySet()?.forEach { watchedStoryId ->
+                    if (story.id == watchedStoryId) {
+                        isWatched = true
+                    }
+                }
+                if (isWatched) {
+                    if(swapInAdapter && story.showBorder == null)
+                        _swapItems.value = index
+                    story.showBorder = false
+                    watched.add(campaign)
+                } else {
+                    notWatched.add(campaign)
                 }
             }
         }
-
         val newStoryCampaign = mutableListOf<Campaign>().apply {
-            addAll(activeEntries)
-            addAll(inactiveEntries)
+            addAll(notWatched)
+            addAll(watched)
         }
         dataModel.campaigns = newStoryCampaign
     }
@@ -218,14 +229,16 @@ internal class APViewViewModel(
             }?.let { entryPoint ->
                 _magnetizeEntryPointEventLiveData.value = Event(entryPoint.id)
             }
-        }
-        _storyViewModelMap.forEach { (_, entryPointViewModel) ->
-            entryPointViewModel.reset()
+            sortAndFilterCampaigns(dataModel, true)
+            dataModel.campaigns.forEach { campaign ->
+                getStoriesViewModel(campaign)?.updateStoryShowBorderAndReset(campaign.body.story?.showBorder)
+            }
+            _storyDataModelLiveData.value = dataModel
         }
     }
 
     override fun getAutoScrollPeriod(): Long? {
-        val autoScroll = _apCarouselViewDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
+        val autoScroll = _storyDataModelLiveData.value?.options?.autoScroll?.let { it * 1000 }?.toLong()
         if (autoScroll == null || autoScroll <= 0L) {
             return null
         }
@@ -465,5 +478,9 @@ internal class APViewViewModel(
                 }
             }
         }
+    }
+
+    private fun getWatchedStorySet(): MutableSet<String>? {
+        return preferences.getWatchedStoryIds()
     }
 }

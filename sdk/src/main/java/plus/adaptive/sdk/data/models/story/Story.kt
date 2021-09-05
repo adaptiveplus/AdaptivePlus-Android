@@ -2,10 +2,13 @@ package plus.adaptive.sdk.data.models.story
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APPadding
+import plus.adaptive.sdk.data.models.APPollData
 import plus.adaptive.sdk.data.models.APSnap
+import plus.adaptive.sdk.data.models.components.APPollComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent.APLocale
 import java.io.Serializable
 
@@ -75,7 +78,8 @@ internal data class Campaign(
 internal data class Story(
     val id: String,
     val type: String,
-    val body: Body
+    val body: Body,
+    var showBorder: Boolean? = true
 ) : Serializable {
     internal data class Body(
         var campaignId: String,
@@ -113,8 +117,12 @@ internal data class Layer(
 ) : Serializable {
 
     data class Component (
+        val id: String,
         val color : String?,
         val url: String?,
+        val type: APPollComponent.Type?,
+        val question: APPollData.Question?,
+        val answers: List<APPollData.Answer>?,
         val value: APLocale?,
         val font: APFont?,
         val text: Text?,

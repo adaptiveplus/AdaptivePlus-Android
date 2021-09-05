@@ -21,6 +21,7 @@ import plus.adaptive.sdk.data.models.story.Campaign
 import plus.adaptive.sdk.data.models.story.Layer
 import plus.adaptive.sdk.data.models.story.Snap
 import plus.adaptive.sdk.data.models.story.Text
+import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
 
 
 internal fun createStoryAction(campaign: Campaign) : APAction?{
@@ -103,6 +104,11 @@ private fun createComponent(layer: Layer): APComponent? {
                     actions = listOf()
                 )
             }
+            APLayer.Type.POLL -> {
+                layer.component.type?.apply {
+                    component = APPollComponent(layer.component.id, this)
+                }
+            }
         }
     }
     return component
@@ -158,8 +164,8 @@ private fun createWebLinkAction(action: Action): APOpenWebLinkAction {
     )
 }
 
-//private fun createShowStoryAction(action: Action): APShowStoryAction {
-//    return APShowStoryAction(APStory())
+//private fun createShowStoryAction(action: Action): APAction? {
+//    return createStoryAction(action)
 //}
 
 private fun createSMSAction(action: Action): APSendSMSAction {
