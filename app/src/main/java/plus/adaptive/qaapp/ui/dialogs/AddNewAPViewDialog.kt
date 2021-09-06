@@ -49,7 +49,7 @@ class AddNewAPViewDialog : DialogFragment() {
             dismiss()
             return
         }
-
+        apViewIdEditText.setText("APV-00000000")
         addAPViewBtn.setOnClickListener {
             val apViewId = apViewIdEditText.text.toString()
             val hasDrafts = apHasDraftsCheckbox.isChecked

@@ -51,6 +51,7 @@ internal class StoryComponentView : APBaseComponentView {
                 APOuterStyles.OuterSize.S -> TEXT_SIZE_S
                 APOuterStyles.OuterSize.M -> TEXT_SIZE_M
                 APOuterStyles.OuterSize.L -> TEXT_SIZE_L
+                else -> 10.0
             }
             val font = APFont(
                 family ="Roboto",

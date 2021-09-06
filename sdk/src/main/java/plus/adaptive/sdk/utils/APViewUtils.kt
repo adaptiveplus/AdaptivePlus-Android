@@ -1,23 +1,18 @@
 package plus.adaptive.sdk.utils
 
 import android.content.Context
-import android.os.Build
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT
 import androidx.core.view.ViewCompat
 import plus.adaptive.sdk.data.models.*
-import plus.adaptive.sdk.data.models.APCarouselViewDataModel
-import plus.adaptive.sdk.data.models.APFont
-import plus.adaptive.sdk.data.models.APLayer
-import plus.adaptive.sdk.data.models.APSnap
-import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.*
 import plus.adaptive.sdk.data.models.story.APOuterStyles
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.apview.StoriesAdapter
+import plus.adaptive.sdk.ui.apview.newVm.CampaignViewModel
 import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModel
 import plus.adaptive.sdk.ui.components.background.APBackgroundComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
@@ -30,8 +25,10 @@ import plus.adaptive.sdk.ui.components.story.StoryCircleComponentView
 import plus.adaptive.sdk.ui.components.story.StoryComponentView
 import plus.adaptive.sdk.ui.components.story.StorySquereComponentView
 import plus.adaptive.sdk.ui.components.text.APTextComponentView
+import plus.adaptive.sdk.ui.splashscreen.vm.APSplashScreenDialogViewModel
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaButtonView
 import plus.adaptive.sdk.ui.stories.actionarea.APActionAreaListener
+import plus.adaptive.sdk.ui.stories.vm.APSnapViewModel
 
 
 internal fun buildComponentView(
@@ -65,6 +62,8 @@ internal fun drawStoryOnLayout(
     layout.removeAllViews()
     component.let {
         val viewModel = componentViewModelProvider?.getAPComponentViewModel(0)
+        val language = getLanguageFromViewModel(componentViewModelProvider)
+        component.outerText.locale = language
         if(isSquere){
             StorySquereComponentView(layout.context, component, viewModel)?.let { componentView ->
                 componentView.id = ViewCompat.generateViewId()
@@ -93,6 +92,16 @@ internal fun drawStoryOnLayout(
     }
 }
 
+private fun getLanguageFromViewModel(viewModel: APComponentViewModelProvider?): String? {
+    return when (viewModel){
+        is APEntryPointViewModel -> viewModel.getLang()
+        is CampaignViewModel -> viewModel.getLang()
+        is APSnapViewModel -> viewModel.getLang()
+        is APSplashScreenDialogViewModel -> viewModel.getLang()
+        else -> null
+    }
+}
+
 internal fun drawCircleStoryOnLayout(
     layout: ConstraintLayout,
     component: StoriesAdapter.StoryComponent,
@@ -101,6 +110,8 @@ internal fun drawCircleStoryOnLayout(
     layout.removeAllViews()
     component.let {
         val viewModel = componentViewModelProvider?.getAPComponentViewModel(0)
+        val language = getLanguageFromViewModel(componentViewModelProvider)
+        component.outerText.locale = language
         var imgViewId = 0
         StoryCircleComponentView(layout.context, component, viewModel)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
@@ -118,6 +129,7 @@ internal fun drawCircleStoryOnLayout(
             APOuterStyles.OuterSize.S -> StorySizeConst.TEXT_SIZE_S
             APOuterStyles.OuterSize.M -> StorySizeConst.TEXT_SIZE_M
             APOuterStyles.OuterSize.L -> StorySizeConst.TEXT_SIZE_L
+            else -> 10.0
         }
         val storyTextComponent = APTextComponent(
             font = APFont(
@@ -134,6 +146,7 @@ internal fun drawCircleStoryOnLayout(
             APOuterStyles.OuterSize.S -> StorySizeConst.STORY_PADDING_TEXT_S
             APOuterStyles.OuterSize.M -> StorySizeConst.STORY_PADDING_TEXT_M
             APOuterStyles.OuterSize.L -> StorySizeConst.STORY_PADDING_TEXT_L
+            else -> -66
         }
         APTextComponentView(layout.context, storyTextComponent, viewModel)?.let { componentTextView ->
             componentTextView.id = ViewCompat.generateViewId()
@@ -146,7 +159,7 @@ internal fun drawCircleStoryOnLayout(
                 componentTextView.id, component.outerStyles.height.toInt())
             textComponentConstraintSet.connect(
                 componentTextView.id, ConstraintSet.BOTTOM,
-                imgViewId, ConstraintSet.BOTTOM,margin
+                imgViewId, ConstraintSet.BOTTOM, margin
             )
             textComponentConstraintSet.applyTo(layout)
         }
@@ -162,10 +175,10 @@ internal fun drawAPLayersOnLayout(
 
     layers.forEachIndexed { index, layer ->
         val componentViewModel = componentViewModelProvider?.getAPComponentViewModel(index)
-//        val language = (componentViewModelProvider as APEntryPointViewModel).getLang()
-//        if(layer.component is APTextComponent){
-//            layer.component.value.locale = language
-//        }
+        val language = getLanguageFromViewModel(componentViewModelProvider)
+        if(layer.component is APTextComponent){
+            layer.component.value.locale = language
+        }
         buildComponentView(layout.context, layer, componentViewModel)?.let { componentView ->
             componentView.id = ViewCompat.generateViewId()
 
@@ -214,7 +227,6 @@ internal fun isStoriesDataModelNullOrEmpty(dataModel: APTemplateDataModel?): Boo
 internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStory>? {
     return dataModel?.run {
         val stories = mutableListOf<APStory>()
-
         entryPoints.forEach { entryPoint ->
             entryPoint.actions.forEach { action ->
                 if (action is APShowStoryAction) {
@@ -222,7 +234,6 @@ internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStor
                 }
             }
         }
-
         stories
     }
 }
@@ -230,7 +241,6 @@ internal fun getAPStoriesList(dataModel: APCarouselViewDataModel?) : List<APStor
 internal fun getAPStoriesList(dataModel: APTemplateDataModel?) : List<APStory>? {
     return dataModel?.run {
         val stories = mutableListOf<APStory>()
-
         campaigns.forEach { campaign ->
             campaign.body.story?.let {
                 stories.add(
@@ -242,7 +252,6 @@ internal fun getAPStoriesList(dataModel: APTemplateDataModel?) : List<APStory>? 
                 )
             }
         }
-
         stories
     }
 }

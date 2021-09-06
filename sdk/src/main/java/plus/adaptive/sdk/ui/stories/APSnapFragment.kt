@@ -186,7 +186,6 @@ internal class APSnapFragment :
         safeRun(
             executable = {
                 drawAPLayersOnLayout(apSnapLayersLayout, snap.layers, viewModel)
-
                 snap.actionArea?.let { actionArea ->
                     drawAPSnapActionArea(apActionAreaLayout, actionArea, viewModel)
                 }

@@ -103,6 +103,10 @@ internal class CampaignViewModel(
         }
     }
 
+    fun getLang(): String?{
+        return userRepository.getAPUser().device?.locale
+    }
+
     private fun onComponentComplete(index: Int) {
         // TODO: implement
     }

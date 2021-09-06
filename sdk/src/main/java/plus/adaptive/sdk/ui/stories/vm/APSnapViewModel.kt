@@ -166,6 +166,10 @@ internal class APSnapViewModel(
         componentViewModelList.forEach { it?.prepare() }
     }
 
+    fun getLang(): String?{
+        return userRepository?.getAPUser()?.device?.locale
+    }
+
     override fun isActive(): Boolean = true
 
     override fun showBorder(): Boolean = true

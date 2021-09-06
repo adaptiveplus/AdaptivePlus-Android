@@ -47,10 +47,25 @@ internal class StorySquereComponentView : APBaseComponentView {
                 color = getColorFromHex(outerStyles.outerImageLoadingColor),
                 cornerRadius = outerStyles.cornerRadius.toInt()
             )
+            apComponentImageView.loadImage(
+                outerImageUrl!!,
+                defaultDrawable = defaultDrawable,
+                cornerRadius = outerStyles.cornerRadius.toInt(),
+                onResourceReady = {
+                    (componentViewModel as? StoryComponentViewModel)?.onImageResourceReady()
+                },
+                onLoadFailed = {
+                    (componentViewModel as? StoryComponentViewModel)?.onImageLoadFailed()
+                },
+                onLoadProgressUpdate = {
+                    (componentViewModel as? StoryComponentViewModel)?.onImageLoadProgressUpdate(it)
+                }
+            )
             val textSize = when(outerStyles.outerSize){
                 APOuterStyles.OuterSize.S -> TEXT_SIZE_S
                 APOuterStyles.OuterSize.M -> TEXT_SIZE_M
                 APOuterStyles.OuterSize.L -> TEXT_SIZE_L
+                else -> 10.0
             }
             val font = APFont(
                 family ="Roboto",
@@ -78,20 +93,6 @@ internal class StorySquereComponentView : APBaseComponentView {
                 onError = {
                     appStoryComponentText.text = outerText.RU
                     (componentViewModel as? StoryComponentViewModel)?.onError()
-                }
-            )
-            apComponentImageView.loadImage(
-                outerImageUrl!!,
-                defaultDrawable = defaultDrawable,
-                cornerRadius = outerStyles.cornerRadius.toInt(),
-                onResourceReady = {
-                    (componentViewModel as? StoryComponentViewModel)?.onImageResourceReady()
-                },
-                onLoadFailed = {
-                    (componentViewModel as? StoryComponentViewModel)?.onImageLoadFailed()
-                },
-                onLoadProgressUpdate = {
-                    (componentViewModel as? StoryComponentViewModel)?.onImageLoadProgressUpdate(it)
                 }
             )
             updateImageBorder()

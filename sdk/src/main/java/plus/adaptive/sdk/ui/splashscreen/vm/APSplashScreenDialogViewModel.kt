@@ -92,4 +92,8 @@ internal class APSplashScreenDialogViewModel(
         }
     }
 
+    fun getLang(): String?{
+        return userRepository?.getAPUser()?.device?.locale
+    }
+
 }

@@ -42,7 +42,7 @@ internal data class APOuterStyles(
     val height: Double,
     val cornerRadius: Double,
     val hasTextUnderImage: Boolean,
-    val outerSize: OuterSize,
+    val outerSize: OuterSize?,
     val outerImageLoadingColor: String
 ) : Serializable {
     enum class OuterSize {

@@ -153,10 +153,10 @@ fun getEnvByName(context: Context, envName: String) : APSdkEnvironment? {
 
 private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
     return when (envName) {
-        Environment.HB_TEST.value -> APSdkEnvironment(
-            name = Environment.HB_TEST.value,
+        Environment.TEST.value -> APSdkEnvironment(
+            name = Environment.TEST.value,
             appId = "plus.adaptive",
-            apiKey = "0JaeeLZzONqXsVLg",
+            apiKey = "rV7brpJwCNKGbgAN",
             apViews = listOf()
         )
         Environment.MOCK.value -> APSdkEnvironment(
