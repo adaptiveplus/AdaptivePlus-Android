@@ -66,22 +66,11 @@ class AdaptivePlusInstruction(
     }
 
     fun showInstruction() {
-        viewModel.loadTemplateFromCache(apViewId = viewId)
-        viewModel.instructionDataModelLiveData.observe(
-            fragmentActivity,
-            object: Observer<APTemplateDataModel?> {
-                override fun onChanged(component: APTemplateDataModel?) {
-                    viewModel.instructionDataModelLiveData.removeObserver(this)
-                    if (component?.campaigns.isNullOrEmpty()) {
-                        onStoriesFinishedCallback?.invoke()
-                    } else {
-                        runOnMainThread {
-                            startStory(component)
-                        }
-                    }
-                }
+        runOnMainThread {
+            viewModel.loadTemplateFromCache(apViewId = viewId)?.let {
+                startStory(it)
             }
-        )
+        }
     }
 
     fun setAPCustomActionListener(listener: APCustomActionListener) {

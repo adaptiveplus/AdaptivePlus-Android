@@ -1,7 +1,5 @@
 package plus.adaptive.sdk.ui.apview.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
@@ -20,20 +18,14 @@ internal class APInstructionViewModel(
     private val preferences: APSharedPreferences
 ) : ViewModel(){
 
-    val instructionDataModelLiveData: LiveData<APTemplateDataModel?>
-        get() = _instructionDataModelLiveData
-
-    private val _instructionDataModelLiveData = MutableLiveData<APTemplateDataModel?>()
+    private lateinit var dataModel: APTemplateDataModel
 
     private fun setInstructionDataModel(
         dataModel: APTemplateDataModel,
-        isCached: Boolean = false,
         appViewId: String
     ) {
-//        if (!isCached) {
-            saveAPTemplateViewDataModelToCache(appViewId, dataModel)
-//        }
-        _instructionDataModelLiveData.value = dataModel
+        this.dataModel = dataModel
+        saveAPTemplateViewDataModelToCache(appViewId, dataModel)
     }
 
     private fun saveAPTemplateViewDataModelToCache(appViewId: String, dataModel: APTemplateDataModel) {
@@ -53,31 +45,21 @@ internal class APInstructionViewModel(
                 }
 
                 override fun failure(error: APError?) {
-                    runOnMainThread {
-                        _instructionDataModelLiveData.value?.let {
-                            setInstructionDataModel(
-                                dataModel = it,
-                                appViewId = apViewId
-                            )
-                        }
-                    }
+
                 }
             }
         )
     }
 
-    fun loadTemplateFromCache(apViewId: String) {
+    fun loadTemplateFromCache(apViewId: String): APTemplateDataModel? {
+        var data: APTemplateDataModel? = null
         cacheManager.loadAPTemplateViewDataModelFromCache(apViewId) { dataModel ->
             if (dataModel != null) {
-
-                runOnMainThread {
-                    setInstructionDataModel(
-                        dataModel = dataModel,
-                        isCached = true,
-                        appViewId = apViewId
-                    )
-                }
+                data = dataModel
+            } else {
+                data = this.dataModel
             }
         }
+        return data
     }
 }

@@ -81,18 +81,26 @@ class ApiFragment : Fragment() {
                 for (apViewModel in configs.apViews) {
                     if(apViewModel.isInstruction == true){
                         activity?.apply {
-
-                            val instruction = AdaptivePlusInstruction(
-                                this,
-                                childFragmentManager
-                            )
-                            instruction.preloadTagById(apViewModel.id)
-                            instruction.setAPCustomActionListener {
-                                val name = it["name"]?.toString()
-                                context?.toast("Custom action: $name")
-                            }
-                            instruction.setOnStoriesFinishedCallback {
-                                context?.toast("finish")
+                            val apButton = Button(context)
+                            apButton.id = ViewCompat.generateViewId()
+                            apButton.text = "SHOW"
+                            apButton.setPadding(10,10,10,10)
+                            apButton.setOnClickListener {
+                                it.isEnabled = false
+                                val instruction = AdaptivePlusInstruction(
+                                    this,
+                                    childFragmentManager
+                                )
+                                instruction.preloadTagById(apViewModel.id)
+                                instruction.setAPCustomActionListener {
+                                    val name = it["name"]?.toString()
+                                    context?.toast("Custom action: $name")
+                                }
+                                instruction.setOnStoriesFinishedCallback {
+                                    context?.toast("finish")
+                                    apButton.isEnabled = true
+                                }
+                                instruction.showInstruction()
                             }
                             val rewindImage = ImageView(ctx).apply {
                                 val paddingSz = TypedValue.applyDimension(
@@ -126,13 +134,6 @@ class ApiFragment : Fragment() {
                                 addView(apViewNameTxtView, txtViewLayoutParams)
                             }
                             apViewsLayout?.addView(apViewHeader)
-                            val apButton = Button(context)
-                            apButton.id = ViewCompat.generateViewId()
-                            apButton.text = "SHOW"
-                            apButton.setPadding(10,10,10,10)
-                            apButton.setOnClickListener {
-                                instruction.showInstruction()
-                            }
                             apViewsLayout.addView(apButton)
                         }
                     } else {
