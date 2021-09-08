@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
@@ -12,18 +13,28 @@ import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.ui.apview.APViewFragment
 import plus.adaptive.sdk.ui.apview.vm.APInstructionViewModel
 import plus.adaptive.sdk.ui.apview.vm.APInstructionViewModelFactory
 import plus.adaptive.sdk.ui.apview.vm.APViewVMDelegateProtocol
 import plus.adaptive.sdk.ui.dialogs.WebViewDialog
 import plus.adaptive.sdk.ui.stories.APStoriesDialog
 import plus.adaptive.sdk.utils.createAPStoryFromStory
+import plus.adaptive.sdk.utils.runDelayedTask
 import plus.adaptive.sdk.utils.runOnMainThread
 
 class AdaptivePlusInstruction(
     private val fragmentActivity: FragmentActivity,
     private val fragmentManager: FragmentManager? = null
 )  : APViewVMDelegateProtocol {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(
+            fragmentActivity: FragmentActivity,
+            fragmentManager: FragmentManager? = null
+        ) = AdaptivePlusInstruction(fragmentActivity, fragmentManager)
+    }
 
     private lateinit var viewModel: APInstructionViewModel
     private var apCustomActionListener: APCustomActionListener? = null
@@ -66,11 +77,11 @@ class AdaptivePlusInstruction(
     }
 
     fun showInstruction() {
-        runOnMainThread {
+        runDelayedTask({
             viewModel.loadTemplateFromCache(apViewId = viewId)?.let {
                 startStory(it)
-            }
-        }
+            } ?: onStoriesFinishedCallback?.invoke()
+        },500)
     }
 
     fun setAPCustomActionListener(listener: APCustomActionListener) {

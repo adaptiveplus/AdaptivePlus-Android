@@ -57,7 +57,9 @@ internal class APInstructionViewModel(
             if (dataModel != null) {
                 data = dataModel
             } else {
-                data = this.dataModel
+                if(this::dataModel.isInitialized){
+                    data = this.dataModel
+                }
             }
         }
         return data

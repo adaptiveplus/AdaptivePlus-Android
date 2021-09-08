@@ -162,7 +162,6 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
             viewModel.apCarouselViewDataModelLiveData.observe(viewLifecycleOwner, apCarouselViewDataModelObserver)
             viewModel.storyDataModelLiveData.observe(viewLifecycleOwner, storyDataModelObserver)
             viewModel.actionEventLiveData.observe(viewLifecycleOwner, actionEventObserver)
-            viewModel.swapItems.observe(viewLifecycleOwner, adapterSwapItemObserver)
             viewModel.magnetizeEntryPointEventLiveData.observe(viewLifecycleOwner, magnetizeEntryPointEventObserver)
         }
     }
@@ -197,13 +196,6 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
     private val actionEventObserver = EventObserver<APAction> {
         apActionsManager?.runAction(action = it)
-    }
-
-    private val adapterSwapItemObserver = Observer<Int> {
-//        it.forEach{ index ->
-
-            storiesAdapter.notifyItemMoved(it, storiesAdapter.itemCount-1)
-//        }
     }
 
     private val magnetizeEntryPointEventObserver =

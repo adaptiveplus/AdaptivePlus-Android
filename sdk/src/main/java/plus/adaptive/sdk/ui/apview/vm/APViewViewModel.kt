@@ -34,15 +34,12 @@ internal class APViewViewModel(
         get() = _actionEventLiveData
     val magnetizeEntryPointEventLiveData: LiveData<Event<String>>
         get() = _magnetizeEntryPointEventLiveData
-    val swapItems: SingleEventLiveData<Int>
-        get() = _swapItems
 
     private val _apCarouselViewDataModelLiveData = MutableLiveData<APCarouselViewDataModel?>()
     private val _storyDataModelLiveData = MutableLiveData<APTemplateDataModel?>()
     private val _actionEventLiveData = MutableLiveData<Event<APAction>>()
     private val _magnetizeEntryPointEventLiveData = MutableLiveData<Event<String>>()
     private val _apStoriesPauseNumberLiveData = MutableLiveData<Int>().apply { value = 0 }
-    private val _swapItems = SingleEventLiveData<Int>()
     private val _isAPStoriesPausedLiveData =
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
@@ -74,7 +71,7 @@ internal class APViewViewModel(
         isEmptyViewId: Boolean = false
     ) {
         if (!isCached || _storyDataModelLiveData.value == null) {
-            sortAndFilterCampaigns(dataModel)
+            sortAndFilterCampaigns(dataModel, true)
             if (!isCached) {
                 saveAPTemplateViewDataModelToCache(appViewId, dataModel)
             }
@@ -115,8 +112,6 @@ internal class APViewViewModel(
                     }
                 }
                 if (isWatched) {
-                    if(swapInAdapter && story.showBorder == null)
-                        _swapItems.value = index
                     story.showBorder = false
                     watched.add(campaign)
                 } else {
@@ -128,7 +123,9 @@ internal class APViewViewModel(
             addAll(notWatched)
             addAll(watched)
         }
-        dataModel.campaigns = newStoryCampaign
+        if(swapInAdapter){
+            dataModel.campaigns = newStoryCampaign
+        }
     }
 
     fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {
@@ -229,7 +226,7 @@ internal class APViewViewModel(
             }?.let { entryPoint ->
                 _magnetizeEntryPointEventLiveData.value = Event(entryPoint.id)
             }
-            sortAndFilterCampaigns(dataModel, true)
+            sortAndFilterCampaigns(dataModel)
             dataModel.campaigns.forEach { campaign ->
                 getStoriesViewModel(campaign)?.updateStoryShowBorderAndReset(campaign.body.story?.showBorder)
             }

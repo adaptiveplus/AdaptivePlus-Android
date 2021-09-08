@@ -82,24 +82,24 @@ class ApiFragment : Fragment() {
                     if(apViewModel.isInstruction == true){
                         activity?.apply {
                             val apButton = Button(context)
+                            val instruction = AdaptivePlusInstruction.newInstance(
+                                this,
+                                childFragmentManager
+                            )
+                            instruction.preloadTagById(apViewModel.id)
+                            instruction.setAPCustomActionListener {
+                                val name = it["name"]?.toString()
+                                context?.toast("Custom action: $name")
+                            }
+                            instruction.setOnStoriesFinishedCallback {
+                                context?.toast("finish")
+                                apButton.isEnabled = true
+                            }
                             apButton.id = ViewCompat.generateViewId()
-                            apButton.text = "SHOW"
+                            apButton.text = "SHOW INSTRUCTION"
                             apButton.setPadding(10,10,10,10)
                             apButton.setOnClickListener {
                                 it.isEnabled = false
-                                val instruction = AdaptivePlusInstruction(
-                                    this,
-                                    childFragmentManager
-                                )
-                                instruction.preloadTagById(apViewModel.id)
-                                instruction.setAPCustomActionListener {
-                                    val name = it["name"]?.toString()
-                                    context?.toast("Custom action: $name")
-                                }
-                                instruction.setOnStoriesFinishedCallback {
-                                    context?.toast("finish")
-                                    apButton.isEnabled = true
-                                }
                                 instruction.showInstruction()
                             }
                             val rewindImage = ImageView(ctx).apply {
