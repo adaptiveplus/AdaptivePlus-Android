@@ -1,29 +1,12 @@
 package plus.adaptive.sdk.utils
 
-import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APSnap
 import plus.adaptive.sdk.data.models.APStory
 import plus.adaptive.sdk.data.models.actions.*
-import plus.adaptive.sdk.data.models.actions.APAction
-import plus.adaptive.sdk.data.models.actions.APCallPhoneAction
-import plus.adaptive.sdk.data.models.actions.APCustomAction
-import plus.adaptive.sdk.data.models.actions.APSendSMSAction
-import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.*
-import plus.adaptive.sdk.data.models.components.APBackgroundComponent
-import plus.adaptive.sdk.data.models.components.APComponent
-import plus.adaptive.sdk.data.models.components.APGIFComponent
-import plus.adaptive.sdk.data.models.components.APImageComponent
-import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.data.models.story.*
-import plus.adaptive.sdk.data.models.story.ActionArea
-import plus.adaptive.sdk.data.models.story.Campaign
-import plus.adaptive.sdk.data.models.story.Layer
-import plus.adaptive.sdk.data.models.story.Snap
-import plus.adaptive.sdk.data.models.story.Text
-import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
 
 
 internal fun createStoryAction(campaign: Campaign) : APAction?{
@@ -101,7 +84,7 @@ private fun createComponent(layer: Layer): APComponent? {
                     APFont(
                         family = it.family,
                         style = it.style,
-                        size = it.size * BASE_SIZE_MULTIPLIER_NEW,
+                        size = it.size,
                         color = it.color,
                         align = it.align,
                         letterSpacing = it.letterSpacing,
@@ -124,7 +107,9 @@ private fun createComponent(layer: Layer): APComponent? {
             }
             APLayer.Type.POLL -> {
                 layer.component.type?.apply {
-                    component = APPollComponent(layer.component.id, this)
+                    layer.component.id?.let {
+                        component = APPollComponent(it, this)
+                    }
                 }
             }
         }

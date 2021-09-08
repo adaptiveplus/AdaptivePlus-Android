@@ -70,14 +70,14 @@ internal class StoryCircleComponentView : APBaseComponentView {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.START, 2* BASE_SIZE_MULTIPLIER_NEW
+                    apComponentImageView.id, ConstraintSet.START, 2 * BASE_SIZE_MULTIPLIER_NEW
                 )
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.END, 2* BASE_SIZE_MULTIPLIER_NEW)
+                    apComponentImageView.id, ConstraintSet.END, 2 * BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.TOP, 2* BASE_SIZE_MULTIPLIER_NEW)
+                    apComponentImageView.id, ConstraintSet.TOP, 2 * BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.BOTTOM, 2* BASE_SIZE_MULTIPLIER_NEW)
+                    apComponentImageView.id, ConstraintSet.BOTTOM, 2 * BASE_SIZE_MULTIPLIER_NEW)
 
                 constraintSet.applyTo(apComponentLayout)
                 val borderDrawable =

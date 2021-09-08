@@ -13,7 +13,6 @@ import plus.adaptive.sdk.data.DELAY_BETWEEN_CLICKS
 import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModelProvider
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
 import plus.adaptive.sdk.data.models.components.APComponent
-import plus.adaptive.sdk.data.models.components.APImageComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.data.models.story.APOuterStyles
 import plus.adaptive.sdk.data.models.story.Campaign

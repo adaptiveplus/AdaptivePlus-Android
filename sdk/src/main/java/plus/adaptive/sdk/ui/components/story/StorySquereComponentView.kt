@@ -48,12 +48,12 @@ internal class StorySquereComponentView : APBaseComponentView {
         (component as? StoriesAdapter.StoryComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(outerStyles.outerImageLoadingColor),
-                cornerRadius = outerStyles.cornerRadius.toInt() * BASE_SIZE_MULTIPLIER_NEW
+                cornerRadius = outerStyles.cornerRadius.toInt()
             )
             apComponentImageView.loadImage(
                 outerImageUrl!!,
                 defaultDrawable = defaultDrawable,
-                cornerRadius = outerStyles.cornerRadius.toInt() * BASE_SIZE_MULTIPLIER_NEW,
+                cornerRadius = outerStyles.cornerRadius.toInt() ,
                 onResourceReady = {
                     (componentViewModel as? StoryComponentViewModel)?.onImageResourceReady()
                 },
@@ -123,19 +123,19 @@ internal class StorySquereComponentView : APBaseComponentView {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.START, 2)
+                    apComponentImageView.id, ConstraintSet.START, 2* BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.END, 2)
+                    apComponentImageView.id, ConstraintSet.END, 2* BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.TOP, 2)
+                    apComponentImageView.id, ConstraintSet.TOP, 2* BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.BOTTOM, 2)
+                    apComponentImageView.id, ConstraintSet.BOTTOM, 2* BASE_SIZE_MULTIPLIER_NEW)
 
                 constraintSet.applyTo(apComponentLayout)
                 val borderDrawable =
                     GradientDrawable().apply {
                         outerStyles.cornerRadius.let { radius ->
-                            cornerRadius = (radius + 2).toFloat() * BASE_SIZE_MULTIPLIER_NEW
+                            cornerRadius = (radius + 8).toFloat()
                         }
                         getColorFromHex(outerBorderColor)?.let {
                             setStroke(2 * BASE_SIZE_MULTIPLIER_NEW, it)

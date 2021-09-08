@@ -117,7 +117,7 @@ internal data class Layer(
 ) : Serializable {
 
     data class Component (
-        val id: String,
+        val id: String?,
         val color : String?,
         val url: String?,
         val type: APPollComponent.Type?,

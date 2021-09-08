@@ -50,7 +50,7 @@ internal class StoryComponentView : APBaseComponentView {
         (component as? StoriesAdapter.StoryComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(outerStyles.outerImageLoadingColor),
-                cornerRadius = outerStyles.cornerRadius.toInt() * BASE_SIZE_MULTIPLIER_NEW
+                cornerRadius = outerStyles.cornerRadius.toInt()
             )
             val textSize = when(outerStyles.outerSize){
                 APOuterStyles.OuterSize.S -> TEXT_SIZE_S
@@ -138,7 +138,7 @@ internal class StoryComponentView : APBaseComponentView {
                     GradientDrawable().apply {
                         shape = GradientDrawable.RECTANGLE
                         outerStyles.cornerRadius.let { radius ->
-                            cornerRadius = radius.toFloat() * BASE_SIZE_MULTIPLIER_NEW
+                            cornerRadius = radius.toFloat()
                         }
                         getColorFromHex(outerBorderColor)?.let {
                             setStroke(2 * BASE_SIZE_MULTIPLIER_NEW, it)

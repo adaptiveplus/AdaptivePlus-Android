@@ -4,10 +4,17 @@ import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import plus.adaptive.sdk.core.analytics.APCrashlytics
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
 import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.components.*
+import plus.adaptive.sdk.data.models.story.*
+import plus.adaptive.sdk.data.models.story.APOuterStyles
+import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.data.models.story.Campaign
+import plus.adaptive.sdk.data.models.story.Layer
+import plus.adaptive.sdk.data.models.story.Story
 
 
 private fun getProcessedAPCarouselViewGson(): Gson {
@@ -986,5 +993,235 @@ internal fun magnifyAPFont(font: APFont) = font.run {
         align = align,
         letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER_NEW,
         lineHeight = lineHeight?.times(BASE_SIZE_MULTIPLIER_NEW)
+    )
+}
+
+internal fun magnifyAPTemplateDataModel(dataModel: APTemplateDataModel) = dataModel.run {
+    APTemplateDataModel(
+        id = id,
+        options = APTemplateDataModel.Options(
+            width = options.width * BASE_SIZE_MULTIPLIER,
+            height = options.height * BASE_SIZE_MULTIPLIER,
+            cornerRadius = options.cornerRadius * BASE_SIZE_MULTIPLIER,
+            magnetize = options.magnetize,
+            autoScroll = options.autoScroll,
+            padding = magnifyAPPadding(options.padding),
+            spacing = options.spacing * BASE_SIZE_MULTIPLIER,
+            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER,
+            showBorder = options.showBorder,
+            outerStyles = magnifyOuterStyles(options.outerStyles)
+        ),
+        campaigns = campaigns.map { magnifyCampaign(it) }
+    )
+}
+
+private fun magnifyOuterStyles(outerStyles: APOuterStyles?) = outerStyles?.run {
+    APOuterStyles(
+        width = width * BASE_SIZE_MULTIPLIER_NEW,
+        height = height * BASE_SIZE_MULTIPLIER_NEW,
+        cornerRadius = cornerRadius * BASE_SIZE_MULTIPLIER_NEW,
+        hasTextUnderImage = hasTextUnderImage,
+        outerSize = outerSize,
+        outerImageLoadingColor = outerImageLoadingColor
+    )
+}
+
+private fun magnifyCampaign(campaign: Campaign) = campaign.run {
+    Campaign(
+        id = id,
+        updatedAt = updatedAt,
+        body = magnifyCampaignBody(body),
+        status = status,
+        showCount = showCount
+    )
+}
+
+private fun magnifyCampaignBody(body: Campaign.APBody)= body.run {
+    Campaign.APBody(
+        story = magnifyStory(story),
+        instruction = magnifyStory(instruction)
+    )
+}
+
+private fun magnifyStory(story: Story?) = story?.run {
+    Story(
+        id = id,
+        type = type,
+        body = magnifyStoryBody(body)
+    )
+}
+
+private fun magnifyStoryBody(body: Story.Body) = body.run {
+    Story.Body(
+        campaignId = campaignId,
+        snaps = snaps.map { magnifySnap(it) },
+        outerText = magnifyValue(outerText),
+        outerBorderColor = outerBorderColor,
+        outerImageUrl = outerImageUrl,
+        outerStyles = magnifyOuterStyles(outerStyles)
+    )
+}
+
+private fun magnifySnap(snap: Snap) = snap.run{
+    Snap(
+        id = id,
+        type = type,
+        body = magnifySnapBody(body),
+        position = position
+    )
+}
+
+private fun magnifySnapBody(body: Snap.Body) = body.run {
+    var area : Double? = null
+    actionAreaHeight?.let {
+        area = it * BASE_SIZE_MULTIPLIER_NEW
+    }
+    Snap.Body(
+        layers = layers.map { magnifyLayer(it) },
+        width = width * BASE_SIZE_MULTIPLIER_NEW,
+        height = height * BASE_SIZE_MULTIPLIER_NEW,
+        actionAreaHeight = area,
+        actionArea = magnifyActionArea(actionArea),
+        showTime = showTime
+    )
+}
+
+private fun magnifyActionArea(actionArea: ActionArea?) = actionArea?.run {
+    ActionArea(
+        type = type,
+        body = magnifyActionAreaBody(body)
+    )
+}
+
+private fun magnifyActionAreaBody(body: ActionArea.Body?) = body?.run {
+    ActionArea.Body(
+        text = magnifyText(text),
+        actions = actions.map { magnifyAction(it) },
+        cornerRadius = cornerRadius * BASE_SIZE_MULTIPLIER_NEW,
+        backgroundColor = backgroundColor,
+        border = magnifyBorder(border)
+    )
+}
+
+private fun magnifyBorder(border: APSnap.ButtonActionArea.Border) = border.run {
+    APSnap.ButtonActionArea.Border(
+        width = width * BASE_SIZE_MULTIPLIER_NEW,
+        color = magnifyColor(color)
+    )
+}
+
+private fun magnifyColor(color: APGradientColor) = color.run {
+    APGradientColor(
+        startColor = startColor,
+        endColor = endColor,
+        angle = angle
+    )
+}
+
+private fun magnifyText(text: Text) = text.run {
+    Text(
+        font = magnifyNotNullFont(font),
+        value = magnifyValue(value)
+    )
+}
+
+private fun magnifyAction(action: Action) = action.run {
+    Action(
+        type = type,
+        parameters = parameters,
+        name = name
+    )
+}
+
+private fun magnifyLayer(layer: Layer) = layer.run {
+    Layer(
+        type = type,
+        options = magnifyLayerOptions(options),
+        component = magnifyLayerComponent(component)
+    )
+}
+
+private fun magnifyLayerComponent(component: Layer.Component?) = component?.run {
+    var radius : Double? = null
+    cornerRadius?.let {
+        radius = it * BASE_SIZE_MULTIPLIER_NEW
+    }
+    Layer.Component(
+        color = color,
+        url = url,
+        text = text,
+        cornerRadius = radius,
+        loadingColor = loadingColor,
+        value = magnifyNullValue(value),
+        font = magnifyFont(font),
+        id = id,
+        question = question,
+        type = type,
+        answers = answers
+    )
+}
+
+private fun magnifyFont(font: APFont?) = font?.run {
+    var height : Double? = null
+    lineHeight?.let {
+        height = it * BASE_SIZE_MULTIPLIER_NEW
+    }
+    APFont(
+        family = family,
+        style = style,
+        size =  size * BASE_SIZE_MULTIPLIER_NEW,
+        color = color,
+        align = align,
+        letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER_NEW,
+        lineHeight = height
+    )
+}
+
+private fun magnifyNotNullFont(font: APFont) = font.run {
+    var height : Double? = null
+    lineHeight?.let {
+        height = it * BASE_SIZE_MULTIPLIER_NEW
+    }
+    APFont(
+        family = family,
+        style = style,
+        size =  size * BASE_SIZE_MULTIPLIER_NEW,
+        color = color,
+        align = align,
+        letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER_NEW,
+        lineHeight = height
+    )
+}
+
+private fun magnifyValue(value: APTextComponent.APLocale) = value.run {
+    APTextComponent.APLocale(
+        EN = EN,
+        KZ = KZ,
+        RU = RU
+    )
+}
+
+private fun magnifyNullValue(value: APTextComponent.APLocale?) = value?.run {
+    APTextComponent.APLocale(
+        EN = EN,
+        KZ = KZ,
+        RU = RU
+    )
+}
+
+private fun magnifyLayerOptions(options: APLayer.Options) = options.run {
+    APLayer.Options(
+        position = magnifyPosition(position),
+        opacity = opacity
+    )
+}
+
+private fun magnifyPosition(position:  APLayer.Position) = position.run {
+    APLayer.Position(
+        x = x * BASE_SIZE_MULTIPLIER_NEW,
+        y = y * BASE_SIZE_MULTIPLIER_NEW,
+        width = width * BASE_SIZE_MULTIPLIER_NEW,
+        height = height * BASE_SIZE_MULTIPLIER_NEW,
+        angle = angle
     )
 }

@@ -14,6 +14,7 @@ import plus.adaptive.sdk.utils.magnifyAPCarouselViewDataModel
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
+import plus.adaptive.sdk.utils.magnifyAPTemplateDataModel
 
 
 internal class APViewRepository(
@@ -91,7 +92,8 @@ internal class APViewRepository(
         executeRequest<APTemplateDataModel>(request,
             { response ->
 //                try {
-                    callback.success(response)
+                val dataModel = magnifyAPTemplateDataModel(response)
+                callback.success(dataModel)
 //                } catch (e: Exception) {
 //                    APCrashlytics.logCrash(e)
 //                    e.printStackTrace()
