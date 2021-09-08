@@ -6,19 +6,13 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
-import plus.adaptive.sdk.data.models.APStory
-import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.apview.APViewFragment
-import plus.adaptive.sdk.ui.stories.APStoriesDialog
-import plus.adaptive.sdk.utils.createAPStoryFromStory
-import plus.adaptive.sdk.utils.runOnMainThread
 import plus.adaptive.sdk.utils.safeRun
 
 
-class AdaptivePlusView : FrameLayout {
+class AdaptivePlusViewLess : FrameLayout {
 
     constructor(context: Context) : super(context) {
         init()

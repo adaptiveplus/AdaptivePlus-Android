@@ -69,7 +69,8 @@ fun addNewAPView(
     context: Context,
     envName: String,
     apViewId: String,
-    hasDrafts: Boolean
+    hasDrafts: Boolean,
+    isInstruction: Boolean
 ) {
     val envs = getEnvs(context).toMutableList()
     envs.firstOrNull { it.name == envName }?.run {
@@ -77,7 +78,8 @@ fun addNewAPView(
             add(
                 APSdkEnvironment.APView(
                     id = apViewId,
-                    hasDrafts = hasDrafts
+                    hasDrafts = hasDrafts,
+                    isInstruction = isInstruction,
                 )
             )
         }
@@ -170,6 +172,6 @@ private fun getLocalEnvByName(envName: String) : APSdkEnvironment? {
 }
 
 private val defaultListOfAPViews = listOf(
-    APSdkEnvironment.APView(id = "", hasDrafts = true),
-    APSdkEnvironment.APView(id = "", hasDrafts = false)
+    APSdkEnvironment.APView(id = "", hasDrafts = true, isInstruction = false),
+    APSdkEnvironment.APView(id = "", hasDrafts = false, isInstruction = false)
 )

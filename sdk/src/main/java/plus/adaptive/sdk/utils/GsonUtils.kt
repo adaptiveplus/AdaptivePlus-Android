@@ -4,7 +4,7 @@ import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import plus.adaptive.sdk.core.analytics.APCrashlytics
-import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.components.*
@@ -799,14 +799,14 @@ internal fun magnifyAPCarouselViewDataModel(dataModel: APCarouselViewDataModel) 
     APCarouselViewDataModel(
         id = id,
         options = APCarouselViewDataModel.Options(
-            width = options.width * BASE_SIZE_MULTIPLIER,
-            height = options.height * BASE_SIZE_MULTIPLIER,
-            cornerRadius = options.cornerRadius * BASE_SIZE_MULTIPLIER,
+            width = options.width * BASE_SIZE_MULTIPLIER_NEW,
+            height = options.height * BASE_SIZE_MULTIPLIER_NEW,
+            cornerRadius = options.cornerRadius * BASE_SIZE_MULTIPLIER_NEW,
             magnetize = options.magnetize,
             autoScroll = options.autoScroll,
             padding = magnifyAPPadding(options.padding),
-            spacing = options.spacing * BASE_SIZE_MULTIPLIER,
-            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER,
+            spacing = options.spacing * BASE_SIZE_MULTIPLIER_NEW,
+            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER_NEW,
             showBorder = options.showBorder
         ),
         entryPoints = entryPoints.map { magnifyAPEntryPoint(it) }
@@ -817,9 +817,9 @@ internal fun magnifyAPSplashScreenViewDataModel(dataModel: APSplashScreenViewDat
     APSplashScreenViewDataModel(
         id = id,
         options = APSplashScreenViewDataModel.Options(
-            width = options.width * BASE_SIZE_MULTIPLIER,
-            height = options.height * BASE_SIZE_MULTIPLIER,
-            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER
+            width = options.width * BASE_SIZE_MULTIPLIER_NEW,
+            height = options.height * BASE_SIZE_MULTIPLIER_NEW,
+            screenWidth = options.screenWidth * BASE_SIZE_MULTIPLIER_NEW
         ),
         splashScreens = splashScreens.map { magnifyAPSplashScreen(it) }
     )
@@ -854,10 +854,10 @@ private fun magnifyAPLayer(layer: APLayer) = layer.run {
         type = type,
         options = APLayer.Options(
             position = APLayer.Position(
-                x = options.position.x * BASE_SIZE_MULTIPLIER,
-                y = options.position.y * BASE_SIZE_MULTIPLIER,
-                width = options.position.width * BASE_SIZE_MULTIPLIER,
-                height = options.position.height * BASE_SIZE_MULTIPLIER,
+                x = options.position.x * BASE_SIZE_MULTIPLIER_NEW,
+                y = options.position.y * BASE_SIZE_MULTIPLIER_NEW,
+                width = options.position.width * BASE_SIZE_MULTIPLIER_NEW,
+                height = options.position.height * BASE_SIZE_MULTIPLIER_NEW,
                 angle = options.position.angle
             ),
             opacity = options.opacity
@@ -874,7 +874,7 @@ private fun magnifyAPComponent(component: APComponent) = when (component) {
                 font = text.font?.let { magnifyAPFont(it) }
             ),
             actions = actions,
-            cornerRadius = cornerRadius * BASE_SIZE_MULTIPLIER,
+            cornerRadius = cornerRadius * BASE_SIZE_MULTIPLIER_NEW,
             backgroundColor = backgroundColor
         )
     }
@@ -884,20 +884,20 @@ private fun magnifyAPComponent(component: APComponent) = when (component) {
             border = border?.let {
                 APGIFComponent.Border(
                     active = APGIFComponent.Border.State(
-                        width = it.active.width * BASE_SIZE_MULTIPLIER,
+                        width = it.active.width * BASE_SIZE_MULTIPLIER_NEW,
                         color = it.active.color,
-                        padding = it.active.padding * BASE_SIZE_MULTIPLIER,
-                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER
+                        padding = it.active.padding * BASE_SIZE_MULTIPLIER_NEW,
+                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER_NEW
                     ),
                     inactive = APGIFComponent.Border.State(
-                        width = it.inactive.width * BASE_SIZE_MULTIPLIER,
+                        width = it.inactive.width * BASE_SIZE_MULTIPLIER_NEW,
                         color = it.inactive.color,
-                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER,
-                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER
+                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER_NEW,
+                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER_NEW
                     )
                 )
             },
-            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER),
+            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER_NEW),
             loadingColor = loadingColor
         )
     }
@@ -907,20 +907,20 @@ private fun magnifyAPComponent(component: APComponent) = when (component) {
             border = border?.let {
                 APImageComponent.Border(
                     active = APImageComponent.Border.State(
-                        width = it.active.width * BASE_SIZE_MULTIPLIER,
+                        width = it.active.width * BASE_SIZE_MULTIPLIER_NEW,
                         color = it.active.color,
-                        padding = it.active.padding * BASE_SIZE_MULTIPLIER,
-                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER
+                        padding = it.active.padding * BASE_SIZE_MULTIPLIER_NEW,
+                        cornerRadius = it.active.cornerRadius * BASE_SIZE_MULTIPLIER_NEW
                     ),
                     inactive = APImageComponent.Border.State(
-                        width = it.inactive.width * BASE_SIZE_MULTIPLIER,
+                        width = it.inactive.width * BASE_SIZE_MULTIPLIER_NEW,
                         color = it.inactive.color,
-                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER,
-                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER
+                        padding = it.inactive.padding * BASE_SIZE_MULTIPLIER_NEW,
+                        cornerRadius = it.inactive.cornerRadius * BASE_SIZE_MULTIPLIER_NEW
                     )
                 )
             },
-            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER),
+            cornerRadius = cornerRadius?.times(BASE_SIZE_MULTIPLIER_NEW),
             loadingColor = loadingColor
         )
     }
@@ -960,9 +960,9 @@ private fun magnifyAPSnap(snap: APSnap) = snap.run {
     APSnap(
         id = id,
         layers = layers.map { magnifyAPLayer(it) },
-        width = width * BASE_SIZE_MULTIPLIER,
-        height = height * BASE_SIZE_MULTIPLIER,
-        actionAreaHeight = actionAreaHeight?.times(BASE_SIZE_MULTIPLIER),
+        width = width * BASE_SIZE_MULTIPLIER_NEW,
+        height = height * BASE_SIZE_MULTIPLIER_NEW,
+        actionAreaHeight = actionAreaHeight?.times(BASE_SIZE_MULTIPLIER_NEW),
         actionArea = actionArea,
         showTime = showTime
     )
@@ -970,21 +970,21 @@ private fun magnifyAPSnap(snap: APSnap) = snap.run {
 
 private fun magnifyAPPadding(padding: APPadding) = padding.run {
     APPadding(
-        top = top * BASE_SIZE_MULTIPLIER,
-        bottom = bottom * BASE_SIZE_MULTIPLIER,
-        left = left * BASE_SIZE_MULTIPLIER,
-        right = right * BASE_SIZE_MULTIPLIER
+        top = top * BASE_SIZE_MULTIPLIER_NEW,
+        bottom = bottom * BASE_SIZE_MULTIPLIER_NEW,
+        left = left * BASE_SIZE_MULTIPLIER_NEW,
+        right = right * BASE_SIZE_MULTIPLIER_NEW
     )
 }
 
-private fun magnifyAPFont(font: APFont) = font.run {
+internal fun magnifyAPFont(font: APFont) = font.run {
     APFont(
         family = family,
         style = style,
-        size = size * BASE_SIZE_MULTIPLIER,
+        size = size * BASE_SIZE_MULTIPLIER_NEW,
         color = color,
         align = align,
-        letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER,
-        lineHeight = lineHeight?.times(BASE_SIZE_MULTIPLIER)
+        letterSpacing = letterSpacing * BASE_SIZE_MULTIPLIER_NEW,
+        lineHeight = lineHeight?.times(BASE_SIZE_MULTIPLIER_NEW)
     )
 }

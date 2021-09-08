@@ -5,11 +5,13 @@ import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.setPadding
 import kotlinx.android.synthetic.main.ap_component_image.view.apComponentBorderView
 import kotlinx.android.synthetic.main.ap_component_image.view.apComponentImageView
 import kotlinx.android.synthetic.main.ap_component_image.view.apComponentLayout
-import kotlinx.android.synthetic.main.ap_component_circle_story.view.*
+import kotlinx.android.synthetic.main.ap_component_circle_story.view.appStoryComponentText
 import plus.adaptive.sdk.R
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.data.models.story.APOuterStyles
 import plus.adaptive.sdk.ext.applyAPFont
@@ -17,6 +19,9 @@ import plus.adaptive.sdk.ext.loadImage
 import plus.adaptive.sdk.ui.apview.StoriesAdapter
 import plus.adaptive.sdk.ui.components.core.APBaseComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
+import plus.adaptive.sdk.utils.StorySizeConst.TEXT_PADDING_L
+import plus.adaptive.sdk.utils.StorySizeConst.TEXT_PADDING_M
+import plus.adaptive.sdk.utils.StorySizeConst.TEXT_PADDING_S
 import plus.adaptive.sdk.utils.StorySizeConst.TEXT_SIZE_L
 import plus.adaptive.sdk.utils.StorySizeConst.TEXT_SIZE_M
 import plus.adaptive.sdk.utils.StorySizeConst.TEXT_SIZE_S
@@ -45,14 +50,21 @@ internal class StoryComponentView : APBaseComponentView {
         (component as? StoriesAdapter.StoryComponent)?.run {
             val defaultDrawable = createDrawableFromColor(
                 color = getColorFromHex(outerStyles.outerImageLoadingColor),
-                cornerRadius = outerStyles.cornerRadius.toInt()
+                cornerRadius = outerStyles.cornerRadius.toInt() * BASE_SIZE_MULTIPLIER_NEW
             )
             val textSize = when(outerStyles.outerSize){
                 APOuterStyles.OuterSize.S -> TEXT_SIZE_S
                 APOuterStyles.OuterSize.M -> TEXT_SIZE_M
                 APOuterStyles.OuterSize.L -> TEXT_SIZE_L
-                else -> 10.0
+                else -> 10.0 * BASE_SIZE_MULTIPLIER_NEW
             }
+            val textPadding = when(outerStyles.outerSize){
+                APOuterStyles.OuterSize.S -> TEXT_PADDING_S
+                APOuterStyles.OuterSize.M -> TEXT_PADDING_M
+                APOuterStyles.OuterSize.L -> TEXT_PADDING_L
+                else -> 6 * BASE_SIZE_MULTIPLIER_NEW
+            }
+            appStoryComponentText.setPadding(textPadding)
             val font = APFont(
                 family ="Roboto",
                 style = APFont.Style.BOLD,
@@ -113,22 +125,23 @@ internal class StoryComponentView : APBaseComponentView {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.START, 5)
+                    apComponentImageView.id, ConstraintSet.START, 2 * BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.END, 5)
+                    apComponentImageView.id, ConstraintSet.END, 2 * BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.TOP, 5)
+                    apComponentImageView.id, ConstraintSet.TOP, 2 * BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.BOTTOM, 5)
+                    apComponentImageView.id, ConstraintSet.BOTTOM, 2 * BASE_SIZE_MULTIPLIER_NEW)
 
                 constraintSet.applyTo(apComponentLayout)
                 val borderDrawable =
                     GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
                         outerStyles.cornerRadius.let { radius ->
-                            cornerRadius = radius.toFloat()
+                            cornerRadius = radius.toFloat() * BASE_SIZE_MULTIPLIER_NEW
                         }
                         getColorFromHex(outerBorderColor)?.let {
-                            setStroke(2, it)
+                            setStroke(2 * BASE_SIZE_MULTIPLIER_NEW, it)
                         }
                     }
                 apComponentBorderView.background = borderDrawable

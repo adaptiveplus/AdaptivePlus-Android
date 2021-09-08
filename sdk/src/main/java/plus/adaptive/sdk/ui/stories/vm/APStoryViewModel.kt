@@ -79,6 +79,8 @@ internal class APStoryViewModel(
     }
 
     fun saveWatchedStoryId(id: String) {
-        preferences.saveWatchedStoryId(id)
+        userRepository.getAPUser().externalId?.let {
+            preferences.saveWatchedStoryId(it, id)
+        }
     }
 }

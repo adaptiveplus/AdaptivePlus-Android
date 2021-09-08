@@ -30,6 +30,7 @@ import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModel
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModelFactory
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.utils.*
@@ -381,32 +382,34 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
 
     private fun updateStoriesViewOptions() {
         viewModel.storyDataModelLiveData.value?.let { template ->
-            val baseScreenWidth = maxOf(template.options.screenWidth, 0.001)
+            val baseScreenWidth = maxOf((template.options.screenWidth * BASE_SIZE_MULTIPLIER_NEW), 0.001)
             val scaleFactor = (apViewFragmentLayout.width / baseScreenWidth).toFloat()
 
             template.options.padding.run {
                 apEntryPointsRecyclerView.setPadding(
-                    (left * scaleFactor).toInt(),
-                    (top * scaleFactor).toInt(),
-                    (right * scaleFactor).toInt(),
-                    (bottom * scaleFactor).toInt())
+                    ((left * BASE_SIZE_MULTIPLIER_NEW) * scaleFactor).toInt(),
+                    ((top * BASE_SIZE_MULTIPLIER_NEW) * scaleFactor).toInt(),
+                    ((right * BASE_SIZE_MULTIPLIER_NEW) * scaleFactor).toInt(),
+                    ((bottom * BASE_SIZE_MULTIPLIER_NEW) * scaleFactor).toInt())
             }
 
             while (apEntryPointsRecyclerView.itemDecorationCount > 0) {
                 apEntryPointsRecyclerView.removeItemDecorationAt(0)
             }
             apEntryPointsRecyclerView.addItemDecoration(
-                APEntryPointSpaceDecoration((template.options.spacing * scaleFactor).toInt()))
-            template.campaigns[0].body.story?.body?.outerStyles?.run {
-                storiesAdapter.updateEntryOptions(
-                    options = StoriesAdapter.StoriesOptions(
-                        width = width,
-                        height = height,
-                        cornerRadius = cornerRadius
-                    ),
-                    scaleFactor = scaleFactor
-                )
-            }
+                APEntryPointSpaceDecoration(((template.options.spacing * BASE_SIZE_MULTIPLIER_NEW) * scaleFactor).toInt())
+            )
+            if (template.campaigns.isNotEmpty())
+                template.campaigns[0].body.story?.body?.outerStyles?.run {
+                    storiesAdapter.updateEntryOptions(
+                        options = StoriesAdapter.StoriesOptions(
+                            width = (width * BASE_SIZE_MULTIPLIER_NEW),
+                            height = (height * BASE_SIZE_MULTIPLIER_NEW),
+                            cornerRadius = (cornerRadius * BASE_SIZE_MULTIPLIER_NEW)
+                        ),
+                        scaleFactor = scaleFactor
+                    )
+                }
         }
     }
 

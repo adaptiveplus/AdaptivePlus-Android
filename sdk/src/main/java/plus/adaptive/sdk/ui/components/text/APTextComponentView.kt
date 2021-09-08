@@ -10,6 +10,7 @@ import plus.adaptive.sdk.ui.components.core.APBaseComponentView
 import plus.adaptive.sdk.ui.components.core.vm.APComponentViewModel
 import kotlinx.android.synthetic.main.ap_component_text.view.*
 import plus.adaptive.sdk.ui.components.story.StoryComponentViewModel
+import plus.adaptive.sdk.utils.magnifyAPFont
 
 
 internal class APTextComponentView : APBaseComponentView {
@@ -33,16 +34,15 @@ internal class APTextComponentView : APBaseComponentView {
         if(component is APTextComponent)
             (component as? APTextComponent)?.run {
                 font?.let {
+                    val newFont = magnifyAPFont(it)
                     apComponentTextView.applyAPFont(
-                        apFont = it,
+                        apFont = newFont,
                         onSuccess = {
-                            var text = value.RU
-                            value.locale?.let {
-                                text = when(it){
-                                    "ru" -> value.RU
-                                    "kk" -> value.KZ
-                                    else -> value.EN
-                                }
+                            val text = when(value.locale){
+                                "ru" -> value.RU
+                                "kk" -> value.KZ
+                                "en" -> value.EN
+                                else -> value.RU
                             }
                             apComponentTextView.text = text
                             (componentViewModel as? APTextComponentViewModel)?.onTextResourceReady()

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.ap_component_image.view.*
 import plus.adaptive.sdk.R
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.ext.loadCircleImage
 import plus.adaptive.sdk.ui.apview.StoriesAdapter
 import plus.adaptive.sdk.ui.components.core.APBaseComponentView
@@ -69,20 +70,21 @@ internal class StoryCircleComponentView : APBaseComponentView {
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(apComponentLayout)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.START, 6)
+                    apComponentImageView.id, ConstraintSet.START, 2* BASE_SIZE_MULTIPLIER_NEW
+                )
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.END, 6)
+                    apComponentImageView.id, ConstraintSet.END, 2* BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.TOP, 6)
+                    apComponentImageView.id, ConstraintSet.TOP, 2* BASE_SIZE_MULTIPLIER_NEW)
                 constraintSet.setMargin(
-                    apComponentImageView.id, ConstraintSet.BOTTOM, 6)
+                    apComponentImageView.id, ConstraintSet.BOTTOM, 2* BASE_SIZE_MULTIPLIER_NEW)
 
                 constraintSet.applyTo(apComponentLayout)
                 val borderDrawable =
                     GradientDrawable().apply {
                         shape = GradientDrawable.OVAL
                         getColorFromHex(outerBorderColor)?.let {
-                            setStroke(3, it)
+                            setStroke(2 * BASE_SIZE_MULTIPLIER_NEW, it)
                         }
                     }
 

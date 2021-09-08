@@ -1,5 +1,7 @@
 package plus.adaptive.sdk.utils
 
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
+import plus.adaptive.sdk.data.models.APFont
 import plus.adaptive.sdk.data.models.APLayer
 import plus.adaptive.sdk.data.models.APSnap
 import plus.adaptive.sdk.data.models.APStory
@@ -27,13 +29,17 @@ import plus.adaptive.sdk.ui.components.poll.APYesNoPollComponentView
 internal fun createStoryAction(campaign: Campaign) : APAction?{
     var story:APStory? = null
     campaign.body.story?.let {
-        story = APStory(id = it.id, campaignId = it.body.campaignId, getAPSnapFromSnap(it.body.snaps))
+        story = createAPStoryFromStory(it)
     }
     return if(story!=null){
         APShowStoryAction(story!!)
     } else {
         null
     }
+}
+
+internal fun createAPStoryFromStory(story: Story): APStory{
+    return APStory(id = story.id, campaignId = story.body.campaignId, getAPSnapFromSnap(story.body.snaps))
 }
 
 internal fun getAPSnapFromSnap(snaps: List<Snap>): List<APSnap> {
@@ -44,7 +50,7 @@ internal fun getAPSnapFromSnap(snaps: List<Snap>): List<APSnap> {
                     id = snap.id,
                     width = snap.body.width,
                     height = snap.body.height,
-                    actionAreaHeight = snap.body.actionAreaHeight,
+                    actionAreaHeight = snap.body.actionAreaHeight ,
                     actionArea = toAPActionArea(snap.body.actionArea),
                     showTime = snap.body.showTime,
                     layers = getAPLayersFromLayers(snap.body.layers)
@@ -91,9 +97,21 @@ private fun createComponent(layer: Layer): APComponent? {
                 )
             }
             APLayer.Type.TEXT -> {
+                var bigFont = font?.let {
+                    APFont(
+                        family = it.family,
+                        style = it.style,
+                        size = it.size * BASE_SIZE_MULTIPLIER_NEW,
+                        color = it.color,
+                        align = it.align,
+                        letterSpacing = it.letterSpacing,
+                        lineHeight = it.lineHeight
+                    )
+                } ?: layer.component.font
+
                 component = APTextComponent(
                     layer.component.value!!,
-                    layer.component.font
+                    bigFont
                 )
             }
             APLayer.Type.BUTTON -> {

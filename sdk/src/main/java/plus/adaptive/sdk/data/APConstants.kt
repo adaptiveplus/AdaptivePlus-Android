@@ -16,6 +16,8 @@ internal const val SDK_API_URL: String = BuildConfig.SDK_API_URL
 
 internal const val DELAY_BETWEEN_CLICKS = 1000L // milliseconds
 
+internal const val BASE_SIZE_MULTIPLIER_NEW = 4 // to increase quality of view drawing
+
 internal const val BASE_SIZE_MULTIPLIER = 1 // to increase quality of view drawing
 
 internal const val OS_NAME = "android"

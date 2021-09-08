@@ -1,16 +1,22 @@
 package plus.adaptive.sdk.utils
 
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
+
 
 object StorySizeConst {
-    const val CIRCLE_STORY_S = 33
-    const val CIRCLE_STORY_M = 36
-    const val CIRCLE_STORY_L = 39
+    const val CIRCLE_STORY_S = 33 * BASE_SIZE_MULTIPLIER_NEW
+    const val CIRCLE_STORY_M = 36 * BASE_SIZE_MULTIPLIER_NEW
+    const val CIRCLE_STORY_L = 39 * BASE_SIZE_MULTIPLIER_NEW
 
-    const val TEXT_SIZE_S = 9.0
-    const val TEXT_SIZE_M = 10.0
-    const val TEXT_SIZE_L = 11.0
+    const val TEXT_SIZE_S = 9.0 * BASE_SIZE_MULTIPLIER_NEW
+    const val TEXT_SIZE_M = 10.0 * BASE_SIZE_MULTIPLIER_NEW
+    const val TEXT_SIZE_L = 11.0 * BASE_SIZE_MULTIPLIER_NEW
 
-    const val STORY_PADDING_TEXT_S = -48
-    const val STORY_PADDING_TEXT_M = -66
-    const val STORY_PADDING_TEXT_L = -80
+    const val TEXT_PADDING_S = 4 * BASE_SIZE_MULTIPLIER_NEW
+    const val TEXT_PADDING_M = 6 * BASE_SIZE_MULTIPLIER_NEW
+    const val TEXT_PADDING_L = 8 * BASE_SIZE_MULTIPLIER_NEW
+
+    const val STORY_PADDING_TEXT_S = -48 * BASE_SIZE_MULTIPLIER_NEW
+    const val STORY_PADDING_TEXT_M = -66 * BASE_SIZE_MULTIPLIER_NEW
+    const val STORY_PADDING_TEXT_L = -80 * BASE_SIZE_MULTIPLIER_NEW
 }

@@ -12,6 +12,7 @@ data class APSdkEnvironment(
 
     data class APView(
         val id: String,
-        val hasDrafts: Boolean?
+        val hasDrafts: Boolean?,
+        val isInstruction: Boolean?,
     ) : Serializable
 }

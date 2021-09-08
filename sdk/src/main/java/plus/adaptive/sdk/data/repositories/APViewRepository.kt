@@ -90,18 +90,18 @@ internal class APViewRepository(
 
         executeRequest<APTemplateDataModel>(request,
             { response ->
-                try {
+//                try {
                     callback.success(response)
-                } catch (e: Exception) {
-                    APCrashlytics.logCrash(e)
-                    e.printStackTrace()
-                    callback.failure(
-                        APError(
-                            code = -1,
-                            message = e.message
-                        )
-                    )
-                }
+//                } catch (e: Exception) {
+//                    APCrashlytics.logCrash(e)
+//                    e.printStackTrace()
+//                    callback.failure(
+//                        APError(
+//                            code = -1,
+//                            message = e.message
+//                        )
+//                    )
+//                }
             },
             { error ->
                 callback.failure(error)

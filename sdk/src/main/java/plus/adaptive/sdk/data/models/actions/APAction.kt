@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
-internal interface APAction {
+interface APAction {
     enum class Type {
         @SerializedName("SHOW_STORY")
         SHOW_STORY,

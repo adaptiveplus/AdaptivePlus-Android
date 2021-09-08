@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -33,7 +34,9 @@ internal fun ImageView.loadImage(
 ) {
     val requestOptions =
         if (cornerRadius != null && cornerRadius > 0) {
-            RequestOptions.bitmapTransform(RoundedCorners(cornerRadius))
+            RequestOptions
+                .bitmapTransform(RoundedCorners(cornerRadius))
+                .fitCenter()
         } else {
             RequestOptions()
         }
@@ -42,6 +45,7 @@ internal fun ImageView.loadImage(
         .with(context)
         .asBitmap()
         .load(url)
+        .centerCrop()
         .timeout(GLIDE_TIMEOUT)
         .placeholder(defaultDrawable)
         .listener(object: RequestListener<Bitmap> {
@@ -113,6 +117,7 @@ internal fun ImageView.loadImage(
         .with(context)
         .asBitmap()
         .load(url)
+        .centerCrop()
         .timeout(GLIDE_TIMEOUT)
         .placeholder(defaultDrawable)
         .into(target)
@@ -225,6 +230,7 @@ internal fun ImageView.loadCircleImage(
         .asBitmap()
         .load(url)
         .timeout(GLIDE_TIMEOUT)
+        .centerCrop()
         .circleCrop()
         .placeholder(defaultDrawable)
         .into(target)
@@ -241,7 +247,12 @@ internal fun ImageView.loadCircleImg(
         .asBitmap()
         .load(url)
         .timeout(GLIDE_TIMEOUT)
-        .circleCrop()
+        .apply(
+            RequestOptions()
+                .fitCenter()
+                .centerCrop()
+                .circleCrop()
+        )
         .placeholder(defaultDrawable)
         .listener(object: RequestListener<Bitmap> {
             override fun onLoadFailed(

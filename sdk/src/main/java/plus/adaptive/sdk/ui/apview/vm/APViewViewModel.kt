@@ -162,30 +162,30 @@ internal class APViewViewModel(
     }
 
     fun requestTemplate(apViewId: String, hasDrafts: Boolean) {
-            apViewRepository.requestTemplate(
-                apViewId, hasDrafts, object: RequestResultCallback<APTemplateDataModel>() {
-                    override fun success(response: APTemplateDataModel) {
-                        runOnMainThread {
+        apViewRepository.requestTemplate(
+            apViewId, hasDrafts, object: RequestResultCallback<APTemplateDataModel>() {
+                override fun success(response: APTemplateDataModel) {
+                    runOnMainThread {
+                        setStoriesDataModel(
+                            dataModel = response,
+                            isEmptyViewId = apViewId.isEmpty(),
+                            appViewId = apViewId
+                        )
+                    }
+                }
+
+                override fun failure(error: APError?) {
+                    runOnMainThread {
+                        _storyDataModelLiveData.value?.let {
                             setStoriesDataModel(
-                                dataModel = response,
-                                isEmptyViewId = apViewId.isEmpty(),
+                                dataModel = it,
                                 appViewId = apViewId
                             )
                         }
                     }
-
-                    override fun failure(error: APError?) {
-                        runOnMainThread {
-                            _storyDataModelLiveData.value?.let {
-                                setStoriesDataModel(
-                                    dataModel = it,
-                                    appViewId = apViewId
-                                )
-                            }
-                        }
-                    }
                 }
-            )
+            }
+        )
     }
 
     override fun runActions(actions: List<APAction?>) {
@@ -481,6 +481,8 @@ internal class APViewViewModel(
     }
 
     private fun getWatchedStorySet(): MutableSet<String>? {
-        return preferences.getWatchedStoryIds()
+        userRepository.getAPUser().externalId?.let {
+            return preferences.getWatchedStoryIds(it)
+        } ?: return null
     }
 }

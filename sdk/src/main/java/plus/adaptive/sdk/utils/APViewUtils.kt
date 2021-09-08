@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT
 import androidx.core.view.ViewCompat
+import plus.adaptive.sdk.data.BASE_SIZE_MULTIPLIER_NEW
 import plus.adaptive.sdk.data.models.*
 import plus.adaptive.sdk.data.models.actions.APShowStoryAction
 import plus.adaptive.sdk.data.models.components.*
@@ -71,9 +72,9 @@ internal fun drawStoryOnLayout(
                 val componentConstraintSet = ConstraintSet()
                 componentConstraintSet.clone(layout)
                 componentConstraintSet.constrainWidth(
-                    componentView.id, component.outerStyles.width.toInt())
+                    componentView.id, (component.outerStyles.width.toInt() * BASE_SIZE_MULTIPLIER_NEW))
                 componentConstraintSet.constrainHeight(
-                    componentView.id, component.outerStyles.height.toInt())
+                    componentView.id, (component.outerStyles.height.toInt() * BASE_SIZE_MULTIPLIER_NEW))
                 componentConstraintSet.applyTo(layout)
             }
         } else {
@@ -83,9 +84,9 @@ internal fun drawStoryOnLayout(
                 val componentConstraintSet = ConstraintSet()
                 componentConstraintSet.clone(layout)
                 componentConstraintSet.constrainWidth(
-                    componentView.id, component.outerStyles.width.toInt())
+                    componentView.id, (component.outerStyles.width.toInt() * BASE_SIZE_MULTIPLIER_NEW))
                 componentConstraintSet.constrainHeight(
-                    componentView.id, component.outerStyles.height.toInt())
+                    componentView.id, (component.outerStyles.height.toInt() * BASE_SIZE_MULTIPLIER_NEW))
                 componentConstraintSet.applyTo(layout)
             }
         }
@@ -120,22 +121,22 @@ internal fun drawCircleStoryOnLayout(
             val componentConstraintSet = ConstraintSet()
             componentConstraintSet.clone(layout)
             componentConstraintSet.constrainWidth(
-                componentView.id, component.outerStyles.width.toInt())
+                componentView.id, (component.outerStyles.width.toInt() * BASE_SIZE_MULTIPLIER_NEW))
             componentConstraintSet.constrainHeight(
-                componentView.id, component.outerStyles.height.toInt())
+                componentView.id, (component.outerStyles.height.toInt() * BASE_SIZE_MULTIPLIER_NEW))
             componentConstraintSet.applyTo(layout)
         }
         val textSize = when(component.outerStyles.outerSize){
             APOuterStyles.OuterSize.S -> StorySizeConst.TEXT_SIZE_S
             APOuterStyles.OuterSize.M -> StorySizeConst.TEXT_SIZE_M
             APOuterStyles.OuterSize.L -> StorySizeConst.TEXT_SIZE_L
-            else -> 10.0
+            else -> 10.0 * BASE_SIZE_MULTIPLIER_NEW
         }
         val storyTextComponent = APTextComponent(
             font = APFont(
                 family = "Roboto",
                 style = APFont.Style.BOLD,
-                size = textSize.toDouble(),
+                size = textSize / BASE_SIZE_MULTIPLIER_NEW,
                 color = "#000000",
                 align = APFont.Align.CENTER,
                 letterSpacing = 0.0,
@@ -146,7 +147,7 @@ internal fun drawCircleStoryOnLayout(
             APOuterStyles.OuterSize.S -> StorySizeConst.STORY_PADDING_TEXT_S
             APOuterStyles.OuterSize.M -> StorySizeConst.STORY_PADDING_TEXT_M
             APOuterStyles.OuterSize.L -> StorySizeConst.STORY_PADDING_TEXT_L
-            else -> -66
+            else -> -66 * BASE_SIZE_MULTIPLIER_NEW
         }
         APTextComponentView(layout.context, storyTextComponent, viewModel)?.let { componentTextView ->
             componentTextView.id = ViewCompat.generateViewId()
@@ -154,9 +155,9 @@ internal fun drawCircleStoryOnLayout(
             val textComponentConstraintSet = ConstraintSet()
             textComponentConstraintSet.clone(layout)
             textComponentConstraintSet.constrainWidth(
-                componentTextView.id, component.outerStyles.width.toInt())
+                componentTextView.id, (component.outerStyles.width.toInt() * BASE_SIZE_MULTIPLIER_NEW))
             textComponentConstraintSet.constrainHeight(
-                componentTextView.id, component.outerStyles.height.toInt())
+                componentTextView.id, (component.outerStyles.height.toInt() * BASE_SIZE_MULTIPLIER_NEW))
             textComponentConstraintSet.connect(
                 componentTextView.id, ConstraintSet.BOTTOM,
                 imgViewId, ConstraintSet.BOTTOM, margin
