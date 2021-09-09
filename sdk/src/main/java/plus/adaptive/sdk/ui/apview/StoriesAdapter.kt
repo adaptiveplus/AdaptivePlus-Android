@@ -12,6 +12,8 @@ import plus.adaptive.sdk.R
 import plus.adaptive.sdk.data.DELAY_BETWEEN_CLICKS
 import plus.adaptive.sdk.ui.apview.vm.APEntryPointViewModelProvider
 import kotlinx.android.synthetic.main.ap_layout_entry_item.view.*
+import plus.adaptive.sdk.core.analytics.APAnalytics
+import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.components.APComponent
 import plus.adaptive.sdk.data.models.components.APTextComponent
 import plus.adaptive.sdk.data.models.story.APOuterStyles
@@ -92,6 +94,16 @@ internal class StoriesAdapter(
             itemView.setOnClickListener {
                 if (SystemClock.elapsedRealtime() - lastTimeClicked > DELAY_BETWEEN_CLICKS) {
                     lastTimeClicked = SystemClock.elapsedRealtime()
+                    campaign.body.story?.run {
+                        APAnalytics.logEvent(
+                            APAnalyticsEvent(
+                                name = "action-outer-image",
+                                campaignId = campaign.id,
+                                apViewId = viewModel?.getAPViewId(),
+                                params = mapOf("storyId" to id)
+                            )
+                        )
+                    }
                     viewModel?.runActions(actionsList)
                 }
             }

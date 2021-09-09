@@ -1,8 +1,14 @@
 package plus.adaptive.sdk.ui.apview.vm
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APCacheManager
 import plus.adaptive.sdk.core.managers.APSharedPreferences
+import plus.adaptive.sdk.data.models.*
+import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APEntryPoint
 import plus.adaptive.sdk.data.models.APError
@@ -15,8 +21,7 @@ import plus.adaptive.sdk.data.repositories.APUserRepository
 import plus.adaptive.sdk.data.repositories.APViewRepository
 import plus.adaptive.sdk.ui.apview.APEntryPointLifecycleListener
 import plus.adaptive.sdk.ui.apview.newVm.CampaignViewModel
-import plus.adaptive.sdk.utils.*
-import java.util.*
+import plus.adaptive.sdk.utils.runOnMainThread
 
 
 internal class APViewViewModel(
@@ -48,6 +53,8 @@ internal class APViewViewModel(
     private var _resumedEntryPointId: String? = null
     private var _visibleEntryPointsPositionRange: IntRange = 0..0
 
+    private var id: String = ""
+
     private fun setAPCarouselViewDataModel(
         dataModel: APCarouselViewDataModel,
         isCached: Boolean = false,
@@ -67,6 +74,7 @@ internal class APViewViewModel(
         appViewId: String,
         isEmptyViewId: Boolean = false
     ) {
+        id = dataModel.id
         if (!isCached || _storyDataModelLiveData.value == null) {
             sortAndFilterCampaigns(dataModel, true)
             if (!isCached) {
@@ -81,10 +89,19 @@ internal class APViewViewModel(
         dataModel.entryPoints.forEach {
             val count = getWatchedBannerCount(it.id)
             it.showCount?.apply {
-                if ( this >= count) {
+                if (this >= count) {
                     activeEntries.add(it)
-                    if(showCount)
+                    if(showCount) {
+                        APAnalytics.logEvent(
+                            APAnalyticsEvent(
+                                name = "shown-banner",
+                                campaignId = it.campaignId,
+                                apViewId = id,
+                                params = mapOf("bannerId" to it.id)
+                            )
+                        )
                         preferences.saveWatchedBannerIdCount(it.id)
+                    }
                 }
             } ?: activeEntries.add(it)
         }
@@ -108,9 +125,11 @@ internal class APViewViewModel(
                     story.showBorder = false
                     if(campaign.showCount!= null && localShowCount<=campaign.showCount){
                         watched.add(campaign)
+                        showStoryShownEvent(campaignId = campaign.id, storyId = story.id)
                     }
                 } else {
                     notWatched.add(campaign)
+                    showStoryShownEvent(campaignId = campaign.id, storyId = story.id)
                 }
             }
         }
@@ -121,6 +140,17 @@ internal class APViewViewModel(
         if(swapInAdapter){
             dataModel.campaigns = newStoryCampaign
         }
+    }
+
+    private fun showStoryShownEvent(campaignId: String?, storyId: String){
+        APAnalytics.logEvent(
+            APAnalyticsEvent(
+                name = "shown-outer-image",
+                campaignId = campaignId,
+                apViewId = id,
+                params = mapOf("storyId" to storyId)
+            )
+        )
     }
 
     fun requestAPViewDataModel(apViewId: String, hasDrafts: Boolean) {
@@ -244,7 +274,7 @@ internal class APViewViewModel(
     }
 
     override fun getAPViewId(): String {
-        return _apCarouselViewDataModelLiveData.value?.id ?: ""
+        return id
     }
 
     @Deprecated(

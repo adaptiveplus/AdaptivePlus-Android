@@ -2,9 +2,7 @@ package plus.adaptive.sdk.ui.apview.newVm
 
 import android.os.Handler
 import android.os.Looper
-import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APSharedPreferences
-import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.actions.APAction
 import plus.adaptive.sdk.data.models.story.Campaign
 import plus.adaptive.sdk.data.repositories.APUserRepository
@@ -101,6 +99,10 @@ internal class CampaignViewModel(
         Looper.myLooper()?.let {
             progressHandler = Handler(it)
         }
+    }
+
+    fun getAPViewId():String{
+        return apViewVMDelegate.getAPViewId()
     }
 
     fun getLang(): String?{

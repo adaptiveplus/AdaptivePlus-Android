@@ -81,13 +81,6 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
             apHasDrafts = arguments?.getBoolean(EXTRA_AP_HAS_DRAFTS, false)
         }
 
-        APAnalytics.logEvent(
-            APAnalyticsEvent(
-                name = "launch-apView",
-                apViewId = apViewId
-            )
-        )
-
         activity?.let {
             val viewModelFactory = APViewViewModelFactory(it)
             viewModel = ViewModelProvider(this, viewModelFactory).get(APViewViewModel::class.java)

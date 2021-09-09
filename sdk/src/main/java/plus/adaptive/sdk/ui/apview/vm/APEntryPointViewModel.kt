@@ -90,15 +90,6 @@ internal class APEntryPointViewModel(
                 apViewVMDelegate.getAutoScrollPeriod()?.let { autoScrollPeriod ->
                     progressHandler?.postDelayed(progressCompleteTask, autoScrollPeriod)
                 }
-
-                APAnalytics.logEvent(
-                    APAnalyticsEvent(
-                        name = "shown-entryPoint",
-                        campaignId = entryPoint.campaignId,
-                        apViewId = apViewVMDelegate.getAPViewId(),
-                        params = mapOf("entryPointId" to entryPoint.id)
-                    )
-                )
             } else {
                 doResumeOnReady = true
             }
@@ -125,10 +116,10 @@ internal class APEntryPointViewModel(
     fun runActions(actions: List<APAction>) {
         APAnalytics.logEvent(
             APAnalyticsEvent(
-                name = "action-entryPoint",
+                name = "action-banner",
                 campaignId = entryPoint.campaignId,
                 apViewId = apViewVMDelegate.getAPViewId(),
-                params = mapOf("entryPointId" to entryPoint.id)
+                params = mapOf("bannerId" to entryPoint.id)
             )
         )
 

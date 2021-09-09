@@ -68,9 +68,9 @@ class AdaptivePlusInstruction(
                 .newInstance(stories, 0, this)
             val count = viewModel.getWatchedInstructionCount(it.campaigns[0].id)
             it.campaigns[0].showCount?.run {
-                if(count<=this){
-                    apStoriesDialog.show(fragmentManagerInstance(), apStoriesDialog.tag)
+                if(count<this){
                     viewModel.saveInstructionShowCount(it.campaigns[0].id)
+                    apStoriesDialog.show(fragmentManagerInstance(), apStoriesDialog.tag)
                 } else {
                     onStoriesFinishedCallback?.invoke()
                 }
