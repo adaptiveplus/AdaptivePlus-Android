@@ -105,6 +105,8 @@ internal class APStoryFragment :
         apStoryFragmentLayout.addOnLayoutChangeListener(apStoryFragmentLayoutChangeListener)
 
         setupObservers()
+
+        viewModel.saveWatchedStoryCountById(story.id)
     }
 
     override fun onResume() {

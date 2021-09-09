@@ -11,7 +11,8 @@ internal data class APEntryPoint(
     val updatedAt: String,
     val campaignId: String,
     val status: Status?,
-    val showOnce: Boolean,
+    val showOnce: Boolean?,
+    val showCount: Int?,
     val layers: List<APLayer>,
     val actions: List<APAction>
 ) : Serializable {

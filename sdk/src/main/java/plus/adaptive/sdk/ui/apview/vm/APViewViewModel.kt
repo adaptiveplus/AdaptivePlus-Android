@@ -51,17 +51,14 @@ internal class APViewViewModel(
     private fun setAPCarouselViewDataModel(
         dataModel: APCarouselViewDataModel,
         isCached: Boolean = false,
-        appViewId: String
+        appViewId: String,
+        showCount: Boolean = true
     ) {
-        if (!isCached || _apCarouselViewDataModelLiveData.value == null) {
-            sortAndFilterCampaigns(dataModel)
-
-            if (!isCached) {
-                saveAPCarouselViewDataModelToCache(appViewId, dataModel)
-            }
-
-            _apCarouselViewDataModelLiveData.value = dataModel
+        sortAndFilterCampaigns(dataModel, showCount)
+        if (!isCached) {
+            saveAPCarouselViewDataModelToCache(appViewId, dataModel)
         }
+        _apCarouselViewDataModelLiveData.value = dataModel
     }
 
     private fun setStoriesDataModel(
@@ -79,25 +76,19 @@ internal class APViewViewModel(
         }
     }
 
-    private fun sortAndFilterCampaigns(dataModel: APCarouselViewDataModel) {
+    private fun sortAndFilterCampaigns(dataModel: APCarouselViewDataModel, showCount: Boolean) {
         val activeEntries = mutableListOf<APEntryPoint>()
-        val inactiveEntries = mutableListOf<APEntryPoint>()
-
         dataModel.entryPoints.forEach {
-            if (getAPEntryPointViewModel(it)?.isActive() == true) {
-                activeEntries.add(it)
-            } else {
-                if (!it.showOnce) {
-                    inactiveEntries.add(it)
+            val count = getWatchedBannerCount(it.id)
+            it.showCount?.apply {
+                if ( this >= count) {
+                    activeEntries.add(it)
+                    if(showCount)
+                        preferences.saveWatchedBannerIdCount(it.id)
                 }
-            }
+            } ?: activeEntries.add(it)
         }
-
-        val newEntryList = mutableListOf<APEntryPoint>().apply {
-            addAll(activeEntries)
-            addAll(inactiveEntries)
-        }
-        dataModel.entryPoints = newEntryList
+        dataModel.entryPoints = activeEntries
     }
 
     private fun sortAndFilterCampaigns(dataModel: APTemplateDataModel, swapInAdapter: Boolean = false) {
@@ -106,14 +97,18 @@ internal class APViewViewModel(
         dataModel.campaigns.forEachIndexed { index, campaign ->
             campaign.body.story?.let { story ->
                 var isWatched = false
+                var localShowCount = 0
                 getWatchedStorySet()?.forEach { watchedStoryId ->
                     if (story.id == watchedStoryId) {
                         isWatched = true
+                        localShowCount = getWatchedStoryCount(watchedStoryId)
                     }
                 }
                 if (isWatched) {
                     story.showBorder = false
-                    watched.add(campaign)
+                    if(campaign.showCount!= null && localShowCount<=campaign.showCount){
+                        watched.add(campaign)
+                    }
                 } else {
                     notWatched.add(campaign)
                 }
@@ -138,7 +133,8 @@ internal class APViewViewModel(
                         runOnMainThread {
                             setAPCarouselViewDataModel(
                                 dataModel = response,
-                                appViewId = apViewId
+                                appViewId = apViewId,
+                                showCount = true
                             )
                         }
                     }
@@ -149,7 +145,8 @@ internal class APViewViewModel(
                         _apCarouselViewDataModelLiveData.value?.let {
                             setAPCarouselViewDataModel(
                                 dataModel = it,
-                                appViewId = apViewId
+                                appViewId = apViewId,
+                                showCount = false
                             )
                         }
                     }
@@ -266,7 +263,8 @@ internal class APViewViewModel(
                 setAPCarouselViewDataModel(
                     dataModel = dataModel,
                     isCached = true,
-                    appViewId = apViewId
+                    appViewId = apViewId,
+                    showCount = false
                 )
             }
         }
@@ -481,5 +479,13 @@ internal class APViewViewModel(
         userRepository.getAPUser().externalId?.let {
             return preferences.getWatchedStoryIds(it)
         } ?: return null
+    }
+
+    private fun getWatchedStoryCount(storyId: String): Int {
+        return preferences.getWatchedStoryCount(storyId)
+    }
+
+    private fun getWatchedBannerCount(bannerID: String): Int {
+        return preferences.getWatchedBannerCount(bannerID)
     }
 }

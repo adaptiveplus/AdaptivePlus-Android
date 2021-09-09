@@ -139,6 +139,7 @@ private val apCarouselViewDataModelDeserializer =
                     val status = campaignJsonObject.get("status")?.asString
                     val campaignBodyJsonObject = campaignJsonObject.get("body").asJsonObject
                     val showOnce = campaignBodyJsonObject.get("showOnce")?.asBoolean ?: false
+                    val showCount = campaignJsonObject.get("showCount")?.asInt
                     if(campaignBodyJsonObject.has("banner")){
                         val bannerJsonObject = campaignBodyJsonObject.get("banner").asJsonObject
                         val bannerId = bannerJsonObject.get("id").asString
@@ -148,7 +149,7 @@ private val apCarouselViewDataModelDeserializer =
                         bannerBodyJsonObject.addProperty("campaignId", campaignId)
                         bannerBodyJsonObject.addProperty("status", status)
                         bannerBodyJsonObject.addProperty("showOnce", showOnce)
-
+                        bannerBodyJsonObject.addProperty("showCount", showCount)
                         val gsonBuilder = GsonBuilder()
                         gsonBuilder.registerTypeAdapter(APLayer::class.java, apLayerDeserializer)
                         gsonBuilder.registerTypeAdapter(APAction::class.java, apEntryPointActionDeserializer)
@@ -619,6 +620,7 @@ private fun checkAPEntryPointProperties(entryPoint: APEntryPoint) {
         campaignId
         status
         layers
+        showCount
         actions
     }
 }
@@ -839,6 +841,7 @@ private fun magnifyAPEntryPoint(entryPoint: APEntryPoint) = entryPoint.run {
         campaignId = campaignId,
         status = status,
         showOnce = showOnce,
+        showCount = showCount,
         layers = layers.map { magnifyAPLayer(it) },
         actions = actions.map { magnifyAPEntryPointAction(it) }
     )

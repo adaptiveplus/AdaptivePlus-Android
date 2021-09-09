@@ -83,4 +83,8 @@ internal class APStoryViewModel(
             preferences.saveWatchedStoryId(it, id)
         }
     }
+
+    fun saveWatchedStoryCountById(id: String) {
+        preferences.saveWatchedStoryCount(id)
+    }
 }

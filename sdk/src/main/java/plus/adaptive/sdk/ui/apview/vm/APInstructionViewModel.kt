@@ -64,4 +64,12 @@ internal class APInstructionViewModel(
         }
         return data
     }
+
+    fun saveInstructionShowCount(instructionId: String){
+        preferences.saveWatchedInstructionCount(instructionId)
+    }
+
+    fun getWatchedInstructionCount(instructionId: String): Int{
+        return preferences.getWatchedInstructionCount(instructionId)
+    }
 }

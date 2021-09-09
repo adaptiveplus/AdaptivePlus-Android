@@ -67,7 +67,32 @@ internal class APSharedPreferences(context: Context) {
 
     fun saveWatchedStoryId(userId: String, value: String) {
         val watchedSet = getWatchedStoryIds(userId) ?: HashSet<String>()
-        (watchedSet as HashSet<String>).add(value)
+        if(!(watchedSet as HashSet<String>).contains(value)){
+            saveWatchedStoryCount(value)
+        }
+        watchedSet.add(value)
         preferences.edit().putStringSet(userId, watchedSet).apply()
+    }
+
+    fun getWatchedStoryCount(storyId: String): Int = preferences.getInt("story $storyId", 0)
+
+    fun saveWatchedStoryCount(storyId: String) {
+        val count = getWatchedStoryCount(storyId)
+        preferences.edit().putInt("story $storyId", count+1).apply()
+    }
+
+    fun getWatchedBannerCount(bannerId: String): Int = preferences.getInt("banner $bannerId", 0)
+
+    fun saveWatchedBannerIdCount(bannerId: String) {
+        val count = getWatchedBannerCount(bannerId)
+        preferences.edit().putInt("banner $bannerId", count+1).apply()
+    }
+
+    fun getWatchedInstructionCount(instructionId: String): Int =
+        preferences.getInt("instruction $instructionId", 0)
+
+    fun saveWatchedInstructionCount(instructionId: String) {
+        val count = getWatchedInstructionCount(instructionId)
+        preferences.edit().putInt("instruction $instructionId", count+1).apply()
     }
 }
