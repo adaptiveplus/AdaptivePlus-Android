@@ -9,8 +9,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
+import plus.adaptive.sdk.core.providers.provideAPSDKManager
+import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
+import plus.adaptive.sdk.data.AUTHORIZATION_TOKEN
 import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.data.models.APStory
+import plus.adaptive.sdk.data.models.AuthTokenData
 import plus.adaptive.sdk.data.models.actions.*
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.apview.APViewFragment
@@ -45,7 +49,7 @@ class AdaptivePlusInstruction(
         Transformations.map(_apStoriesPauseNumberLiveData) { it > 0 }
 
     init {
-        fragmentActivity?.let {
+        fragmentActivity.let {
             val viewModelFactory = APInstructionViewModelFactory(it)
             viewModel = ViewModelProvider(fragmentActivity, viewModelFactory).get(APInstructionViewModel::class.java)
         }
@@ -53,7 +57,16 @@ class AdaptivePlusInstruction(
 
     fun preloadTagById(apViewId: String) {
         viewId = apViewId
-        viewModel.requestTemplate(apViewId)
+        val networkManager = provideNetworkServiceManager(fragmentActivity)
+        val tokenLiveData = networkManager.getTokenLiveData()
+        if (tokenLiveData.value?.token == null) {
+            fragmentActivity.let { provideAPSDKManager(it).authorize() }
+        } else {
+            tokenLiveData.value?.token?.let {
+                AUTHORIZATION_TOKEN = it
+            }
+            viewModel.requestTemplate(apViewId)
+        }
     }
 
     private fun startStory(component: APTemplateDataModel?) {

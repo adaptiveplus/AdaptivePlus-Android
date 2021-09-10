@@ -6,6 +6,7 @@ import plus.adaptive.sdk.core.providers.provideAPAuthCredentialsManager
 import plus.adaptive.sdk.core.providers.provideAPUserRepository
 import plus.adaptive.sdk.core.providers.provideAdaptivePlusSDK
 import plus.adaptive.sdk.core.providers.provideNetworkServiceManager
+import plus.adaptive.sdk.data.AUTHORIZATION_TOKEN
 import plus.adaptive.sdk.data.CUSTOM_IP_ADDRESS
 import plus.adaptive.sdk.data.IS_DEBUGGABLE
 import plus.adaptive.sdk.data.LOCALE
@@ -59,6 +60,11 @@ interface AdaptivePlusSDK {
             }
 
             CUSTOM_IP_ADDRESS = customIP
+        }
+
+        @JvmStatic
+        fun getAuthorizationToken(): String{
+            return AUTHORIZATION_TOKEN
         }
     }
 

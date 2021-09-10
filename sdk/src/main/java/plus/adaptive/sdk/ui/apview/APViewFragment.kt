@@ -30,6 +30,7 @@ import plus.adaptive.sdk.data.listeners.APCustomActionListener
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModel
 import plus.adaptive.sdk.ui.apview.vm.APViewViewModelFactory
 import kotlinx.android.synthetic.main.ap_fragment_ap_view.*
+import plus.adaptive.sdk.data.AUTHORIZATION_TOKEN
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
 import plus.adaptive.sdk.ui.ViewControllerDelegateProtocol
 import plus.adaptive.sdk.utils.*
@@ -161,6 +162,9 @@ internal class APViewFragment : Fragment(), ViewControllerDelegateProtocol {
     private val tokenObserver = Observer<AuthTokenData?> { tokenData ->
         if (tokenData?.token != null && !tokenData.isFromCache) {
             viewModel.requestAPViewDataModel(apViewId, apHasDrafts ?: false)
+        }
+        tokenData?.token?.let {
+            AUTHORIZATION_TOKEN = it
         }
     }
 

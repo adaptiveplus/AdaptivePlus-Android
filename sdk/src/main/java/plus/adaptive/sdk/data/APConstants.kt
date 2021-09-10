@@ -24,3 +24,5 @@ internal var SDK_API_URL = "https://test-adaptive-api2.homebank.kz/v1"
 internal var QA_API_URL: String? = ""
 
 internal var ENV_NAME = ""
+
+internal var AUTHORIZATION_TOKEN = ""

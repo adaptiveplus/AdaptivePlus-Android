@@ -28,7 +28,7 @@ internal open class APBaseRepository(
         crossinline onError: (error: APError?) -> Unit
     ) {
         Thread {
-//            try {
+            try {
                 val response = networkManager.getOkHttpClient().newCall(request).execute()
 
                 if (response.isSuccessful) {
@@ -54,13 +54,13 @@ internal open class APBaseRepository(
                         )
                     )
                 }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//                onError.invoke(null)
-//            } catch (stateException: IllegalStateException){
-//                stateException.printStackTrace()
-//                onError.invoke(null)
-//            }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onError.invoke(null)
+            } catch (stateException: IllegalStateException){
+                stateException.printStackTrace()
+                onError.invoke(null)
+            }
         }.start()
     }
 

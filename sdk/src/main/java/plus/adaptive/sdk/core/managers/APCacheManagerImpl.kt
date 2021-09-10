@@ -2,7 +2,6 @@ package plus.adaptive.sdk.core.managers
 
 import android.content.Context
 import com.google.gson.GsonBuilder
-import okio.utf8Size
 import plus.adaptive.sdk.data.ENV_NAME
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
@@ -120,7 +119,7 @@ internal class APCacheManagerImpl(
         apViewId: String,
         dataModel: APTemplateDataModel
     ) {
-//        try {
+        try {
             val dataModelFile = File(context.cacheDir, "${ENV_NAME}_template_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
@@ -133,9 +132,9 @@ internal class APCacheManagerImpl(
 
             outputStream.flush()
             outputStream.close()
-//        } catch (ex: IOException) {
-//            ex.printStackTrace()
-//        }
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
     }
 
     override fun removeAPCarouselViewDataModelFromCache(

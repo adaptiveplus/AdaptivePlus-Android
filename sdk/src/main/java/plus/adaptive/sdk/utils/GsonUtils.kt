@@ -48,16 +48,16 @@ internal fun getSerializedProcessedAPSplashScreenViewDataModel(
 internal fun getDeserializedProcessedAPCarouselViewDataModel(
     json: String
 ): APCarouselViewDataModel? {
-//    return try {
+    return try {
         val dataModel = getProcessedAPCarouselViewGson()
             .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
     return dataModel
-//    } catch (e: Exception) {
-//        APCrashlytics.logCrash(e)
-//        e.printStackTrace()
-//        null
-//    }
+    } catch (e: Exception) {
+        APCrashlytics.logCrash(e)
+        e.printStackTrace()
+        null
+    }
 }
 
 internal fun getDeserializedProcessedAPSplashScreenViewDataModel(
@@ -94,16 +94,16 @@ internal fun getUnprocessedAPSplashScreenViewGson(): Gson {
 internal fun getDeserializedUnprocessedAPCarouselViewDataModel(
     json: String
 ): APCarouselViewDataModel? {
-//    try {
+    return try {
         val dataModel = getUnprocessedAPCarouselViewGson()
             .fromJson(json, APCarouselViewDataModel::class.java)
         checkAPCarouselViewDataModelProperties(dataModel)
-    return  magnifyAPCarouselViewDataModel(dataModel)
-//    } catch (e: Exception) {
-//        APCrashlytics.logCrash(e)
-//        e.printStackTrace()
-//        null
-//    }
+        magnifyAPCarouselViewDataModel(dataModel)
+    } catch (e: Exception) {
+        APCrashlytics.logCrash(e)
+        e.printStackTrace()
+        null
+    }
 }
 
 internal fun getDeserializedUnprocessedAPSplashScreenViewDataModel(
@@ -238,7 +238,7 @@ private val apSplashScreenViewDataModelDeserializer =
 
 private val apLayerDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString,
@@ -270,16 +270,16 @@ private val apLayerDeserializer =
             }
 
             APLayer(type, options, component)
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apStoryDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val storyBodyJsonObject = jsonObject.get("body").asJsonObject
@@ -291,11 +291,11 @@ private val apStoryDeserializer =
             apStoryGson.fromJson(
                 storyBodyJsonObject.toString(),
                 APStory::class.java)
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apStorySerializer =
@@ -315,7 +315,7 @@ private val apStorySerializer =
 
 private val apSnapDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val id = jsonObject.get("id").asString
             val snapBodyJsonObject = jsonObject.get("body").asJsonObject
@@ -330,11 +330,11 @@ private val apSnapDeserializer =
             apSnapGson.fromJson(
                 snapBodyJsonObject.toString(),
                 APSnap::class.java)
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apSnapSerializer =
@@ -355,7 +355,7 @@ private val apSnapSerializer =
 
 private val apSnapActionAreaDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APSnap.ActionArea.Type::class.java)
@@ -370,11 +370,11 @@ private val apSnapActionAreaDeserializer =
                     actionAreaGson.fromJson(bodyJson, APSnap.ButtonActionArea::class.java)
                 else -> null
             }
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apSnapActionAreaSerializer =
@@ -402,7 +402,7 @@ private val apSnapActionAreaSerializer =
 
 private val apActionDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APAction.Type::class.java)
@@ -431,11 +431,11 @@ private val apActionDeserializer =
                 }
                 else -> null
             }
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apActionSerializer =
@@ -479,7 +479,7 @@ private val apActionSerializer =
 
 private val apEntryPointActionDeserializer =
     JsonDeserializer { json, _, _ ->
-//        try {
+        try {
             val jsonObject: JsonObject = json.asJsonObject
             val type = Gson().fromJson(
                 jsonObject.get("type").asString, APAction.Type::class.java)
@@ -516,11 +516,11 @@ private val apEntryPointActionDeserializer =
                 }
                 else -> null
             }
-//        } catch (e: JsonSyntaxException) {
-//            APCrashlytics.logCrash(e)
-//            e.printStackTrace()
-//            null
-//        }
+        } catch (e: JsonSyntaxException) {
+            APCrashlytics.logCrash(e)
+            e.printStackTrace()
+            null
+        }
     }
 
 private val apEntryPointActionSerializer =

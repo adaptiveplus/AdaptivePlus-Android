@@ -3,6 +3,7 @@ package plus.adaptive.sdk.core.managers
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import plus.adaptive.sdk.data.AUTHORIZATION_TOKEN
 import plus.adaptive.sdk.data.models.APError
 import plus.adaptive.sdk.data.models.network.APConfigsResponseBody
 import plus.adaptive.sdk.data.models.network.RequestResultCallback
@@ -46,14 +47,16 @@ internal class APSDKManagerImpl(
             requestAPConfigs()
             return
         }
-
+        networkServiceManager?.getTokenLiveData().value?.token?.let {
+            AUTHORIZATION_TOKEN = it
+        }
         tokenRequestState = RequestState.IN_PROCESS
-
         authRepository?.requestToken(
             object : RequestResultCallback<String>() {
                 override fun success(response: String) {
                     tokenRequestState = RequestState.SUCCESS
                     requestAPConfigs()
+                    AUTHORIZATION_TOKEN = response
                 }
 
                 override fun failure(error: APError?) {

@@ -21,6 +21,7 @@ import plus.adaptive.qaapp.ui.dialogs.AddNewAPViewDialog
 import plus.adaptive.qaapp.utils.getEnvByName
 import plus.adaptive.qaapp.utils.removeAPView
 import plus.adaptive.qaapp.utils.toast
+import plus.adaptive.sdk.AdaptivePlusSDK
 import plus.adaptive.sdk.ui.AdaptivePlusInstruction
 import plus.adaptive.sdk.ui.AdaptivePlusView
 
@@ -63,11 +64,9 @@ class ApiFragment : Fragment() {
 
     private fun setAdaptivePlusViews() {
         val envName = arguments?.getString(EXTRA_ENV_NAME)
-
         if (context == null || envName == null) {
             return
         }
-
         getEnvByName(requireContext(), envName)?.let { configs ->
             context?.let { ctx ->
                 apViewsSpinner.adapter = ArrayAdapter(
@@ -75,9 +74,7 @@ class ApiFragment : Fragment() {
                     android.R.layout.simple_spinner_dropdown_item,
                     configs.apViews.map { it.id }
                 )
-
                 apViewsLayout?.removeAllViews()
-
                 for (apViewModel in configs.apViews) {
                     if(apViewModel.isInstruction == true){
                         activity?.apply {
@@ -186,11 +183,24 @@ class ApiFragment : Fragment() {
                         }
                     }
                 }
-
+                val apButton = Button(context)
+                val apSdkTokenTxtView = EditText(context)
+                apSdkTokenTxtView.visibility = View.GONE
+                apButton.id = ViewCompat.generateViewId()
+                apButton.text = "GET SDK TOKEN"
+                apButton.setPadding(10,10,10,10)
+                apButton.setOnClickListener {
+                    val token = AdaptivePlusSDK.getAuthorizationToken()
+                    if(!token.isNullOrEmpty()){
+                        apSdkTokenTxtView.setText(token)
+                        apSdkTokenTxtView.visibility = View.VISIBLE
+                    }
+                }
+                apViewsLayout?.addView(apSdkTokenTxtView)
+                apViewsLayout?.addView(apButton)
                 addNewAPViewBtn?.setOnClickListener {
                     showAddNewAPViewDialog(configs.name)
                 }
-
                 deleteAPViewBtn.setOnClickListener {
                     context?.let { ctx ->
                         val checkDialog = AlertDialog.Builder(ctx)
