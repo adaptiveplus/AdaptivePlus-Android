@@ -1,14 +1,18 @@
 package plus.adaptive.sdk
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.MainThread
 import plus.adaptive.sdk.core.analytics.APAnalytics
 import plus.adaptive.sdk.core.managers.APSDKManager
 import plus.adaptive.sdk.core.providers.provideAPAnalyticsRepository
 import plus.adaptive.sdk.core.providers.provideAPSplashScreenViewController
+import plus.adaptive.sdk.data.*
 import plus.adaptive.sdk.data.LOCALE
 import plus.adaptive.sdk.data.OS_NAME
+import plus.adaptive.sdk.data.QA_API_URL
+import plus.adaptive.sdk.data.SDK_API_URL
 import plus.adaptive.sdk.data.listeners.APSplashScreenListener
 import plus.adaptive.sdk.data.models.APAnalyticsEvent
 import plus.adaptive.sdk.data.models.APLocation
@@ -83,8 +87,28 @@ internal class AdaptivePlusSDKImpl(
         }
 
         sdkManager.authorize(true)
-
+        setBaseSdkUrl()
         return this
+    }
+
+    private fun setBaseSdkUrl(){
+        if(context.packageName == "plus.adaptive.qaapp"){
+            QA_API_URL?.let {
+                SDK_API_URL = it
+            } ?: setBaseSdkUrlFromManifest()
+        } else {
+            setBaseSdkUrlFromManifest()
+        }
+    }
+
+    private fun setBaseSdkUrlFromManifest(){
+        val appInfo = context.packageManager.getApplicationInfo(
+            context.packageName,
+            PackageManager.GET_META_DATA
+        )
+        SDK_API_URL = appInfo.metaData?.getString("adaptiveBaseApiUrl")?.let { url ->
+            url
+        } ?: ""
     }
 
     @MainThread
@@ -149,6 +173,18 @@ internal class AdaptivePlusSDKImpl(
 
     override fun setSplashScreenListener(listener: APSplashScreenListener?): AdaptivePlusSDK {
         this.splashScreenListener = listener
+        return this
+    }
+
+    override fun setQaBaseUrl(url: String?) : AdaptivePlusSDK{
+        QA_API_URL = url
+        return this
+    }
+
+    override fun setEnvName(url: String?) : AdaptivePlusSDK{
+        url?.let {
+            ENV_NAME = it
+        }
         return this
     }
 

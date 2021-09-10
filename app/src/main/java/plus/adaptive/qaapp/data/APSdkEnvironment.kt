@@ -7,6 +7,7 @@ data class APSdkEnvironment(
     val name: String,
     val appId: String,
     val apiKey: String,
+    val qaUrl: String? = null,
     var apViews: List<APView>
 ) : Serializable {
 

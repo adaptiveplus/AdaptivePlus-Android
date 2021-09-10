@@ -22,7 +22,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders = [
+                    adaptiveBaseApiUrl : "https://test-adaptive-api2.homebank.kz/v1"
+            ]
+        }
         release {
+            manifestPlaceholders = [
+                    adaptiveBaseApiUrl : "https://api.adaptive.plus/v1"
+            ]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

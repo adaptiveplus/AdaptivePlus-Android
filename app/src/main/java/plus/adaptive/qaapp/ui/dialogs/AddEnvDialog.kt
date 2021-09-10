@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import androidx.fragment.app.DialogFragment
 import plus.adaptive.qaapp.R
 import plus.adaptive.qaapp.data.APSdkEnvironment
@@ -42,11 +43,22 @@ class AddEnvDialog : DialogFragment() {
                 appIdEditText.text.toString().isNotEmpty() &&
                 apiKeyEditText.text.toString().isNotEmpty()
             ) {
+                val qaUrl =
+                    if(apiUrlEditText.text.toString().isNullOrEmpty()){
+                        null
+                    } else {
+                        if(URLUtil.isValidUrl(apiUrlEditText.text.toString())) {
+                            apiUrlEditText.text.toString()
+                        } else {
+                            null
+                        }
+                    }
                 val newEnv = APSdkEnvironment(
                     name = envNameEditText.text.toString(),
                     appId = appIdEditText.text.toString(),
                     apiKey = apiKeyEditText.text.toString(),
-                    apViews = listOf()
+                    apViews = listOf(),
+                    qaUrl = qaUrl
                 )
 
                 context?.let { ctx -> addNewEnv(ctx, newEnv) }

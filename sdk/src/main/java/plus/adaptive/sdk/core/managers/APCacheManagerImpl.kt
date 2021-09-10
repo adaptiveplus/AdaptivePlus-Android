@@ -3,6 +3,7 @@ package plus.adaptive.sdk.core.managers
 import android.content.Context
 import com.google.gson.GsonBuilder
 import okio.utf8Size
+import plus.adaptive.sdk.data.ENV_NAME
 import plus.adaptive.sdk.data.models.APCarouselViewDataModel
 import plus.adaptive.sdk.data.models.APSplashScreenViewDataModel
 import plus.adaptive.sdk.data.models.story.APTemplateDataModel
@@ -45,8 +46,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APCarouselViewDataModel?) -> Unit
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_carousel_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -71,8 +71,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APTemplateDataModel?) -> Unit
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_template_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_template_$apViewId.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -101,8 +100,7 @@ internal class APCacheManagerImpl(
         dataModel: APCarouselViewDataModel
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_carousel_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
             val json = getSerializedProcessedAPCarouselViewDataModel(dataModel)
@@ -123,8 +121,7 @@ internal class APCacheManagerImpl(
         dataModel: APTemplateDataModel
     ) {
 //        try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_template_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_template_$apViewId.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
             val gsonBuilder = GsonBuilder()
@@ -145,8 +142,7 @@ internal class APCacheManagerImpl(
         apViewId: String
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_carousel_$apViewId.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_carousel_$apViewId.json")
             dataModelFile.delete()
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -179,8 +175,7 @@ internal class APCacheManagerImpl(
         onResult: (dataModel: APSplashScreenViewDataModel?) -> Unit
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_splashscreen.json")
             val inputStream: InputStream = dataModelFile.inputStream()
             val size = inputStream.available()
             val buffer = ByteArray(size)
@@ -205,8 +200,7 @@ internal class APCacheManagerImpl(
         onSuccess: (() -> Unit)?
     ) {
         try {
-            val userId = userRepository.getAPUserId() ?: ""
-            val dataModelFile = File(context.cacheDir, "${userId}_splashscreen.json")
+            val dataModelFile = File(context.cacheDir, "${ENV_NAME}_splashscreen.json")
             dataModelFile.createNewFile()
             val outputStream: OutputStream = dataModelFile.outputStream()
             val json = getSerializedProcessedAPSplashScreenViewDataModel(dataModel)

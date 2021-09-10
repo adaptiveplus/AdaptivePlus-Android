@@ -58,24 +58,26 @@ class AdaptivePlusInstruction(
 
     private fun startStory(component: APTemplateDataModel?) {
         component?.let {
-            val stories = ArrayList<APStory>()
-            it.campaigns.forEach { campaign ->
-                if (campaign.body.instruction != null) {
-                    stories.add(createAPStoryFromStory(campaign.body.instruction))
+            if(it.campaigns.isNotEmpty()){
+                val stories = ArrayList<APStory>()
+                it.campaigns.forEach { campaign ->
+                    if (campaign.body.instruction != null) {
+                        stories.add(createAPStoryFromStory(campaign.body.instruction))
+                    }
                 }
-            }
-            val apStoriesDialog = APStoriesDialog
-                .newInstance(stories, 0, this)
-            val count = viewModel.getWatchedInstructionCount(it.campaigns[0].id)
-            it.campaigns[0].showCount?.run {
-                if(count<this){
-                    viewModel.saveInstructionShowCount(it.campaigns[0].id)
-                    apStoriesDialog.show(fragmentManagerInstance(), apStoriesDialog.tag)
-                } else {
-                    onStoriesFinishedCallback?.invoke()
+                val apStoriesDialog = APStoriesDialog
+                    .newInstance(stories, 0, this)
+                val count = viewModel.getWatchedInstructionCount(it.campaigns[0].id)
+                it.campaigns[0].showCount?.run {
+                    if(count<this){
+                        viewModel.saveInstructionShowCount(it.campaigns[0].id)
+                        apStoriesDialog.show(fragmentManagerInstance(), apStoriesDialog.tag)
+                    } else {
+                        onStoriesFinishedCallback?.invoke()
+                    }
                 }
-            } ?: {
-                apStoriesDialog.show(fragmentManagerInstance(), apStoriesDialog.tag)
+            } else {
+                onStoriesFinishedCallback?.invoke()
             }
         }
     }

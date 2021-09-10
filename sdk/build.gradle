@@ -30,14 +30,9 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField "String", "SDK_API_URL", "\"https://test-adaptive-api2.homebank.kz/v1\""
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            buildConfigField "String", "SDK_API_URL", "\"https://api.adaptive.plus/v1\""
         }
     }
     compileOptions {

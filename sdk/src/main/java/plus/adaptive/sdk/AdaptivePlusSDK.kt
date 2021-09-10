@@ -92,4 +92,12 @@ interface AdaptivePlusSDK {
     fun showMockSplashScreen() : AdaptivePlusSDK
 
     fun setSplashScreenListener(listener: APSplashScreenListener?) : AdaptivePlusSDK
+
+    @Deprecated(
+        message = "Only for testing purposes.",
+        level = DeprecationLevel.WARNING
+    )
+    fun setQaBaseUrl(url: String?): AdaptivePlusSDK
+
+    fun setEnvName(envName: String?): AdaptivePlusSDK
 }

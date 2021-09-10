@@ -81,6 +81,8 @@ class MainActivity : AppCompatActivity() {
             .setUserProperties(userProperties)
             .setLocation(location)
             .setLocale(locale)
+            .setQaBaseUrl(env.qaUrl)
+            .setEnvName(env.appId)
             .setIsDebuggable(true)
             .start()
 
@@ -142,32 +144,6 @@ class MainActivity : AppCompatActivity() {
                 MockFragment.newInstance()
             )
             .commit()
-
-//        sdk.setSplashScreenListener(
-//            object: APSplashScreenListener {
-//                override fun onFinish() {
-//                    Handler(Looper.getMainLooper()).post {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            "Launch Screen Finished",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//
-//                override fun onRunAPCustomAction(params: HashMap<String, Any>) {
-//                    val name = params["name"]?.toString()
-//                    Handler(Looper.getMainLooper()).post {
-//                        Toast.makeText(
-//                            this@MainActivity,
-//                            "Custom action: $name",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//            }
-//        )
-//        .showMockSplashScreen()
     }
 
     override fun onDestroy() {

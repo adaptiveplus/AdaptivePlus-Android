@@ -1,6 +1,7 @@
 package plus.adaptive.sdk.core.managers
 
 import android.content.Context
+import plus.adaptive.sdk.data.ENV_NAME
 
 
 internal class APSharedPreferences(context: Context) {
@@ -74,25 +75,25 @@ internal class APSharedPreferences(context: Context) {
         preferences.edit().putStringSet(userId, watchedSet).apply()
     }
 
-    fun getWatchedStoryCount(storyId: String): Int = preferences.getInt("story $storyId", 0)
+    fun getWatchedStoryCount(storyId: String): Int = preferences.getInt("$ENV_NAME story $storyId", 0)
 
     fun saveWatchedStoryCount(storyId: String) {
         val count = getWatchedStoryCount(storyId)
-        preferences.edit().putInt("story $storyId", count+1).apply()
+        preferences.edit().putInt("$ENV_NAME story $storyId", count+1).apply()
     }
 
-    fun getWatchedBannerCount(bannerId: String): Int = preferences.getInt("banner $bannerId", 0)
+    fun getWatchedBannerCount(bannerId: String): Int = preferences.getInt("$ENV_NAME banner $bannerId", 0)
 
     fun saveWatchedBannerIdCount(bannerId: String) {
         val count = getWatchedBannerCount(bannerId)
-        preferences.edit().putInt("banner $bannerId", count+1).apply()
+        preferences.edit().putInt("$ENV_NAME banner $bannerId", count+1).apply()
     }
 
     fun getWatchedInstructionCount(instructionId: String): Int =
-        preferences.getInt("instruction $instructionId", 0)
+        preferences.getInt("$ENV_NAME instruction $instructionId", 0)
 
     fun saveWatchedInstructionCount(instructionId: String) {
         val count = getWatchedInstructionCount(instructionId)
-        preferences.edit().putInt("instruction $instructionId", count+1).apply()
+        preferences.edit().putInt("$ENV_NAME instruction $instructionId", count+1).apply()
     }
 }
