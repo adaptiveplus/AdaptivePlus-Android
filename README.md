@@ -14,7 +14,7 @@ Add the following dependency to your app's `build.gradle` file:
 
 ```groovy
 dependencies {
-    implementation 'plus.adaptive:android-sdk:2.2.3'
+    implementation 'plus.adaptive:android-sdk:2.3.2'
 }
 ```
 
@@ -66,7 +66,7 @@ class YourApp: Application() {
 ### Initialization Exception
 SDK throws `APInitializationException` on `newInstance` method call if **adaptivePlusApiKey** is not provided beforehand via `init` method
 
-## Banner and Story
+## AdaptivePlusView (Banner & Story)
 You can visit the admin panel and create some content. Do not forget to change the status of the content to **active**. Then create **AdaptivePlusView** instance or add it in xml and specify APViewId(e. g. `APV-00000000`).
 ```kotlin
 class MainActivity: Activity() {
@@ -90,9 +90,9 @@ XML
     />
 ```
 
-## Instruction
+## AdaptivePlusViewless (Instruction & PopUp) 
 
-You can visit the admin panel and create some content. Do not forget to change the status of the content to **active**. When you call `preloadTagById` and `showInstruction` methods you need add created APViewId(e. g. `APV-00000000`) as argument. `preloadTagById` method preloads the instruction contents to your device, and `showInstruction` displaying it.
+You can visit the admin panel and create some content. Do not forget to change the status of the content to **active**. When you call `preload` and `show` methods you need add created APViewId(e. g. `APV-00000000`) as argument. `preload` method preloads the Instruction(or PopUp) contents to your device, and `show` displaying it.
 
 ```kotlin
 class MainActivity: Activity() {
@@ -100,16 +100,16 @@ class MainActivity: Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        AdaptivePlusInstruction(this).apply {
-            preloadTagById("APV-00000000")
-            showInstruction("APV-00000000")
+        AdaptivePlusViewless(this).apply {
+            preload("APV-00000000")
+            show("APV-00000000")
         }
     }
 }
 ```
 
-Show AdaptivePlus Instruction at any suitable moment but note that 
-`preloadTagById` must call before calling `showInstruction` method.
+Show AdaptivePlus Viewless at any suitable moment but note that 
+`preload` must call before calling `show` method.
 
 Also you can add **OnStoriesFinishedCallback**
 ```kotlin
@@ -119,8 +119,8 @@ class MainActivity: Activity() {
         setContentView(R.layout.activity_main)
 
         val adaptiveInstruction = AdaptivePlusInstruction(this)
-        adaptiveInstruction.preloadTagById("APV-00000000")
-        adaptiveInstruction.setOnStoriesFinishedCallback {
+        adaptiveInstruction.preload("APV-00000000")
+        adaptiveInstruction.setOnDismissedListener {
             // TODO: dosomething when instructions finished 
         }
     }
@@ -130,7 +130,7 @@ class MainActivity: Activity() {
 If you are not able to observe the created content - probable reasons are:
 - You forgot to activate the content in the AdaptivePlus admin panel
 - Check again the integration guide, maybe you missed something out
-- The SDK couldn't preload the contents on the previous `            preloadTagById` method calls due to network issues or internal sdk issues
+- The SDK couldn't preload the contents on the previous `            preload` method calls due to network issues or internal sdk issues
 
 ### Custom Action Listener
 ```kotlin
