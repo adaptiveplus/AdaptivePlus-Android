@@ -14,7 +14,7 @@ Add the following dependency to your app's `build.gradle` file:
 
 ```groovy
 dependencies {
-    implementation 'plus.adaptive:android-sdk:2.3.2'
+    implementation 'plus.adaptive:android-sdk:2.3.9'
 }
 ```
 
